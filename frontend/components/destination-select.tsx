@@ -5,6 +5,7 @@ import { Search, MapPin, Plane, Globe, Loader2, X } from 'lucide-react'
 import { Airport, airportApi } from '@/lib/api/airport-api'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDebouncedCallback } from '@/lib/hooks/use-debounce'
+import { localizeAirport, mapThaiInputToEnglish, hasThaiCharacters } from '@/lib/services/thai-translation-service'
 import { cn } from '@/lib/utils'
 import {
     Popover,
@@ -59,7 +60,9 @@ export function DestinationSelect({
         const fetchName = async () => {
             try {
                 const details = await airportApi.getAirportDetails(value)
-                setSelectedName(`${details.city || details.name} (${details.code})`)
+                // setSelectedName(`${details.city || details.name} (${details.code})`)
+                const localized = localizeAirport(details)
+                setSelectedName(`${localized.city || localized.name} (${localized.code})`)
             } catch (err) {
                 // Fallback if not found
                 if (!selectedName) setSelectedName(value)
@@ -80,8 +83,12 @@ export function DestinationSelect({
 
         setIsLoading(true)
         try {
-            const data = await airportApi.searchAirports(query)
-            setResults(data)
+            // const data = await airportApi.searchAirports(query)
+            // setResults(data)
+            // Map Thai input to English for backend search
+            const apiQuery = hasThaiCharacters(query) ? mapThaiInputToEnglish(query) : query
+            const data = await airportApi.searchAirports(apiQuery)
+            setResults(data.map(localizeAirport))
         } catch (err) {
             console.error('Search failed', err)
             setResults([])
@@ -167,7 +174,7 @@ export function DestinationSelect({
                         <input
                             ref={inputRef}
                             type="text"
-                            className="flex-1 bg-transparent border-none focus:ring-0 pl-11 pr-10 text-sm sm:text-base h-full placeholder:text-gray-400 outline-none font-medium cursor-pointer"
+                            className="flex-1 w-full min-w-0 bg-transparent border-none focus:ring-0 pl-11 pr-10 text-sm sm:text-base h-full placeholder:text-gray-400 outline-none font-medium text-left"
                             placeholder={placeholder}
                             value={search || (isPopoverOpen ? search : selectedName)}
                             onChange={handleSearchChange}

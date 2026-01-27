@@ -14,6 +14,7 @@ import { provinceNames } from '@/services/data/constants'
 import { statisticsApi } from '@/lib/api/statistics-api'
 import { airportApi } from '@/lib/api/airport-api'
 import { PROVINCES } from '@/services/data/constants'
+import { translateCity } from '@/lib/services/thai-translation-service'
 
 // Chart configuration - สามารถปรับสีและขนาดได้ที่นี่
 const chartConfig = {
@@ -418,7 +419,8 @@ export function FlightStats() {
                   <span className="text-xs sm:text-sm text-muted-foreground">{'จังหวัดที่ค้นหามากที่สุด'}</span>
                 </div>
                 <div className="text-xl sm:text-2xl font-bold break-words">
-                  {provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country}
+                  {/* {provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country} */}
+                  {translateCity(provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country)}
                 </div>
                 <div className="text-xs sm:text-sm text-muted-foreground mt-1">
                   {'ค้นหา '}{stats.mostSearchedCountry.count}{' ครั้ง'}
@@ -499,7 +501,8 @@ export function FlightStats() {
                         {/* Province Name */}
                         <div className="flex-shrink-0 min-w-[120px] max-w-[140px]">
                           <span className="font-medium">
-                            {provinceNames[item.province] || item.province}
+                            {/* {provinceNames[item.province] || item.province} */}
+                            {translateCity(provinceNames[item.province] || item.province)}
                           </span>
                         </div>
 

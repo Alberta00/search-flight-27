@@ -20,6 +20,7 @@ import { statisticsApi } from '@/lib/api/statistics-api'
 import { flightApi } from '@/lib/api/flight-api'
 import { useDebounce } from '@/lib/hooks/use-debounce'
 import { formatDateToUTCString } from '@/lib/utils'
+import { translateCity } from '@/lib/services/thai-translation-service'
 
 interface PriceAnalysisProps {
   searchParams?: FlightSearchParams | null
@@ -231,13 +232,15 @@ export function PriceAnalysis({ searchParams, onFlightPricesChange }: PriceAnaly
 
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-6 lg:px-8">
-      <div className="mb-6 sm:mb-8 px-0 md:px-4">
+      <div className="mb-6 sm:mb-8 w-full max-w-6xl mx-auto">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3">
           <span className="inline-block">{'การวิเคราะห์ราคา'}</span>
           <span className="mx-1 sm:mx-2 text-muted-foreground">{' - '}</span>
-          <span className="inline-block break-words">{searchParams.originName}</span>
+          {/* <span className="inline-block break-words">{searchParams.originName}</span> */}
+          <span className="inline-block break-words">{translateCity(searchParams.originName)}</span>
           <span className="mx-1 sm:mx-2 text-primary">{' → '}</span>
-          <span className="inline-block break-words">{searchParams.destinationName}</span>
+          {/* <span className="inline-block break-words">{searchParams.destinationName}</span> */}
+          <span className="inline-block break-words">{translateCity(searchParams.destinationName)}</span>
         </h2>
         <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
           {searchParams.tripType === 'one-way' ? (
@@ -300,7 +303,7 @@ export function PriceAnalysis({ searchParams, onFlightPricesChange }: PriceAnaly
       </div>
 
       {/* Divider */}
-      <div className="border-t border-border my-6 sm:my-8 w-full max-w-6xl -ml-4 sm:-ml-4 md:-ml-6 lg:ml-4"></div>
+      <div className="border-t border-border my-6 sm:my-8 w-full max-w-6xl mx-auto"></div>
 
       {/* Recommendation Card & Weather Display - Side by Side */}
       {recommendedPeriod && searchParams?.destination && (() => {
@@ -517,38 +520,38 @@ export function PriceAnalysis({ searchParams, onFlightPricesChange }: PriceAnaly
       />
 
       {/* Price Statistics Charts */}
-      {analysis.dayOfWeekStats && analysis.monthStats && 
-       analysis.dayOfWeekStats.length > 0 && analysis.monthStats.length > 0 && (
-        <div className="mt-4 w-full max-w-6xl mx-auto">
-          <PriceStatisticsCharts
-            dayOfWeekData={analysis.dayOfWeekStats
-              .map(stat => {
-                // Convert dayOfWeek (0=Sunday, 1=Monday, ..., 6=Saturday) to Thai format
-                // Map to Monday-first order: 1=Monday, 2=Tuesday, ..., 6=Saturday, 0=Sunday
-                const dayOrder = [1, 2, 3, 4, 5, 6, 0] // Monday to Sunday
-                const thaiDays = ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.', 'อา.']
-                const thaiDaysFull = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์']
-                const dayIndex = dayOrder.indexOf(stat.dayOfWeek)
-                return {
-                  day: thaiDays[dayIndex] || '',
-                  dayFull: thaiDaysFull[dayIndex] || '',
-                  averagePrice: Math.round(stat.averagePrice),
-                  sortOrder: dayIndex, // For sorting
-                }
-              })
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map(({ sortOrder, ...rest }) => rest)}
-            monthData={analysis.monthStats.map(stat => ({
-              month: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'][stat.month - 1] || '',
-              monthIndex: stat.month - 1,
-              averagePrice: Math.round(stat.averagePrice),
-            }))}
-            originName={searchParams.originName || searchParams.origin}
-            destinationName={searchParams.destinationName || searchParams.destination}
-            loading={loading}
-          />
-        </div>
-      )}
+      {analysis.dayOfWeekStats && analysis.monthStats &&
+        analysis.dayOfWeekStats.length > 0 && analysis.monthStats.length > 0 && (
+          <div className="mt-4 w-full max-w-6xl mx-auto">
+            <PriceStatisticsCharts
+              dayOfWeekData={analysis.dayOfWeekStats
+                .map(stat => {
+                  // Convert dayOfWeek (0=Sunday, 1=Monday, ..., 6=Saturday) to Thai format
+                  // Map to Monday-first order: 1=Monday, 2=Tuesday, ..., 6=Saturday, 0=Sunday
+                  const dayOrder = [1, 2, 3, 4, 5, 6, 0] // Monday to Sunday
+                  const thaiDays = ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.', 'อา.']
+                  const thaiDaysFull = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์']
+                  const dayIndex = dayOrder.indexOf(stat.dayOfWeek)
+                  return {
+                    day: thaiDays[dayIndex] || '',
+                    dayFull: thaiDaysFull[dayIndex] || '',
+                    averagePrice: Math.round(stat.averagePrice),
+                    sortOrder: dayIndex, // For sorting
+                  }
+                })
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map(({ sortOrder, ...rest }) => rest)}
+              monthData={analysis.monthStats.map(stat => ({
+                month: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'][stat.month - 1] || '',
+                monthIndex: stat.month - 1,
+                averagePrice: Math.round(stat.averagePrice),
+              }))}
+              originName={searchParams.originName || searchParams.origin}
+              destinationName={searchParams.destinationName || searchParams.destination}
+              loading={loading}
+            />
+          </div>
+        )}
     </div>
   )
 }

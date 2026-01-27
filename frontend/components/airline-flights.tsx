@@ -17,6 +17,7 @@ import { FlightPrice } from '@/lib/api/types'
 import { getFlightDataSource } from '@/lib/services/data-source'
 import { formatDateToUTCString } from '@/lib/utils'
 import { thaiMonthsFull } from '@/services/data/constants'
+import { translateAirport, translateCity } from '@/lib/services/thai-translation-service'
 
 // Helper function to format date to Thai format (e.g., "16 มกราคม 2569")
 const formatThaiDate = (dateStr: string): string => {
@@ -267,6 +268,10 @@ export function AirlineFlights({ searchParams, selectedAirlines, onAirlinesChang
           date: dateStr,  // ✅ ใช้ UTC date string
           originAirportCode: fp.origin || airportCodes[debouncedSearchParams.origin] || debouncedSearchParams.origin,
           destinationAirportCode: fp.destination || airportCodes[debouncedSearchParams.destination] || debouncedSearchParams.destination,
+          originNameTH: translateCity(debouncedSearchParams.originName || ''),
+          destinationNameTH: translateCity(debouncedSearchParams.destinationName || ''),
+          originAirportNameTH: translateAirport(fp.origin || airportCodes[debouncedSearchParams.origin] || debouncedSearchParams.origin),
+          destinationAirportNameTH: translateAirport(fp.destination || airportCodes[debouncedSearchParams.destination] || debouncedSearchParams.destination),
           airplane: fp.airplane || null,
           often_delayed: fp.often_delayed || false,
           carbon_emissions: fp.carbon_emissions || null,
@@ -443,6 +448,10 @@ export function AirlineFlights({ searchParams, selectedAirlines, onAirlinesChang
                 date: dateStr,
                 originAirportCode: fp.origin || airportCodes[debouncedSearchParams.origin] || debouncedSearchParams.origin,
                 destinationAirportCode: fp.destination || airportCodes[debouncedSearchParams.destination] || debouncedSearchParams.destination,
+                originNameTH: translateCity(debouncedSearchParams.originName || ''),
+                destinationNameTH: translateCity(debouncedSearchParams.destinationName || ''),
+                originAirportNameTH: translateAirport(fp.origin || airportCodes[debouncedSearchParams.origin] || debouncedSearchParams.origin),
+                destinationAirportNameTH: translateAirport(fp.destination || airportCodes[debouncedSearchParams.destination] || debouncedSearchParams.destination),
                 airplane: fp.airplane || null,
                 often_delayed: fp.often_delayed || false,
                 carbon_emissions: fp.carbon_emissions || null,
@@ -729,8 +738,13 @@ export function AirlineFlights({ searchParams, selectedAirlines, onAirlinesChang
                                 {flight.destinationAirportCode || airportCodes[searchParams.destination] || searchParams.destination}
                               </span>
                               <span className="text-gray-500 ml-1 hidden sm:inline">
-                                ({searchParams.originName} → {searchParams.destinationName})
+                                {/* ({searchParams.originName} → {searchParams.destinationName}) */}
+                                ({(flight as any).originNameTH || searchParams.originName} → {(flight as any).destinationNameTH || searchParams.destinationName})
                               </span>
+                            </div>
+
+                            <div className="text-[10px] text-gray-400 mb-2 truncate">
+                              {(flight as any).originAirportNameTH} → {(flight as any).destinationAirportNameTH}
                             </div>
 
                             {/* Additional Info */}

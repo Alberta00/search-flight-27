@@ -10,6 +10,7 @@ import { airportApi } from '@/lib/api/airport-api'
 import { PROVINCES, thaiMonths } from '@/services/data/constants'
 import { FlightSearchParams } from '@/components/flight-search-form'
 import { formatDateToUTCString } from '@/lib/utils'
+import { translateCity } from '@/lib/services/thai-translation-service'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
@@ -483,7 +484,8 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
             
             return {
               destination: dest.destination,
-              destinationName: displayName,
+              // destinationName: displayName,
+              destinationName: translateCity(displayName),
               count: dest.count,
               provinceValue,
               image: imagePath, // ✅ ใช้รูปภาพจาก airport code
