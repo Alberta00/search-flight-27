@@ -179,10 +179,10 @@ export function DestinationSelect({
                         {(selectedName || search) && (
                             <button
                                 onClick={clearSelection}
-                                className="absolute right-2 p-1.5 hover:bg-gray-100 rounded-full transition-colors z-10"
+                                className="absolute right-2 p-1.5 hover:bg-blue-50 rounded-full transition-colors z-10"
                                 type="button"
                             >
-                                <X className="h-4 w-4 text-gray-400" />
+                                <X className="h-4 w-4 text-blue-600 font-bold" />
                             </button>
                         )}
                     </div>
