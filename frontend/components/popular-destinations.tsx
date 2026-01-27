@@ -19,46 +19,46 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 // ถ้าไม่มีรูปจริง จะ fallback ไปใช้ placeholder.svg ตาม logic ใน onError
 const provinceImages: Record<string, string> = {
   // ภาคกลาง & ตะวันออก
-  'bangkok': `${basePath}/bangkok.jpg`,
-  'rayong': `${basePath}/rayong.jpg`,
-  'trat': `${basePath}/trat.jpg`,
-  'prachuap-khiri-khan': `${basePath}/prachuap-khiri-khan.jpg`,
-  'chonburi': `${basePath}/chonburi.jpg`,
-  'kanchanaburi': `${basePath}/kanchanaburi.jpg`,
-  
+  'bangkok': `${basePath}/thai/bangkok.jpg`,
+  'rayong': `${basePath}/thai/rayong.jpg`,
+  'trat': `${basePath}/thai/trat.jpg`,
+  'prachuap-khiri-khan': `${basePath}/thai/prachuap-khiri-khan.jpg`,
+  'chonburi': `${basePath}/thai/chonburi.jpg`,
+  'kanchanaburi': `${basePath}/thai/kanchanaburi.jpg`,
+
   // ภาคเหนือ
-  'chiang-mai': `${basePath}/chiang-mai.jpg`,
-  'chiang-rai': `${basePath}/chiang-rai.jpg`,
-  'lampang': `${basePath}/lampang.jpg`,
-  'mae-hong-son': `${basePath}/mae-hong-son.jpg`,
-  'nan': `${basePath}/nan.jpg`,
-  'phrae': `${basePath}/phrae.jpg`,
-  'phitsanulok': `${basePath}/phitsanulok.jpg`,
-  'sukhothai': `${basePath}/sukhothai.jpg`,
-  'tak': `${basePath}/tak.jpg`,
-  
+  'chiang-mai': `${basePath}/thai/chiang-mai.jpg`,
+  'chiang-rai': `${basePath}/thai/chiang-rai.jpg`,
+  'lampang': `${basePath}/thai/lampang.jpg`,
+  'mae-hong-son': `${basePath}/thai/mae-hong-son.jpg`,
+  'nan': `${basePath}/thai/nan.jpg`,
+  'phrae': `${basePath}/thai/phrae.jpg`,
+  'phitsanulok': `${basePath}/thai/phitsanulok.jpg`,
+  'sukhothai': `${basePath}/thai/sukhothai.jpg`,
+  'tak': `${basePath}/thai/tak.jpg`,
+
   // ภาคตะวันออกเฉียงเหนือ (อีสาน)
-  'udon-thani': `${basePath}/udon-thani.jpg`,
-  'khon-kaen': `${basePath}/khon-kaen.jpg`,
-  'nakhon-ratchasima': `${basePath}/nakhon-ratchasima.jpg`,
-  'ubon-ratchathani': `${basePath}/ubon-ratchathani.jpg`,
-  'nakhon-phanom': `${basePath}/nakhon-phanom.jpg`,
-  'sakon-nakhon': `${basePath}/sakon-nakhon.jpg`,
-  'roi-et': `${basePath}/roi-et.jpg`,
-  'loei': `${basePath}/loei.jpg`,
-  'buri-ram': `${basePath}/buri-ram.jpg`,
-  
+  'udon-thani': `${basePath}/thai/udon-thani.jpg`,
+  'khon-kaen': `${basePath}/thai/khon-kaen.jpg`,
+  'nakhon-ratchasima': `${basePath}/thai/nakhon-ratchasima.jpg`,
+  'ubon-ratchathani': `${basePath}/thai/ubon-ratchathani.jpg`,
+  'nakhon-phanom': `${basePath}/thai/nakhon-phanom.jpg`,
+  'sakon-nakhon': `${basePath}/thai/sakon-nakhon.jpg`,
+  'roi-et': `${basePath}/thai/roi-et.jpg`,
+  'loei': `${basePath}/thai/loei.jpg`,
+  'buri-ram': `${basePath}/thai/buri-ram.jpg`,
+
   // ภาคใต้
-  'phuket': `${basePath}/phuket.jpg`,
-  'krabi': `${basePath}/krabi.jpg`,
-  'songkhla': `${basePath}/songkhla.jpg`,
-  'hat-yai': `${basePath}/hat-yai.jpg`,
-  'surat-thani': `${basePath}/surat-thani.jpg`,
-  'nakhon-si-thammarat': `${basePath}/nakhon-si-thammarat.jpg`,
-  'trang': `${basePath}/trang.jpg`,
-  'ranong': `${basePath}/ranong.jpg`,
-  'chumphon': `${basePath}/chumphon.jpg`,
-  'narathiwat': `${basePath}/narathiwat.jpg`,
+  'phuket': `${basePath}/thai/phuket.jpg`,
+  'krabi': `${basePath}/thai/krabi.jpg`,
+  'songkhla': `${basePath}/thai/songkhla.jpg`,
+  'hat-yai': `${basePath}/thai/hat-yai.jpg`,
+  'surat-thani': `${basePath}/thai/surat-thani.jpg`,
+  'nakhon-si-thammarat': `${basePath}/thai/nakhon-si-thammarat.jpg`,
+  'trang': `${basePath}/thai/trang.jpg`,
+  'ranong': `${basePath}/thai/ranong.jpg`,
+  'chumphon': `${basePath}/thai/chumphon.jpg`,
+  'narathiwat': `${basePath}/thai/narathiwat.jpg`,
 }
 
 // Mock average prices - ใช้ราคาเบื้องต้นที่หลากหลายขึ้น
@@ -74,7 +74,7 @@ const mockAveragePrices: Record<string, number> = {
   'phitsanulok': 2900,
   'sukhothai': 3000,
   'tak': 2800,
-  
+
   // ภาคอีสาน
   'khon-kaen': 2800,
   'udon-thani': 2700,
@@ -85,7 +85,7 @@ const mockAveragePrices: Record<string, number> = {
   'roi-et': 2900,
   'loei': 3100,
   'buri-ram': 2700,
-  
+
   // ภาคใต้
   'phuket': 3200,
   'songkhla': 2500,
@@ -97,7 +97,7 @@ const mockAveragePrices: Record<string, number> = {
   'ranong': 2900,
   'chumphon': 2700,
   'narathiwat': 3300,
-  
+
   // ภาคกลางและตะวันออก
   'bangkok': 2000, // เที่ยวในประเทศจากกรุงเทพ
   'chonburi': 1800,
@@ -168,18 +168,18 @@ function parseThaiDate(dateString: string): Date | null {
     // Format: "27 ม.ค. 2569" or "27 ม.ค. 2569" (Buddhist Era)
     const match = dateString.match(/(\d+)\s+([^\s]+)\s+(\d+)/)
     if (!match) return null
-    
+
     const day = parseInt(match[1], 10)
     const monthAbbr = match[2].trim()
     const buddhistYear = parseInt(match[3], 10)
-    
+
     // Convert Buddhist Era to AD (subtract 543)
     const adYear = buddhistYear - 543
-    
+
     // Find month index from Thai month abbreviations
     const monthIndex = thaiMonths.findIndex(m => m === monthAbbr)
     if (monthIndex === -1) return null
-    
+
     return new Date(adYear, monthIndex, day)
   } catch (error) {
     console.error('Error parsing Thai date:', error)
@@ -212,7 +212,7 @@ function extractAirportCode(destination: string, destinationName: string | null)
   if (/^[A-Z]{3}$/.test(destination)) {
     return destination.toUpperCase()
   }
-  
+
   // Try to extract from destination_name format: "City Name (CODE)"
   if (destinationName) {
     const match = destinationName.match(/\(([A-Z]{3})\)/)
@@ -220,7 +220,7 @@ function extractAirportCode(destination: string, destinationName: string | null)
       return match[1]
     }
   }
-  
+
   // Fallback: use destination as is (might be airport code)
   return destination.toUpperCase()
 }
@@ -269,60 +269,71 @@ async function getImagePathForDestination(
   try {
     // Extract airport code
     const airportCode = extractAirportCode(destination, destinationName)
-    
+
     // Get airport details from API
     const airportDetails = await airportApi.getAirportDetails(airportCode)
-    
-    if (airportDetails?.city) {
-      // Convert city name to province value (kebab-case)
-      const cityKey = cityNameToProvinceValue(airportDetails.city)
-      
-      // First, try direct mapping from cityToProvinceMapping
-      const mappedProvinceValue = cityToProvinceMapping[cityKey]
-      if (mappedProvinceValue && provinceImages[mappedProvinceValue]) {
-        return provinceImages[mappedProvinceValue]
+
+    if (airportDetails) {
+      // 1. If it's Thailand, use province-level images from /thai folder
+      if (airportDetails.country_code === 'TH') {
+        if (airportDetails.city) {
+          // Convert city name to province value (kebab-case)
+          const cityKey = cityNameToProvinceValue(airportDetails.city)
+
+          // First, try direct mapping from cityToProvinceMapping
+          const mappedProvinceValue = cityToProvinceMapping[cityKey]
+          if (mappedProvinceValue && provinceImages[mappedProvinceValue]) {
+            return provinceImages[mappedProvinceValue]
+          }
+
+          // Check if converted city name matches a province value directly
+          if (provinceImages[cityKey]) {
+            return provinceImages[cityKey]
+          }
+
+          // Try to find matching province by city name
+          const matchingProvince = PROVINCES.find(p => {
+            const provinceCityName = cityNameToProvinceValue(p.label)
+            const airportCityName = cityNameToProvinceValue(airportDetails.city || '')
+            return provinceCityName === airportCityName ||
+              airportDetails.city?.toLowerCase().includes(p.label.toLowerCase()) ||
+              p.label.toLowerCase().includes(airportDetails.city?.toLowerCase() || '')
+          })
+
+          if (matchingProvince && provinceImages[matchingProvince.value]) {
+            return provinceImages[matchingProvince.value]
+          }
+        }
+
+        // Fallback: try to find province by airport code
+        const provinceByCode = PROVINCES.find(p => p.airportCode === airportCode)
+        if (provinceByCode && provinceImages[provinceByCode.value]) {
+          return provinceImages[provinceByCode.value]
+        }
       }
-      
-      // Check if converted city name matches a province value directly
-      if (provinceImages[cityKey]) {
-        return provinceImages[cityKey]
-      }
-      
-      // Try to find matching province by city name
-      const matchingProvince = PROVINCES.find(p => {
-        const provinceCityName = cityNameToProvinceValue(p.label)
-        const airportCityName = cityNameToProvinceValue(airportDetails.city || '')
-        return provinceCityName === airportCityName || 
-               airportDetails.city?.toLowerCase().includes(p.label.toLowerCase()) ||
-               p.label.toLowerCase().includes(airportDetails.city?.toLowerCase() || '')
-      })
-      
-      if (matchingProvince && provinceImages[matchingProvince.value]) {
-        return provinceImages[matchingProvince.value]
+      // 2. If it's international, use country-level images from /other_countries folder
+      else if (airportDetails.country_name) {
+        // Normalize country name: lowercase and remove spaces to match file names
+        const normalizedCountry = airportDetails.country_name.toLowerCase().replace(/\s+/g, '')
+        return `${basePath}/other_countries/${normalizedCountry}.jpg`
       }
     }
-    
-    // Fallback: try to find province by airport code
-    const provinceByCode = PROVINCES.find(p => p.airportCode === airportCode)
-    if (provinceByCode && provinceImages[provinceByCode.value]) {
-      return provinceImages[provinceByCode.value]
-    }
-    
+
     // Final fallback: use placeholder
     return `${basePath}/placeholder.svg`
   } catch (error) {
     console.warn(`[PopularDestinations] Failed to get image for ${destination}:`, error)
-    
+
     // Fallback: try to find province by destination value
-    const province = PROVINCES.find(p => 
-      p.value === destination || 
+    const province = PROVINCES.find(p =>
+      p.value === destination ||
       p.airportCode === destination.toUpperCase()
     )
-    
+
     if (province && provinceImages[province.value]) {
       return provinceImages[province.value]
     }
-    
+
     return `${basePath}/placeholder.svg`
   }
 }
@@ -336,59 +347,59 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
       try {
         setLoading(true)
         const stats = await statisticsApi.getStatistics()
-        
+
         // แปลงข้อมูลจาก API เป็นรูปแบบที่ต้องการ
         const destinationsDataPromises = stats.popularDestinations
           .slice(0, 4) // แสดงแค่ 4 อันดับแรก
           .map(async (dest, index) => {
             // ดึงข้อมูลรูปภาพจาก airport code
             const imagePath = await getImagePathForDestination(dest.destination, dest.destination_name)
-            
+
             // หา province value จาก destination name หรือ destination value
-            const province = PROVINCES.find(p => 
-              p.label === dest.destination_name || 
+            const province = PROVINCES.find(p =>
+              p.label === dest.destination_name ||
               p.value === dest.destination ||
               p.airportCode === dest.destination.toUpperCase() ||
               dest.destination_name?.includes(p.label) ||
               p.label.includes(dest.destination_name || '')
             )
-            
+
             const provinceValue = province?.value || dest.destination
             const displayName = dest.destination_name || province?.label || dest.destination
-            
+
             // ดึงข้อมูลราคาต่ำสุดและสายการบิน
             let cheapestPrice: number | null = null
             let airlineName: string | null = null
             let cheapestDate: string | null = null // ✅ เพิ่มวันที่ของราคาต่ำสุด
-            
+
             // ✅ ตรวจสอบว่ามีข้อมูล flightPrices จาก airline-flights หรือไม่ (ถ้าปลายทางตรงกัน)
             // เปรียบเทียบทั้ง destination value และ province value
-            const searchDestinationProvince = currentSearchParams?.destination 
-              ? PROVINCES.find(p => 
-                  p.value === currentSearchParams.destination || 
-                  p.label === currentSearchParams.destination
-                )
+            const searchDestinationProvince = currentSearchParams?.destination
+              ? PROVINCES.find(p =>
+                p.value === currentSearchParams.destination ||
+                p.label === currentSearchParams.destination
+              )
               : null
-            const hasMatchingFlightPrices = flightPrices && 
+            const hasMatchingFlightPrices = flightPrices &&
               flightPrices.length > 0 &&
               currentSearchParams?.origin === 'bangkok' &&
               (currentSearchParams?.destination === dest.destination ||
-               currentSearchParams?.destination === provinceValue ||
-               searchDestinationProvince?.value === provinceValue ||
-               searchDestinationProvince?.value === dest.destination)
-            
+                currentSearchParams?.destination === provinceValue ||
+                searchDestinationProvince?.value === provinceValue ||
+                searchDestinationProvince?.value === dest.destination)
+
             if (hasMatchingFlightPrices && flightPrices.length > 0) {
               // ✅ ใช้ข้อมูลจาก airline-flights (ราคาที่ถูกที่สุดจากที่แนะนำ)
-              const cheapest = flightPrices.reduce((min, flight) => 
+              const cheapest = flightPrices.reduce((min, flight) =>
                 flight.price < min.price ? flight : min
               )
-              
+
               cheapestPrice = cheapest.price
               airlineName = cheapest.airline_name_th || cheapest.airline_name || null
               // ✅ เก็บวันที่ของเที่ยวบินที่ถูกที่สุด
               if (cheapest.departure_date) {
-                const date = typeof cheapest.departure_date === 'string' 
-                  ? new Date(cheapest.departure_date) 
+                const date = typeof cheapest.departure_date === 'string'
+                  ? new Date(cheapest.departure_date)
                   : cheapest.departure_date
                 cheapestDate = date.toLocaleDateString('th-TH', {
                   day: 'numeric',
@@ -396,7 +407,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                   year: 'numeric'
                 })
               }
-              
+
               console.log(`✅ [REAL DATA - AirlineFlights] ${dest.destination} (${displayName}): ${airlineName || 'Unknown'} - ฿${cheapestPrice}`, {
                 totalFlights: flightPrices.length,
                 cheapestFlight: cheapest
@@ -407,7 +418,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                 const today = new Date()
                 const futureDate = new Date()
                 futureDate.setDate(futureDate.getDate() + 90) // ดูข้อมูล 90 วันข้างหน้า
-                
+
                 const fetchedFlightPrices = await flightApi.getFlightPrices({
                   origin: 'bangkok',
                   destination: dest.destination,
@@ -418,13 +429,13 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                   selectedAirlines: [],
                   travelClass: 'economy',
                 })
-                
+
                 // หาเที่ยวบินที่ถูกที่สุด
                 if (fetchedFlightPrices && fetchedFlightPrices.length > 0) {
-                  const cheapest = fetchedFlightPrices.reduce((min, flight) => 
+                  const cheapest = fetchedFlightPrices.reduce((min, flight) =>
                     flight.price < min.price ? flight : min
                   )
-                  
+
                   cheapestPrice = cheapest.price
                   airlineName = cheapest.airline_name_th || cheapest.airline_name || cheapest.airline || null
                   // ✅ เก็บวันที่ของเที่ยวบินที่ถูกที่สุด
@@ -443,7 +454,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                       year: 'numeric'
                     })
                   }
-                  
+
                   console.log(`✅ [REAL DATA - API] ${dest.destination} (${displayName}): ${airlineName || 'Unknown'} - ฿${cheapestPrice}`, {
                     totalFlights: fetchedFlightPrices.length,
                     cheapestFlight: cheapest
@@ -451,7 +462,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                 } else {
                   console.warn(`⚠️ [NO DATA - API] ${dest.destination}: API returned empty array`)
                 }
-              
+
               } catch (flightError) {
                 // ถ้า API error หรือไม่มีข้อมูล ให้ใช้ mock data
                 console.warn(`⚠️ [MOCK DATA - API Error] ${dest.destination} (${displayName}): ${flightError instanceof Error ? flightError.message : 'Unknown error'}`, {
@@ -461,7 +472,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                 cheapestPrice = mockAveragePrices[provinceValue] || null
               }
             }
-            
+
             // ถ้ายังไม่มีราคา ให้ใช้ค่า default ตามระยะทางคร่าวๆ
             if (cheapestPrice === null) {
               const fallbackPrice = (() => {
@@ -477,11 +488,11 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
                   return 2800
                 }
               })()
-              
+
               console.warn(`⚠️ [MOCK DATA - Fallback] ${dest.destination} (${displayName}): No price data, using fallback ฿${fallbackPrice}`)
               cheapestPrice = fallbackPrice
             }
-            
+
             return {
               destination: dest.destination,
               // destinationName: displayName,
@@ -495,7 +506,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
               popular: index === 0,
             }
           })
-        
+
         const destinationsData = await Promise.all(destinationsDataPromises)
         setDestinations(destinationsData)
       } catch (error) {
@@ -563,26 +574,26 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
         {destinations.map((dest) => {
           const handleCardClick = () => {
             if (!onSearch) return
-            
+
             // Parse date from Thai format
             const searchDate = dest.cheapestDate ? parseThaiDate(dest.cheapestDate) : null
             if (!searchDate) {
               console.warn('Cannot parse date:', dest.cheapestDate)
               return
             }
-            
+
             // Get origin and destination provinces
             const originProvince = PROVINCES.find(p => p.value === 'bangkok') || PROVINCES[0]
-            const destinationProvince = PROVINCES.find(p => 
-              p.value === dest.provinceValue || 
+            const destinationProvince = PROVINCES.find(p =>
+              p.value === dest.provinceValue ||
               p.label === dest.destinationName
             )
-            
+
             if (!destinationProvince) {
               console.warn('Cannot find destination province:', dest.provinceValue, dest.destinationName)
               return
             }
-            
+
             // Create search params
             const searchParams: FlightSearchParams = {
               origin: originProvince.value,
@@ -597,73 +608,73 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
               passengerCount: 1,
               travelClass: 'economy',
             }
-            
+
             onSearch(searchParams)
           }
-          
+
           return (
-          <Card 
-            key={dest.destination} 
-            className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer p-0"
-            onClick={handleCardClick}
-          >
-            <div className="relative h-48 bg-muted rounded-t-xl">
-              <img 
-                src={dest.image || `${basePath}/placeholder.svg`} 
-                alt={dest.destinationName || dest.destination}
-                className="w-full h-full object-cover rounded-t-xl"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.src = `${basePath}/placeholder.svg`
-                }}
-              />
-              {dest.popular && (
-                <div className="absolute top-0 left-0 z-10">
-                  <div 
-                    className="bg-yellow-500 px-4 py-2"
-                    style={{
-                      borderTopLeftRadius: '0.5rem',
-                      borderTopRightRadius: '0',
-                      borderBottomLeftRadius: '0',
-                      borderBottomRightRadius: '0.5rem',
-                    }}
-                  >
-                    <span className="font-semibold text-sm" style={{ color: '#0055a4' }}>
-                      {'ยอดนิยม'}
-                    </span>
+            <Card
+              key={dest.destination}
+              className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer p-0"
+              onClick={handleCardClick}
+            >
+              <div className="relative h-48 bg-muted rounded-t-xl">
+                <img
+                  src={dest.image || `${basePath}/placeholder.svg`}
+                  alt={dest.destinationName || dest.destination}
+                  className="w-full h-full object-cover rounded-t-xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = `${basePath}/placeholder.svg`
+                  }}
+                />
+                {dest.popular && (
+                  <div className="absolute top-0 left-0 z-10">
+                    <div
+                      className="bg-yellow-500 px-4 py-2"
+                      style={{
+                        borderTopLeftRadius: '0.5rem',
+                        borderTopRightRadius: '0',
+                        borderBottomLeftRadius: '0',
+                        borderBottomRightRadius: '0.5rem',
+                      }}
+                    >
+                      <span className="font-semibold text-sm" style={{ color: '#0055a4' }}>
+                        {'ยอดนิยม'}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-            
-            <div className="p-4 rounded-b-xl">
-              <h3 className="font-bold text-lg mb-3">{dest.destinationName || dest.destination}</h3>
-              
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Users className="w-4 h-4" />
-                    <span>{dest.count.toLocaleString()} {'ครั้ง'}</span>
+                )}
+              </div>
+
+              <div className="p-4 rounded-b-xl">
+                <h3 className="font-bold text-lg mb-3">{dest.destinationName || dest.destination}</h3>
+
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <Users className="w-4 h-4" />
+                      <span>{dest.count.toLocaleString()} {'ครั้ง'}</span>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="pt-2 border-t">
-                  <div className="text-xs text-muted-foreground mb-1">{'ราคาถูกที่สุด'}</div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <div className="text-xl font-bold text-primary">{dest.cheapestPrice}</div>
-                    {dest.airlineName && (
-                      <div className="text-sm text-muted-foreground">• {dest.airlineName}</div>
+
+                  <div className="pt-2 border-t">
+                    <div className="text-xs text-muted-foreground mb-1">{'ราคาถูกที่สุด'}</div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="text-xl font-bold text-primary">{dest.cheapestPrice}</div>
+                      {dest.airlineName && (
+                        <div className="text-sm text-muted-foreground">• {dest.airlineName}</div>
+                      )}
+                    </div>
+                    {dest.cheapestDate && (
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {'วันที่: '}{dest.cheapestDate}
+                      </div>
                     )}
                   </div>
-                  {dest.cheapestDate && (
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {'วันที่: '}{dest.cheapestDate}
-                    </div>
-                  )}
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
           )
         })}
       </div>

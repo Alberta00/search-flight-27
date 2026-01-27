@@ -20,7 +20,7 @@ export const popularDestinations: PopularDestination[] = [
     avgPrice: '฿3,500',
     trend: '+15%',
     popular: true,
-    image: '/chiang-mai.jpg',
+    image: '/thai/chiang-mai.jpg',
   },
   {
     province: 'ภูเก็ต',
@@ -29,7 +29,7 @@ export const popularDestinations: PopularDestination[] = [
     avgPrice: '฿3,200',
     trend: '+22%',
     popular: true,
-    image: '/phuket.jpg',
+    image: '/thai/phuket.jpg',
   },
   {
     province: 'กระบี่',
@@ -38,7 +38,7 @@ export const popularDestinations: PopularDestination[] = [
     avgPrice: '฿3,000',
     trend: '+8%',
     popular: false,
-    image: '/krabi.jpg',
+    image: '/thai/krabi.jpg',
   },
   {
     province: 'หาดใหญ่',
@@ -47,7 +47,7 @@ export const popularDestinations: PopularDestination[] = [
     avgPrice: '฿2,500',
     trend: '+18%',
     popular: false,
-    image: '/hat-yai.jpg',
+    image: '/thai/hat-yai.jpg',
   },
 ]
 

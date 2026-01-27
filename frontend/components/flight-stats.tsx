@@ -60,46 +60,46 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 // ถ้าไม่มีรูปจริง จะ fallback ไปใช้ placeholder.svg ตาม logic ในโค้ด
 const provinceImages: Record<string, string> = {
   // ภาคกลาง & ตะวันออก
-  'bangkok': `${basePath}/bangkok.jpg`,
-  'rayong': `${basePath}/rayong.jpg`,
-  'trat': `${basePath}/trat.jpg`,
-  'prachuap-khiri-khan': `${basePath}/prachuap-khiri-khan.jpg`,
-  'chonburi': `${basePath}/chonburi.jpg`,
-  'kanchanaburi': `${basePath}/kanchanaburi.jpg`,
+  'bangkok': `${basePath}/thai/bangkok.jpg`,
+  'rayong': `${basePath}/thai/rayong.jpg`,
+  'trat': `${basePath}/thai/trat.jpg`,
+  'prachuap-khiri-khan': `${basePath}/thai/prachuap-khiri-khan.jpg`,
+  'chonburi': `${basePath}/thai/chonburi.jpg`,
+  'kanchanaburi': `${basePath}/thai/kanchanaburi.jpg`,
 
   // ภาคเหนือ
-  'chiang-mai': `${basePath}/chiang-mai.jpg`,
-  'chiang-rai': `${basePath}/chiang-rai.jpg`,
-  'lampang': `${basePath}/lampang.jpg`,
-  'mae-hong-son': `${basePath}/mae-hong-son.jpg`,
-  'nan': `${basePath}/nan.jpg`,
-  'phrae': `${basePath}/phrae.jpg`,
-  'phitsanulok': `${basePath}/phitsanulok.jpg`,
-  'sukhothai': `${basePath}/sukhothai.jpg`,
-  'tak': `${basePath}/tak.jpg`,
+  'chiang-mai': `${basePath}/thai/chiang-mai.jpg`,
+  'chiang-rai': `${basePath}/thai/chiang-rai.jpg`,
+  'lampang': `${basePath}/thai/lampang.jpg`,
+  'mae-hong-son': `${basePath}/thai/mae-hong-son.jpg`,
+  'nan': `${basePath}/thai/nan.jpg`,
+  'phrae': `${basePath}/thai/phrae.jpg`,
+  'phitsanulok': `${basePath}/thai/phitsanulok.jpg`,
+  'sukhothai': `${basePath}/thai/sukhothai.jpg`,
+  'tak': `${basePath}/thai/tak.jpg`,
 
   // ภาคตะวันออกเฉียงเหนือ (อีสาน)
-  'udon-thani': `${basePath}/udon-thani.jpg`,
-  'khon-kaen': `${basePath}/khon-kaen.jpg`,
-  'nakhon-ratchasima': `${basePath}/nakhon-ratchasima.jpg`,
-  'ubon-ratchathani': `${basePath}/ubon-ratchathani.jpg`,
-  'nakhon-phanom': `${basePath}/nakhon-phanom.jpg`,
-  'sakon-nakhon': `${basePath}/sakon-nakhon.jpg`,
-  'roi-et': `${basePath}/roi-et.jpg`,
-  'loei': `${basePath}/loei.jpg`,
-  'buri-ram': `${basePath}/buri-ram.jpg`,
+  'udon-thani': `${basePath}/thai/udon-thani.jpg`,
+  'khon-kaen': `${basePath}/thai/khon-kaen.jpg`,
+  'nakhon-ratchasima': `${basePath}/thai/nakhon-ratchasima.jpg`,
+  'ubon-ratchathani': `${basePath}/thai/ubon-ratchathani.jpg`,
+  'nakhon-phanom': `${basePath}/thai/nakhon-phanom.jpg`,
+  'sakon-nakhon': `${basePath}/thai/sakon-nakhon.jpg`,
+  'roi-et': `${basePath}/thai/roi-et.jpg`,
+  'loei': `${basePath}/thai/loei.jpg`,
+  'buri-ram': `${basePath}/thai/buri-ram.jpg`,
 
   // ภาคใต้
-  'phuket': `${basePath}/phuket.jpg`,
-  'krabi': `${basePath}/krabi.jpg`,
-  'songkhla': `${basePath}/songkhla.jpg`,
-  'hat-yai': `${basePath}/hat-yai.jpg`,
-  'surat-thani': `${basePath}/surat-thani.jpg`,
-  'nakhon-si-thammarat': `${basePath}/nakhon-si-thammarat.jpg`,
-  'trang': `${basePath}/trang.jpg`,
-  'ranong': `${basePath}/ranong.jpg`,
-  'chumphon': `${basePath}/chumphon.jpg`,
-  'narathiwat': `${basePath}/narathiwat.jpg`,
+  'phuket': `${basePath}/thai/phuket.jpg`,
+  'krabi': `${basePath}/thai/krabi.jpg`,
+  'songkhla': `${basePath}/thai/songkhla.jpg`,
+  'hat-yai': `${basePath}/thai/hat-yai.jpg`,
+  'surat-thani': `${basePath}/thai/surat-thani.jpg`,
+  'nakhon-si-thammarat': `${basePath}/thai/nakhon-si-thammarat.jpg`,
+  'trang': `${basePath}/thai/trang.jpg`,
+  'ranong': `${basePath}/thai/ranong.jpg`,
+  'chumphon': `${basePath}/thai/chumphon.jpg`,
+  'narathiwat': `${basePath}/thai/narathiwat.jpg`,
 }
 
 /**
@@ -158,33 +158,44 @@ async function getImagePathForDestination(
     const airportCode = extractAirportCode(destination, destinationName)
     const airportDetails = await airportApi.getAirportDetails(airportCode)
 
-    if (airportDetails?.city) {
-      const cityKey = cityNameToProvinceValue(airportDetails.city)
-      const mappedProvinceValue = cityToProvinceMapping[cityKey]
+    if (airportDetails) {
+      // 1. If it's Thailand, use province-level images from /thai folder
+      if (airportDetails.country_code === 'TH') {
+        if (airportDetails.city) {
+          const cityKey = cityNameToProvinceValue(airportDetails.city)
+          const mappedProvinceValue = cityToProvinceMapping[cityKey]
 
-      if (mappedProvinceValue && provinceImages[mappedProvinceValue]) {
-        return provinceImages[mappedProvinceValue]
+          if (mappedProvinceValue && provinceImages[mappedProvinceValue]) {
+            return provinceImages[mappedProvinceValue]
+          }
+          if (provinceImages[cityKey]) {
+            return provinceImages[cityKey]
+          }
+
+          const matchingProvince = PROVINCES.find(p => {
+            const provinceCityName = cityNameToProvinceValue(p.label)
+            const airportCityName = cityNameToProvinceValue(airportDetails.city || '')
+            return provinceCityName === airportCityName ||
+              airportDetails.city?.toLowerCase().includes(p.label.toLowerCase()) ||
+              p.label.toLowerCase().includes(airportDetails.city?.toLowerCase() || '')
+          })
+
+          if (matchingProvince && provinceImages[matchingProvince.value]) {
+            return provinceImages[matchingProvince.value]
+          }
+        }
+
+        const provinceByCode = PROVINCES.find(p => p.airportCode === airportCode)
+        if (provinceByCode && provinceImages[provinceByCode.value]) {
+          return provinceImages[provinceByCode.value]
+        }
       }
-      if (provinceImages[cityKey]) {
-        return provinceImages[cityKey]
+      // 2. If it's international, use country-level images from /other_countries folder
+      else if (airportDetails.country_name) {
+        // Normalize country name: lowercase and remove spaces to match file names
+        const normalizedCountry = airportDetails.country_name.toLowerCase().replace(/\s+/g, '')
+        return `${basePath}/other_countries/${normalizedCountry}.jpg`
       }
-
-      const matchingProvince = PROVINCES.find(p => {
-        const provinceCityName = cityNameToProvinceValue(p.label)
-        const airportCityName = cityNameToProvinceValue(airportDetails.city || '')
-        return provinceCityName === airportCityName ||
-          airportDetails.city?.toLowerCase().includes(p.label.toLowerCase()) ||
-          p.label.toLowerCase().includes(airportDetails.city?.toLowerCase() || '')
-      })
-
-      if (matchingProvince && provinceImages[matchingProvince.value]) {
-        return provinceImages[matchingProvince.value]
-      }
-    }
-
-    const provinceByCode = PROVINCES.find(p => p.airportCode === airportCode)
-    if (provinceByCode && provinceImages[provinceByCode.value]) {
-      return provinceImages[provinceByCode.value]
     }
 
     return `${basePath}/placeholder.svg`
