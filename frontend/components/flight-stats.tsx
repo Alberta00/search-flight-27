@@ -100,6 +100,7 @@ const provinceImages: Record<string, string> = {
   'ranong': `${basePath}/thai/ranong.jpg`,
   'chumphon': `${basePath}/thai/chumphon.jpg`,
   'narathiwat': `${basePath}/thai/narathiwat.jpg`,
+  'samui': `${basePath}/thai/samui.jpg`,
 }
 
 /**
@@ -154,6 +155,8 @@ const cityToProvinceMapping: Record<string, string> = {
   'hat-yai': 'hat-yai',
   'songkhla': 'songkhla',
   'surat-thani': 'surat-thani',
+  'samui': 'samui',
+  'na-thon': 'samui',
 }
 
 /**

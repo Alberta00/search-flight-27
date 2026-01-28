@@ -64,6 +64,7 @@ export const PROVINCES = [
   { value: 'ranong', label: 'ระนอง', airportCode: 'UNN' },
   { value: 'chumphon', label: 'ชุมพร', airportCode: 'CJM' },
   { value: 'narathiwat', label: 'นราธิวาส', airportCode: 'NAW' },
+  { value: 'samui', label: 'เกาะสมุย', airportCode: 'USM' },
 ]
 
 // Airport code mapping (province value -> airport code)

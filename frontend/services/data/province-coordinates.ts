@@ -52,6 +52,7 @@ export const provinceCoordinates: Record<string, ProvinceCoordinates> = {
   'ranong': { lat: 9.9628, lon: 98.6389, cityName: 'Ranong' },
   'chumphon': { lat: 10.4931, lon: 99.1800, cityName: 'Chumphon' },
   'narathiwat': { lat: 6.4264, lon: 101.8231, cityName: 'Narathiwat' },
+  'samui': { lat: 9.5120, lon: 100.0136, cityName: 'Ko Samui' },
 }
 
 /**
