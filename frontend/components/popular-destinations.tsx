@@ -349,7 +349,7 @@ export function PopularDestinations({ flightPrices, currentSearchParams, onSearc
     const fetchPopularDestinations = async () => {
       try {
         setLoading(true)
-        const stats = await statisticsApi.getStatistics()
+        const stats = await statisticsApi.getStatistics(currentSearchParams?.destination)
 
         // แปลงข้อมูลจาก API เป็นรูปแบบที่ต้องการ
         const destinationsDataPromises = stats.popularDestinations

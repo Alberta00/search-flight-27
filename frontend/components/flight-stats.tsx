@@ -15,6 +15,11 @@ import { statisticsApi } from '@/lib/api/statistics-api'
 import { airportApi } from '@/lib/api/airport-api'
 import { PROVINCES } from '@/services/data/constants'
 import { translateCity } from '@/lib/services/thai-translation-service'
+import { FlightSearchParams } from './flight-search-form'
+
+interface FlightStatsProps {
+  searchParams?: FlightSearchParams | null
+}
 
 // Chart configuration - สามารถปรับสีและขนาดได้ที่นี่
 const chartConfig = {
@@ -223,7 +228,7 @@ async function getImagePathForDestination(
   }
 }
 
-export function FlightStats() {
+export function FlightStats({ searchParams }: FlightStatsProps) {
   const [stats, setStats] = useState({
     mostSearchedCountry: null as { country: string; countryName?: string | null; count: number } | null,
     mostSearchedDuration: null as { duration: string; count: number } | null,
@@ -254,7 +259,7 @@ export function FlightStats() {
 
       try {
         // Try to fetch from backend API first
-        const data = await statisticsApi.getStatistics();
+        const data = await statisticsApi.getStatistics(searchParams?.destination);
 
         if (!mounted) return;
 
@@ -403,7 +408,7 @@ export function FlightStats() {
       }
       isFetchingRef.current = false
     };
-  }, [])
+  }, [searchParams?.destination])
 
   if (loading) {
     return (
@@ -498,7 +503,7 @@ export function FlightStats() {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Trophy className="w-5 h-5 text-primary" />
-                  <h4 className="text-lg font-bold">{'จังหวัดยอดนิยม'}</h4>
+                  <h4 className="text-lg font-bold">{'การค้นหายอดนิยม'}</h4>
                 </div>
 
                 <div className="space-y-4">

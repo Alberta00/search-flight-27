@@ -74,8 +74,8 @@ export class StatisticsApi {
   /**
    * Get all statistics
    */
-  async getStatistics(signal?: AbortSignal): Promise<StatisticsResponse> {
-    return apiClient.get<StatisticsResponse>('/statistics', undefined, { signal });
+  async getStatistics(destination?: string, signal?: AbortSignal): Promise<StatisticsResponse> {
+    return apiClient.get<StatisticsResponse>('/statistics', { destination }, { signal });
   }
 
   /**

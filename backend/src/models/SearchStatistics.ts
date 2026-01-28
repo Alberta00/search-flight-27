@@ -83,20 +83,44 @@ export class SearchStatisticsModel {
 
   /**
    * Get popular destinations (top N)
+   * @param limit - Max number of results
+   * @param countryCode - Optional country code to filter by
    */
-  static async getPopularDestinations(limit: number = 5): Promise<Array<{ destination: string; destination_name: string | null; count: number }>> {
-    const query = `
+  static async getPopularDestinations(limit: number = 5, countryCode?: string): Promise<Array<{ destination: string; destination_name: string | null; count: number }>> {
+    let query = `
       SELECT 
-        destination,
-        MAX(destination_name) as destination_name,
+        ss.destination,
+        MAX(ss.destination_name) as destination_name,
         COUNT(*) as count
-      FROM search_statistics
-      GROUP BY destination
+      FROM search_statistics ss
+    `;
+
+    const params: any[] = [limit];
+    let paramIndex = 2;
+
+    if (countryCode) {
+      query += `
+        INNER JOIN airports a ON ss.destination = a.code
+        WHERE a.country = $${paramIndex}
+      `;
+      params.push(countryCode);
+      paramIndex++;
+    }
+
+    query += `
+      GROUP BY ss.destination
       ORDER BY count DESC
       LIMIT $1
     `;
 
-    const result = await pool.query(query, [limit]);
+    const result = await pool.query(query, params);
+
+    // Fallback: If no results found for specific country, return global popular destinations
+    if (countryCode && result.rows.length === 0) {
+      console.log(`[SearchStatisticsModel] No results for country ${countryCode}, falling back to global.`);
+      return this.getPopularDestinations(limit);
+    }
+
     return result.rows;
   }
 

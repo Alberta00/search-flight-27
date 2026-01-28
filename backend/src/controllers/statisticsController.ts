@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { SearchStatisticsModel, PriceStatisticsModel } from '../models/SearchStatistics';
+import { AirportModel } from '../models/Airport';
+import { convertToAirportCode } from '../utils/airportCodeConverter';
 
 /**
  * Save a search query to the database
@@ -24,7 +26,7 @@ export async function saveSearch(req: Request, res: Response, next: NextFunction
     }
 
     // Get user IP address (handle proxy headers)
-    const userIp = 
+    const userIp =
       (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
       (req.headers['x-real-ip'] as string) ||
       req.ip ||
@@ -93,8 +95,25 @@ export async function savePriceStat(req: Request, res: Response, next: NextFunct
  * Get all statistics
  * GET /api/statistics
  */
-export async function getStatistics(_req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function getStatistics(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
+    const { destination } = req.query;
+
+    let countryCode: string | undefined;
+
+    if (destination && typeof destination === 'string') {
+      try {
+        const airportCode = await convertToAirportCode(destination);
+        const airport = await AirportModel.getAirportByCode(airportCode);
+        if (airport) {
+          countryCode = airport.country || undefined;
+          console.log(`[statisticsController] Resolved destination ${destination} to country ${countryCode}`);
+        }
+      } catch (error) {
+        console.warn(`[statisticsController] Failed to resolve country for destination: ${destination}`);
+      }
+    }
+
     const [
       totalSearches,
       mostSearchedDestination,
@@ -105,7 +124,7 @@ export async function getStatistics(_req: Request, res: Response, next: NextFunc
       SearchStatisticsModel.getTotalSearches(),
       SearchStatisticsModel.getMostSearchedDestination(1),
       SearchStatisticsModel.getMostSearchedDuration(1),
-      SearchStatisticsModel.getPopularDestinations(5),
+      SearchStatisticsModel.getPopularDestinations(5, countryCode),
       SearchStatisticsModel.getMonthlySearchStats(),
     ]);
 
