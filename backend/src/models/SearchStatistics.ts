@@ -47,7 +47,7 @@ export class SearchStatisticsModel {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       search.origin,
       search.originName || null,
@@ -58,22 +58,25 @@ export class SearchStatisticsModel {
       search.userIp || null,
       search.userAgent || null,
     ]);
-    
+
     return result.rows[0];
   }
 
   /**
    * Get the most searched destination
    */
-  static async getMostSearchedDestination(limit: number = 1): Promise<Array<{ destination: string; count: number }>> {
+  static async getMostSearchedDestination(limit: number = 1): Promise<Array<{ destination: string; destination_name: string | null; count: number }>> {
     const query = `
-      SELECT destination, COUNT(*) as count
+      SELECT 
+        destination, 
+        MAX(destination_name) as destination_name,
+        COUNT(*) as count
       FROM search_statistics
       GROUP BY destination
       ORDER BY count DESC
       LIMIT $1
     `;
-    
+
     const result = await pool.query(query, [limit]);
     return result.rows;
   }
@@ -92,7 +95,7 @@ export class SearchStatisticsModel {
       ORDER BY count DESC
       LIMIT $1
     `;
-    
+
     const result = await pool.query(query, [limit]);
     return result.rows;
   }
@@ -110,7 +113,7 @@ export class SearchStatisticsModel {
       GROUP BY EXTRACT(MONTH FROM created_at), TO_CHAR(created_at, 'TMMonth')
       ORDER BY month
     `;
-    
+
     const result = await pool.query(query);
     return result.rows;
   }
@@ -135,7 +138,7 @@ export class SearchStatisticsModel {
       ORDER BY count DESC
       LIMIT $1
     `;
-    
+
     const result = await pool.query(query, [limit]);
     return result.rows;
   }
@@ -160,7 +163,7 @@ export class SearchStatisticsModel {
       const now = new Date();
       const recentStartDate = new Date(now);
       recentStartDate.setDate(recentStartDate.getDate() - 7);
-      
+
       const olderStartDate = new Date(now);
       olderStartDate.setDate(olderStartDate.getDate() - 14);
       const olderEndDate = new Date(recentStartDate);
@@ -207,7 +210,7 @@ export class SearchStatisticsModel {
 
       // ✅ 1. เพิ่ม threshold: ต้องมีข้อมูลเก่าอย่างน้อย 3 ครั้ง ถึงจะคำนวณ trend ได้
       const MINIMUM_COUNT_FOR_TREND = 3;
-      
+
       if (olderCount < MINIMUM_COUNT_FOR_TREND) {
         // ถ้าไม่มีข้อมูลเก่าเพียงพอ ไม่ควรแสดง trend
         // เพราะจะทำให้ได้เปอร์เซ็นต์ที่สูงเกินจริง (เช่น จาก 1 ครั้ง → 15 ครั้ง = 1400%)
@@ -263,7 +266,7 @@ export class PriceStatisticsModel {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       priceStat.origin,
       priceStat.originName || null,
@@ -273,7 +276,7 @@ export class PriceStatisticsModel {
       priceStat.season,
       priceStat.airline || null,
     ]);
-    
+
     return result.rows[0];
   }
 
@@ -299,7 +302,7 @@ export class PriceStatisticsModel {
 
     const result = await pool.query(query, params);
     const avgPrice = result.rows[0]?.avg_price;
-    
+
     return avgPrice ? parseFloat(avgPrice) : null;
   }
 
@@ -331,7 +334,7 @@ export class PriceStatisticsModel {
       const now = new Date();
       const recentStartDate = new Date(now);
       recentStartDate.setDate(recentStartDate.getDate() - 30);
-      
+
       const olderStartDate = new Date(now);
       olderStartDate.setDate(olderStartDate.getDate() - 60);
       const olderEndDate = new Date(recentStartDate);

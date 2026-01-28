@@ -25,6 +25,7 @@ export interface StatisticsResponse {
   totalSearches: number;
   mostSearchedDestination: {
     destination: string;
+    destination_name: string | null;
     count: number;
   } | null;
   mostSearchedDuration: {

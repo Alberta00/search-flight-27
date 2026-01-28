@@ -31,7 +31,7 @@ export const PROVINCES = [
   { value: 'rayong', label: 'ระยอง', airportCode: 'UTP' },
   { value: 'trat', label: 'ตราด', airportCode: 'TDX' },
   { value: 'prachuap-khiri-khan', label: 'ประจวบคีรีขันธ์', airportCode: 'HHQ' },
-  
+
   // ภาคเหนือ
   { value: 'chiang-mai', label: 'เชียงใหม่', airportCode: 'CNX' },
   { value: 'chiang-rai', label: 'เชียงราย', airportCode: 'CEI' },
@@ -42,7 +42,7 @@ export const PROVINCES = [
   { value: 'phitsanulok', label: 'พิษณุโลก', airportCode: 'PHS' },
   { value: 'sukhothai', label: 'สุโขทัย', airportCode: 'THS' },
   { value: 'tak', label: 'ตาก', airportCode: 'MAQ' },
-  
+
   // ภาคตะวันออกเฉียงเหนือ (อีสาน)
   { value: 'udon-thani', label: 'อุดรธานี', airportCode: 'UTH' },
   { value: 'khon-kaen', label: 'ขอนแก่น', airportCode: 'KKC' },
@@ -53,7 +53,7 @@ export const PROVINCES = [
   { value: 'loei', label: 'เลย', airportCode: 'LOE' },
   { value: 'buri-ram', label: 'บุรีรัมย์', airportCode: 'BFV' },
   { value: 'nakhon-ratchasima', label: 'นครราชสีมา', airportCode: 'NAK' },
-  
+
   // ภาคใต้
   { value: 'phuket', label: 'ภูเก็ต', airportCode: 'HKT' },
   { value: 'songkhla', label: 'สงขลา', airportCode: 'HDY' },
@@ -88,9 +88,10 @@ export const THAI_AIRLINES = [
   { value: 'nok-air', label: 'Nok Air' },
 ]
 
-// Province names mapping (value -> label)
+// Province names mapping (value -> label and airportCode -> label)
 export const provinceNames: Record<string, string> = PROVINCES.reduce((acc, province) => {
   acc[province.value] = province.label
+  acc[province.airportCode] = province.label
   return acc
 }, {} as Record<string, string>)
 

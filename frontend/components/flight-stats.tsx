@@ -122,11 +122,20 @@ function extractAirportCode(destination: string, destinationName: string | null 
  * Convert city name to province value (kebab-case)
  */
 function cityNameToProvinceValue(cityName: string): string {
+  if (!cityName) return ''
   return cityName
     .toLowerCase()
     .trim()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '')
+}
+
+/**
+ * Clean city name by removing airport code in parentheses
+ */
+function cleanCityName(name: string | null): string | null {
+  if (!name) return null
+  return name.replace(/\s*\(.*?\)\s*/g, '').trim()
 }
 
 /**
@@ -213,11 +222,11 @@ async function getImagePathForDestination(
 
 export function FlightStats() {
   const [stats, setStats] = useState({
-    mostSearchedCountry: null as { country: string; count: number } | null,
+    mostSearchedCountry: null as { country: string; countryName?: string | null; count: number } | null,
     mostSearchedDuration: null as { duration: string; count: number } | null,
     totalSearches: 0,
     monthlyStats: [] as Array<{ month: string; count: number }>,
-    popularProvinces: [] as Array<{ province: string; count: number; image?: string }>,
+    popularProvinces: [] as Array<{ province: string; provinceName?: string | null; count: number; image?: string }>,
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -252,6 +261,7 @@ export function FlightStats() {
           mostSearchedCountry: data.mostSearchedDestination
             ? {
               country: data.mostSearchedDestination.destination,
+              countryName: cleanCityName(data.mostSearchedDestination.destination_name),
               count: data.mostSearchedDestination.count,
             }
             : null,
@@ -263,6 +273,7 @@ export function FlightStats() {
             : null,
           popularProvinces: await Promise.all(data.popularDestinations.map(async (d) => ({
             province: d.destination,
+            provinceName: cleanCityName(d.destination_name),
             count: d.count,
             image: await getImagePathForDestination(d.destination, d.destination_name)
           }))),
@@ -304,8 +315,9 @@ export function FlightStats() {
               mostSearchedDuration: getMostSearchedDuration(),
               totalSearches: getTotalSearches(),
               monthlyStats: Array.isArray(monthlyStats) ? monthlyStats : [],
-              popularProvinces: await Promise.all((Array.isArray(popularProvinces) ? popularProvinces : []).map(async (p) => ({
+              popularProvinces: await Promise.all((Array.isArray(popularProvinces) ? popularProvinces : []).map(async (p: any) => ({
                 ...p,
+                provinceName: cleanCityName(p.destinationName || p.provinceName || p.province),
                 image: await getImagePathForDestination(p.province)
               }))),
             });
@@ -431,7 +443,7 @@ export function FlightStats() {
                 </div>
                 <div className="text-xl sm:text-2xl font-bold break-words">
                   {/* {provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country} */}
-                  {translateCity(provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country)}
+                  {translateCity(stats.mostSearchedCountry.countryName || provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country)}
                 </div>
                 <div className="text-xs sm:text-sm text-muted-foreground mt-1">
                   {'ค้นหา '}{stats.mostSearchedCountry.count}{' ครั้ง'}
@@ -499,7 +511,7 @@ export function FlightStats() {
                         <div className="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden border-2 border-blue-200 shadow-md">
                           <img
                             src={provinceImage}
-                            alt={provinceNames[item.province] || item.province}
+                            alt={item.provinceName || provinceNames[item.province] || item.province}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               // Fallback to placeholder if image fails to load
@@ -513,7 +525,7 @@ export function FlightStats() {
                         <div className="flex-shrink-0 min-w-[120px] max-w-[140px]">
                           <span className="font-medium">
                             {/* {provinceNames[item.province] || item.province} */}
-                            {translateCity(provinceNames[item.province] || item.province)}
+                            {translateCity(item.provinceName || provinceNames[item.province] || item.province)}
                           </span>
                         </div>
 

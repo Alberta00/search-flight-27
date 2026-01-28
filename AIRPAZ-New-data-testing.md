@@ -84,6 +84,6 @@ in the root folder
 
 docker exec -it flight_search_backend_test sh
 
-/app $ npm run import:airpaz
+/app $ npm run import-airpaz-flights
 ```
 ...
