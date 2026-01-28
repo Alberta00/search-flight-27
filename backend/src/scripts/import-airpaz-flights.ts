@@ -118,8 +118,8 @@ async function importCSVFile(csvFilePath: string): Promise<{
     const routeCache = new Map<string, { id: number; origin: string; destination: string }>();
     const airlineCache = new Map<string, { id: number; code: string }>();
 
-    // Batch for bulk insert
-    const batch: any[] = [];
+    // Batch for bulk insert (use Map to deduplicate within the batch)
+    const batch = new Map<string, any>();
     const BATCH_SIZE = 500;
 
     for (let i = 1; i < lines.length; i++) {
@@ -191,27 +191,13 @@ async function importCSVFile(csvFilePath: string): Promise<{
             const arrivalTime = new Date(departureTime.getTime() + durationMins * 60000);
 
             const price = parseFloat(row.price_value);
-            const stops = row.stops === 'Direct' ? 0 : (parseInt(row.stops) || 0); // Need to parse if "1 Stop"
-            // Note: If stops column has "1 Stop", row.stops parsing might need int parsing logic. 
-            // Assuming "Direct" or number. User CSV showed "Direct".
+            const stops = row.stops === 'Direct' ? 0 : (parseInt(row.stops) || 0);
 
             // Scraped At
             const scrapedAt = row.scraped_at ? new Date(row.scraped_at) : new Date();
 
-            // Trip Type - CSV seems to be One Way usually? 
-            // logic: User CSV didn't strictly have trip_type column, but usually scraping is one-way segments.
-            // Default to one-way
+            // Trip Type
             const tripType = 'one-way';
-
-            // Flight Number - CSV does not have specific flight number column in user request list?
-            // Wait, user said columns: date, ..., airline, airline_code ...
-            // Ah, the user's list DOES NOT include flight_number!
-            // But database constraint REQUIRES flight_number: UNIQUE(..., flight_number).
-            // If data doesn't have flight number, we need to generate one or find it.
-            // Looking at CSV provided in turn 1: It DOES NOT have flight_number.
-            // It has airline_code (SL) and dep_time.
-            // We might need to generate a dummy flight number like "SL-0800" (Code + DepTime) to satisfy uniqueness constraint
-            // or "SL-Hash".
 
             let flightNumber = row.flight_number;
             if (!flightNumber) {
@@ -220,26 +206,32 @@ async function importCSVFile(csvFilePath: string): Promise<{
                 flightNumber = `${airlineCode}${timeCode}`;
             }
 
-            batch.push({
+            // 4. Deduplicate within the batch to avoid "affect row a second time" error
+            // Key based on: route_id, airline_id, departure_date, trip_type, flight_number
+            // Note: date should be ISO string to be used as part of key
+            const dateStr = departureDate.toISOString().split('T')[0];
+            const batchItemKey = `${route.id}-${airline.id}-${dateStr}-${tripType}-${flightNumber}`;
+
+            const flightData = {
                 route_id: route.id,
                 airline_id: airline.id,
                 departure_date: departureDate,
                 return_date: null,
                 price: price,
-                base_price: price, // Use same as price for now
+                base_price: price,
                 departure_time: departureTime.toISOString(),
                 arrival_time: arrivalTime.toISOString(),
                 duration: durationMins,
                 flight_number: flightNumber,
                 trip_type: tripType,
-                season: null, // default
-                travel_class: 'economy', // default or infer
+                season: null,
+                travel_class: 'economy',
 
                 // New columns
                 origin_group: row.origin_group,
                 dep_airport: row.dep_airport,
                 arr_airport: row.arr_airport,
-                destination: row.destination, // region/city name
+                destination: row.destination,
                 airline_name: row.airline,
                 airline_code: row.airline_code,
                 price_text: row.price_text,
@@ -248,15 +240,26 @@ async function importCSVFile(csvFilePath: string): Promise<{
 
                 // Others
                 stops: stops,
-                airplane: null, // not in csv
+                airplane: null,
                 legroom: null,
                 often_delayed: false
-            });
+            };
 
-            if (batch.length >= BATCH_SIZE) {
-                await FlightModel.batchInsertFlightPrices(batch);
-                stored += batch.length;
-                batch.length = 0; // clear
+            // If key already exists in current batch, only keep the one with lower price
+            if (batch.has(batchItemKey)) {
+                const existing = batch.get(batchItemKey);
+                if (price < existing.price) {
+                    batch.set(batchItemKey, flightData);
+                }
+                skipped++; // Count as skipped because it was a duplicate in this batch
+            } else {
+                batch.set(batchItemKey, flightData);
+            }
+
+            if (batch.size >= BATCH_SIZE) {
+                await FlightModel.batchInsertFlightPrices(Array.from(batch.values()));
+                stored += batch.size;
+                batch.clear();
             }
 
         } catch (err: any) {
@@ -266,13 +269,13 @@ async function importCSVFile(csvFilePath: string): Promise<{
     }
 
     // Process remaining
-    if (batch.length > 0) {
+    if (batch.size > 0) {
         try {
-            await FlightModel.batchInsertFlightPrices(batch);
-            stored += batch.length;
+            await FlightModel.batchInsertFlightPrices(Array.from(batch.values()));
+            stored += batch.size;
         } catch (err: any) {
             console.error(`Status: Error processing final batch: ${err.message}`);
-            errors += batch.length;
+            errors += batch.size;
         }
     }
 

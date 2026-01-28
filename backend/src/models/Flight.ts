@@ -599,7 +599,7 @@ export class FlightModel {
           airline_name, airline_code, price_text, source, created_at, updated_at
         )
         VALUES ${placeholders.join(', ')}
-        ON CONFLICT (route_id, airline_id, departure_date, trip_type, flight_number, departure_time)
+        ON CONFLICT (route_id, airline_id, departure_date, trip_type, flight_number, travel_class)
         DO UPDATE SET
           return_date = EXCLUDED.return_date,
           price = EXCLUDED.price,
