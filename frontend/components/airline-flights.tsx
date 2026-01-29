@@ -99,18 +99,58 @@ interface AirlineFlightsProps {
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 // Mapping รูปภาพสำหรับแต่ละสายการบิน
-const getAirlineImage = (airline: string): string => {
-  const imageMap: Record<string, string> = {
-    'Thai Airways': `${basePath}/airlines/thai-airways.png`,
-    'Thai AirAsia': `${basePath}/airlines/thai-airasia.png`,
-    'Thai Lion Air': `${basePath}/airlines/thai-lion-air.png`,
-    'Thai Vietjet Air': `${basePath}/airlines/thai-vietjet.png`,
-    'Bangkok Airways': `${basePath}/airlines/bangkok-airways.png`,
-    'Nok Air': `${basePath}/airlines/nok-air.png`,
+const getAirlineImage = (airlineLabel: string): string => {
+  // Convert label to slug for default filename
+  const slug = airlineLabel.toLowerCase()
+    .replace(/´/g, '') // Handle T´Way Air
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]/g, '')
+
+  const extensionMap: Record<string, string> = {
+    'air-cambodia': 'jpg',
+    'cambodia-airways': 'jpg',
+    'condor': 'jpg',
+    'finnair': 'jpg',
+    'lufthansa': 'jpg',
+    'pal': 'jpg',
+    'vietravel-airlines': 'jpg',
+    'jin-air': 'jpeg',
+    'kenya-airways': 'jpeg',
+    'klm': 'jpeg',
+    'lao-airlines': 'jpeg',
+    'mai': 'jpeg',
+    'norse-atlantic-uk': 'jpeg',
+    'norse': 'jpeg',
+    'royal-jordanian': 'jpeg',
+    'salam-air': 'jpeg',
+    'shandong-airlines': 'jpeg',
+    'shenzhen-airlines': 'jpeg',
+    'srilankan-airlines': 'jpeg',
+    'air-japan': 'webp',
+    'air-premia': 'webp',
+    'kunming-airlines': 'webp',
+    'qingdao-airlines': 'webp',
+    'shanghai-airlines': 'webp',
+    'starlux': 'webp',
+    'urumqi-airlines': 'webp',
+    'hong-kong-airlines': 'svg',
   }
 
-  // ใช้ placeholder เป็น default จนกว่าจะมีรูปภาพจริง
-  return imageMap[airline] || `${basePath}/placeholder-logo.png`
+  const nameMap: Record<string, string> = {
+    'austrian': 'australian',
+    'cathay-pacific': 'cathy-pacific',
+    'eastar-jet': 'easter-jet',
+    'ruili-airlines': 'ruili-airline',
+    'sichuan-airlines': 'sichuan-airline',
+    'tway-air': 't-way-air',
+    'thai-vietjet-air': 'thai-vietjet',
+    'xiamenair': 'xiamen-air',
+  }
+
+  const filename = nameMap[slug] || slug
+  const extension = extensionMap[slug] || extensionMap[filename] || 'png'
+
+  return `${basePath}/airlines/${filename}.${extension}`
 }
 
 export function AirlineFlights({ searchParams, selectedAirlines, onAirlinesChange, flightPrices: propFlightPrices }: AirlineFlightsProps) {
@@ -572,42 +612,54 @@ export function AirlineFlights({ searchParams, selectedAirlines, onAirlinesChang
           <Card className="p-4">
             <div className="mb-4">
               <h4 className="text-lg font-semibold mb-2">{'สายการบิน'}</h4>
-              <div className="space-y-3">
-                {THAI_AIRLINES.map((airline) => {
-                  const flightCount = getFlightCount(airline.value)
-                  const airlineImage = getAirlineImage(airline.label)
-                  return (
-                    <div key={airline.value} className="flex items-center space-x-2 min-h-[2.5rem]">
-                      <Checkbox
-                        id={airline.value}
-                        checked={selectedAirlines.includes(airline.value)}
-                        onCheckedChange={() => toggleAirline(airline.value)}
-                      />
-                      <label
-                        htmlFor={airline.value}
-                        className="text-sm font-medium leading-none cursor-pointer flex items-center gap-2 flex-1"
-                      >
-                        <img
-                          src={airlineImage}
-                          alt={airline.label}
-                          className="w-6 h-6 object-cover flex-shrink-0 rounded-full bg-muted"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            if (!target.src.endsWith('/placeholder-logo.png')) {
-                              target.src = `${basePath}/placeholder-logo.png`
-                            }
-                          }}
+              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                {[...THAI_AIRLINES]
+                  .sort((a, b) => {
+                    const countA = getFlightCount(a.value)
+                    const countB = getFlightCount(b.value)
+
+                    // Priority 1: Airlines with flights come first
+                    if (countA > 0 && countB === 0) return -1
+                    if (countA === 0 && countB > 0) return 1
+
+                    // Priority 2: Alphabetical order
+                    return a.label.localeCompare(b.label)
+                  })
+                  .map((airline) => {
+                    const flightCount = getFlightCount(airline.value)
+                    const airlineImage = getAirlineImage(airline.label)
+                    return (
+                      <div key={airline.value} className="flex items-center space-x-2 min-h-[2.5rem]">
+                        <Checkbox
+                          id={airline.value}
+                          checked={selectedAirlines.includes(airline.value)}
+                          onCheckedChange={() => toggleAirline(airline.value)}
                         />
-                        <span>{airline.label}</span>
-                        {flightCount > 0 && (
-                          <span className="text-xs text-muted-foreground ml-auto">
-                            ({flightCount})
-                          </span>
-                        )}
-                      </label>
-                    </div>
-                  )
-                })}
+                        <label
+                          htmlFor={airline.value}
+                          className="text-sm font-medium leading-none cursor-pointer flex items-center gap-2 flex-1"
+                        >
+                          <img
+                            src={airlineImage}
+                            alt={airline.label}
+                            className="w-6 h-6 object-cover flex-shrink-0 rounded-full bg-muted shadow-sm"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              if (!target.src.endsWith('/placeholder-logo.png')) {
+                                target.src = `${basePath}/placeholder-logo.png`
+                              }
+                            }}
+                          />
+                          <span className="truncate max-w-[140px]">{airline.label}</span>
+                          {flightCount > 0 && (
+                            <span className="text-xs text-muted-foreground ml-auto">
+                              ({flightCount})
+                            </span>
+                          )}
+                        </label>
+                      </div>
+                    )
+                  })}
               </div>
             </div>
             <div className="flex gap-2 pt-4 border-t">
