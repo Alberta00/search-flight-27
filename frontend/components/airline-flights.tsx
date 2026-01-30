@@ -105,6 +105,7 @@ const getAirlineImage = (airlineLabel: string): string => {
     .replace(/´/g, '') // Handle T´Way Air
     .replace(/\s+/g, '-')
     .replace(/[^\w-]/g, '')
+    .replace(/-+/g, '-') // Normalize multiple dashes
 
   const extensionMap: Record<string, string> = {
     'air-cambodia': 'jpg',

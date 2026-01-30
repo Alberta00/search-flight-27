@@ -39,6 +39,9 @@ export const AIRPORT_TRANSLATIONS: Record<string, string> = {
     'TDX': 'ท่าอากาศยานตราด',
     'UTP': 'ท่าอากาศยานนานาชาติอู่ตะเภา',
     'HHQ': 'ท่าอากาศยานหัวหิน',
+    'NAK': 'ท่าอากาศยานนครราชสีมา',
+    'BTZ': 'ท่าอากาศยานนานาชาติเบตง',
+    'KDT': 'ท่าอากาศยานกำแพงแสน',
 
     // International - Asia
     // 'NRT': 'ท่าอากาศยานนาริตะ',
@@ -115,6 +118,8 @@ export const CITY_TRANSLATIONS: Record<string, string> = {
     'Surin': 'สุรินทร์',
     'Uttaradit': 'อุตรดิตถ์',
     'Ban Mak Khaen': 'บ้านหมากแข้ง',
+    'Nakhon Phanom': 'นครพนม',
+    'Nakhon Ratchasima': 'นครราชสีมา',
     'Chaloem Phra Kiat': 'เฉลิมพระเกียรติ',
     'Pattani': 'ปัตตานี',
     'Phetchabun': 'เพชรบูรณ์',
@@ -390,4 +395,6 @@ export const THAI_SEARCH_MAPPING: Record<string, string> = {
     'ตาคลี': 'Takhli',
     'สงขลา': 'Songkhla',
     'เกาะสมุย': 'Samui',
+    'นครพนม': 'Nakhon Phanom',
+    'นครราชสีมา': 'Nakhon Ratchasima',
 }
