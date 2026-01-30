@@ -2,9 +2,9 @@
  * Script to import international flight data from FlightsFrom.com CSV format
  * 
  * Usage:
- *   npm run import:intl-flights
- *   npm run import:intl-flights -- --dir="./data/intl_flight_data"
- *   npm run import:intl-flights -- --file="./backend/data/intl_flight_data/flightsfrom_BKK_2026-01-31.csv"
+ *   npm run import-intl-flights
+ *   npm run import-intl-flights -- --dir="./data/intl_flight_data"
+ *   npm run import-intl-flights -- --file="./backend/data/intl_flight_data/flightsfrom_BKK_2026-01-31.csv"
  */
 
 import dotenv from 'dotenv';
@@ -99,7 +99,15 @@ function parseDurationToMinutes(durationStr: string): number {
  */
 function calculateArrivalTime(dateStr: string, timeStr: string, durationMinutes: number): string {
     // Construct UTC date-time
-    const departure = new Date(`${dateStr}T${timeStr}:00Z`);
+    // timeStr format: HH:MM or H:MM
+    let [hours, minutes] = timeStr.split(':');
+
+    // Pad hours with leading zero if necessary
+    if (hours.length === 1) {
+        hours = '0' + hours;
+    }
+
+    const departure = new Date(`${dateStr}T${hours}:${minutes}:00Z`);
     if (isNaN(departure.getTime())) return '';
 
     const arrival = new Date(departure.getTime() + durationMinutes * 60000);
@@ -214,7 +222,11 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 originCode = otherAirport;
                 destinationCode = csvAirport;
                 // For arrivals, the CSV time is the arrival time
-                arrivalTimeUTC = `${row.date}T${row.time}:00Z`;
+                // timeStr format: HH:MM or H:MM
+                let [hours, minutes] = row.time.split(':');
+                if (hours.length === 1) hours = '0' + hours;
+
+                arrivalTimeUTC = `${row.date}T${hours}:${minutes}:00Z`;
                 const arrivalDate = new Date(arrivalTimeUTC);
                 const departureDate = new Date(arrivalDate.getTime() - durationMinutes * 60000);
                 departureTimeUTC = departureDate.toISOString();
@@ -224,7 +236,11 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 originCode = csvAirport;
                 destinationCode = otherAirport;
                 // For departures, the CSV time is the departure time
-                departureTimeUTC = `${row.date}T${row.time}:00Z`;
+                // timeStr format: HH:MM or H:MM
+                let [hours, minutes] = row.time.split(':');
+                if (hours.length === 1) hours = '0' + hours;
+
+                departureTimeUTC = `${row.date}T${hours}:${minutes}:00Z`;
                 arrivalTimeUTC = calculateArrivalTime(row.date, row.time, durationMinutes);
                 displayDestination = row.destination; // Keeps "PER Perth"
             }

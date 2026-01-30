@@ -75,8 +75,15 @@ function parseDuration(durationStr: string): number {
  */
 function combineDateTime(dateStr: string, timeStr: string): Date {
     // dateStr format: YYYY-MM-DD
-    // timeStr format: HH:MM
-    return new Date(`${dateStr}T${timeStr}:00`);
+    // timeStr format: HH:MM or H:MM
+    let [hours, minutes] = timeStr.split(':');
+
+    // Pad hours with leading zero if necessary
+    if (hours.length === 1) {
+        hours = '0' + hours;
+    }
+
+    return new Date(`${dateStr}T${hours}:${minutes}:00`);
 }
 
 /**
