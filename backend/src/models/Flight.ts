@@ -29,6 +29,28 @@ export interface FlightPriceRecord {
   updated_at: Date;
 }
 
+export interface IntlFlightInfoRecord {
+  id: number;
+  route_id: number;
+  airline_id: number;
+  departure_date: Date;
+  departure_time: string;
+  arrival_time: string;
+  duration: number;
+  flight_number: string;
+  trip_type: string;
+  travel_class?: string;
+  stops: number;
+  dep_airport?: string;
+  arr_airport?: string;
+  destination?: string;
+  airline_name?: string;
+  airline_code?: string;
+  source?: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface Route {
   id: number;
   origin: string;
@@ -633,6 +655,115 @@ export class FlightModel {
   }
 
   /**
+   * Batch insert international flight info (much faster than individual upserts)
+   * Uses PostgreSQL multi-value INSERT with ON CONFLICT for better performance
+   */
+  static async batchInsertIntlFlightInfo(
+    intlFlights: Array<{
+      route_id: number;
+      airline_id: number;
+      departure_date: Date;
+      departure_time: Date | string;
+      arrival_time: Date | string;
+      duration: number;
+      flight_number: string;
+      trip_type: string;
+      travel_class?: string;
+      stops?: number;
+      dep_airport?: string | null;
+      arr_airport?: string | null;
+      destination?: string | null;
+      airline_name?: string | null;
+      airline_code?: string | null;
+      source?: string | null;
+    }>
+  ): Promise<void> {
+    if (intlFlights.length === 0) {
+      return;
+    }
+
+    // Use multi-value INSERT with ON CONFLICT for upsert behavior
+    // Process in chunks to avoid query size limits
+    const chunkSize = 500;
+    for (let i = 0; i < intlFlights.length; i += chunkSize) {
+      const chunk = intlFlights.slice(i, i + chunkSize);
+
+      // Build values array
+      const values: any[] = [];
+      const placeholders: string[] = [];
+      let paramIndex = 1;
+
+      chunk.forEach((fp) => {
+        const placeholdersRow: string[] = [];
+        placeholdersRow.push(`$${paramIndex++}`); // route_id
+        placeholdersRow.push(`$${paramIndex++}`); // airline_id
+        placeholdersRow.push(`$${paramIndex++}`); // departure_date
+        placeholdersRow.push(`$${paramIndex++}`); // departure_time
+        placeholdersRow.push(`$${paramIndex++}`); // arrival_time
+        placeholdersRow.push(`$${paramIndex++}`); // duration
+        placeholdersRow.push(`$${paramIndex++}`); // flight_number
+        placeholdersRow.push(`$${paramIndex++}`); // trip_type
+        placeholdersRow.push(`$${paramIndex++}`); // travel_class
+        placeholdersRow.push(`$${paramIndex++}`); // stops
+        placeholdersRow.push(`$${paramIndex++}`); // dep_airport
+        placeholdersRow.push(`$${paramIndex++}`); // arr_airport
+        placeholdersRow.push(`$${paramIndex++}`); // destination
+        placeholdersRow.push(`$${paramIndex++}`); // airline_name
+        placeholdersRow.push(`$${paramIndex++}`); // airline_code
+        placeholdersRow.push(`$${paramIndex++}`); // source
+        placeholdersRow.push(`NOW()`); // created_at
+        placeholdersRow.push(`NOW()`); // updated_at
+
+        placeholders.push(`(${placeholdersRow.join(', ')})`);
+
+        values.push(
+          fp.route_id,
+          fp.airline_id,
+          fp.departure_date,
+          fp.departure_time,
+          fp.arrival_time,
+          fp.duration,
+          fp.flight_number,
+          fp.trip_type,
+          fp.travel_class || 'economy',
+          fp.stops ?? 0,
+          fp.dep_airport || null,
+          fp.arr_airport || null,
+          fp.destination || null,
+          fp.airline_name || null,
+          fp.airline_code || null,
+          fp.source || null
+        );
+      });
+
+      const query = `
+        INSERT INTO intl_flight_info (
+          route_id, airline_id, departure_date, departure_time, arrival_time,
+          duration, flight_number, trip_type, travel_class, stops,
+          dep_airport, arr_airport, destination, airline_name, airline_code,
+          source, created_at, updated_at
+        )
+        VALUES ${placeholders.join(', ')}
+        ON CONFLICT (route_id, airline_id, departure_date, trip_type, flight_number, departure_time)
+        DO UPDATE SET
+          arrival_time = EXCLUDED.arrival_time,
+          duration = EXCLUDED.duration,
+          travel_class = EXCLUDED.travel_class,
+          stops = EXCLUDED.stops,
+          dep_airport = EXCLUDED.dep_airport,
+          arr_airport = EXCLUDED.arr_airport,
+          destination = EXCLUDED.destination,
+          airline_name = EXCLUDED.airline_name,
+          airline_code = EXCLUDED.airline_code,
+          source = EXCLUDED.source,
+          updated_at = NOW()
+      `;
+
+      await pool.query(query, values);
+    }
+  }
+
+  /**
    * Get price statistics for a route
    */
   static async getPriceStatistics(
@@ -747,6 +878,87 @@ export class FlightModel {
       month: parseInt(row.month),
       averagePrice: parseFloat(row.average_price),
     }));
+  }
+
+  /**
+   * Get international flight info for a specific route and date range
+   */
+  static async getIntlFlights(
+    origin: string | string[],
+    destination: string,
+    startDate: Date,
+    endDate?: Date,
+    tripType?: string,
+    airlineIds?: number[],
+    travelClass?: string,
+    stops: 'direct' | 'connecting' | 'all' = 'all'
+  ): Promise<IntlFlightInfoRecord[]> {
+    const finalEndDate = endDate || (() => {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + 30); // Default to 30 days for intl info
+      return date;
+    })();
+
+    const formatDateForQuery = (date: Date): string => {
+      const year = date.getUTCFullYear();
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(date.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    const startDateStr = formatDateForQuery(startDate);
+    const endDateStr = formatDateForQuery(finalEndDate);
+
+    const originCodes = Array.isArray(origin) ? origin : [origin];
+
+    let query = `
+      SELECT 
+        ifi.*,
+        r.origin,
+        r.destination,
+        a.code as airline_code,
+        a.name as airline_name,
+        a.name_th as airline_name_th
+      FROM intl_flight_info ifi
+      INNER JOIN routes r ON ifi.route_id = r.id
+      INNER JOIN airlines a ON ifi.airline_id = a.id
+      WHERE r.origin = ANY($1)
+        AND r.destination = $2
+        AND DATE(ifi.departure_date) >= DATE($3)
+        AND DATE(ifi.departure_date) <= DATE($4)
+    `;
+
+    const params: any[] = [originCodes, destination, startDateStr, endDateStr];
+    let paramIndex = 5;
+
+    if (tripType) {
+      query += ` AND ifi.trip_type = $${paramIndex}`;
+      params.push(tripType);
+      paramIndex++;
+    }
+
+    if (travelClass) {
+      query += ` AND ifi.travel_class = $${paramIndex}`;
+      params.push(travelClass);
+      paramIndex++;
+    }
+
+    if (stops === 'direct') {
+      query += ` AND ifi.stops = 0`;
+    } else if (stops === 'connecting') {
+      query += ` AND ifi.stops > 0`;
+    }
+
+    if (airlineIds && airlineIds.length > 0) {
+      query += ` AND ifi.airline_id = ANY($${paramIndex})`;
+      params.push(airlineIds);
+      paramIndex++;
+    }
+
+    query += ` ORDER BY ifi.departure_date, ifi.departure_time ASC LIMIT 5000`;
+
+    const result = await pool.query(query, params);
+    return result.rows;
   }
 }
 

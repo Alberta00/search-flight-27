@@ -276,8 +276,6 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 route_id: route.id,
                 airline_id: airline.id,
                 departure_date: departureDateObj,
-                price: 0,
-                base_price: 0,
                 departure_time: departureTimeUTC,
                 arrival_time: arrivalTimeUTC,
                 duration: durationMinutes,
@@ -290,14 +288,24 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 destination: displayDestination,
                 airline_name: airline.name,
                 airline_code: airlineCode,
-                scraped_at: row.scraped_at ? new Date(row.scraped_at) : new Date()
+                stops: 0
             });
 
             totalProcessed++;
 
             if (batch.length >= BATCH_SIZE) {
-                await FlightModel.batchInsertFlightPrices(batch);
-                totalStored += batch.length;
+                // Deduplicate within the batch to avoid "affect row a second time" error
+                // Unique key: route_id, airline_id, departure_date, trip_type, flight_number, departure_time
+                const uniqueMap = new Map();
+                for (const record of batch) {
+                    const departureDateStr = record.departure_date.toISOString().split('T')[0];
+                    const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+                    uniqueMap.set(key, record);
+                }
+                const deduplicatedBatch = Array.from(uniqueMap.values());
+
+                await FlightModel.batchInsertIntlFlightInfo(deduplicatedBatch);
+                totalStored += deduplicatedBatch.length;
                 batch.length = 0;
             }
         } catch (error: any) {
@@ -307,8 +315,15 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
     }
 
     if (batch.length > 0) {
-        await FlightModel.batchInsertFlightPrices(batch);
-        totalStored += batch.length;
+        const uniqueMap = new Map();
+        for (const record of batch) {
+            const departureDateStr = record.departure_date.toISOString().split('T')[0];
+            const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+            uniqueMap.set(key, record);
+        }
+        const deduplicatedBatch = Array.from(uniqueMap.values());
+        await FlightModel.batchInsertIntlFlightInfo(deduplicatedBatch);
+        totalStored += deduplicatedBatch.length;
     }
 
     console.log(`   ✅ Completed: ${totalStored} stored, ${totalSkipped} skipped, ${totalErrors} errors`);
@@ -320,7 +335,13 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
  */
 async function main() {
     const args = process.argv.slice(2);
-    const csvDir = args.find(arg => arg.startsWith('--dir='))?.split('=')[1] || './backend/data/intl_flight_data';
+    // Default directory logic: check both ./data/intl_flight_data and ./backend/data/intl_flight_data
+    let defaultDir = './data/intl_flight_data';
+    if (!fs.existsSync(path.join(process.cwd(), defaultDir)) && fs.existsSync(path.join(process.cwd(), './backend/data/intl_flight_data'))) {
+        defaultDir = './backend/data/intl_flight_data';
+    }
+
+    const csvDir = args.find(arg => arg.startsWith('--dir='))?.split('=')[1] || defaultDir;
     const csvFile = args.find(arg => arg.startsWith('--file='))?.split('=')[1];
 
     console.log('\n' + '='.repeat(80));
