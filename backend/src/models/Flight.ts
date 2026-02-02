@@ -1077,8 +1077,8 @@ export class FlightModel {
         routes: [],
         summary: {
           avgFlightsPerDay: 0,
-          peakHourRange: 'N/A',
-          mostActiveCarrier: 'N/A',
+          peakHourRange: 'ไม่พบข้อมูล',
+          mostActiveCarrier: 'ไม่พบข้อมูล',
           totalFlights: 0
         }
       };
@@ -1118,8 +1118,8 @@ export class FlightModel {
       }),
       summary: {
         avgFlightsPerDay: Math.ceil(totalFlightsMonth / activeDaysMonth),
-        peakHourRange: totalFlightsDay > 0 ? `${startHour} - ${endHour} ` : 'N/A',
-        mostActiveCarrier: row.top_carrier || 'N/A',
+        peakHourRange: totalFlightsDay > 0 ? `${startHour} - ${endHour} ` : 'ไม่พบข้อมูล',
+        mostActiveCarrier: row.top_carrier || 'ไม่พบข้อมูล',
         totalFlights: totalFlightsDay
       }
     };

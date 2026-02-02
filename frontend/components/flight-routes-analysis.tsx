@@ -80,8 +80,8 @@ const chartConfig = {
 
 const SummaryDefaults = {
   avgFlightsPerDay: 0,
-  peakHourRange: 'N/A',
-  mostActiveCarrier: 'N/A',
+  peakHourRange: 'ไม่พบข้อมูล',
+  mostActiveCarrier: 'ไม่พบข้อมูล',
   totalFlights: 0,
 }
 
@@ -427,35 +427,49 @@ export function FlightRoutesAnalysis() {
               </h2>
               <ScrollArea className="h-[280px] sm:h-[320px] w-full rounded-md border bg-muted/20">
                 <div className="p-1 space-y-2">
-                  {routes.map((route, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-background border shadow-sm hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                          <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  {routes.length > 0 ? (
+                    routes.map((route, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-background border shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                            <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-medium text-foreground text-sm sm:text-base truncate">
+                              {route.departureName} → {route.arrivalCity}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
+                              <span className="font-medium text-primary/80">{route.flightNumber}</span>
+                              <span>•</span>
+                              <span>{route.departureCode} → {route.arrivalCode}</span>
+                              {route.direct && (
+                                <span className="text-emerald-600 font-medium ml-1">Direct</span>
+                              )}
+                            </p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="font-medium text-foreground text-sm sm:text-base truncate">
-                            {route.departureName} → {route.arrivalCity}
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
-                            <span className="font-medium text-primary/80">{route.flightNumber}</span>
-                            <span>•</span>
-                            <span>{route.departureCode} → {route.arrivalCode}</span>
-                            {route.direct && (
-                              <span className="text-emerald-600 font-medium ml-1">Direct</span>
-                            )}
-                          </p>
+                        <div className="shrink-0 text-right">
+                          <p className="text-xs text-muted-foreground">สายการบิน</p>
+                          <p className="text-sm font-bold text-primary">{route.airlineCode}</p>
                         </div>
                       </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-xs text-muted-foreground">สายการบิน</p>
-                        <p className="text-sm font-bold text-primary">{route.airlineCode}</p>
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                      <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                        <Send className="w-6 h-6 text-muted-foreground opacity-50" />
                       </div>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        ไม่พบข้อมูลเส้นทางการบินสำหรับวันที่เลือก
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        ลองเปลี่ยนวันที่หรือสนามบินอื่น
+                      </p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </ScrollArea>
             </Card>
