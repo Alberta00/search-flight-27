@@ -20,7 +20,7 @@ async function migrateIntlData() {
             return;
         }
 
-        // 2. Map to intl_flight_info format
+        // 2. Map to flight_paths format
         const intlFlights = records.map(r => ({
             route_id: r.route_id,
             airline_id: r.airline_id,
@@ -40,9 +40,9 @@ async function migrateIntlData() {
             source: r.source
         }));
 
-        // 3. Batch insert into intl_flight_info
-        console.log('📥 Inserting records into intl_flight_info...');
-        await FlightModel.batchInsertIntlFlightInfo(intlFlights);
+        // 3. Batch insert into flight_paths
+        console.log('📥 Inserting records into flight_paths...');
+        await FlightModel.batchInsertFlightPaths(intlFlights);
 
         // 4. Optionally delete from flight_prices
         console.log('🧹 Cleaning up migrated records from flight_prices...');

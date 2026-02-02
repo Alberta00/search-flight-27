@@ -587,6 +587,60 @@ export async function getCheapestDates(
 }
 
 /**
+ * Get flight route analysis data
+ * GET /api/flights/analysis
+ */
+export async function getFlightRoutesAnalysis(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { origin, destination, date } = req.query;
+
+    if (!origin && !destination) {
+      res.status(400).json({
+        success: false,
+        message: 'Origin or destination is required',
+      });
+      return;
+    }
+
+    const airportCode = (origin as string) || (destination as string);
+    const isDeparture = !!origin;
+
+    // Parse date or use current date - ensure UTC consistency
+    const selectedDate = (() => {
+      if (!date) return new Date();
+      const dateOnly = (date as string).split('T')[0];
+      return parseISO(dateOnly + 'T00:00:00.000Z');
+    })();
+
+    // Analysis window: current month of the selected date
+    const startDate = new Date(selectedDate);
+    startDate.setUTCDate(1);
+    startDate.setUTCHours(0, 0, 0, 0);
+
+    const endDate = new Date(startDate);
+    endDate.setUTCMonth(endDate.getUTCMonth() + 1);
+    endDate.setUTCDate(0); // Last day of month
+    endDate.setUTCHours(23, 59, 59, 999);
+
+    const analysis = await FlightModel.getIntlFlightAnalysis(
+      airportCode,
+      isDeparture,
+      startDate,
+      endDate,
+      selectedDate
+    );
+
+    res.json(analysis);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * Get price analysis for a specific route and date
  * POST /api/flights/price-analysis
  * @deprecated This endpoint is no longer available after removing Amadeus integration
@@ -601,5 +655,6 @@ export async function getPriceAnalysis(
     message: 'This endpoint is no longer available. Please use /api/flights/analyze for price analysis.',
   });
 }
+
 
 

@@ -78,11 +78,11 @@ const chartConfig = {
   },
 }
 
-const summaryDefaults = {
-  avgFlightsPerDay: 12,
-  peakHourRange: '08:00 - 10:00',
-  mostActiveCarrier: 'Thai Airways',
-  totalFlights: 360,
+const SummaryDefaults = {
+  avgFlightsPerDay: 0,
+  peakHourRange: 'N/A',
+  mostActiveCarrier: 'N/A',
+  totalFlights: 0,
 }
 
 export function FlightRoutesAnalysis() {
@@ -95,24 +95,94 @@ export function FlightRoutesAnalysis() {
   const [compareMode, setCompareMode] = useState(false)
   const [hasAnalyzed, setHasAnalyzed] = useState(false)
 
-  // ค้นหาอัตโนมัติเมื่อเลือก/สลับ departure หรือ arrival (เปลี่ยนเมื่อไหร่ก็ค้นหาใหม่)
-  useEffect(() => {
-    if (origin || destination) {
-      setHasAnalyzed(true)
-    } else {
-      setHasAnalyzed(false)
-    }
-  }, [origin, destination])
+  const [dailyData, setDailyData] = useState<any[]>([])
+  const [dailyDataCompare, setDailyDataCompare] = useState<any[]>([])
+  const [routes, setRoutes] = useState<any[]>([])
+  const [summary, setSummary] = useState(SummaryDefaults)
+  const [loading, setLoading] = useState(false)
 
-  const baseData = chartDays === 7 ? mockDailyData.slice(0, 7) : mockDailyData
-  const compareBaseData = chartDays === 7 ? mockDailyDataCompare.slice(0, 7) : mockDailyDataCompare
+  // Fetch analysis data
+  useEffect(() => {
+    async function fetchAnalysis() {
+      if (!origin && !destination) {
+        setHasAnalyzed(false)
+        return
+      }
+
+      setLoading(true)
+      setHasAnalyzed(true)
+
+      try {
+        const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
+
+        // Fetch main analysis
+        const params = new URLSearchParams()
+        if (origin) params.append('origin', origin)
+        if (destination) params.append('destination', destination)
+        params.append('date', dateStr)
+
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
+        const response = await fetch(`${baseUrl}/flights/analysis?${params.toString()}`)
+        const data = await response.json()
+
+        if (data) {
+          setDailyData(data.dailyFrequency || [])
+          setRoutes(data.routes || [])
+          setSummary(data.summary || SummaryDefaults)
+        }
+
+        // Fetch comparison data if mode is active
+        if (compareMode) {
+          const compareParams = new URLSearchParams()
+          // If we have origin, compare with it as destination (arrivals)
+          // If we have destination, compare with it as origin (departures)
+          if (origin) compareParams.append('destination', origin)
+          if (destination) compareParams.append('origin', destination)
+          compareParams.append('date', dateStr)
+
+          const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
+          const compareResponse = await fetch(`${baseUrl}/flights/analysis?${compareParams.toString()}`)
+          const compareData = await compareResponse.json()
+
+          if (compareData) {
+            setDailyDataCompare(compareData.dailyFrequency || [])
+          }
+        } else {
+          setDailyDataCompare([])
+        }
+      } catch (error) {
+        console.error('Failed to fetch flight analysis:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAnalysis()
+  }, [origin, destination, selectedDate, compareMode])
+
+  const baseData = chartDays === 7 ? dailyData.slice(-7) : dailyData
+  const compareBaseData = chartDays === 7 ? dailyDataCompare.slice(-7) : dailyDataCompare
+
+  // Align dates for comparison if needed
   const displayData = compareMode
-    ? baseData.map((row, i) => ({ ...row, flightsCompare: compareBaseData[i]?.flightsCompare ?? 0 }))
-    : baseData
+    ? baseData.map((row) => {
+      const compareRow = compareBaseData.find(cr => cr.date === row.date)
+      return {
+        ...row,
+        flightsCompare: compareRow ? compareRow.flights : 0,
+        // Format date for display
+        displayDate: format(new Date(row.date), 'd MMM', { locale: undefined }) // Simplified for now
+      }
+    })
+    : baseData.map(row => ({
+      ...row,
+      displayDate: format(new Date(row.date), 'd MMM')
+    }))
 
   const isDeparture = !!origin
   const mainLabel = isDeparture ? 'ออกจากสนามบิน (Departure)' : 'มาถึงสนามบิน (Arrival)'
   const compareLabel = isDeparture ? 'มาถึงสนามบิน (Arrival)' : 'ออกจากสนามบิน (Departure)'
+
 
   return (
     <div className="space-y-6 sm:space-y-8 w-full min-w-0">
@@ -220,218 +290,225 @@ export function FlightRoutesAnalysis() {
 
       {/* Chart + Summary + รายการเส้นทาง - แสดงหลังกดวิเคราะห์ข้อมูล */}
       {hasAnalyzed && (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 w-full min-w-0">
-        {/* Left column: กราฟ + รายการเส้นทาง */}
-        <div className="lg:col-span-2 flex flex-col gap-4 sm:gap-6 min-w-0">
-        {/* Daily frequency chart - responsive */}
-        <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
-            <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-              สถิติความถี่เที่ยวบินรายวัน
-            </h2>
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="flex rounded-lg border bg-muted/30 p-0.5">
-                <Button
-                  variant={chartDays === 7 ? 'default' : 'ghost'}
-                  size="sm"
-                  className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                  onClick={() => setChartDays(7)}
-                >
-                  7 วัน
-                </Button>
-                <Button
-                  variant={chartDays === 30 ? 'default' : 'ghost'}
-                  size="sm"
-                  className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                  onClick={() => setChartDays(30)}
-                >
-                  30 วัน
-                </Button>
-              </div>
-              <Button
-                variant={compareMode ? 'default' : 'ghost'}
-                size="sm"
-                className="rounded-lg border h-8 px-2.5 sm:px-3 text-xs sm:text-sm"
-                onClick={() => setCompareMode((prev) => !prev)}
-              >
-                เปรียบเทียบ
-              </Button>
-            </div>
-          </div>
-          <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
-            <div className="h-[260px] sm:h-[320px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
-            <ChartContainer config={chartConfig} className="h-full w-full aspect-auto">
-              <AreaChart data={displayData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
-                <defs>
-                  <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.05} />
-                  </linearGradient>
-                  <linearGradient id="flightCompareGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.05} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                <XAxis
-                  dataKey="date"
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={11}
-                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                />
-                <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={11}
-                  tickFormatter={(v) => `${v}`}
-                  label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
-                  width={45}
-                />
-                <Tooltip
-                  content={({ active, payload }) => {
-                    if (!active || !payload?.length) return null
-                    const p = payload[0].payload
-                    return (
-                      <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
-                        <p className="font-medium mb-2">{p.date}</p>
-                        <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)' }}>
-                          {mainLabel}: {p.flights} เที่ยว
-                        </p>
-                        {compareMode && (
-                          <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)' }}>
-                            {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
-                          </p>
-                        )}
-                      </div>
-                    )
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="flights"
-                  name={mainLabel}
-                  stroke="hsl(221, 83%, 53%)"
-                  strokeWidth={2}
-                  fill="url(#flightGradient)"
-                />
-                {compareMode && (
-                  <Area
-                    type="monotone"
-                    dataKey="flightsCompare"
-                    name={compareLabel}
-                    stroke="hsl(142, 76%, 36%)"
-                    strokeWidth={2}
-                    fill="url(#flightCompareGradient)"
-                  />
-                )}
-              </AreaChart>
-            </ChartContainer>
-            </div>
-          </div>
-          {compareMode && (
-            <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-primary shrink-0" />
-                <span className="truncate">{mainLabel}</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-emerald-600 shrink-0" />
-                <span className="truncate">{compareLabel}</span>
-              </span>
+        <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 w-full min-w-0 transition-opacity duration-300", loading ? "opacity-50 pointer-events-none" : "opacity-100")}>
+          {loading && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/20 backdrop-blur-sm pointer-events-none">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
-        </Card>
-
-        {/* รายการเส้นทางสายการบิน - ใต้กราฟ */}
-        <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden">
-          <h2 className="text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
-            <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
-            {origin
-              ? `เส้นทางการบินที่ออกจาก ${originName || origin} (${mockRoutes.length} เส้นทาง)`
-              : `เส้นทางการบินที่มาถึง ${destinationName || destination} (${mockRoutes.length} เส้นทาง)`}
-          </h2>
-          <ScrollArea className="h-[280px] sm:h-[320px] w-full rounded-md border bg-muted/20">
-            <div className="p-1 space-y-2">
-              {mockRoutes.map((route, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-background border shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-medium text-foreground text-sm sm:text-base truncate">
-                        {route.departureName} → {route.arrivalCity}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
-                        <span>{route.departureCode} → {route.arrivalCode}</span>
-                        {route.direct && (
-                          <span className="text-emerald-600 font-medium">Direct</span>
-                        )}
-                      </p>
-                    </div>
+          {/* Left column: กราฟ + รายการเส้นทาง */}
+          <div className="lg:col-span-2 flex flex-col gap-4 sm:gap-6 min-w-0">
+            {/* Daily frequency chart - responsive */}
+            <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
+                <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0">
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  สถิติความถี่เที่ยวบินรายวัน
+                </h2>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex rounded-lg border bg-muted/30 p-0.5">
+                    <Button
+                      variant={chartDays === 7 ? 'default' : 'ghost'}
+                      size="sm"
+                      className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
+                      onClick={() => setChartDays(7)}
+                    >
+                      7 วัน
+                    </Button>
+                    <Button
+                      variant={chartDays === 30 ? 'default' : 'ghost'}
+                      size="sm"
+                      className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
+                      onClick={() => setChartDays(30)}
+                    >
+                      30 วัน
+                    </Button>
                   </div>
-                  <div className="shrink-0 text-right">
-                    <p className="text-xs text-muted-foreground">สายการบิน</p>
-                    <p className="text-sm font-bold text-primary">{route.airlineCode}</p>
-                  </div>
+                  <Button
+                    variant={compareMode ? 'default' : 'ghost'}
+                    size="sm"
+                    className="rounded-lg border h-8 px-2.5 sm:px-3 text-xs sm:text-sm"
+                    onClick={() => setCompareMode((prev) => !prev)}
+                  >
+                    เปรียบเทียบ
+                  </Button>
                 </div>
-              ))}
-            </div>
-          </ScrollArea>
-        </Card>
-        </div>
+              </div>
+              <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
+                <div className="h-[260px] sm:h-[320px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
+                  <ChartContainer config={chartConfig} className="h-full w-full aspect-auto">
+                    <AreaChart data={displayData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+                      <defs>
+                        <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
+                          <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.05} />
+                        </linearGradient>
+                        <linearGradient id="flightCompareGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.4} />
+                          <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.05} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                      <XAxis
+                        dataKey="date"
+                        stroke="hsl(var(--muted-foreground))"
+                        fontSize={11}
+                        tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      />
+                      <YAxis
+                        stroke="hsl(var(--muted-foreground))"
+                        fontSize={11}
+                        tickFormatter={(v) => `${v}`}
+                        label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
+                        width={45}
+                      />
+                      <Tooltip
+                        content={({ active, payload }) => {
+                          if (!active || !payload?.length) return null
+                          const p = payload[0].payload
+                          return (
+                            <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
+                              <p className="font-medium mb-2">{p.date}</p>
+                              <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)' }}>
+                                {mainLabel}: {p.flights} เที่ยว
+                              </p>
+                              {compareMode && (
+                                <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)' }}>
+                                  {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
+                                </p>
+                              )}
+                            </div>
+                          )
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="flights"
+                        name={mainLabel}
+                        stroke="hsl(221, 83%, 53%)"
+                        strokeWidth={2}
+                        fill="url(#flightGradient)"
+                      />
+                      {compareMode && (
+                        <Area
+                          type="monotone"
+                          dataKey="flightsCompare"
+                          name={compareLabel}
+                          stroke="hsl(142, 76%, 36%)"
+                          strokeWidth={2}
+                          fill="url(#flightCompareGradient)"
+                        />
+                      )}
+                    </AreaChart>
+                  </ChartContainer>
+                </div>
+              </div>
+              {compareMode && (
+                <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
+                    <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-primary shrink-0" />
+                    <span className="truncate">{mainLabel}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
+                    <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-emerald-600 shrink-0" />
+                    <span className="truncate">{compareLabel}</span>
+                  </span>
+                </div>
+              )}
+            </Card>
 
-        {/* Right: Summary - responsive */}
-        <Card className="p-3 sm:p-6 border min-w-0">
-          <div className="flex items-center gap-2 mb-4 sm:mb-6">
-            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 shrink-0" />
-            <h2 className="text-base sm:text-lg font-bold text-foreground">
-              สรุปข้อมูลเส้นทาง
-            </h2>
+            {/* รายการเส้นทางสายการบิน - ใต้กราฟ */}
+            <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden">
+              <h2 className="text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
+                <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
+                {origin
+                  ? `เส้นทางการบินที่ออกจาก ${originName || origin} (${routes.length} เส้นทาง)`
+                  : `เส้นทางการบินที่มาถึง ${destinationName || destination} (${routes.length} เส้นทาง)`}
+              </h2>
+              <ScrollArea className="h-[280px] sm:h-[320px] w-full rounded-md border bg-muted/20">
+                <div className="p-1 space-y-2">
+                  {routes.map((route, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-background border shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-foreground text-sm sm:text-base truncate">
+                            {route.departureName} → {route.arrivalCity}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-primary/80">{route.flightNumber}</span>
+                            <span>•</span>
+                            <span>{route.departureCode} → {route.arrivalCode}</span>
+                            {route.direct && (
+                              <span className="text-emerald-600 font-medium ml-1">Direct</span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="text-xs text-muted-foreground">สายการบิน</p>
+                        <p className="text-sm font-bold text-primary">{route.airlineCode}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </Card>
           </div>
-          <div className="space-y-3 sm:space-y-4">
-            <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-              <p className="text-xs sm:text-sm font-medium text-foreground">
-                จำนวนเที่ยวบินเฉลี่ย/วัน
-              </p>
-              <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                {summaryDefaults.avgFlightsPerDay} เที่ยว
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">อ้างอิงข้อมูลช่วงที่เลือก</p>
+
+          {/* Right: Summary - responsive */}
+          <Card className="p-3 sm:p-6 border min-w-0">
+            <div className="flex items-center gap-2 mb-4 sm:mb-6">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 shrink-0" />
+              <h2 className="text-base sm:text-lg font-bold text-foreground">
+                สรุปข้อมูลเส้นทาง
+              </h2>
             </div>
-            <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-              <p className="text-xs sm:text-sm font-medium text-foreground">
-                ช่วงเวลาที่คนนิยมที่สุด
-              </p>
-              <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                {summaryDefaults.peakHourRange}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">Peak Hour Range</p>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
+                <p className="text-xs sm:text-sm font-medium text-foreground">
+                  จำนวนเที่ยวบินเฉลี่ย/วัน
+                </p>
+                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
+                  {summary.avgFlightsPerDay} เที่ยว
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">อ้างอิงข้อมูลช่วงที่เลือก</p>
+              </div>
+              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
+                <p className="text-xs sm:text-sm font-medium text-foreground">
+                  ช่วงเวลาที่คนนิยมที่สุด
+                </p>
+                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
+                  {summary.peakHourRange}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">Peak Hour Range</p>
+              </div>
+              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
+                <p className="text-xs sm:text-sm font-medium text-foreground">
+                  สายการบินที่มีเที่ยวบินสูงสุด
+                </p>
+                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
+                  {summary.mostActiveCarrier}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">Most Active Carrier</p>
+              </div>
+              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
+                <p className="text-xs sm:text-sm font-medium text-foreground">
+                  รวมจำนวนเที่ยวบินทั้งหมด
+                </p>
+                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
+                  {summary.totalFlights} เที่ยว
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">ตามช่วงเวลาที่เลือก</p>
+              </div>
             </div>
-            <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-              <p className="text-xs sm:text-sm font-medium text-foreground">
-                สายการบินที่มีเที่ยวบินสูงสุด
-              </p>
-              <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                {summaryDefaults.mostActiveCarrier}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">Most Active Carrier</p>
-            </div>
-            <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-              <p className="text-xs sm:text-sm font-medium text-foreground">
-                รวมจำนวนเที่ยวบินทั้งหมด
-              </p>
-              <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                {summaryDefaults.totalFlights} เที่ยว
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">ตามช่วงเวลาที่เลือก</p>
-            </div>
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
       )}
     </div>
   )

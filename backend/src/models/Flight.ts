@@ -29,7 +29,7 @@ export interface FlightPriceRecord {
   updated_at: Date;
 }
 
-export interface IntlFlightInfoRecord {
+export interface FlightPathRecord {
   id: number;
   route_id: number;
   airline_id: number;
@@ -658,8 +658,8 @@ export class FlightModel {
    * Batch insert international flight info (much faster than individual upserts)
    * Uses PostgreSQL multi-value INSERT with ON CONFLICT for better performance
    */
-  static async batchInsertIntlFlightInfo(
-    intlFlights: Array<{
+  static async batchInsertFlightPaths(
+    flightPaths: Array<{
       route_id: number;
       airline_id: number;
       departure_date: Date;
@@ -678,15 +678,15 @@ export class FlightModel {
       source?: string | null;
     }>
   ): Promise<void> {
-    if (intlFlights.length === 0) {
+    if (flightPaths.length === 0) {
       return;
     }
 
     // Use multi-value INSERT with ON CONFLICT for upsert behavior
     // Process in chunks to avoid query size limits
     const chunkSize = 500;
-    for (let i = 0; i < intlFlights.length; i += chunkSize) {
-      const chunk = intlFlights.slice(i, i + chunkSize);
+    for (let i = 0; i < flightPaths.length; i += chunkSize) {
+      const chunk = flightPaths.slice(i, i + chunkSize);
 
       // Build values array
       const values: any[] = [];
@@ -737,7 +737,7 @@ export class FlightModel {
       });
 
       const query = `
-        INSERT INTO intl_flight_info (
+        INSERT INTO flight_paths (
           route_id, airline_id, departure_date, departure_time, arrival_time,
           duration, flight_number, trip_type, travel_class, stops,
           dep_airport, arr_airport, destination, airline_name, airline_code,
@@ -778,15 +778,15 @@ export class FlightModel {
     count: number;
   }> {
     let query = `
-      SELECT 
+        SELECT
         MIN(price) as min,
-        MAX(price) as max,
-        AVG(price) as avg,
-        COUNT(*) as count
+          MAX(price) as max,
+          AVG(price) as avg,
+          COUNT(*) as count
       FROM flight_prices fp
       INNER JOIN routes r ON fp.route_id = r.id
       WHERE r.origin = $1 AND r.destination = $2
-    `;
+          `;
 
     const params: any[] = [origin, destination];
 
@@ -796,7 +796,7 @@ export class FlightModel {
     }
 
     if (endDate) {
-      query += ` AND fp.departure_date <= $${params.length + 1}`;
+      query += ` AND fp.departure_date <= $${params.length + 1} `;
       params.push(endDate);
     }
 
@@ -816,12 +816,12 @@ export class FlightModel {
     averagePrice: number;
   }>> {
     const origins = Array.isArray(origin) ? origin : [origin];
-    const placeholders = origins.map((_, i) => `$${i + 1}`).join(', ');
+    const placeholders = origins.map((_, i) => `$${i + 1} `).join(', ');
 
     const query = `
-      SELECT 
-        EXTRACT(DOW FROM fp.departure_date)::INTEGER as day_of_week,
-        AVG(fp.price)::DECIMAL(10, 2) as average_price
+        SELECT
+        EXTRACT(DOW FROM fp.departure_date):: INTEGER as day_of_week,
+          AVG(fp.price):: DECIMAL(10, 2) as average_price
       FROM flight_prices fp
       INNER JOIN routes r ON fp.route_id = r.id
       WHERE r.origin = ANY(ARRAY[${placeholders}])
@@ -854,12 +854,12 @@ export class FlightModel {
     averagePrice: number;
   }>> {
     const origins = Array.isArray(origin) ? origin : [origin];
-    const placeholders = origins.map((_, i) => `$${i + 1}`).join(', ');
+    const placeholders = origins.map((_, i) => `$${i + 1} `).join(', ');
 
     const query = `
-      SELECT 
-        EXTRACT(MONTH FROM fp.departure_date)::INTEGER as month,
-        AVG(fp.price)::DECIMAL(10, 2) as average_price
+        SELECT
+        EXTRACT(MONTH FROM fp.departure_date):: INTEGER as month,
+          AVG(fp.price):: DECIMAL(10, 2) as average_price
       FROM flight_prices fp
       INNER JOIN routes r ON fp.route_id = r.id
       WHERE r.origin = ANY(ARRAY[${placeholders}])
@@ -892,7 +892,7 @@ export class FlightModel {
     airlineIds?: number[],
     travelClass?: string,
     stops: 'direct' | 'connecting' | 'all' = 'all'
-  ): Promise<IntlFlightInfoRecord[]> {
+  ): Promise<FlightPathRecord[]> {
     const finalEndDate = endDate || (() => {
       const date = new Date(startDate);
       date.setDate(date.getDate() + 30); // Default to 30 days for intl info
@@ -903,7 +903,7 @@ export class FlightModel {
       const year = date.getUTCFullYear();
       const month = String(date.getUTCMonth() + 1).padStart(2, '0');
       const day = String(date.getUTCDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+      return `${year} -${month} -${day} `;
     };
 
     const startDateStr = formatDateForQuery(startDate);
@@ -912,33 +912,33 @@ export class FlightModel {
     const originCodes = Array.isArray(origin) ? origin : [origin];
 
     let query = `
-      SELECT 
+        SELECT
         ifi.*,
-        r.origin,
-        r.destination,
-        a.code as airline_code,
-        a.name as airline_name,
-        a.name_th as airline_name_th
-      FROM intl_flight_info ifi
+          r.origin,
+          r.destination,
+          a.code as airline_code,
+          a.name as airline_name,
+          a.name_th as airline_name_th
+      FROM flight_paths ifi
       INNER JOIN routes r ON ifi.route_id = r.id
       INNER JOIN airlines a ON ifi.airline_id = a.id
       WHERE r.origin = ANY($1)
         AND r.destination = $2
         AND DATE(ifi.departure_date) >= DATE($3)
         AND DATE(ifi.departure_date) <= DATE($4)
-    `;
+          `;
 
     const params: any[] = [originCodes, destination, startDateStr, endDateStr];
     let paramIndex = 5;
 
     if (tripType) {
-      query += ` AND ifi.trip_type = $${paramIndex}`;
+      query += ` AND ifi.trip_type = $${paramIndex} `;
       params.push(tripType);
       paramIndex++;
     }
 
     if (travelClass) {
-      query += ` AND ifi.travel_class = $${paramIndex}`;
+      query += ` AND ifi.travel_class = $${paramIndex} `;
       params.push(travelClass);
       paramIndex++;
     }
@@ -960,6 +960,171 @@ export class FlightModel {
     const result = await pool.query(query, params);
     return result.rows;
   }
+
+  /**
+   * Get flight route analysis data from flight_paths
+   */
+  static async getIntlFlightAnalysis(
+    airportCode: string,
+    isDeparture: boolean,
+    startDate: Date,
+    endDate: Date,
+    selectedDate: Date
+  ): Promise<{
+    dailyFrequency: Array<{ date: string; flights: number }>;
+    routes: Array<{
+      departureCode: string;
+      departureName: string;
+      arrivalCode: string;
+      arrivalCity: string;
+      direct: boolean;
+      airlineCode: string;
+      flightNumber: string;
+    }>;
+    summary: {
+      avgFlightsPerDay: number;
+      peakHourRange: string;
+      mostActiveCarrier: string;
+      totalFlights: number;
+    };
+  }> {
+    const airportParam = airportCode.toUpperCase();
+    const startDateStr = startDate.toISOString().split('T')[0];
+    const endDateStr = endDate.toISOString().split('T')[0];
+    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+
+    // 1. Daily Frequency (Monthly Trend)
+    const dailyQuery = `
+        SELECT
+        departure_date as date,
+          COUNT(*):: INTEGER as flights
+      FROM flight_paths
+      WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
+        AND departure_date >= $2
+        AND departure_date <= $3
+      GROUP BY departure_date
+      ORDER BY date
+          `;
+    const dailyResult = await pool.query(dailyQuery, [airportParam, startDateStr, endDateStr]);
+
+    // 2. Routes List (Specific to Selected Date - including flight number to show all individual flights)
+    const routesQuery = `
+      SELECT DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)
+        dep_airport as departure_code,
+          arr_airport as arrival_code,
+          destination as destination_name,
+          airline_code,
+          flight_number,
+          stops = 0 as direct
+      FROM flight_paths
+      WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
+        AND departure_date = $2
+      ORDER BY dep_airport, arr_airport, airline_code, flight_number, departure_time
+          `;
+    const routesResult = await pool.query(routesQuery, [airportParam, selectedDateStr]);
+
+    // 3. Summary Stats (Stats for Selected Date, except average which is monthly)
+    const summaryQuery = `
+      WITH day_stats AS(
+            SELECT 
+          airline_code,
+            EXTRACT(HOUR FROM departure_time) as dep_hour,
+            COUNT(*) as flight_count
+        FROM flight_paths
+        WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
+          AND departure_date = $2
+        GROUP BY airline_code, dep_hour
+          ),
+          month_stats AS(
+            SELECT 
+          COUNT(*):: INTEGER as total_flights_month,
+            COUNT(DISTINCT departure_date) as active_days_month
+        FROM flight_paths
+        WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
+          AND departure_date >= $3
+          AND departure_date <= $4
+          ),
+            peak_hour AS(
+              SELECT dep_hour
+        FROM day_stats
+        GROUP BY dep_hour
+        ORDER BY SUM(flight_count) DESC
+        LIMIT 1
+            ),
+              top_carrier AS(
+                SELECT airline_code
+        FROM day_stats
+        GROUP BY airline_code
+        ORDER BY SUM(flight_count) DESC
+        LIMIT 1
+              )
+        SELECT
+          (SELECT COUNT(*) FROM flight_paths WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 AND departure_date = $2):: INTEGER as total_flights_day,
+            ms.total_flights_month,
+            ms.active_days_month,
+            ph.dep_hour as peak_hour,
+            tc.airline_code as top_carrier
+      FROM month_stats ms
+      LEFT JOIN peak_hour ph ON true
+      LEFT JOIN top_carrier tc ON true
+    `;
+    const summaryResult = await pool.query(summaryQuery, [airportParam, selectedDateStr, startDateStr, endDateStr]);
+
+    // Fallback if no data
+    if (!summaryResult.rows[0] || (summaryResult.rows[0].total_flights_day === 0 && summaryResult.rows[0].total_flights_month === 0)) {
+      return {
+        dailyFrequency: [],
+        routes: [],
+        summary: {
+          avgFlightsPerDay: 0,
+          peakHourRange: 'N/A',
+          mostActiveCarrier: 'N/A',
+          totalFlights: 0
+        }
+      };
+    }
+
+    const row = summaryResult.rows[0];
+    const totalFlightsDay = parseInt(row.total_flights_day) || 0;
+    const totalFlightsMonth = parseInt(row.total_flights_month) || 0;
+    const activeDaysMonth = parseInt(row.active_days_month) || 1;
+    const peakHour = row.peak_hour !== null ? parseInt(row.peak_hour) : 0;
+
+    // Format peak hour range (e.g. 8 -> "08:00 - 10:00")
+    const startHour = String(peakHour).padStart(2, '0') + ':00';
+    const endHour = String((peakHour + 2) % 24).padStart(2, '0') + ':00';
+
+    return {
+      dailyFrequency: dailyResult.rows.map(r => ({
+        date: r.date instanceof Date ? r.date.toISOString().split('T')[0] : r.date,
+        flights: r.flights
+      })),
+      routes: routesResult.rows.map(r => {
+        // Extract city from "CODE City" format if available
+        let arrivalCity = r.destination_name || r.arrival_code;
+        if (isDeparture && r.destination_name && r.destination_name.includes(' ')) {
+          arrivalCity = r.destination_name.substring(r.destination_name.indexOf(' ') + 1);
+        }
+
+        return {
+          departureCode: r.departure_code,
+          departureName: isDeparture ? airportParam : r.departure_code,
+          arrivalCode: r.arrival_code,
+          arrivalCity: arrivalCity,
+          direct: r.direct,
+          airlineCode: r.airline_code,
+          flightNumber: r.flight_number
+        };
+      }),
+      summary: {
+        avgFlightsPerDay: Math.ceil(totalFlightsMonth / activeDaysMonth),
+        peakHourRange: totalFlightsDay > 0 ? `${startHour} - ${endHour} ` : 'N/A',
+        mostActiveCarrier: row.top_carrier || 'N/A',
+        totalFlights: totalFlightsDay
+      }
+    };
+  }
 }
+
 
 

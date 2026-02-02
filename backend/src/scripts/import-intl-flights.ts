@@ -213,6 +213,11 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
 
             const csvAirport = row.airport.trim().toUpperCase(); // e.g., BKK
             const direction = row.direction.toLowerCase();
+
+            if (otherAirport === csvAirport) {
+                totalSkipped++;
+                continue;
+            }
             const durationMinutes = parseDurationToMinutes(row.duration);
 
             let originCode, destinationCode, departureTimeUTC, arrivalTimeUTC, displayDestination;
@@ -304,7 +309,7 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 }
                 const deduplicatedBatch = Array.from(uniqueMap.values());
 
-                await FlightModel.batchInsertIntlFlightInfo(deduplicatedBatch);
+                await FlightModel.batchInsertFlightPaths(deduplicatedBatch);
                 totalStored += deduplicatedBatch.length;
                 batch.length = 0;
             }
@@ -322,7 +327,7 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
             uniqueMap.set(key, record);
         }
         const deduplicatedBatch = Array.from(uniqueMap.values());
-        await FlightModel.batchInsertIntlFlightInfo(deduplicatedBatch);
+        await FlightModel.batchInsertFlightPaths(deduplicatedBatch);
         totalStored += deduplicatedBatch.length;
     }
 

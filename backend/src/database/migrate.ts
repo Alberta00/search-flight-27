@@ -25,6 +25,7 @@ async function getMigrations(): Promise<Migration[]> {
     { name: '009_add_flight_price_columns', file: '009_add_flight_price_columns.sql' },
     { name: '011_update_airports_table', file: '011_update_airports_table.sql' },
     { name: '012_create_intl_flight_info', file: '012_create_intl_flight_info.sql' },
+    { name: '013_rename_intl_flight_info_to_flight_paths', file: '013_rename_intl_flight_info_to_flight_paths.sql' },
   ];
 }
 

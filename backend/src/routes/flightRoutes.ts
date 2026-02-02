@@ -9,6 +9,7 @@ import {
   getAirportCodeByProvince,
   getCheapestDates,
   getPriceAnalysis,
+  getFlightRoutesAnalysis,
 } from '../controllers/flightController';
 import {
   validateBody,
@@ -107,7 +108,12 @@ router.post('/cheapest-dates', validateBody(cheapestDatesSchema), getCheapestDat
  * @desc    Get price analysis for a specific route and date
  * @access  Public
  */
-router.post('/price-analysis', validateBody(priceAnalysisSchema), getPriceAnalysis);
+/**
+ * @route   GET /api/flights/analysis
+ * @desc    Get flight route analysis data
+ * @access  Public
+ */
+router.get('/analysis', getFlightRoutesAnalysis);
 
 export default router;
 
