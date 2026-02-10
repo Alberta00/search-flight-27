@@ -979,6 +979,7 @@ export class FlightModel {
       arrivalCity: string;
       direct: boolean;
       airlineCode: string;
+      airlineName: string;
       flightNumber: string;
       departureTime: string;
       duration: string;
@@ -1016,6 +1017,7 @@ export class FlightModel {
           arr_airport as arrival_code,
           destination as destination_name,
           airline_code,
+          airline_name,
           flight_number,
           stops = 0 as direct,
           departure_time,
@@ -1113,11 +1115,11 @@ export class FlightModel {
         // Format departure time as HH:mm
         const depTime = r.departure_time != null
           ? (() => {
-              const d = new Date(r.departure_time);
-              const h = d.getUTCHours();
-              const m = d.getUTCMinutes();
-              return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            })()
+            const d = new Date(r.departure_time);
+            const h = d.getUTCHours();
+            const m = d.getUTCMinutes();
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          })()
           : '';
 
         // Format duration (minutes) as "Xh Ym"
@@ -1133,6 +1135,7 @@ export class FlightModel {
           arrivalCity: arrivalCity,
           direct: r.direct,
           airlineCode: r.airline_code,
+          airlineName: r.airline_name || r.airline_code,
           flightNumber: r.flight_number,
           departureTime: depTime,
           duration: durationStr
