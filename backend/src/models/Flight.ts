@@ -46,6 +46,7 @@ export interface FlightPathRecord {
   destination?: string;
   airline_name?: string;
   airline_code?: string;
+  aircraft?: string;
   source?: string;
   created_at: Date;
   updated_at: Date;
@@ -675,6 +676,7 @@ export class FlightModel {
       destination?: string | null;
       airline_name?: string | null;
       airline_code?: string | null;
+      aircraft?: string | null;
       source?: string | null;
     }>
   ): Promise<void> {
@@ -710,6 +712,7 @@ export class FlightModel {
         placeholdersRow.push(`$${paramIndex++}`); // destination
         placeholdersRow.push(`$${paramIndex++}`); // airline_name
         placeholdersRow.push(`$${paramIndex++}`); // airline_code
+        placeholdersRow.push(`$${paramIndex++}`); // aircraft
         placeholdersRow.push(`$${paramIndex++}`); // source
         placeholdersRow.push(`NOW()`); // created_at
         placeholdersRow.push(`NOW()`); // updated_at
@@ -732,6 +735,7 @@ export class FlightModel {
           fp.destination || null,
           fp.airline_name || null,
           fp.airline_code || null,
+          fp.aircraft || null,
           fp.source || null
         );
       });
@@ -741,7 +745,7 @@ export class FlightModel {
           route_id, airline_id, departure_date, departure_time, arrival_time,
           duration, flight_number, trip_type, travel_class, stops,
           dep_airport, arr_airport, destination, airline_name, airline_code,
-          source, created_at, updated_at
+          aircraft, source, created_at, updated_at
         )
         VALUES ${placeholders.join(', ')}
         ON CONFLICT (route_id, airline_id, departure_date, trip_type, flight_number, departure_time)
@@ -755,6 +759,7 @@ export class FlightModel {
           destination = EXCLUDED.destination,
           airline_name = EXCLUDED.airline_name,
           airline_code = EXCLUDED.airline_code,
+          aircraft = EXCLUDED.aircraft,
           source = EXCLUDED.source,
           updated_at = NOW()
       `;

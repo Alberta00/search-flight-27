@@ -169,7 +169,7 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
 
     // Parse header
     const headers = parseCSVLine(lines[0]);
-    // Expected headers: date,airport,direction,time,destination,flight,airline,duration,raw_text,scraped_at
+    // Expected headers: date,airport,direction,time,destination,flight,airline,duration,raw_text,scraped_at,aircraft
     const expectedHeaders = ['date', 'airport', 'direction', 'time', 'destination', 'flight', 'duration'];
 
     // Validate headers
@@ -294,6 +294,7 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 destination: displayDestination,
                 airline_name: airline.name,
                 airline_code: airlineCode,
+                aircraft: row.aircraft || null,
                 stops: 0
             });
 
