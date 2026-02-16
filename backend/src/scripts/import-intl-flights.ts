@@ -144,6 +144,34 @@ function getAirlineInfo(airlineName: string, airlineCode: string): { name: strin
 }
 
 /**
+ * Get human-readable airport display name (e.g., "HKT" -> "Phuket (HKT)")
+ */
+function getAirportDisplayName(code: string): string {
+    const airportMap: Record<string, string> = {
+        'BKK': 'Bangkok (BKK)',
+        'DMK': 'Bangkok (DMK)',
+        'HKT': 'HKT Phuket',
+        'CNX': 'Chiang Mai (CNX)',
+        'KBV': 'Krabi (KBV)',
+        'HDY': 'Hat Yai (HDY)',
+        'UTH': 'Udon Thani (UTH)',
+        'USM': 'Koh Samui (USM)',
+        'CEI': 'Chiang Rai (CEI)',
+        'UBP': 'Ubon Ratchathani (UBP)',
+        'KKC': 'Khon Kaen (KKC)',
+        'NST': 'Nakhon Si Thammarat (NST)',
+        'URT': 'Surat Thani (URT)',
+        'TDX': 'Trat (TDX)',
+        'NAW': 'Narathiwat (NAW)',
+        'BFV': 'Buri Ram (BFV)',
+        'THS': 'Sukhothai (THS)',
+        'UTP': 'Rayong/Pattaya (UTP)',
+    };
+
+    return airportMap[code] || `${code} (${code})`;
+}
+
+/**
  * Import flight data from a single CSV file (FlightsFrom.com format)
  */
 async function importIntlCSVFile(csvFilePath: string): Promise<{
@@ -236,7 +264,7 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 const arrivalDate = new Date(arrivalTimeUTC);
                 const departureDate = new Date(arrivalDate.getTime() - durationMinutes * 60000);
                 departureTimeUTC = departureDate.toISOString();
-                displayDestination = 'Bangkok (BKK)'; // Since they are arriving at BKK
+                displayDestination = getAirportDisplayName(csvAirport);
             } else {
                 // Flight departing from csvAirport (BKK) to otherAirport (PER)
                 originCode = csvAirport;
