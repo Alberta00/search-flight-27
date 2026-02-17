@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { pool, initializeTimescaleDB } from '../config/database';
 
@@ -10,24 +10,22 @@ interface Migration {
 }
 
 async function getMigrations(): Promise<Migration[]> {
-  // In a real application, you'd read from the filesystem
-  // For now, we'll define them manually
-  return [
-    { name: '001_initial_schema', file: '001_initial_schema.sql' },
-    { name: '002_create_hypertable', file: '002_create_hypertable.sql' },
-    { name: '003_create_search_statistics', file: '003_create_search_statistics.sql' },
-    { name: '004_add_composite_indexes', file: '004_add_composite_indexes.sql' },
-    { name: '005_create_history_tables', file: '005_create_history_tables.sql' },
-    { name: '006_update_flight_prices_unique_constraint', file: '006_update_flight_prices_unique_constraint.sql' },
-    { name: '007_add_travel_class', file: '007_add_travel_class.sql' },
-    { name: '008_create_route_price_statistics', file: '008_create_route_price_statistics.sql' },
-    { name: '009_add_composite_index_for_search', file: '009_add_composite_index_for_search.sql' },
-    { name: '009_add_flight_price_columns', file: '009_add_flight_price_columns.sql' },
-    { name: '011_update_airports_table', file: '011_update_airports_table.sql' },
-    { name: '012_create_intl_flight_info', file: '012_create_intl_flight_info.sql' },
-    { name: '013_rename_intl_flight_info_to_flight_paths', file: '013_rename_intl_flight_info_to_flight_paths.sql' },
-    { name: '014_create_imported_files', file: '014_create_imported_files.sql' },
-  ];
+  try {
+    const files = readdirSync(MIGRATIONS_DIR);
+
+    // Filter for .sql files and sort them to ensure correct order
+    const sqlFiles = files
+      .filter(file => file.endsWith('.sql'))
+      .sort();
+
+    return sqlFiles.map(file => ({
+      name: file.replace('.sql', ''),
+      file: file
+    }));
+  } catch (error) {
+    console.error('Error reading migrations directory:', error);
+    return [];
+  }
 }
 
 async function getExecutedMigrations(): Promise<string[]> {
