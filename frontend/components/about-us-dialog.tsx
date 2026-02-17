@@ -46,7 +46,7 @@ export function AboutUsDialog({ open, onOpenChange }: AboutUsDialogProps) {
             <h1 className="text-3xl font-bold text-primary mb-2 drop-shadow-sm">
               เกี่ยวกับเรา (About Us)
             </h1>
-            <div 
+            <div
               className={`${underlineConfig.height} ${underlineConfig.width} rounded-full`}
               style={{
                 background: `linear-gradient(to right, ${underlineConfig.gradient.from}, ${underlineConfig.gradient.via}, ${underlineConfig.gradient.to})`
@@ -84,7 +84,7 @@ export function AboutUsDialog({ open, onOpenChange }: AboutUsDialogProps) {
               <div className="bg-blue-50 rounded-lg flex overflow-hidden">
                 <div className="w-1.5 bg-primary flex-shrink-0"></div>
                 <p className="text-primary p-4 flex-1">
-                  วิเคราะห์ราคาตั๋วตาม <span className="font-bold">จังหวัดปลายทาง</span>
+                  วิเคราะห์ราคาตั๋วตาม <span className="font-bold">ประเทศ/เมืองปลายทาง</span>
                 </p>
               </div>
               <div className="bg-blue-50 rounded-lg flex overflow-hidden">
@@ -124,7 +124,7 @@ export function AboutUsDialog({ open, onOpenChange }: AboutUsDialogProps) {
             </div>
             <div className="bg-pink-50 rounded-lg p-4">
               <p className="text-foreground leading-relaxed">
-                ช่วยให้ผู้ใช้ <span className="font-bold">ประหยัดเวลา ประหยัดเงิน และตัดสินใจได้แบบมีข้อมูลประกอบ</span> เราจะเก็บสถิติ เช่น จังหวัดยอดนิยม ช่วงที่คนเดินทางเยอะ ราคาเฉลี่ยแต่ละเดือน เพื่อนำกลับไปปรับระบบให้แนะนำได้แม่นยำยิ่งขึ้น
+                ช่วยให้ผู้ใช้ <span className="font-bold">ประหยัดเวลา ประหยัดเงิน และตัดสินใจได้แบบมีข้อมูลประกอบ</span> เราจะเก็บสถิติ เช่น ปลายทางยอดนิยม ช่วงที่คนเดินทางเยอะ ราคาเฉลี่ยแต่ละเดือน เพื่อนำกลับไปปรับระบบให้แนะนำได้แม่นยำยิ่งขึ้น
               </p>
             </div>
           </div>

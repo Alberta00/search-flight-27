@@ -447,7 +447,7 @@ export function FlightStats({ searchParams }: FlightStatsProps) {
               <div className="p-4 bg-background rounded-lg border">
                 <div className="flex items-center gap-2 mb-2">
                   <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
-                  <span className="text-xs sm:text-sm text-muted-foreground">{'จังหวัดที่ค้นหามากที่สุด'}</span>
+                  <span className="text-xs sm:text-sm text-muted-foreground">{'ประเทศ/เมืองที่ค้นหามากที่สุด'}</span>
                 </div>
                 <div className="text-xl sm:text-2xl font-bold break-words">
                   {/* {provinceNames[stats.mostSearchedCountry.country] || stats.mostSearchedCountry.country} */}

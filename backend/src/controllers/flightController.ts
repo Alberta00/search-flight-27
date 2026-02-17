@@ -17,7 +17,7 @@ const flightAnalysisService = new FlightAnalysisService();
 const pricePredictionService = new PricePredictionService();
 
 /**
- * Convert province value to airport code
+ * Convert location value to airport code
  * GET /api/flights/airport-code?province=bangkok
  * Note: This is a fallback - should use /api/airports/search instead
  */
@@ -47,7 +47,7 @@ export async function getAirportCodeByProvince(
     const provinceParam = req.query.province as string || 'unknown';
     res.status(404).json({
       error: 'Airport not found',
-      message: error.message || `Could not find airport for province: ${provinceParam}. Please use /api/airports/search instead.`,
+      message: error.message || `Could not find airport for location: ${provinceParam}. Please use /api/airports/search instead.`,
     });
   }
 }
@@ -137,7 +137,7 @@ export async function getFlightPrices(
       passengers.adults = passengerCount;
     }
 
-    // Convert province/country values to airport codes
+    // Convert location values to airport codes
     let originAirportCode: string | string[] = await convertToAirportCode(origin);
     const destinationAirportCode = await convertToAirportCode(destination);
 
@@ -282,7 +282,7 @@ export async function getAvailableAirlines(
       destination: string;
     };
 
-    // Convert province/country values to airport codes
+    // Convert location values to airport codes
     let originAirportCode: string | string[] = await convertToAirportCode(origin);
     const destinationAirportCode = await convertToAirportCode(destination);
 
@@ -322,7 +322,7 @@ export async function predictPrice(
       daysOfHistory = 90,
     } = params;
 
-    // Convert province/country values to airport codes
+    // Convert location values to airport codes
     const originAirportCode = await convertToAirportCode(origin);
     const destinationAirportCode = await convertToAirportCode(destination);
 
@@ -375,7 +375,7 @@ export async function getPriceTrend(
       daysAhead = 30,
     } = params;
 
-    // Convert province/country values to airport codes
+    // Convert location values to airport codes
     const originAirportCode = await convertToAirportCode(origin);
     const destinationAirportCode = await convertToAirportCode(destination);
 
@@ -420,7 +420,7 @@ export async function predictPriceRange(
       tripType = 'round-trip',
     } = params;
 
-    // Convert province/country values to airport codes
+    // Convert location values to airport codes
     const originAirportCode = await convertToAirportCode(origin);
     const destinationAirportCode = await convertToAirportCode(destination);
 
@@ -491,7 +491,7 @@ export async function getCheapestDates(
       return;
     }
 
-    // Convert province/country values to airport codes
+    // Convert location values to airport codes
     originAirportCode = await convertToAirportCode(origin);
     destinationAirportCode = await convertToAirportCode(destination);
 

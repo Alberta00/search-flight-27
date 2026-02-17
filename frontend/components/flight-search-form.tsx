@@ -115,8 +115,8 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
       setErrors(prev => ({ ...prev, origin: 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน', destination: 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' }))
     } else if (errors.origin === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' || errors.destination === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน') {
       // Clear the error if they're no longer the same
-      setErrors(prev => ({ 
-        ...prev, 
+      setErrors(prev => ({
+        ...prev,
         origin: prev.origin === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' ? undefined : prev.origin,
         destination: prev.destination === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' ? undefined : prev.destination
       }))
@@ -129,19 +129,19 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
     const tempOriginName = originName
     const newOrigin = destination
     const newDestination = tempOrigin
-    
+
     setOrigin(newOrigin)
     setOriginName(destinationName)
     setDestination(newDestination)
     setDestinationName(tempOriginName)
-    
+
     // Check if origin and destination are the same after swap
     if (newOrigin && newDestination && newOrigin === newDestination) {
       setErrors(prev => ({ ...prev, origin: 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน', destination: 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' }))
     } else {
       // Clear the same location error if they're different
-      setErrors(prev => ({ 
-        ...prev, 
+      setErrors(prev => ({
+        ...prev,
         origin: prev.origin === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' ? undefined : prev.origin,
         destination: prev.destination === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' ? undefined : prev.destination
       }))
@@ -168,8 +168,8 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
       setErrors(prev => ({ ...prev, origin: 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน', destination: 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' }))
     } else if (errors.origin === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' || errors.destination === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน') {
       // Clear the error if they're no longer the same
-      setErrors(prev => ({ 
-        ...prev, 
+      setErrors(prev => ({
+        ...prev,
         origin: prev.origin === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' ? undefined : prev.origin,
         destination: prev.destination === 'ต้นทางและปลายทางต้องไม่ใช่ที่เดียวกัน' ? undefined : prev.destination
       }))
@@ -301,12 +301,12 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
     let hasError = false
 
     if (!origin) {
-      newErrors.origin = 'เพิ่มจังหวัดต้นทาง'
+      newErrors.origin = 'เพิ่มประเทศต้นทาง'
       hasError = true
     }
 
     if (!destination) {
-      newErrors.destination = 'เพิ่มจังหวัดปลายทาง'
+      newErrors.destination = 'เพิ่มประเทศปลายทาง'
       hasError = true
     }
 
@@ -514,7 +514,7 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 sm:gap-3 flex-[2] min-w-0">
           <div className="relative flex-1 min-w-0">
             <Label htmlFor="origin" className="text-xs sm:text-sm font-medium text-gray-700 mb-1.5 block">
-              {'จังหวัดต้นทาง'}
+              {'ประเทศต้นทาง'}
             </Label>
             <DestinationSelect
               value={origin}
@@ -532,14 +532,14 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
             size="icon"
             onClick={handleSwapOriginDestination}
             className="rounded-full bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 transition-colors flex-shrink-0 h-12 w-12 sm:h-14 sm:w-14 mb-0 self-center sm:self-end"
-            title="สลับจังหวัดต้นทางและปลายทาง"
+            title="สลับประเทศต้นทางและปลายทาง"
           >
             <ArrowLeftRight className="h-4 w-4 text-gray-600" />
           </Button>
 
           <div className="relative flex-1 min-w-0">
             <Label htmlFor="destination" className="text-xs sm:text-sm font-medium text-gray-700 mb-1.5 block">
-              {'จังหวัดปลายทาง'}
+              {'ประเทศปลายทาง'}
             </Label>
             <DestinationSelect
               value={destination}

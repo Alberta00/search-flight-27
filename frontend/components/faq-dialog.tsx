@@ -52,7 +52,7 @@ const faqItems = [
     answer: 'การแบ่งฤดูกาลพิจารณาจากสถิติราคาตั๋วเครื่องบินในแต่ละเดือน โดยอ้างอิงจากราคาเฉลี่ย ปริมาณการเดินทาง และปัจจัยอื่น ๆ ที่มีผลต่อการเปลี่ยนแปลงของราคาตั๋ว',
   },
   {
-    question: 'ถ้าฉันอยากไปจังหวัดหนึ่ง แต่ยังไม่รู้ช่วงวันที่ชัดเจน จะใช้ได้ไหม?',
+    question: 'ถ้าฉันอยากไปประเทศหรือเมืองหนึ่ง แต่ยังไม่รู้ช่วงวันที่ชัดเจน จะใช้ได้ไหม?',
     answer: 'สามารถใช้งานได้ โดยผู้ใช้สามารถเลือกปลายทางและระบุระยะเวลาการเดินทาง (เช่น 5–7 วัน) ระบบจะทำการวิเคราะห์และแนะนำช่วงเวลาที่เหมาะสมที่สุดให้โดยอัตโนมัติ',
   },
   {
@@ -95,7 +95,7 @@ export function FaqDialog({ open, onOpenChange }: FaqDialogProps) {
             <h1 className="text-3xl font-bold text-primary mb-2 drop-shadow-sm">
               คำถามที่พบบ่อย (FAQ)
             </h1>
-            <div 
+            <div
               className={`${underlineConfig.height} ${underlineConfig.width} rounded-full`}
               style={{
                 background: `linear-gradient(to right, ${underlineConfig.gradient.from}, ${underlineConfig.gradient.via}, ${underlineConfig.gradient.to})`
