@@ -217,7 +217,8 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
     const airlineCache = new Map<string, any>();
 
     const BATCH_SIZE = 500;
-    const batch: any[] = [];
+    const departureBatch: any[] = [];
+    const arrivalBatch: any[] = [];
 
     console.log(`   📊 Processing ${lines.length - 1} rows...`);
 
@@ -306,7 +307,7 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
             const departureDateObj = new Date(departureTimeUTC);
             departureDateObj.setUTCHours(0, 0, 0, 0);
 
-            batch.push({
+            const flightRecord = {
                 route_id: route.id,
                 airline_id: airline.id,
                 departure_date: departureDateObj,
@@ -324,24 +325,40 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 airline_code: airlineCode,
                 aircraft: row.aircraft || null,
                 stops: 0
-            });
+            };
+
+            if (direction === 'departure') {
+                departureBatch.push(flightRecord);
+            } else {
+                arrivalBatch.push(flightRecord);
+            }
 
             totalProcessed++;
 
-            if (batch.length >= BATCH_SIZE) {
-                // Deduplicate within the batch to avoid "affect row a second time" error
-                // Unique key: route_id, airline_id, departure_date, trip_type, flight_number, departure_time
+            if (departureBatch.length >= BATCH_SIZE) {
                 const uniqueMap = new Map();
-                for (const record of batch) {
+                for (const record of departureBatch) {
                     const departureDateStr = record.departure_date.toISOString().split('T')[0];
                     const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
                     uniqueMap.set(key, record);
                 }
                 const deduplicatedBatch = Array.from(uniqueMap.values());
-
-                await FlightModel.batchInsertFlightPaths(deduplicatedBatch);
+                await FlightModel.batchInsertFlightPaths(deduplicatedBatch, true);
                 totalStored += deduplicatedBatch.length;
-                batch.length = 0;
+                departureBatch.length = 0;
+            }
+
+            if (arrivalBatch.length >= BATCH_SIZE) {
+                const uniqueMap = new Map();
+                for (const record of arrivalBatch) {
+                    const departureDateStr = record.departure_date.toISOString().split('T')[0];
+                    const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+                    uniqueMap.set(key, record);
+                }
+                const deduplicatedBatch = Array.from(uniqueMap.values());
+                await FlightModel.batchInsertFlightPaths(deduplicatedBatch, false);
+                totalStored += deduplicatedBatch.length;
+                arrivalBatch.length = 0;
             }
         } catch (error: any) {
             totalErrors++;
@@ -349,15 +366,27 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
         }
     }
 
-    if (batch.length > 0) {
+    if (departureBatch.length > 0) {
         const uniqueMap = new Map();
-        for (const record of batch) {
+        for (const record of departureBatch) {
             const departureDateStr = record.departure_date.toISOString().split('T')[0];
             const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
             uniqueMap.set(key, record);
         }
         const deduplicatedBatch = Array.from(uniqueMap.values());
-        await FlightModel.batchInsertFlightPaths(deduplicatedBatch);
+        await FlightModel.batchInsertFlightPaths(deduplicatedBatch, true);
+        totalStored += deduplicatedBatch.length;
+    }
+
+    if (arrivalBatch.length > 0) {
+        const uniqueMap = new Map();
+        for (const record of arrivalBatch) {
+            const departureDateStr = record.departure_date.toISOString().split('T')[0];
+            const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+            uniqueMap.set(key, record);
+        }
+        const deduplicatedBatch = Array.from(uniqueMap.values());
+        await FlightModel.batchInsertFlightPaths(deduplicatedBatch, false);
         totalStored += deduplicatedBatch.length;
     }
 

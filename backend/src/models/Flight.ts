@@ -678,11 +678,14 @@ export class FlightModel {
       airline_code?: string | null;
       aircraft?: string | null;
       source?: string | null;
-    }>
+    }>,
+    isDeparture: boolean = true
   ): Promise<void> {
     if (flightPaths.length === 0) {
       return;
     }
+
+    const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
 
     // Use multi-value INSERT with ON CONFLICT for upsert behavior
     // Process in chunks to avoid query size limits
@@ -741,7 +744,7 @@ export class FlightModel {
       });
 
       const query = `
-        INSERT INTO flight_paths (
+        INSERT INTO ${tableName} (
           route_id, airline_id, departure_date, departure_time, arrival_time,
           duration, flight_number, trip_type, travel_class, stops,
           dep_airport, arr_airport, destination, airline_name, airline_code,
@@ -915,6 +918,8 @@ export class FlightModel {
     const endDateStr = formatDateForQuery(finalEndDate);
 
     const originCodes = Array.isArray(origin) ? origin : [origin];
+    const isDeparture = Array.isArray(origin) ? origin.some(o => o === 'BKK' || o === 'DMK') : (origin === 'BKK' || origin === 'DMK');
+    const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
 
     let query = `
         SELECT
@@ -924,7 +929,7 @@ export class FlightModel {
           a.code as airline_code,
           a.name as airline_name,
           a.name_th as airline_name_th
-      FROM flight_paths ifi
+      FROM ${tableName} ifi
       INNER JOIN routes r ON ifi.route_id = r.id
       INNER JOIN airlines a ON ifi.airline_id = a.id
       WHERE r.origin = ANY($1)
@@ -1001,12 +1006,14 @@ export class FlightModel {
     const endDateStr = endDate.toISOString().split('T')[0];
     const selectedDateStr = selectedDate.toISOString().split('T')[0];
 
+    const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
+
     // 1. Daily Frequency (Monthly Trend)
     const dailyQuery = `
         SELECT
         departure_date as date,
           COUNT(*):: INTEGER as flights
-      FROM flight_paths
+      FROM ${tableName}
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
         AND departure_date >= $2
         AND departure_date <= $3
@@ -1027,7 +1034,7 @@ export class FlightModel {
           stops = 0 as direct,
           departure_time,
           duration
-      FROM flight_paths
+      FROM ${tableName}
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
         AND departure_date = $2
       ORDER BY dep_airport, arr_airport, airline_code, flight_number, departure_time
@@ -1041,7 +1048,7 @@ export class FlightModel {
           airline_code,
             EXTRACT(HOUR FROM departure_time) as dep_hour,
             COUNT(*) as flight_count
-        FROM flight_paths
+        FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
           AND departure_date = $2
         GROUP BY airline_code, dep_hour
@@ -1050,10 +1057,11 @@ export class FlightModel {
             SELECT 
           COUNT(*):: INTEGER as total_flights_month,
             COUNT(DISTINCT departure_date) as active_days_month
-        FROM flight_paths
+        FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
           AND departure_date >= $3
           AND departure_date <= $4
+        GROUP BY total_flights_month
           ),
             peak_hour AS(
               SELECT dep_hour
@@ -1070,7 +1078,7 @@ export class FlightModel {
         LIMIT 1
               )
         SELECT
-          (SELECT COUNT(*) FROM flight_paths WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 AND departure_date = $2):: INTEGER as total_flights_day,
+          (SELECT COUNT(*) FROM ${tableName} WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 AND departure_date = $2):: INTEGER as total_flights_day,
             ms.total_flights_month,
             ms.active_days_month,
             ph.dep_hour as peak_hour,

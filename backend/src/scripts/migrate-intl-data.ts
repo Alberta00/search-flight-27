@@ -20,29 +20,49 @@ async function migrateIntlData() {
             return;
         }
 
-        // 2. Map to flight_paths format
-        const intlFlights = records.map(r => ({
-            route_id: r.route_id,
-            airline_id: r.airline_id,
-            departure_date: r.departure_date,
-            departure_time: r.departure_time,
-            arrival_time: r.arrival_time,
-            duration: r.duration,
-            flight_number: r.flight_number,
-            trip_type: r.trip_type,
-            travel_class: r.travel_class,
-            stops: r.stops || 0,
-            dep_airport: r.dep_airport,
-            arr_airport: r.arr_airport,
-            destination: r.destination,
-            airline_name: r.airline_name,
-            airline_code: r.airline_code,
-            source: r.source
-        }));
+        // 2. Map to flight_paths format and split by direction
+        const departures: any[] = [];
+        const arrivals: any[] = [];
 
-        // 3. Batch insert into flight_paths
-        console.log('📥 Inserting records into flight_paths...');
-        await FlightModel.batchInsertFlightPaths(intlFlights);
+        records.forEach(r => {
+            const flight = {
+                route_id: r.route_id,
+                airline_id: r.airline_id,
+                departure_date: r.departure_date,
+                departure_time: r.departure_time,
+                arrival_time: r.arrival_time,
+                duration: r.duration,
+                flight_number: r.flight_number,
+                trip_type: r.trip_type,
+                travel_class: r.travel_class,
+                stops: r.stops || 0,
+                dep_airport: r.dep_airport,
+                arr_airport: r.arr_airport,
+                destination: r.destination,
+                airline_name: r.airline_name,
+                airline_code: r.airline_code,
+                source: r.source
+            };
+
+            // Heuristic for direction if not specified in flight_prices
+            // If dep_airport is BKK/DMK, it's likely a departure
+            if (r.dep_airport === 'BKK' || r.dep_airport === 'DMK') {
+                departures.push(flight);
+            } else {
+                arrivals.push(flight);
+            }
+        });
+
+        // 3. Batch insert into new tables
+        if (departures.length > 0) {
+            console.log(`📥 Inserting ${departures.length} records into departure_flight_paths...`);
+            await FlightModel.batchInsertFlightPaths(departures, true);
+        }
+
+        if (arrivals.length > 0) {
+            console.log(`📥 Inserting ${arrivals.length} records into arrival_flight_paths...`);
+            await FlightModel.batchInsertFlightPaths(arrivals, false);
+        }
 
         // 4. Optionally delete from flight_prices
         console.log('🧹 Cleaning up migrated records from flight_prices...');
