@@ -899,7 +899,8 @@ export class FlightModel {
     tripType?: string,
     airlineIds?: number[],
     travelClass?: string,
-    stops: 'direct' | 'connecting' | 'all' = 'all'
+    stops: 'direct' | 'connecting' | 'all' = 'all',
+    isDeparture: boolean = true
   ): Promise<FlightPathRecord[]> {
     const finalEndDate = endDate || (() => {
       const date = new Date(startDate);
@@ -911,14 +912,18 @@ export class FlightModel {
       const year = date.getUTCFullYear();
       const month = String(date.getUTCMonth() + 1).padStart(2, '0');
       const day = String(date.getUTCDate()).padStart(2, '0');
-      return `${year} -${month} -${day} `;
+      return `${year}-${month}-${day}`;
     };
 
     const startDateStr = formatDateForQuery(startDate);
     const endDateStr = formatDateForQuery(finalEndDate);
 
     const originCodes = Array.isArray(origin) ? origin : [origin];
-    const isDeparture = Array.isArray(origin) ? origin.some(o => o === 'BKK' || o === 'DMK') : (origin === 'BKK' || origin === 'DMK');
+    // isDeparture should be passed as an argument or determined by the caller
+    // but here it was hardcoded to BKK/DMK. Let's fix it by adding it as a parameter if needed,
+    // or just keeping the existing parameter if it was meant to be the source of truth.
+    // Actually, getIntlFlights signature has it as an optional trailing param if I recall.
+    // Wait, line 894: static async getIntlFlights(..., isDeparture: boolean = true)
     const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
 
     let query = `
@@ -1061,7 +1066,6 @@ export class FlightModel {
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
           AND departure_date >= $3
           AND departure_date <= $4
-        GROUP BY total_flights_month
           ),
             peak_hour AS(
               SELECT dep_hour
