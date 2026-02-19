@@ -417,14 +417,33 @@ async function main() {
 
     let csvFiles: string[] = [];
 
+    /**
+     * Recursively get all files in a directory
+     */
+    function getFilesRecursively(dir: string): string[] {
+        let results: string[] = [];
+        if (!fs.existsSync(dir)) return results;
+
+        const list = fs.readdirSync(dir);
+        for (const file of list) {
+            const fullPath = path.join(dir, file);
+            const stat = fs.statSync(fullPath);
+            if (stat && stat.isDirectory()) {
+                results = results.concat(getFilesRecursively(fullPath));
+            } else if (file.endsWith('.csv')) {
+                results.push(fullPath);
+            }
+        }
+        return results;
+    }
+
     if (csvFile) {
         const fullPath = path.isAbsolute(csvFile) ? csvFile : path.join(process.cwd(), csvFile);
         csvFiles = [fullPath];
     } else {
         const fullDir = path.isAbsolute(csvDir) ? csvDir : path.join(process.cwd(), csvDir);
         if (fs.existsSync(fullDir)) {
-            const files = fs.readdirSync(fullDir);
-            csvFiles = files.filter(f => f.endsWith('.csv')).map(f => path.join(fullDir, f));
+            csvFiles = getFilesRecursively(fullDir);
         }
     }
 
