@@ -1,0 +1,41 @@
+﻿date,airport,direction,time,destination,flight,airline,airline_source,duration,crosscheck_found,airline_match,aircraft,status,reason,page_date_verified,scraped_at,crosschecked_at
+2026-02-15,KKC,departure,08:25,BKK Bangkok,TG41,Thai Airways,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:37.644504,2026-02-12T20:10:57.638572
+2026-02-15,KKC,departure,08:40,BKK Bangkok,VZ211,Vietjet Thailand,text,1h 5m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:38.590189,2026-02-12T20:10:57.638579
+2026-02-15,KKC,departure,08:55,CNX Chiang Mai,FD5503,Thai AirAsia,text,1h 5m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T15:34:39.509130,2026-02-12T20:11:13.181890
+2026-02-15,KKC,departure,09:15,DMK Bangkok,FD3251,Thai AirAsia,text,1h 0m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:40.413620,2026-02-12T20:11:28.049616
+2026-02-15,KKC,departure,09:50,DMK Bangkok,SL643,Thai Lion Air,text,1h 10m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:41.336066,2026-02-12T20:11:28.049632
+2026-02-15,KKC,departure,11:55,BKK Bangkok,TG43,Thai Airways,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:42.249465,2026-02-12T20:11:28.049644
+2026-02-15,KKC,departure,12:20,DMK Bangkok,FD3249,Thai AirAsia,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:43.167779,2026-02-12T20:11:28.049648
+2026-02-15,KKC,departure,12:50,DMK Bangkok,SL645,Thai Lion Air,text,1h 0m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:44.094410,2026-02-12T20:11:28.049653
+2026-02-15,KKC,departure,13:00,BKK Bangkok,FD4502,Thai AirAsia,text,0h 55m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:45.031552,2026-02-12T20:11:28.049657
+2026-02-15,KKC,departure,14:05,DMK Bangkok,FD3255,Thai AirAsia,text,1h 0m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:45.965661,2026-02-12T20:11:28.049661
+2026-02-15,KKC,departure,15:40,BKK Bangkok,TG45,Thai Airways,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:46.914702,2026-02-12T20:11:28.049665
+2026-02-15,KKC,departure,16:20,DMK Bangkok,FD3261,Thai AirAsia,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:47.847191,2026-02-12T20:11:28.049669
+2026-02-15,KKC,departure,17:30,DMK Bangkok,SL647,Thai Lion Air,text,1h 5m,False,False,Boeing 737-900 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:48.774425,2026-02-12T20:11:28.049674
+2026-02-15,KKC,departure,17:35,HKT Phuket,FD3601,Thai AirAsia,text,1h 50m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:49.687785,2026-02-12T20:11:43.489061
+2026-02-15,KKC,departure,19:05,BKK Bangkok,VZ215,Vietjet Thailand,text,1h 10m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:50.598080,2026-02-12T20:11:43.489090
+2026-02-15,KKC,departure,19:20,DMK Bangkok,FD3257,Thai AirAsia,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:51.504096,2026-02-12T20:11:43.489097
+2026-02-15,KKC,departure,20:00,DMK Bangkok,SL649,Thai Lion Air,text,1h 0m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:52.421389,2026-02-12T20:11:43.489101
+2026-02-15,KKC,departure,20:30,DMK Bangkok,FD3253,Thai AirAsia,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:53.405135,2026-02-12T20:11:43.489106
+2026-02-15,KKC,departure,21:00,BKK Bangkok,FD4504,Thai AirAsia,text,1h 5m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:54.365458,2026-02-12T20:11:43.489110
+2026-02-15,KKC,departure,21:10,BKK Bangkok,TG47,Thai Airways,text,1h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T15:34:55.306746,2026-02-12T20:11:43.489114
+2026-02-15,KKC,arrival,07:55,BKK Bangkok,TG41,Thai Airways,text,1h 0m,,,Airbus A320,,,True,2026-02-11T15:34:56.987150,
+2026-02-15,KKC,arrival,08:10,BKK Bangkok,VZ210,Vietjet Thailand,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:34:57.913853,
+2026-02-15,KKC,arrival,08:25,CNX Chiang Mai,FD5502,Thai AirAsia,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:34:58.828153,
+2026-02-15,KKC,arrival,08:40,DMK Bangkok,FD3250,Thai AirAsia,text,1h 15m,,,Airbus A321neo,,,True,2026-02-11T15:34:59.739709,
+2026-02-15,KKC,arrival,09:10,DMK Bangkok,SL642,Thai Lion Air,text,1h 10m,,,Boeing 737-800 Passenger,,,True,2026-02-11T15:35:00.658097,
+2026-02-15,KKC,arrival,11:25,BKK Bangkok,TG42,Thai Airways,text,1h 0m,,,Airbus A320,,,True,2026-02-11T15:35:01.589110,
+2026-02-15,KKC,arrival,11:50,DMK Bangkok,FD3248,Thai AirAsia,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:35:02.504036,
+2026-02-15,KKC,arrival,12:10,DMK Bangkok,SL644,Thai Lion Air,text,1h 0m,,,Boeing 737-800 Passenger,,,True,2026-02-11T15:35:03.415969,
+2026-02-15,KKC,arrival,12:30,BKK Bangkok,FD4501,Thai AirAsia,text,1h 20m,,,Airbus A320,,,True,2026-02-11T15:35:04.331139,
+2026-02-15,KKC,arrival,13:30,DMK Bangkok,FD3254,Thai AirAsia,text,1h 10m,,,Airbus A321neo,,,True,2026-02-11T15:35:05.250813,
+2026-02-15,KKC,arrival,15:10,BKK Bangkok,TG44,Thai Airways,text,1h 0m,,,Airbus A320,,,True,2026-02-11T15:35:06.185527,
+2026-02-15,KKC,arrival,15:50,DMK Bangkok,FD3260,Thai AirAsia,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:35:07.103997,
+2026-02-15,KKC,arrival,16:50,DMK Bangkok,SL646,Thai Lion Air,text,1h 10m,,,Boeing 737-900 Passenger,,,True,2026-02-11T15:35:08.020124,
+2026-02-15,KKC,arrival,17:05,HKT Phuket,FD3602,Thai AirAsia,text,1h 45m,,,Airbus A320,,,True,2026-02-11T15:35:08.959806,
+2026-02-15,KKC,arrival,18:30,BKK Bangkok,VZ214,Vietjet Thailand,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:35:09.918749,
+2026-02-15,KKC,arrival,18:50,DMK Bangkok,FD3256,Thai AirAsia,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:35:10.832798,
+2026-02-15,KKC,arrival,19:20,DMK Bangkok,SL648,Thai Lion Air,text,1h 5m,,,Boeing 737-800 Passenger,,,True,2026-02-11T15:35:11.763923,
+2026-02-15,KKC,arrival,20:00,DMK Bangkok,FD3252,Thai AirAsia,text,1h 5m,,,Airbus A320,,,True,2026-02-11T15:35:12.687531,
+2026-02-15,KKC,arrival,20:20,BKK Bangkok,FD4503,Thai AirAsia,text,1h 10m,,,Airbus A320,,,True,2026-02-11T15:35:13.613864,
+2026-02-15,KKC,arrival,20:40,BKK Bangkok,TG46,Thai Airways,text,1h 0m,,,Airbus A320,,,True,2026-02-11T15:35:14.548659,
