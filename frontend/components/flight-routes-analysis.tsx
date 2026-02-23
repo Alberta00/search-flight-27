@@ -12,8 +12,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { format, subDays } from 'date-fns'
-import th from 'date-fns/locale/th'
+import { format, subDays, differenceInDays } from 'date-fns'
+import {th } from 'date-fns/locale/th'
 import {
   Area,
   AreaChart,
@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
+import { DateRange } from 'react-day-picker'
 
 // Mock: รายการเส้นทางสายการบิน (ใช้แสดงใต้กราฟ)
 const mockRoutes = [
@@ -97,8 +98,10 @@ export function FlightRoutesAnalysis() {
   const [originName, setOriginName] = useState('')
   const [destination, setDestination] = useState('')
   const [destinationName, setDestinationName] = useState('')
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(() => new Date())
-  const [chartDays, setChartDays] = useState<7 | 30>(30)
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: subDays(new Date(), 29),
+    to: new Date(),
+  })
   const [compareMode, setCompareMode] = useState(false)
   const [chartZoomed, setChartZoomed] = useState(false)
   const zoomDialogRef = useRef<HTMLDivElement>(null)
@@ -159,7 +162,7 @@ export function FlightRoutesAnalysis() {
       setHasAnalyzed(true)
 
       try {
-        const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
+        const dateStr = dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
 
         // Fetch main analysis
         const params = new URLSearchParams()
@@ -204,33 +207,21 @@ export function FlightRoutesAnalysis() {
     }
 
     fetchAnalysis()
-  }, [origin, destination, selectedDate, compareMode])
+  }, [origin, destination, dateRange, compareMode])
 
-  // ช่วง 7 วัน: แสดง 7 วันที่ลงท้ายด้วยวันที่เลือก (วันที่เลือก - 6 ถึง วันที่เลือก)
-  const selectedDateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
-  const sevenDayStartStr = selectedDate ? format(subDays(selectedDate, 6), 'yyyy-MM-dd') : ''
-  const baseData =
-    chartDays === 7 && sevenDayStartStr
-      ? dailyData
-        .filter((row) => {
-          const d = row.date
-          return d >= sevenDayStartStr && d <= selectedDateStr
-        })
-        .sort((a, b) => a.date.localeCompare(b.date))
-      : chartDays === 7
-        ? dailyData.slice(-7)
-        : dailyData
-  const compareBaseData =
-    chartDays === 7 && sevenDayStartStr
-      ? dailyDataCompare
-        .filter((row) => {
-          const d = row.date
-          return d >= sevenDayStartStr && d <= selectedDateStr
-        })
-        .sort((a, b) => a.date.localeCompare(b.date))
-      : chartDays === 7
-        ? dailyDataCompare.slice(-7)
-        : dailyDataCompare
+  // Filter data based on dateRange
+  const startDateStr = dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : ''
+  const endDateStr = dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : ''
+
+  const filterData = (data: any[]) => {
+    return data.filter((row) => {
+      const d = row.date
+      return (!startDateStr || d >= startDateStr) && (!endDateStr || d <= endDateStr)
+    }).sort((a, b) => a.date.localeCompare(b.date))
+  }
+
+  const baseData = filterData(dailyData)
+  const compareBaseData = filterData(dailyDataCompare)
 
   // Format date for x-axis: สั้น อ่านง่าย ใช้เดือนภาษาไทย (เช่น 1 ก.พ., 15 ก.พ.)
   const formatChartDate = (dateStr: string) =>
@@ -255,6 +246,10 @@ export function FlightRoutesAnalysis() {
   const mainLabel = isDeparture ? 'ออกจากสนามบิน (Departure)' : 'มาถึงสนามบิน (Arrival)'
   const compareLabel = isDeparture ? 'มาถึงสนามบิน (Arrival)' : 'ออกจากสนามบิน (Departure)'
 
+  // Calculate current days diff for buttons state
+  const currentDaysDiff = dateRange?.from && dateRange?.to 
+    ? differenceInDays(dateRange.to, dateRange.from) + 1 
+    : 0
 
   return (
     <div className="space-y-6 sm:space-y-8 w-full min-w-0">
@@ -313,30 +308,59 @@ export function FlightRoutesAnalysis() {
           </div>
           <div className="space-y-2 min-w-0">
             <Label className="text-sm font-medium text-muted-foreground">
-              เลือกวันที่
+              ช่วงวันที่ (Start - End)
             </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    'w-full justify-start text-left font-normal h-12 sm:h-14',
-                    !selectedDate && 'text-muted-foreground'
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                  {selectedDate ? format(selectedDate, 'dd/MM/yyyy') : 'เลือกวันที่'}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
-                <Calendar
-                  mode="single"
-                  defaultMonth={selectedDate}
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                />
-              </PopoverContent>
-            </Popover>
+            <div className="flex gap-2 w-full min-w-0">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
+                      !dateRange?.from && 'text-muted-foreground'
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="truncate">
+                      {dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy') : 'วันเริ่มต้น'}
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dateRange?.from}
+                    onSelect={(date) => setDateRange((prev) => ({ from: date, to: prev?.to }))}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
+                      !dateRange?.to && 'text-muted-foreground'
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                    <span className="truncate">
+                      {dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy') : 'วันสิ้นสุด'}
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dateRange?.to}
+                    onSelect={(date) => setDateRange((prev) => ({ from: prev?.from, to: date }))}
+                    disabled={(date) => dateRange?.from ? date < dateRange.from : false}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
         </div>
       </Card>
@@ -380,18 +404,24 @@ export function FlightRoutesAnalysis() {
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="flex rounded-lg border bg-muted/30 p-0.5">
                     <Button
-                      variant={chartDays === 7 ? 'default' : 'ghost'}
+                      variant={currentDaysDiff === 7 ? 'default' : 'ghost'}
                       size="sm"
                       className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                      onClick={() => setChartDays(7)}
+                      onClick={() => {
+                        const to = new Date()
+                        setDateRange({ from: subDays(to, 6), to })
+                      }}
                     >
                       7 วัน
                     </Button>
                     <Button
-                      variant={chartDays === 30 ? 'default' : 'ghost'}
+                      variant={currentDaysDiff === 30 ? 'default' : 'ghost'}
                       size="sm"
                       className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                      onClick={() => setChartDays(30)}
+                      onClick={() => {
+                        const to = new Date()
+                        setDateRange({ from: subDays(to, 29), to })
+                      }}
                     >
                       30 วัน
                     </Button>
@@ -446,9 +476,9 @@ export function FlightRoutesAnalysis() {
                         stroke="hsl(var(--muted-foreground))"
                         fontSize={11}
                         tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                        interval={chartDays === 30 ? 'preserveStartEnd' : 0}
-                        angle={chartDays === 30 ? -35 : 0}
-                        textAnchor={chartDays === 30 ? 'end' : 'middle'}
+                        interval={currentDaysDiff > 14 ? 'preserveStartEnd' : 0}
+                        angle={currentDaysDiff > 14 ? -35 : 0}
+                        textAnchor={currentDaysDiff > 14 ? 'end' : 'middle'}
                       />
                       <YAxis
                         stroke="hsl(var(--muted-foreground))"
@@ -555,8 +585,8 @@ export function FlightRoutesAnalysis() {
                             stroke="hsl(var(--muted-foreground))"
                             fontSize={11}
                             tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                            interval={chartDays === 30 ? 'preserveStartEnd' : 0}
-                            angle={0}
+                            interval={currentDaysDiff > 14 ? 'preserveStartEnd' : 0}
+                            angle={currentDaysDiff > 14 ? -35 : 0}
                             textAnchor="middle"
                           />
                           <YAxis

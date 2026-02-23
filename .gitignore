@@ -1,2 +1,11 @@
 .env
 .env.test
+backend/node_modules/
+dist/
+coverage/
+*.log
+fronend/node_modules/
+fronend/package-lock.json
+fronend/package.json
+backend/package-lock.json
+backend/package.json
