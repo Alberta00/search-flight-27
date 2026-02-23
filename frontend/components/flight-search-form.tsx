@@ -797,7 +797,7 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
                   <div className="flex-1">
                     <div className="font-medium text-gray-900 mb-2">ชั้นโดยสาร</div>
                   </div>
-                  <Select value={travelClass} onValueChange={setTravelClass}>
+                  <Select value={travelClass} onValueChange={(value) => setTravelClass(value as 'economy' | 'business' | 'first')}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="เลือกชั้นโดยสาร" />
                     </SelectTrigger>
@@ -846,5 +846,3 @@ export function FlightSearchForm({ onSearch }: FlightSearchFormProps) {
     </Card>
   )
 }
-
-
