@@ -1,0 +1,222 @@
+﻿date,airport,direction,time,destination,flight,airline,airline_source,duration,crosscheck_found,airline_match,aircraft,status,reason,page_date_verified,scraped_at,crosschecked_at
+2026-02-20,HKT,departure,00:05,PVG Shanghai,FM832,Shanghai Airlines,text,4h 50m,False,False,Boeing 737 Mixed Configuration,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:31:46.232710,2026-02-13T07:36:49.741151
+2026-02-20,HKT,departure,00:05,XIY Xian,MU2082,China Eastern,text,4h 50m,True,True,Airbus A320neo,OK,route_and_airline_match,True,2026-02-11T13:31:47.137814,2026-02-13T07:37:08.007177
+2026-02-20,HKT,departure,00:10,NKG Nanjing,MU2814,China Eastern,text,5h 0m,True,True,Airbus A320neo,OK,route_and_airline_match,True,2026-02-11T13:31:48.038482,2026-02-13T07:37:24.720877
+2026-02-20,HKT,departure,00:50,DOH Doha,QR841,Qatar Airways,text,7h 0m,True,True,Boeing 777-300ER,OK,route_and_airline_match,True,2026-02-11T13:31:48.953730,2026-02-13T07:37:41.869779
+2026-02-20,HKT,departure,03:10,AUH Abu Dhabi,EY415,Etihad,text,6h 35m,False,False,Boeing 787-9,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:31:49.853447,2026-02-13T07:37:58.211768
+2026-02-20,HKT,departure,03:30,PVG Shanghai,FM7306,Shanghai Airlines,text,4h 40m,False,False,Boeing 737-500 (winglets) Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:31:50.754440,2026-02-13T07:37:58.211796
+2026-02-20,HKT,departure,06:30,DMK Bangkok,FD3036,Thai AirAsia,text,1h 20m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:31:51.650678,2026-02-13T07:38:14.521390
+2026-02-20,HKT,departure,06:35,DMK Bangkok,DD539,Nok Air,text,1h 30m,True,True,Boeing 737-800 Passenger,OK,route_and_airline_match,True,2026-02-11T13:31:52.542652,2026-02-13T07:38:14.521398
+2026-02-20,HKT,departure,07:20,DMK Bangkok,SL1771,Thai Lion Air,text,1h 25m,True,True,Boeing 737-800 Passenger,OK,route_and_airline_match,True,2026-02-11T13:31:53.468669,2026-02-13T07:38:14.521410
+2026-02-20,HKT,departure,07:30,DMK Bangkok,FD8163,Thai AirAsia,text,1h 25m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:31:54.374067,2026-02-13T07:38:14.521417
+2026-02-20,HKT,departure,07:30,USM Koh Samui,PG408,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:31:55.272706,2026-02-13T07:38:29.805245
+2026-02-20,HKT,departure,07:45,BKK Bangkok,PG270,Bangkok Airways,text,1h 35m,False,False,Airbus A319,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:31:56.162043,2026-02-13T07:38:46.744862
+2026-02-20,HKT,departure,07:50,DMK Bangkok,SL771,Thai Lion Air,text,1h 30m,True,True,Boeing 737-800 Passenger,OK,route_and_airline_match,True,2026-02-11T13:31:57.051694,2026-02-13T07:38:46.744897
+2026-02-20,HKT,departure,08:15,CNX Chiang Mai,VZ415,Vietjet Thailand,text,2h 5m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:31:57.951154,2026-02-13T07:39:04.008423
+2026-02-20,HKT,departure,08:15,CEI Chiang Rai,VZ400,Vietjet Thailand,text,2h 5m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:31:58.861303,2026-02-13T07:39:19.677785
+2026-02-20,HKT,departure,08:20,DOH Doha,QR843,Qatar Airways,text,7h 0m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:31:59.787090,2026-02-13T07:39:19.677813
+2026-02-20,HKT,departure,08:35,TFU Chengdu,3U3930,Sichuan Airlines,text,3h 50m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:00.742475,2026-02-13T07:39:36.172936
+2026-02-20,HKT,departure,08:40,SIN Singapore,SQ723,Singapore Airlines,text,2h 0m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:01.665750,2026-02-13T07:39:53.343858
+2026-02-20,HKT,departure,08:40,MCT Muscat,WY834,Oman Air,text,6h 30m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:02.576811,2026-02-13T07:40:10.400792
+2026-02-20,HKT,departure,08:50,DMK Bangkok,SL751,Thai Lion Air,text,1h 20m,False,False,Boeing 737-900 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:03.475084,2026-02-13T07:40:10.400836
+2026-02-20,HKT,departure,08:55,BKK Bangkok,VZ315,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:04.380052,2026-02-13T07:40:10.400853
+2026-02-20,HKT,departure,08:55,ARN Stockholm,N0196,Norse,text,13h 0m,False,False,Boeing 787-9,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:05.296364,2026-02-13T07:40:27.048189
+2026-02-20,HKT,departure,09:00,CNX Chiang Mai,FD3159,Thai AirAsia,text,2h 0m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:32:06.212489,2026-02-13T07:40:27.048317
+2026-02-20,HKT,departure,09:00,DMK Bangkok,FD3038,Thai AirAsia,text,1h 25m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:07.133912,2026-02-13T07:40:27.048367
+2026-02-20,HKT,departure,09:05,SHJ Sharjah,G9688,Air Arabia,text,6h 50m,False,False,Airbus A321,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:08.043982,2026-02-13T07:40:43.433480
+2026-02-20,HKT,departure,09:05,AUH Abu Dhabi,EY411,Etihad,text,6h 30m,False,False,Boeing 787-10,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:08.947033,2026-02-13T07:40:43.433502
+2026-02-20,HKT,departure,09:10,DEL Delhi,AI2379,Air India,text,4h 45m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:09.857584,2026-02-13T07:41:00.308811
+2026-02-20,HKT,departure,09:20,DMK Bangkok,FD3035,Thai AirAsia,text,1h 40m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:10.772481,2026-02-13T07:41:00.308863
+2026-02-20,HKT,departure,09:45,USM Koh Samui,PG252,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:32:11.688130,2026-02-13T07:41:00.308873
+2026-02-20,HKT,departure,09:50,BKK Bangkok,TG202,Thai Airways,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:12.622836,2026-02-13T07:41:00.308890
+2026-02-20,HKT,departure,10:00,BKK Bangkok,FD4125,Thai AirAsia,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:13.547262,2026-02-13T07:41:00.308897
+2026-02-20,HKT,departure,10:00,PVG Shanghai,9C8668,Spring Airlines,text,4h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:14.448709,2026-02-13T07:41:00.308916
+2026-02-20,HKT,departure,10:05,SIN Singapore,SQ725,Singapore Airlines,text,2h 5m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:15.351723,2026-02-13T07:41:00.308930
+2026-02-20,HKT,departure,10:10,FRA Frankfurt,DE2369,Condor,text,12h 50m,False,False,Airbus A330-900neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:16.255906,2026-02-13T07:41:16.683183
+2026-02-20,HKT,departure,10:15,CNX Chiang Mai,FD3161,Thai AirAsia,text,1h 55m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:32:17.174160,2026-02-13T07:41:16.683346
+2026-02-20,HKT,departure,10:15,BKK Bangkok,PG272,Bangkok Airways,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:18.092100,2026-02-13T07:41:16.683413
+2026-02-20,HKT,departure,10:20,BKK Bangkok,VZ301,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:18.994748,2026-02-13T07:41:16.683433
+2026-02-20,HKT,departure,10:25,BKK Bangkok,TG204,Thai Airways,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:19.930409,2026-02-13T07:41:16.683446
+2026-02-20,HKT,departure,10:30,KUL Kuala Lumpur,MH787,Malaysia Airlines,text,1h 30m,False,False,Boeing 737-800 (winglets) Passenger/BBJ2,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:20.855691,2026-02-13T07:41:34.920502
+2026-02-20,HKT,departure,10:45,ALA Almaty,KC564,Air Astana,text,7h 25m,False,False,Boeing 767-300 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:21.755838,2026-02-13T07:41:51.889256
+2026-02-20,HKT,departure,10:45,HEL Helsinki,AY152,Finnair,text,12h 45m,False,False,Airbus A350-900,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:22.664802,2026-02-13T07:42:08.566222
+2026-02-20,HKT,departure,10:55,SIN Singapore,TR679,Scoot,text,2h 0m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:23.568246,2026-02-13T07:42:08.566264
+2026-02-20,HKT,departure,11:00,USM Koh Samui,PG254,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:32:24.483153,2026-02-13T07:42:08.566280
+2026-02-20,HKT,departure,11:00,HKG Hong Kong,UO725,HK Express,text,3h 30m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:25.380534,2026-02-13T07:42:26.419647
+2026-02-20,HKT,departure,11:05,BOM Mumbai,6E1072,IndiGo,text,4h 35m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:26.283151,2026-02-13T07:42:43.218189
+2026-02-20,HKT,departure,11:05,SIN Singapore,SQ727,Singapore Airlines,text,2h 0m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:27.189229,2026-02-13T07:42:43.218213
+2026-02-20,HKT,departure,11:10,SVO Moscow,SU279,Aeroflot,text,10h 15m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:28.109046,2026-02-13T07:42:59.784001
+2026-02-20,HKT,departure,11:25,SVX Yekaterinburg,SU627,Aeroflot,text,9h 25m,False,False,Airbus A330-300,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:29.037745,2026-02-13T07:43:17.176009
+2026-02-20,HKT,departure,11:30,DMK Bangkok,DD525,Nok Air,text,1h 30m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:29.948001,2026-02-13T07:43:17.176065
+2026-02-20,HKT,departure,11:30,KUL Kuala Lumpur,AK833,AirAsia,text,1h 35m,False,False,Airbus A320 (sharklets),NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:30.853326,2026-02-13T07:43:17.176086
+2026-02-20,HKT,departure,11:35,DMK Bangkok,SL759,Thai Lion Air,text,1h 20m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:31.836657,2026-02-13T07:43:17.176093
+2026-02-20,HKT,departure,11:45,DMK Bangkok,FD3030,Thai AirAsia,text,1h 25m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:32.740905,2026-02-13T07:43:17.176099
+2026-02-20,HKT,departure,11:50,BKK Bangkok,TG206,Thai Airways,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:33.655594,2026-02-13T07:43:17.176114
+2026-02-20,HKT,departure,11:55,CDG Paris,AF157,Air France,text,13h 20m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:34.577958,2026-02-13T07:43:33.610058
+2026-02-20,HKT,departure,12:10,SVO Moscow,SU285,Aeroflot,text,10h 15m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:35.489369,2026-02-13T07:43:33.610368
+2026-02-20,HKT,departure,12:15,TAS Tashkent,C6530,Centrum Air,text,6h 25m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:36.410680,2026-02-13T07:43:48.690594
+2026-02-20,HKT,departure,12:20,SHJ Sharjah,G9700,Air Arabia,text,6h 50m,False,False,Airbus A321,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:37.320143,2026-02-13T07:43:48.690642
+2026-02-20,HKT,departure,12:20,DMK Bangkok,SL755,Thai Lion Air,text,1h 20m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:38.238789,2026-02-13T07:43:48.690662
+2026-02-20,HKT,departure,12:20,HKG Hong Kong,CX770,Cathay Pacific,text,3h 45m,False,False,Airbus A330-300,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:39.161181,2026-02-13T07:43:48.690684
+2026-02-20,HKT,departure,12:25,BKK Bangkok,VZ305,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:40.073926,2026-02-13T07:43:48.690695
+2026-02-20,HKT,departure,12:35,CCU Kolkata,6E1088,IndiGo,text,3h 10m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:40.981047,2026-02-13T07:44:04.607537
+2026-02-20,HKT,departure,12:35,DEL Delhi,6E1074,IndiGo,text,4h 40m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:41.897478,2026-02-13T07:44:04.607562
+2026-02-20,HKT,departure,12:40,HYD Hyderabad,IX937,Air India Express,text,3h 45m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:42.807035,2026-02-13T07:44:21.566845
+2026-02-20,HKT,departure,12:55,USM Koh Samui,PG250,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:32:43.712017,2026-02-13T07:44:21.566864
+2026-02-20,HKT,departure,13:20,KUL Kuala Lumpur,OD541,Batik Air,text,1h 40m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:44.634726,2026-02-13T07:44:21.566888
+2026-02-20,HKT,departure,13:20,DMK Bangkok,FD3092,Thai AirAsia,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:45.579391,2026-02-13T07:44:21.566919
+2026-02-20,HKT,departure,13:25,CNX Chiang Mai,VZ417,Vietjet Thailand,text,2h 15m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:46.487186,2026-02-13T07:44:21.566936
+2026-02-20,HKT,departure,13:30,BLR Bengaluru,6E1076,IndiGo,text,3h 40m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:47.388929,2026-02-13T07:44:38.731543
+2026-02-20,HKT,departure,13:30,BKK Bangkok,VZ2303,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:48.307387,2026-02-13T07:44:38.731568
+2026-02-20,HKT,departure,13:35,KUL Kuala Lumpur,AK825,AirAsia,text,1h 35m,False,False,Airbus A320 (sharklets),NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:49.234022,2026-02-13T07:44:38.731578
+2026-02-20,HKT,departure,13:40,BKK Bangkok,TG208,Thai Airways,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:50.137733,2026-02-13T07:44:38.731586
+2026-02-20,HKT,departure,13:40,BKK Bangkok,VZ303,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:51.050607,2026-02-13T07:44:38.731593
+2026-02-20,HKT,departure,13:50,TAS Tashkent,HH2204,Taban Air,text,6h 40m,False,False,Airbus A330,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:51.952296,2026-02-13T07:44:38.731609
+2026-02-20,HKT,departure,14:00,TFU Chengdu,CA414,Air China,text,3h 55m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:52.881248,2026-02-13T07:44:38.731626
+2026-02-20,HKT,departure,14:05,SIN Singapore,TR665,Scoot,text,2h 10m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:53.805393,2026-02-13T07:44:38.731636
+2026-02-20,HKT,departure,14:10,SGN Ho Chi Minh City,VJ808,VietJet,text,1h 55m,False,False,Airbus A321,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:54.746153,2026-02-13T07:44:54.058792
+2026-02-20,HKT,departure,14:15,USM Koh Samui,PG402,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:32:55.676315,2026-02-13T07:44:54.058801
+2026-02-20,HKT,departure,14:15,PVG Shanghai,9C8522,Spring Airlines,text,4h 50m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:56.630861,2026-02-13T07:44:54.058832
+2026-02-20,HKT,departure,14:20,BKK Bangkok,FD4111,Thai AirAsia,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:57.531084,2026-02-13T07:44:54.058843
+2026-02-20,HKT,departure,14:25,DMK Bangkok,SL757,Thai Lion Air,text,1h 20m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:58.438473,2026-02-13T07:44:54.058854
+2026-02-20,HKT,departure,14:35,PEN Penang,FY3601,Firefly,text,1h 0m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:32:59.382984,2026-02-13T07:45:09.864320
+2026-02-20,HKT,departure,14:55,SIN Singapore,SQ731,Singapore Airlines,text,2h 0m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:00.310328,2026-02-13T07:45:09.864334
+2026-02-20,HKT,departure,14:55,BKK Bangkok,FD4123,Thai AirAsia,text,1h 15m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:01.228673,2026-02-13T07:45:09.864346
+2026-02-20,HKT,departure,15:00,BKK Bangkok,PG274,Bangkok Airways,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:02.144165,2026-02-13T07:45:09.864352
+2026-02-20,HKT,departure,15:05,PVG Shanghai,HO1324,Juneyao Airlines,text,4h 55m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:03.064241,2026-02-13T07:45:09.864363
+2026-02-20,HKT,departure,15:10,UTP Utapao,PG282,Bangkok Airways,text,1h 40m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:33:04.024237,2026-02-13T07:45:23.507084
+2026-02-20,HKT,departure,15:20,KKC Khon Kaen,FD3602,Thai AirAsia,text,1h 45m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:33:04.957374,2026-02-13T07:45:37.124231
+2026-02-20,HKT,departure,15:20,PVG Shanghai,9C8664,Spring Airlines,text,4h 55m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:05.870330,2026-02-13T07:45:37.124246
+2026-02-20,HKT,departure,15:25,PVG Shanghai,FM7288,Shanghai Airlines,text,4h 50m,False,False,Boeing 737-500 (winglets) Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:06.771852,2026-02-13T07:45:37.124252
+2026-02-20,HKT,departure,15:30,AUH Abu Dhabi,EY417,Etihad,text,7h 5m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:07.677378,2026-02-13T07:45:37.124286
+2026-02-20,HKT,departure,15:30,DMK Bangkok,FD3026,Thai AirAsia,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:08.574589,2026-02-13T07:45:37.124298
+2026-02-20,HKT,departure,15:40,KUL Kuala Lumpur,AK823,AirAsia,text,1h 30m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:09.479237,2026-02-13T07:45:37.124317
+2026-02-20,HKT,departure,15:45,DMK Bangkok,DD531,Nok Air,text,1h 30m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:10.395919,2026-02-13T07:45:37.124324
+2026-02-20,HKT,departure,15:55,HKG Hong Kong,HX742,Hong Kong Airlines,text,3h 15m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:11.320090,2026-02-13T07:45:37.124342
+2026-02-20,HKT,departure,15:55,PEN Penang,QR840,Qatar Airways,text,1h 5m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:12.288617,2026-02-13T07:45:37.124351
+2026-02-20,HKT,departure,16:00,PVG Shanghai,9C8666,Spring Airlines,text,4h 50m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:13.203177,2026-02-13T07:45:37.124358
+2026-02-20,HKT,departure,16:00,BKK Bangkok,VZ2301,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:14.101905,2026-02-13T07:45:37.124369
+2026-02-20,HKT,departure,16:05,BKK Bangkok,TG212,Thai Airways,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:15.022614,2026-02-13T07:45:37.124375
+2026-02-20,HKT,departure,16:20,BKK Bangkok,FD4113,Thai AirAsia,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:15.935241,2026-02-13T07:45:37.124390
+2026-02-20,HKT,departure,16:35,USM Koh Samui,PG256,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:33:16.847095,2026-02-13T07:45:37.124396
+2026-02-20,HKT,departure,16:45,BOM Mumbai,QP619,Akasa Air,text,4h 50m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:17.768350,2026-02-13T07:45:37.124406
+2026-02-20,HKT,departure,16:50,DMK Bangkok,FD3094,Thai AirAsia,text,1h 25m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:18.693587,2026-02-13T07:45:37.124413
+2026-02-20,HKT,departure,16:55,KUL Kuala Lumpur,MH795,Malaysia Airlines,text,1h 35m,False,False,Boeing 737-800 (winglets) Passenger/BBJ2,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:19.609598,2026-02-13T07:45:37.124420
+2026-02-20,HKT,departure,17:00,BLR Bengaluru,QP624,Akasa Air,text,4h 20m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:20.539248,2026-02-13T07:45:37.124431
+2026-02-20,HKT,departure,17:00,HGH Hangzhou,CA718,Air China,text,4h 45m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:21.462600,2026-02-13T07:45:53.515207
+2026-02-20,HKT,departure,17:00,DMK Bangkok,SL767,Thai Lion Air,text,1h 20m,False,False,Boeing 737-900 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:22.390244,2026-02-13T07:45:53.515221
+2026-02-20,HKT,departure,17:05,KUL Kuala Lumpur,AK821,AirAsia,text,1h 20m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:23.330652,2026-02-13T07:45:53.515231
+2026-02-20,HKT,departure,17:10,BKK Bangkok,TG216,Thai Airways,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:24.234698,2026-02-13T07:45:53.515242
+2026-02-20,HKT,departure,17:25,DMK Bangkok,FD3018,Thai AirAsia,text,1h 25m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:25.180577,2026-02-13T07:45:53.515249
+2026-02-20,HKT,departure,17:25,CAN Guangzhou,CZ6064,China Southern,text,3h 40m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:26.085292,2026-02-13T07:46:11.667768
+2026-02-20,HKT,departure,17:30,USM Koh Samui,PG404,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:33:27.024489,2026-02-13T07:46:11.667777
+2026-02-20,HKT,departure,17:30,BKK Bangkok,VZ307,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:27.926810,2026-02-13T07:46:11.667788
+2026-02-20,HKT,departure,18:00,SIN Singapore,SQ735,Singapore Airlines,text,2h 0m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:28.869360,2026-02-13T07:46:11.667802
+2026-02-20,HKT,departure,18:05,DMK Bangkok,FD3022,Thai AirAsia,text,1h 30m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:29.806323,2026-02-13T07:46:11.667813
+2026-02-20,HKT,departure,18:10,DPS Denpasar,QZ247,Indonesia AirAsia,text,4h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:30.722087,2026-02-13T07:46:28.572499
+2026-02-20,HKT,departure,18:10,VVO Vladivostok,SU639,Aeroflot,text,6h 50m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:31.625763,2026-02-13T07:46:44.239665
+2026-02-20,HKT,departure,18:20,KUL Kuala Lumpur,MH791,Malaysia Airlines,text,1h 35m,False,False,Boeing 737-800 (winglets) Passenger/BBJ2,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:32.575487,2026-02-13T07:46:44.239701
+2026-02-20,HKT,departure,18:25,PEK Beijing,CA822,Air China,text,5h 25m,True,True,Airbus A330-300,OK,route_and_airline_match,True,2026-02-11T13:33:33.516044,2026-02-13T07:47:02.097356
+2026-02-20,HKT,departure,18:35,HKG Hong Kong,CX778,Cathay Pacific,text,3h 40m,False,False,Airbus A330-300,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:34.467035,2026-02-13T07:47:02.097376
+2026-02-20,HKT,departure,18:40,DMK Bangkok,SL761,Thai Lion Air,text,1h 25m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:35.371893,2026-02-13T07:47:02.097416
+2026-02-20,HKT,departure,18:50,TFU Chengdu,3U3932,Sichuan Airlines,text,3h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:36.300108,2026-02-13T07:47:02.097436
+2026-02-20,HKT,departure,18:55,CNX Chiang Mai,FD3167,Thai AirAsia,text,2h 0m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:37.223511,2026-02-13T07:47:02.097450
+2026-02-20,HKT,departure,19:00,BKK Bangkok,VZ311,Vietjet Thailand,text,1h 30m,False,False,Airbus A321,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:38.157469,2026-02-13T07:47:02.097464
+2026-02-20,HKT,departure,19:05,DXB Dubai,EK379,Emirates,text,6h 35m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:39.071481,2026-02-13T07:47:18.944847
+2026-02-20,HKT,departure,19:10,MCT Muscat,WY832,Oman Air,text,6h 30m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:40.007263,2026-02-13T07:47:18.944909
+2026-02-20,HKT,departure,19:10,KUL Kuala Lumpur,AK827,AirAsia,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:40.929627,2026-02-13T07:47:18.944964
+2026-02-20,HKT,departure,19:25,BKK Bangkok,TG218,Thai Airways,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:41.865247,2026-02-13T07:47:18.944984
+2026-02-20,HKT,departure,19:35,DMK Bangkok,DD533,Nok Air,text,1h 30m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:42.779507,2026-02-13T07:47:18.944994
+2026-02-20,HKT,departure,19:35,KMG Kunming,MU5094,China Eastern,text,3h 40m,True,True,Boeing 737 Passenger,OK,route_and_airline_match,True,2026-02-11T13:33:43.689362,2026-02-13T07:47:35.541718
+2026-02-20,HKT,departure,19:50,BKK Bangkok,PG278,Bangkok Airways,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:44.621311,2026-02-13T07:47:35.541765
+2026-02-20,HKT,departure,19:50,SHJ Sharjah,G9715,Air Arabia,text,6h 50m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:45.547278,2026-02-13T07:47:35.541819
+2026-02-20,HKT,departure,19:55,USM Koh Samui,PG258,Bangkok Airways,text,0h 55m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:33:46.481317,2026-02-13T07:47:35.541836
+2026-02-20,HKT,departure,20:00,DMK Bangkok,FD3010,Thai AirAsia,text,1h 25m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:47.419362,2026-02-13T07:47:35.541868
+2026-02-20,HKT,departure,20:15,SIN Singapore,SQ739,Singapore Airlines,text,2h 10m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:48.372046,2026-02-13T07:47:35.541881
+2026-02-20,HKT,departure,20:20,SIN Singapore,TR653,Scoot,text,1h 55m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:49.261863,2026-02-13T07:47:35.541888
+2026-02-20,HKT,departure,20:25,BKK Bangkok,FD4115,Thai AirAsia,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:50.160591,2026-02-13T07:47:35.541895
+2026-02-20,HKT,departure,20:30,DEL Delhi,AI2377,Air India,text,4h 55m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:51.054682,2026-02-13T07:47:35.541913
+2026-02-20,HKT,departure,20:30,DOH Doha,QR847,Qatar Airways,text,7h 0m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:51.969468,2026-02-13T07:47:35.541929
+2026-02-20,HKT,departure,20:35,HDY Hat Yai,PG298,Bangkok Airways,text,1h 5m,True,True,ATR 42 / ATR 72,OK,route_and_airline_match,True,2026-02-11T13:33:52.861645,2026-02-13T07:47:51.413549
+2026-02-20,HKT,departure,20:40,BKK Bangkok,VZ2305,Vietjet Thailand,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:53.755949,2026-02-13T07:47:51.413569
+2026-02-20,HKT,departure,20:40,BKK Bangkok,TG222,Thai Airways,text,1h 35m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:54.655343,2026-02-13T07:47:51.413575
+2026-02-20,HKT,departure,20:45,DMK Bangkok,FD3028,Thai AirAsia,text,1h 30m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:55.578067,2026-02-13T07:47:51.413591
+2026-02-20,HKT,departure,21:00,AUH Abu Dhabi,EY413,Etihad,text,6h 35m,True,True,Boeing 787-9,OK,route_and_airline_match,True,2026-02-11T13:33:56.508895,2026-02-13T07:47:51.413602
+2026-02-20,HKT,departure,21:00,DMK Bangkok,SL763,Thai Lion Air,text,1h 25m,False,False,Boeing 737-900 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:57.456082,2026-02-13T07:47:51.413608
+2026-02-20,HKT,departure,21:20,BKK Bangkok,VZ309,Vietjet Thailand,text,1h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:33:58.399140,2026-02-13T07:47:51.413615
+2026-02-20,HKT,departure,21:25,PEK Beijing,HU7930,Hainan Airlines,text,5h 40m,True,True,Boeing 737-800 Passenger,OK,route_and_airline_match,True,2026-02-11T13:33:59.340792,2026-02-13T07:47:51.413633
+2026-02-20,HKT,departure,21:45,MEL Melbourne,JQ18,Jetstar,text,8h 20m,False,False,Boeing 787-8,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:00.261653,2026-02-13T07:48:09.134900
+2026-02-20,HKT,departure,21:50,BKK Bangkok,PG280,Bangkok Airways,text,1h 35m,False,False,Airbus A319,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:01.178109,2026-02-13T07:48:09.134921
+2026-02-20,HKT,departure,21:55,DMK Bangkok,FD3032,Thai AirAsia,text,1h 25m,False,False,Airbus A321neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:02.117578,2026-02-13T07:48:09.134932
+2026-02-20,HKT,departure,22:00,XIY Xian,9H6030,Air Changan,text,4h 35m,False,False,Boeing 737-800 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:03.101434,2026-02-13T07:48:09.135002
+2026-02-20,HKT,departure,22:05,DEL Delhi,6E1082,IndiGo,text,5h 0m,True,True,Airbus A321neo,OK,route_and_airline_match,True,2026-02-11T13:34:04.032940,2026-02-13T07:48:09.135072
+2026-02-20,HKT,departure,22:05,DMK Bangkok,SL765,Thai Lion Air,text,1h 25m,True,True,Boeing 737-900 Passenger,OK,route_and_airline_match,True,2026-02-11T13:34:04.974321,2026-02-13T07:48:09.135075
+2026-02-20,HKT,departure,22:20,BKK Bangkok,FD4420,Thai AirAsia,text,1h 25m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:05.916684,2026-02-13T07:48:09.135082
+2026-02-20,HKT,departure,22:25,IST Istanbul,TK173,Turkish Airlines,text,11h 5m,False,False,Airbus A330-300,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:06.851234,2026-02-13T07:48:25.147642
+2026-02-20,HKT,departure,22:30,IKT Irkutsk,S76322,S7 Airlines,text,7h 10m,True,True,Boeing 737-800 (winglets) Passenger/BBJ2,OK,route_and_airline_match,True,2026-02-11T13:34:07.764575,2026-02-13T07:48:42.512685
+2026-02-20,HKT,departure,22:30,PVG Shanghai,FM7282,Shanghai Airlines,text,5h 30m,False,False,Boeing 737-500 (winglets) Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:08.659410,2026-02-13T07:48:42.512736
+2026-02-20,HKT,departure,22:30,CAN Guangzhou,9C8772,Spring Airlines,text,3h 45m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:09.592182,2026-02-13T07:48:42.512769
+2026-02-20,HKT,departure,22:35,PEK Beijing,CA798,Air China,text,5h 25m,True,True,Boeing 737MAX 8 Passenger,OK,route_and_airline_match,True,2026-02-11T13:34:10.521203,2026-02-13T07:48:42.512793
+2026-02-20,HKT,departure,22:35,PVG Shanghai,HO1322,Juneyao Airlines,text,4h 55m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:11.422450,2026-02-13T07:48:42.512800
+2026-02-20,HKT,departure,22:45,TFU Chengdu,9C8758,Spring Airlines,text,3h 50m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:12.329448,2026-02-13T07:48:42.512832
+2026-02-20,HKT,departure,22:50,BOM Mumbai,6E1090,IndiGo,text,4h 30m,True,True,Airbus A321neo,OK,route_and_airline_match,True,2026-02-11T13:34:13.235732,2026-02-13T07:48:42.512869
+2026-02-20,HKT,departure,22:55,ICN Seoul,OZ748,Asiana,text,6h 20m,False,False,Airbus A330-300,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:14.169044,2026-02-13T07:48:58.069120
+2026-02-20,HKT,departure,23:05,PVG Shanghai,FM858,Shanghai Airlines,text,4h 55m,False,False,Boeing 737 Mixed Configuration,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:15.093353,2026-02-13T07:48:58.069169
+2026-02-20,HKT,departure,23:10,DMK Bangkok,FD3016,Thai AirAsia,text,1h 25m,True,True,Airbus A320,OK,route_and_airline_match,True,2026-02-11T13:34:16.038590,2026-02-13T07:48:58.069183
+2026-02-20,HKT,departure,23:20,COK Kochi,FD196,Thai AirAsia,text,3h 35m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:16.992655,2026-02-13T07:49:15.716537
+2026-02-20,HKT,departure,23:20,CAN Guangzhou,CZ6058,China Southern,text,3h 15m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:17.961132,2026-02-13T07:49:15.716619
+2026-02-20,HKT,departure,23:25,PVG Shanghai,HO1370,Juneyao Airlines,text,5h 0m,False,False,Airbus A320neo,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:18.869782,2026-02-13T07:49:15.716652
+2026-02-20,HKT,departure,23:30,ICN Seoul,LJ6,Jin Air,text,5h 55m,False,False,Boeing 737MAX 8 Passenger,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:19.794330,2026-02-13T07:49:15.716664
+2026-02-20,HKT,departure,23:40,ICN Seoul,KE678,Korean Air,text,5h 55m,False,False,Airbus A330-300,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:20.727471,2026-02-13T07:49:15.716670
+2026-02-20,HKT,departure,23:50,DXB Dubai,EK397,Emirates,text,6h 35m,False,False,Boeing 777-300ER,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:21.713306,2026-02-13T07:49:15.716686
+2026-02-20,HKT,departure,23:55,PVG Shanghai,9C8670,Spring Airlines,text,4h 55m,False,False,Airbus A320,NOT_FOUND,flight_not_in_reference,True,2026-02-11T13:34:22.655972,2026-02-13T07:49:15.716693
+2026-02-20,HKT,arrival,05:55,HKT Phuket,FM832,Shanghai Airlines,text,4h 50m,,,Boeing 737 Mixed Configuration,,,True,2026-02-11T13:34:24.344227,
+2026-02-20,HKT,arrival,06:15,AUH Abu Dhabi,MU2082,China Eastern,text,6h 15m,,,Airbus A320neo,,,True,2026-02-11T13:34:25.252035,
+2026-02-20,HKT,arrival,06:45,MAA Chennai,FD193,Thai AirAsia,text,3h 10m,,,Airbus A320,,,True,2026-02-11T13:34:26.175437,
+2026-02-20,HKT,arrival,06:50,DOH Doha,QR842,Qatar Airways,text,6h 30m,,,Boeing 777-300ER,,,True,2026-02-11T13:34:27.087606,
+2026-02-20,HKT,arrival,06:55,ARN Stockholm,N0195,Norse,text,11h 30m,,,Boeing 787-9,,,True,2026-02-11T13:34:28.007041,
+2026-02-20,HKT,arrival,07:40,MCT Muscat,WY833,Oman Air,text,6h 10m,,,Boeing 737-800 Passenger,,,True,2026-02-11T13:34:28.913583,
+2026-02-20,HKT,arrival,07:40,BOM Mumbai,VZ763,Vietjet Thailand,text,4h 30m,,,Airbus A320,,,True,2026-02-11T13:34:29.817327,
+2026-02-20,HKT,arrival,07:45,BKK Bangkok,VZ302,Vietjet Thailand,text,1h 35m,,,Airbus A320,,,True,2026-02-11T13:34:30.735576,
+2026-02-20,HKT,arrival,07:50,SIN Singapore,SQ724,Singapore Airlines,text,1h 55m,,,Boeing 737MAX 8 Passenger,,,True,2026-02-11T13:34:31.634575,
+2026-02-20,HKT,arrival,08:00,SVO Moscow,SU278,Aeroflot,text,9h 25m,,,Boeing 777-300ER,,,True,2026-02-11T13:34:32.561958,
+2026-02-20,HKT,arrival,08:05,DEL Delhi,AI2378,Air India,text,4h 35m,,,Airbus A320neo,,,True,2026-02-11T13:34:33.476160,
+2026-02-20,HKT,arrival,08:05,SHJ Sharjah,G9687,Air Arabia,text,6h 15m,,,Airbus A321,,,True,2026-02-11T13:34:34.410234,
+2026-02-20,HKT,arrival,08:10,DMK Bangkok,SL750,Thai Lion Air,text,1h 25m,,,Boeing 737-900 Passenger,,,True,2026-02-11T13:34:35.343588,
+2026-02-20,HKT,arrival,08:10,FRA Frankfurt,DE2368,Condor,text,11h 15m,,,Airbus A330-900neo,,,True,2026-02-11T13:34:36.335136,
+2026-02-20,HKT,arrival,08:25,BKK Bangkok,VZ314,Vietjet Thailand,text,1h 35m,,,Airbus A320,,,True,2026-02-11T13:34:37.270071,
+2026-02-20,HKT,arrival,08:30,CNX Chiang Mai,FD3160,Thai AirAsia,text,2h 5m,,,Airbus A320,,,True,2026-02-11T13:34:38.186142,
+2026-02-20,HKT,arrival,08:45,CAN Guangzhou,9C8771,Spring Airlines,text,3h 50m,,,Airbus A320,,,True,2026-02-11T13:34:39.094684,
+2026-02-20,HKT,arrival,08:45,DMK Bangkok,FD3034,Thai AirAsia,text,1h 30m,,,Airbus A321neo,,,True,2026-02-11T13:34:40.000237,
+2026-02-20,HKT,arrival,08:50,HEL Helsinki,AY151,Finnair,text,11h 25m,,,Airbus A350-900,,,True,2026-02-11T13:34:40.884385,
+2026-02-20,HKT,arrival,09:10,BKK Bangkok,TG201,Thai Airways,text,1h 30m,,,Airbus A320,,,True,2026-02-11T13:34:41.780278,
+2026-02-20,HKT,arrival,09:15,SIN Singapore,SQ726,Singapore Airlines,text,1h 55m,,,Boeing 737MAX 8 Passenger,,,True,2026-02-11T13:34:42.687882,
+2026-02-20,HKT,arrival,09:15,USM Koh Samui,PG251,Bangkok Airways,text,1h 0m,,,ATR 42 / ATR 72,,,True,2026-02-11T13:34:43.596306,
+2026-02-20,HKT,arrival,09:25,CDG Paris,AF156,Air France,text,11h 45m,,,Boeing 777-300ER,,,True,2026-02-11T13:34:44.531522,
+2026-02-20,HKT,arrival,09:25,BKK Bangkok,TG203,Thai Airways,text,1h 25m,,,Airbus A320,,,True,2026-02-11T13:34:45.457645,
+2026-02-20,HKT,arrival,09:30,BKK Bangkok,FD4124,Thai AirAsia,text,1h 40m,,,Airbus A320,,,True,2026-02-11T13:34:46.352297,
+2026-02-20,HKT,arrival,09:30,ALA Almaty,KC563,Air Astana,text,7h 0m,,,Boeing 767-300 Passenger,,,True,2026-02-11T13:34:47.262658,
+2026-02-20,HKT,arrival,09:35,BKK Bangkok,PG271,Bangkok Airways,text,1h 35m,,,Airbus A320,,,True,2026-02-11T13:34:48.185820,
+2026-02-20,HKT,arrival,09:45,DMK Bangkok,FD3037,Thai AirAsia,text,1h 25m,,,Airbus A320,,,True,2026-02-11T13:34:49.134699,
+2026-02-20,HKT,arrival,09:50,KUL Kuala Lumpur,MH786,Malaysia Airlines,text,1h 40m,,,Boeing 737-800 (winglets) Passenger/BBJ2,,,True,2026-02-11T13:34:50.065027,
+2026-02-20,HKT,arrival,09:50,BKK Bangkok,VZ300,Vietjet Thailand,text,1h 30m,,,Airbus A320,,,True,2026-02-11T13:34:50.997765,
+2026-02-20,HKT,arrival,09:55,SVX Yekaterinburg,SU626,Aeroflot,text,8h 45m,,,Airbus A330-300,,,True,2026-02-11T13:34:51.894283,
+2026-02-20,HKT,arrival,09:55,SIN Singapore,TR678,Scoot,text,2h 0m,,,Airbus A321neo,,,True,2026-02-11T13:34:52.851907,
+2026-02-20,HKT,arrival,10:05,BOM Mumbai,6E1071,IndiGo,text,4h 25m,,,Airbus A321neo,,,True,2026-02-11T13:34:53.769733,
+2026-02-20,HKT,arrival,10:10,SIN Singapore,SQ728,Singapore Airlines,text,2h 5m,,,Boeing 737MAX 8 Passenger,,,True,2026-02-11T13:34:54.719561,
+2026-02-20,HKT,arrival,10:15,HKG Hong Kong,UO724,HK Express,text,3h 50m,,,Airbus A320neo,,,True,2026-02-11T13:34:55.622199,
+2026-02-20,HKT,arrival,10:20,SVO Moscow,SU284,Aeroflot,text,9h 40m,,,Boeing 777-300ER,,,True,2026-02-11T13:34:56.516314,
+2026-02-20,HKT,arrival,10:20,USM Koh Samui,PG407,Bangkok Airways,text,1h 0m,,,ATR 42 / ATR 72,,,True,2026-02-11T13:34:57.411580,
+2026-02-20,HKT,arrival,10:35,DMK Bangkok,SL758,Thai Lion Air,text,1h 30m,,,Boeing 737-800 Passenger,,,True,2026-02-11T13:34:58.322287,
+2026-02-20,HKT,arrival,10:40,TAS Tashkent,C6529,Centrum Air,text,7h 10m,,,Airbus A320neo,,,True,2026-02-11T13:34:59.243561,
+2026-02-20,HKT,arrival,10:50,KUL Kuala Lumpur,AK832,AirAsia,text,1h 30m,,,Airbus A320 (sharklets),,,True,2026-02-11T13:35:00.151324,
+2026-02-20,HKT,arrival,10:50,SHJ Sharjah,G9699,Air Arabia,text,6h 15m,,,Airbus A321,,,True,2026-02-11T13:35:01.066810,
+2026-02-20,HKT,arrival,11:00,DMK Bangkok,DD524,Nok Air,text,1h 30m,,,Boeing 737-800 Passenger,,,True,2026-02-11T13:35:02.013140,
+2026-02-20,HKT,arrival,11:10,BKK Bangkok,TG205,Thai Airways,text,1h 30m,,,Airbus A320,,,True,2026-02-11T13:35:02.922999,
+2026-02-20,HKT,arrival,11:15,DMK Bangkok,FD3029,Thai AirAsia,text,1h 30m,,,Airbus A320,,,True,2026-02-11T13:35:03.819945,
+2026-02-20,HKT,arrival,11:20,HKG Hong Kong,CX787,Cathay Pacific,text,3h 50m,,,Airbus A330-300,,,True,2026-02-11T13:35:04.756566,
+2026-02-20,HKT,arrival,11:30,DEL Delhi,6E1073,IndiGo,text,4h 35m,,,Airbus A321neo,,,True,2026-02-11T13:35:05.712619,
+2026-02-20,HKT,arrival,11:35,CCU Kolkata,6E1087,IndiGo,text,3h 25m,,,Airbus A320neo,,,True,2026-02-11T13:35:06.648341,
+2026-02-20,HKT,arrival,11:40,DMK Bangkok,SL754,Thai Lion Air,text,1h 20m,,,Boeing 737-800 Passenger,,,True,2026-02-11T13:35:07.597927,
+2026-02-20,HKT,arrival,11:40,HYD Hyderabad,IX938,Air India Express,text,4h 0m,,,Boeing 737MAX 8 Passenger,,,True,2026-02-11T13:35:08.508289,
+2026-02-20,HKT,arrival,11:45,TAS Tashkent,HH2203,Taban Air,text,6h 35m,,,Airbus A330,,,True,2026-02-11T13:35:09.438218,
