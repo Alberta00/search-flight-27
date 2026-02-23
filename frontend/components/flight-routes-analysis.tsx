@@ -243,8 +243,8 @@ export function FlightRoutesAnalysis() {
     }))
 
   const isDeparture = !!origin
-  const mainLabel = isDeparture ? 'ออกจากสนามบิน (Departure)' : 'มาถึงสนามบิน (Arrival)'
-  const compareLabel = isDeparture ? 'มาถึงสนามบิน (Arrival)' : 'ออกจากสนามบิน (Departure)'
+  const mainLabel = isDeparture ? 'ขาออก (Departure)' : 'ขาเข้า (Arrival)'
+  const compareLabel = isDeparture ? 'ขาเข้า (Arrival)' : 'ขาออก (Departure)'
 
   // Calculate current days diff for buttons state
   const currentDaysDiff = dateRange?.from && dateRange?.to 
@@ -404,6 +404,14 @@ export function FlightRoutesAnalysis() {
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="flex rounded-lg border bg-muted/30 p-0.5">
                     <Button
+                      variant={!dateRange?.from && !dateRange?.to ? 'default' : 'ghost'}
+                      size="sm"
+                      className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
+                      onClick={() => setDateRange(undefined)}
+                    >
+                      ทั้งหมด
+                    </Button>
+                    <Button
                       variant={currentDaysDiff === 7 ? 'default' : 'ghost'}
                       size="sm"
                       className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
@@ -477,8 +485,9 @@ export function FlightRoutesAnalysis() {
                         fontSize={11}
                         tick={{ fill: 'hsl(var(--muted-foreground))' }}
                         interval={currentDaysDiff > 14 ? 'preserveStartEnd' : 0}
-                        angle={currentDaysDiff > 14 ? -35 : 0}
-                        textAnchor={currentDaysDiff > 14 ? 'end' : 'middle'}
+                        angle={-30}
+                        textAnchor="end"
+                        height={50}
                       />
                       <YAxis
                         stroke="hsl(var(--muted-foreground))"
@@ -586,8 +595,9 @@ export function FlightRoutesAnalysis() {
                             fontSize={11}
                             tick={{ fill: 'hsl(var(--muted-foreground))' }}
                             interval={currentDaysDiff > 14 ? 'preserveStartEnd' : 0}
-                            angle={currentDaysDiff > 14 ? -35 : 0}
-                            textAnchor="middle"
+                            angle={-30}
+                            textAnchor="end"
+                            height={50}
                           />
                           <YAxis
                             stroke="hsl(var(--muted-foreground))"
