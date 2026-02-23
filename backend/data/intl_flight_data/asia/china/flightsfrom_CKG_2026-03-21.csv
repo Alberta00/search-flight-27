@@ -1,0 +1,968 @@
+﻿date,airport,direction,time,destination,flight,airline,airline_source,duration,aircraft,page_date_verified,scraped_at
+2026-03-21,CKG,departure,01:10,DOH Doha,QR881,Qatar Airways,text,Duration: 8h 45m,,True,2026-02-19T09:34:11.693582
+2026-03-21,CKG,departure,02:30,CDG Paris,HU717,Hainan Airlines,text,Duration: 12h 0m,,True,2026-02-19T09:34:11.693595
+2026-03-21,CKG,departure,02:35,SIN Singapore,SQ819,Singapore Airlines,text,Duration: 5h 25m,,True,2026-02-19T09:34:11.693604
+2026-03-21,CKG,departure,02:50,DMK Bangkok,SL931,Thai Lion Air,text,Duration: 3h 10m,,True,2026-02-19T09:34:11.693612
+2026-03-21,CKG,departure,02:50,BRU Brussels,HU469,Hainan Airlines,text,Duration: 11h 45m,,True,2026-02-19T09:34:11.693619
+2026-03-21,CKG,departure,03:15,PEN Penang,FY3847,Firefly,text,Duration: 4h 15m,,True,2026-02-19T09:34:11.693626
+2026-03-21,CKG,departure,05:40,PVG Shanghai,9C6108,Spring Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.693632
+2026-03-21,CKG,departure,06:05,NKG Nanjing,PN6259,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:11.693639
+2026-03-21,CKG,departure,06:20,TNA Jinan,PN6327,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.693646
+2026-03-21,CKG,departure,06:25,SHA Shanghai,MU5422,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.693652
+2026-03-21,CKG,departure,06:25,RKZ Shigatse,TV9761,Tibet Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:11.693785
+2026-03-21,CKG,departure,06:25,BPX Bangda,PN6215,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.693795
+2026-03-21,CKG,departure,06:30,CGO Zhengzhou,PN6273,West Air (China),text,Duration: 1h 50m,,True,2026-02-19T09:34:11.693802
+2026-03-21,CKG,departure,06:35,KMG Kunming,MU5449,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.693809
+2026-03-21,CKG,departure,06:35,LLV Luliang,G52913,Gestair,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.693816
+2026-03-21,CKG,departure,06:35,LZH Liuzhou,G54769,Gestair,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.693822
+2026-03-21,CKG,departure,06:35,DLU Dali City,TV9809,Tibet Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.693830
+2026-03-21,CKG,departure,06:35,SZX Shenzhen,PN6229,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.693837
+2026-03-21,CKG,departure,06:35,SJW Shijiazhuang,PN6349,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.693843
+2026-03-21,CKG,departure,06:40,XUZ Xuzhou,G52807,Gestair,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.693850
+2026-03-21,CKG,departure,06:40,JIC Jinchang,G52749,Gestair,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.693951
+2026-03-21,CKG,departure,06:40,TSN Tianjin,OQ2081,Chongqing Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:11.693960
+2026-03-21,CKG,departure,06:40,ZAT Zhaotong,G54603,Gestair,text,Duration: 1h 15m,,True,2026-02-19T09:34:11.693966
+2026-03-21,CKG,departure,06:40,NKG Nanjing,MU2746,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.693972
+2026-03-21,CKG,departure,06:40,XNN Xining,3U8073,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.693977
+2026-03-21,CKG,departure,06:45,JGN Jiayuguan,G52851,Gestair,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.693983
+2026-03-21,CKG,departure,06:45,HFE Hefei,PN6415,West Air (China),text,Duration: 1h 50m,,True,2026-02-19T09:34:11.693988
+2026-03-21,CKG,departure,06:45,SYX Sanya,PN6213,West Air (China),text,Duration: 2h 10m,,True,2026-02-19T09:34:11.693994
+2026-03-21,CKG,departure,06:45,CZX Changzhou,3U8097,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.693999
+2026-03-21,CKG,departure,06:50,HDG Handan,G54301,Gestair,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.694004
+2026-03-21,CKG,departure,06:50,BPX Bangda,TV9907,Tibet Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694097
+2026-03-21,CKG,departure,06:50,WUX Wuxi,3U8025,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694104
+2026-03-21,CKG,departure,06:50,YTY Yangzhou,3U8167,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.694110
+2026-03-21,CKG,departure,06:50,TSN Tianjin,3U8013,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.694115
+2026-03-21,CKG,departure,06:55,HNY Hengyang,GS7435,Tianjin Airlines,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.694120
+2026-03-21,CKG,departure,06:55,NNG Nanning,3U8137,Sichuan Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.694125
+2026-03-21,CKG,departure,06:55,XIY Xian,GS7666,Tianjin Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.694130
+2026-03-21,CKG,departure,06:55,YCU Yuncheng,CA4013,Air China,text,Duration: 1h 20m,,True,2026-02-19T09:34:11.694136
+2026-03-21,CKG,departure,07:00,SWA Jieyang,OQ2349,Chongqing Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.694141
+2026-03-21,CKG,departure,07:00,CIH Changzhi,G52721,Gestair,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.694146
+2026-03-21,CKG,departure,07:00,SZX Shenzhen,CA4343,Air China,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.694244
+2026-03-21,CKG,departure,07:00,CAN Guangzhou,3U8745,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694251
+2026-03-21,CKG,departure,07:00,CAN Guangzhou,CA4361,Air China,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.694257
+2026-03-21,CKG,departure,07:05,AKU Aksu,CA4275,Air China,text,Duration: 4h 40m,,True,2026-02-19T09:34:11.694262
+2026-03-21,CKG,departure,07:05,AKU Aksu,OQ2007,Chongqing Airlines,text,Duration: 4h 50m,,True,2026-02-19T09:34:11.694268
+2026-03-21,CKG,departure,07:10,TAO Qingdao,SC4838,Shandong Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.694274
+2026-03-21,CKG,departure,07:10,LHW Lanzhou,G54033,Gestair,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.694280
+2026-03-21,CKG,departure,07:10,HGH Hangzhou,3U8081,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694285
+2026-03-21,CKG,departure,07:10,PVG Shanghai,3U8971,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.694291
+2026-03-21,CKG,departure,07:15,LXA Lhasa/Lasa,3U8635,Sichuan Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:11.694296
+2026-03-21,CKG,departure,07:15,FOC Fuzhou,CA4571,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694376
+2026-03-21,CKG,departure,07:15,LYG Lianyungang,G52835,Gestair,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.694383
+2026-03-21,CKG,departure,07:15,HRB Harbin,CA4011,Air China,text,Duration: 3h 40m,,True,2026-02-19T09:34:11.694389
+2026-03-21,CKG,departure,07:15,JHG Jinghong,3U8079,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.694395
+2026-03-21,CKG,departure,07:20,HAK Haikou,OQ2341,Chongqing Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.694400
+2026-03-21,CKG,departure,07:20,UCB Ulanqab,G54917,Gestair,text,Duration: 2h 45m,,True,2026-02-19T09:34:11.694406
+2026-03-21,CKG,departure,07:20,SZX Shenzhen,3U8781,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.694412
+2026-03-21,CKG,departure,07:25,LYI Linyi,OQ2363,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.694417
+2026-03-21,CKG,departure,07:25,PVG Shanghai,MU5424,China Eastern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.694422
+2026-03-21,CKG,departure,07:25,HAK Haikou,3U8065,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694428
+2026-03-21,CKG,departure,07:30,CAN Guangzhou,OQ2323,Chongqing Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.694503
+2026-03-21,CKG,departure,07:30,SZX Shenzhen,OQ2335,Chongqing Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694510
+2026-03-21,CKG,departure,07:30,SHS Shashi,G54753,Gestair,text,Duration: 1h 25m,,True,2026-02-19T09:34:11.694516
+2026-03-21,CKG,departure,07:30,CSX Changsha,GS6587,Tianjin Airlines,text,Duration: 1h 25m,,True,2026-02-19T09:34:11.694521
+2026-03-21,CKG,departure,07:35,SIN Singapore,CA449,Air China,text,Duration: 5h 5m,,True,2026-02-19T09:34:11.694526
+2026-03-21,CKG,departure,07:35,TNA Jinan,SC8802,Shandong Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.694533
+2026-03-21,CKG,departure,07:35,FUG Fuyang,PN6219,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:11.694538
+2026-03-21,CKG,departure,07:45,XIC Xichang,G54165,Gestair,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.694543
+2026-03-21,CKG,departure,07:50,SHE Shenyang,OQ2073,Chongqing Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:11.694549
+2026-03-21,CKG,departure,07:50,LZY Nyingchi,TV9869,Tibet Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.694554
+2026-03-21,CKG,departure,07:50,TSN Tianjin,GS7906,Tianjin Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.694630
+2026-03-21,CKG,departure,07:50,XMN Xiamen,MF8414,XiamenAir,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.694637
+2026-03-21,CKG,departure,07:50,SHE Shenyang,3U8037,Sichuan Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:11.694642
+2026-03-21,CKG,departure,07:55,JHG Jinghong,G54263,Gestair,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.694647
+2026-03-21,CKG,departure,07:55,FOC Fuzhou,HU7263,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.694653
+2026-03-21,CKG,departure,07:55,SZX Shenzhen,HU7458,Hainan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.694658
+2026-03-21,CKG,departure,08:00,PEK Beijing,CA4131,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.694663
+2026-03-21,CKG,departure,08:00,PKX Beijing,OQ2001,Chongqing Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.694669
+2026-03-21,CKG,departure,08:00,SJW Shijiazhuang,NS3240,Hebei Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694675
+2026-03-21,CKG,departure,08:00,CGQ Changchun,CA4015,Air China,text,Duration: 3h 35m,,True,2026-02-19T09:34:11.694680
+2026-03-21,CKG,departure,08:00,SZX Shenzhen,ZH9470,Shenzhen Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.694766
+2026-03-21,CKG,departure,08:05,XIY Xian,OQ2303,Chongqing Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.694773
+2026-03-21,CKG,departure,08:05,BKK Bangkok,HU423,Hainan Airlines,text,Duration: 3h 35m,,True,2026-02-19T09:34:11.694779
+2026-03-21,CKG,departure,08:05,PVG Shanghai,HU7494,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.694784
+2026-03-21,CKG,departure,08:05,KUL Kuala Lumpur,MF8687,XiamenAir,text,Duration: 4h 45m,,True,2026-02-19T09:34:11.694789
+2026-03-21,CKG,departure,08:05,ZUH Zhuhai,CA4371,Air China,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.694795
+2026-03-21,CKG,departure,08:05,SHA Shanghai,CA4543,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694800
+2026-03-21,CKG,departure,08:05,NGB Ningbo,CA4549,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694805
+2026-03-21,CKG,departure,08:10,KMG Kunming,OQ2117,Chongqing Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.694811
+2026-03-21,CKG,departure,08:10,WNZ Wenzhou,3U8021,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694816
+2026-03-21,CKG,departure,08:15,HGH Hangzhou,GS6581,Tianjin Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694891
+2026-03-21,CKG,departure,08:15,TYN Taiyuan,SC2267,Shandong Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.694897
+2026-03-21,CKG,departure,08:15,NNG Nanning,ZH9382,Shenzhen Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.694903
+2026-03-21,CKG,departure,08:15,XMN Xiamen,CA4565,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.694909
+2026-03-21,CKG,departure,08:15,PKX Beijing,MF8454,XiamenAir,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.694914
+2026-03-21,CKG,departure,08:15,LXA Lhasa/Lasa,3U8633,Sichuan Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:11.694919
+2026-03-21,CKG,departure,08:20,PVG Shanghai,OQ2307,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.694924
+2026-03-21,CKG,departure,08:20,HFE Hefei,3U8197,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.694930
+2026-03-21,CKG,departure,08:25,HGH Hangzhou,OQ2379,Chongqing Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694935
+2026-03-21,CKG,departure,08:25,JJN Jinjiang,MF8612,XiamenAir,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.694940
+2026-03-21,CKG,departure,08:30,SHA Shanghai,MU5426,China Eastern,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695014
+2026-03-21,CKG,departure,08:30,ICN Seoul,CA439,Air China,text,Duration: 3h 30m,,True,2026-02-19T09:34:11.695021
+2026-03-21,CKG,departure,08:30,CAN Guangzhou,HU7342,Hainan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.695026
+2026-03-21,CKG,departure,08:35,SIN Singapore,OQ2095,Chongqing Airlines,text,Duration: 4h 50m,,True,2026-02-19T09:34:11.695032
+2026-03-21,CKG,departure,08:40,KOW Ganzhou,G54921,Gestair,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695037
+2026-03-21,CKG,departure,08:40,CGQ Changchun,MF8037,XiamenAir,text,Duration: 3h 50m,,True,2026-02-19T09:34:11.695043
+2026-03-21,CKG,departure,08:40,HGH Hangzhou,CA4553,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.695049
+2026-03-21,CKG,departure,08:40,URC Urumqi,CA4255,Air China,text,Duration: 4h 15m,,True,2026-02-19T09:34:11.695054
+2026-03-21,CKG,departure,08:40,HKG Hong Kong,HX497,Hong Kong Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.695060
+2026-03-21,CKG,departure,08:45,TAO Qingdao,SC4832,Shandong Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695066
+2026-03-21,CKG,departure,08:45,URC Urumqi,GS6591,Tianjin Airlines,text,Duration: 4h 15m,,True,2026-02-19T09:34:11.695140
+2026-03-21,CKG,departure,08:50,INC Yinchuan,G54337,Gestair,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.695146
+2026-03-21,CKG,departure,08:50,BHY Beihai,3U8123,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695152
+2026-03-21,CKG,departure,08:50,YNT Yantai,SC7653,Shandong Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.695157
+2026-03-21,CKG,departure,08:50,PEK Beijing,HU7268,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.695163
+2026-03-21,CKG,departure,08:55,HFE Hefei,MU9981,China Eastern,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.695168
+2026-03-21,CKG,departure,08:55,LZY Nyingchi,3U8029,Sichuan Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.695174
+2026-03-21,CKG,departure,08:55,YIC Yichun,PN6479,West Air (China),text,Duration: 1h 35m,,True,2026-02-19T09:34:11.695179
+2026-03-21,CKG,departure,09:00,DLU Dali City,OQ2347,Chongqing Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695185
+2026-03-21,CKG,departure,09:00,CAN Guangzhou,OQ2305,Chongqing Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.695190
+2026-03-21,CKG,departure,09:00,SZX Shenzhen,ZH9466,Shenzhen Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.695267
+2026-03-21,CKG,departure,09:00,PKX Beijing,CZ5644,China Southern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.695274
+2026-03-21,CKG,departure,09:00,CGO Zhengzhou,CZ6650,China Southern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.695279
+2026-03-21,CKG,departure,09:00,PEK Beijing,CA4137,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695285
+2026-03-21,CKG,departure,09:05,CGQ Changchun,OQ2077,Chongqing Airlines,text,Duration: 3h 20m,,True,2026-02-19T09:34:11.695291
+2026-03-21,CKG,departure,09:05,HIA Huai'an,OQ2035,Chongqing Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695296
+2026-03-21,CKG,departure,09:05,HGH Hangzhou,MF8474,XiamenAir,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695302
+2026-03-21,CKG,departure,09:05,LJG Lijiang,PN6239,West Air (China),text,Duration: 1h 45m,,True,2026-02-19T09:34:11.695307
+2026-03-21,CKG,departure,09:05,ZUH Zhuhai,SC2265,Shandong Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.695313
+2026-03-21,CKG,departure,09:05,WNZ Wenzhou,HU7463,Hainan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.695319
+2026-03-21,CKG,departure,09:10,HYN Taizhou,OQ2013,Chongqing Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.695395
+2026-03-21,CKG,departure,09:10,NKG Nanjing,OQ2321,Chongqing Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.695402
+2026-03-21,CKG,departure,09:10,TNA Jinan,PN6265,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695408
+2026-03-21,CKG,departure,09:15,PVG Shanghai,CA4575,Air China,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695413
+2026-03-21,CKG,departure,09:20,PVG Shanghai,PN6373,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695419
+2026-03-21,CKG,departure,09:30,TNA Jinan,SC8812,Shandong Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695424
+2026-03-21,CKG,departure,09:35,JHG Jinghong,8L9606,Lucky Air,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.695430
+2026-03-21,CKG,departure,09:40,TAO Qingdao,SC4836,Shandong Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.695435
+2026-03-21,CKG,departure,09:40,INC Yinchuan,3U8283,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.695441
+2026-03-21,CKG,departure,09:55,SZX Shenzhen,9C8614,Spring Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695446
+2026-03-21,CKG,departure,09:55,TCZ Tengchong,KY3005,Kunming Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695526
+2026-03-21,CKG,departure,09:55,PEK Beijing,CA1450,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.695534
+2026-03-21,CKG,departure,10:00,JHG Jinghong,PN6403,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695541
+2026-03-21,CKG,departure,10:00,LXA Lhasa/Lasa,CZ3463,China Southern,text,Duration: 3h 5m,,True,2026-02-19T09:34:11.695546
+2026-03-21,CKG,departure,10:05,HAK Haikou,CA4379,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695552
+2026-03-21,CKG,departure,10:10,CAN Guangzhou,MU5796,China Eastern,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695558
+2026-03-21,CKG,departure,10:15,SWA Jieyang,PN6385,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:11.695564
+2026-03-21,CKG,departure,10:25,JNG Jining,GX8891,GX Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695569
+2026-03-21,CKG,departure,10:25,XIY Xian,MU2262,China Eastern,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.695574
+2026-03-21,CKG,departure,10:30,BAV Baotou,G54179,Gestair,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.695581
+2026-03-21,CKG,departure,10:30,TYN Taiyuan,3U8057,Sichuan Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.695672
+2026-03-21,CKG,departure,10:30,TSN Tianjin,GS7774,Tianjin Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695679
+2026-03-21,CKG,departure,10:35,CZX Changzhou,MU2904,China Eastern,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695685
+2026-03-21,CKG,departure,10:35,YYA Yueyang,DZ6285,Donghai Airlines,text,Duration: 1h 20m,,True,2026-02-19T09:34:11.695690
+2026-03-21,CKG,departure,10:35,JNH Jiaxing,GJ8783,Loong Air,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.695696
+2026-03-21,CKG,departure,10:40,TNA Jinan,SC8814,Shandong Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695701
+2026-03-21,CKG,departure,10:40,WUH Wuhan,CZ6176,China Southern,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.695707
+2026-03-21,CKG,departure,10:45,KHN Nanchang,ZH8846,Shenzhen Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.695713
+2026-03-21,CKG,departure,10:45,CAN Guangzhou,CA4347,Air China,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695718
+2026-03-21,CKG,departure,10:45,TYN Taiyuan,DR5311,Ruili Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695724
+2026-03-21,CKG,departure,10:45,LZY Nyingchi,3U3181,Sichuan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695806
+2026-03-21,CKG,departure,10:50,YTY Yangzhou,9C6196,Spring Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695813
+2026-03-21,CKG,departure,10:50,CAN Guangzhou,JD5228,Capital Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.695819
+2026-03-21,CKG,departure,10:50,LXA Lhasa/Lasa,MF8411,XiamenAir,text,Duration: 3h 5m,,True,2026-02-19T09:34:11.695825
+2026-03-21,CKG,departure,10:50,PKX Beijing,CA8652,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.695830
+2026-03-21,CKG,departure,10:50,URC Urumqi,CZ6797,China Southern,text,Duration: 4h 10m,,True,2026-02-19T09:34:11.695836
+2026-03-21,CKG,departure,10:55,WUX Wuxi,MU9766,China Eastern,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.695841
+2026-03-21,CKG,departure,10:55,HGH Hangzhou,CA1760,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.695847
+2026-03-21,CKG,departure,10:55,HGH Hangzhou,JD5692,Capital Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695852
+2026-03-21,CKG,departure,11:00,XMN Xiamen,SC2136,Shandong Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.695858
+2026-03-21,CKG,departure,11:00,WUH Wuhan,MF8029,XiamenAir,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.695951
+2026-03-21,CKG,departure,11:00,HFE Hefei,CA4563,Air China,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.695958
+2026-03-21,CKG,departure,11:05,ACX Xingyi,BK2953,OkAir,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.695964
+2026-03-21,CKG,departure,11:05,HAK Haikou,HU7172,Hainan Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.695971
+2026-03-21,CKG,departure,11:05,NKG Nanjing,HO1708,Juneyao Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.695977
+2026-03-21,CKG,departure,11:05,XMN Xiamen,MF8404,XiamenAir,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.695983
+2026-03-21,CKG,departure,11:15,PKX Beijing,MU6682,China Eastern,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.695989
+2026-03-21,CKG,departure,11:20,DMK Bangkok,FD557,Thai AirAsia,text,Duration: 3h 15m,,True,2026-02-19T09:34:11.695996
+2026-03-21,CKG,departure,11:20,TAO Qingdao,SC4846,Shandong Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696003
+2026-03-21,CKG,departure,11:20,SZX Shenzhen,ZH9462,Shenzhen Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.696010
+2026-03-21,CKG,departure,11:25,PVG Shanghai,MU6794,China Eastern,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696102
+2026-03-21,CKG,departure,11:30,TSN Tianjin,CA2862,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696110
+2026-03-21,CKG,departure,11:30,PKX Beijing,CZ8918,China Southern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.696115
+2026-03-21,CKG,departure,11:30,SYX Sanya,HU7350,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696121
+2026-03-21,CKG,departure,11:30,PEK Beijing,CA4135,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.696126
+2026-03-21,CKG,departure,11:35,PVG Shanghai,CA8544,Air China,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.696132
+2026-03-21,CKG,departure,11:35,HAK Haikou,CZ6314,China Southern,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.696138
+2026-03-21,CKG,departure,11:35,PVG Shanghai,HO1250,Juneyao Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696143
+2026-03-21,CKG,departure,11:40,WUH Wuhan,CZ5754,China Southern,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.696148
+2026-03-21,CKG,departure,11:40,SZX Shenzhen,CZ3466,China Southern,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.696154
+2026-03-21,CKG,departure,11:40,NKG Nanjing,MU2926,China Eastern,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.696263
+2026-03-21,CKG,departure,11:50,SWA Jieyang,CZ3860,China Southern,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.696270
+2026-03-21,CKG,departure,11:50,WNZ Wenzhou,CA8304,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696275
+2026-03-21,CKG,departure,11:50,CAN Guangzhou,OQ2317,Chongqing Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.696281
+2026-03-21,CKG,departure,11:55,HKG Hong Kong,CA419,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.696287
+2026-03-21,CKG,departure,11:55,YIW Yiwu,CZ3888,China Southern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696292
+2026-03-21,CKG,departure,11:55,PEK Beijing,CA1432,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.696297
+2026-03-21,CKG,departure,12:00,PKX Beijing,NS8036,Hebei Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.696303
+2026-03-21,CKG,departure,12:00,CMB Colombo,OQ2393,Chongqing Airlines,text,Duration: 6h 10m,,True,2026-02-19T09:34:11.696308
+2026-03-21,CKG,departure,12:00,HFE Hefei,MU6469,China Eastern,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.696313
+2026-03-21,CKG,departure,12:00,WNZ Wenzhou,KN5298,China United Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696400
+2026-03-21,CKG,departure,12:05,WUX Wuxi,ZH9552,Shenzhen Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696408
+2026-03-21,CKG,departure,12:05,PKX Beijing,JD5756,Capital Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696414
+2026-03-21,CKG,departure,12:05,LXA Lhasa/Lasa,PN6568,West Air (China),text,Duration: 3h 0m,,True,2026-02-19T09:34:11.696419
+2026-03-21,CKG,departure,12:10,SHA Shanghai,MU5428,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696424
+2026-03-21,CKG,departure,12:10,DLC Dalian,CZ5750,China Southern,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.696430
+2026-03-21,CKG,departure,12:15,JHG Jinghong,3U3551,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696435
+2026-03-21,CKG,departure,12:15,LXA Lhasa/Lasa,EU2738,Chengdu Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:11.696441
+2026-03-21,CKG,departure,12:15,ZUH Zhuhai,CZ8286,China Southern,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.696446
+2026-03-21,CKG,departure,12:15,URC Urumqi,3U3209,Sichuan Airlines,text,Duration: 4h 15m,,True,2026-02-19T09:34:11.696451
+2026-03-21,CKG,departure,12:20,SJW Shijiazhuang,PN6335,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:11.696528
+2026-03-21,CKG,departure,12:25,NTG Nantong,ZH8672,Shenzhen Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696535
+2026-03-21,CKG,departure,12:30,HGH Hangzhou,OQ2389,Chongqing Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696540
+2026-03-21,CKG,departure,12:30,TAO Qingdao,SC4840,Shandong Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696546
+2026-03-21,CKG,departure,12:30,PEK Beijing,HU7168,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.696551
+2026-03-21,CKG,departure,12:40,SHA Shanghai,9C8898,Spring Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.696557
+2026-03-21,CKG,departure,12:40,CGO Zhengzhou,CZ3480,China Southern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.696562
+2026-03-21,CKG,departure,12:45,HET Hohhot,OQ2175,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.696567
+2026-03-21,CKG,departure,12:45,NKG Nanjing,MU2664,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.696573
+2026-03-21,CKG,departure,12:50,DHH Hami,EU2223,Chengdu Airlines,text,Duration: 4h 10m,,True,2026-02-19T09:34:11.696578
+2026-03-21,CKG,departure,12:50,HGH Hangzhou,MF8472,XiamenAir,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.696652
+2026-03-21,CKG,departure,12:55,PVG Shanghai,9C7298,Spring Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.696659
+2026-03-21,CKG,departure,12:55,NKG Nanjing,3U8043,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.696665
+2026-03-21,CKG,departure,12:55,SZX Shenzhen,HU7158,Hainan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.696670
+2026-03-21,CKG,departure,13:00,PEK Beijing,3U8831,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.696676
+2026-03-21,CKG,departure,13:05,TNA Jinan,SC8818,Shandong Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.696682
+2026-03-21,CKG,departure,13:05,WNZ Wenzhou,PN6283,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:11.696687
+2026-03-21,CKG,departure,13:10,NRT Tokyo,CA433,Air China,text,Duration: 4h 20m,,True,2026-02-19T09:34:11.696693
+2026-03-21,CKG,departure,13:10,TYN Taiyuan,MU9834,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.696698
+2026-03-21,CKG,departure,13:10,LXA Lhasa/Lasa,TV9719,Tibet Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:11.696704
+2026-03-21,CKG,departure,13:10,CAN Guangzhou,CZ3406,China Southern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696778
+2026-03-21,CKG,departure,13:15,PEK Beijing,CA1430,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696785
+2026-03-21,CKG,departure,13:15,SZX Shenzhen,3U8783,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696790
+2026-03-21,CKG,departure,13:20,LXA Lhasa/Lasa,PN6391,West Air (China),text,Duration: 2h 55m,,True,2026-02-19T09:34:11.696797
+2026-03-21,CKG,departure,13:20,WUH Wuhan,3U8155,Sichuan Airlines,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.696802
+2026-03-21,CKG,departure,13:25,WEF Weifang,G52773,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696808
+2026-03-21,CKG,departure,13:25,BHY Beihai,3U8121,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.696813
+2026-03-21,CKG,departure,13:25,CAN Guangzhou,3U8747,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.696819
+2026-03-21,CKG,departure,13:30,"JUZ Quzhou, Zhejiang Province",G54683,Gestair,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696825
+2026-03-21,CKG,departure,13:30,KHG Kashi,OQ2009,Chongqing Airlines,text,Duration: 5h 25m,,True,2026-02-19T09:34:11.696830
+2026-03-21,CKG,departure,13:30,CAN Guangzhou,HU7142,Hainan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.696905
+2026-03-21,CKG,departure,13:40,CGQ Changchun,CZ6364,China Southern,text,Duration: 3h 40m,,True,2026-02-19T09:34:11.696912
+2026-03-21,CKG,departure,13:40,SYX Sanya,PN6203,West Air (China),text,Duration: 2h 25m,,True,2026-02-19T09:34:11.696918
+2026-03-21,CKG,departure,13:45,LXA Lhasa/Lasa,CA4420,Air China,text,Duration: 3h 15m,,True,2026-02-19T09:34:11.696924
+2026-03-21,CKG,departure,13:50,CSX Changsha,3U8009,Sichuan Airlines,text,Duration: 1h 20m,,True,2026-02-19T09:34:11.696929
+2026-03-21,CKG,departure,13:50,SHA Shanghai,MU9196,China Eastern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.696935
+2026-03-21,CKG,departure,13:50,DLU Dali City,CA4485,Air China,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.696941
+2026-03-21,CKG,departure,13:50,SHE Shenyang,CZ6404,China Southern,text,Duration: 3h 10m,,True,2026-02-19T09:34:11.696946
+2026-03-21,CKG,departure,13:55,AEB Baise,MU5493,China Eastern,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.696952
+2026-03-21,CKG,departure,14:00,SZX Shenzhen,OQ2345,Chongqing Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.696957
+2026-03-21,CKG,departure,14:00,CAN Guangzhou,CA4349,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697030
+2026-03-21,CKG,departure,14:05,DOY Dongying,G54009,Gestair,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697037
+2026-03-21,CKG,departure,14:05,HET Hohhot,G54151,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.697043
+2026-03-21,CKG,departure,14:05,XUZ Xuzhou,G54607,Gestair,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697049
+2026-03-21,CKG,departure,14:05,YIW Yiwu,GY7278,Colorful GuiZhou Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697054
+2026-03-21,CKG,departure,14:10,HRB Harbin,OQ2327,Chongqing Airlines,text,Duration: 3h 45m,,True,2026-02-19T09:34:11.697060
+2026-03-21,CKG,departure,14:10,KHN Nanchang,3U8181,Sichuan Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.697065
+2026-03-21,CKG,departure,14:15,HZA Heze,GJ8292,Loong Air,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697071
+2026-03-21,CKG,departure,14:15,XNN Xining,TV9911,Tibet Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697077
+2026-03-21,CKG,departure,14:15,CGO Zhengzhou,3U8159,Sichuan Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.697082
+2026-03-21,CKG,departure,14:20,KMG Kunming,MU5866,China Eastern,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.697155
+2026-03-21,CKG,departure,14:25,ZUH Zhuhai,CZ5726,China Southern,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697162
+2026-03-21,CKG,departure,14:25,URC Urumqi,CZ6986,China Southern,text,Duration: 4h 0m,,True,2026-02-19T09:34:11.697167
+2026-03-21,CKG,departure,14:25,PEK Beijing,CA4141,Air China,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.697173
+2026-03-21,CKG,departure,14:30,LXA Lhasa/Lasa,TV9843,Tibet Airlines,text,Duration: 3h 30m,,True,2026-02-19T09:34:11.697178
+2026-03-21,CKG,departure,14:30,KRL Korla,OQ2017,Chongqing Airlines,text,Duration: 4h 25m,,True,2026-02-19T09:34:11.697184
+2026-03-21,CKG,departure,14:30,XMN Xiamen,HU7425,Hainan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697189
+2026-03-21,CKG,departure,14:35,HTN Hotan,CA4253,Air China,text,Duration: 5h 0m,,True,2026-02-19T09:34:11.697195
+2026-03-21,CKG,departure,14:45,HAK Haikou,CA9657,Air China,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697200
+2026-03-21,CKG,departure,14:45,NGB Ningbo,3U8109,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697207
+2026-03-21,CKG,departure,14:50,PKX Beijing,MU6684,China Eastern,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.697279
+2026-03-21,CKG,departure,14:50,SZX Shenzhen,ZH9464,Shenzhen Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697286
+2026-03-21,CKG,departure,14:50,FOC Fuzhou,MF8462,XiamenAir,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697291
+2026-03-21,CKG,departure,14:55,WDS Shiyan,G54487,Gestair,text,Duration: 1h 15m,,True,2026-02-19T09:34:11.697296
+2026-03-21,CKG,departure,15:00,LHR London,GS7965,Tianjin Airlines,text,Duration: 12h 0m,,True,2026-02-19T09:34:11.697302
+2026-03-21,CKG,departure,15:00,HET Hohhot,CA4007,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697308
+2026-03-21,CKG,departure,15:00,XMN Xiamen,MF8434,XiamenAir,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697313
+2026-03-21,CKG,departure,15:05,CAN Guangzhou,OQ2339,Chongqing Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697319
+2026-03-21,CKG,departure,15:05,HUZ Huizhou,OQ2343,Chongqing Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697325
+2026-03-21,CKG,departure,15:05,PVG Shanghai,3U8973,Sichuan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.697330
+2026-03-21,CKG,departure,15:10,URC Urumqi,CA4257,Air China,text,Duration: 4h 5m,,True,2026-02-19T09:34:11.697403
+2026-03-21,CKG,departure,15:10,WUX Wuxi,HO2014,Juneyao Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697410
+2026-03-21,CKG,departure,15:15,PEK Beijing,CA4143,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.697416
+2026-03-21,CKG,departure,15:15,PEK Beijing,HU7568,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.697421
+2026-03-21,CKG,departure,15:15,HGH Hangzhou,3U8083,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697427
+2026-03-21,CKG,departure,15:15,KMG Kunming,3U8284,Sichuan Airlines,text,Duration: 1h 20m,,True,2026-02-19T09:34:11.697432
+2026-03-21,CKG,departure,15:20,TPE Taipei,CA409,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:11.697438
+2026-03-21,CKG,departure,15:20,SJW Shijiazhuang,NS3241,Hebei Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697444
+2026-03-21,CKG,departure,15:20,INC Yinchuan,HU7271,Hainan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.697449
+2026-03-21,CKG,departure,15:25,PVG Shanghai,FM7348,Shanghai Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.697455
+2026-03-21,CKG,departure,15:25,KRL Korla,G54005,Gestair,text,Duration: 4h 5m,,True,2026-02-19T09:34:11.697527
+2026-03-21,CKG,departure,15:35,DIG Diqing,OQ2147,Chongqing Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697534
+2026-03-21,CKG,departure,15:35,SZX Shenzhen,CZ3456,China Southern,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.697539
+2026-03-21,CKG,departure,15:40,SHA Shanghai,MU5432,China Eastern,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.697545
+2026-03-21,CKG,departure,15:45,URC Urumqi,OQ2311,Chongqing Airlines,text,Duration: 4h 15m,,True,2026-02-19T09:34:11.697551
+2026-03-21,CKG,departure,15:50,BKK Bangkok,3U3771,Sichuan Airlines,text,Duration: 3h 30m,,True,2026-02-19T09:34:11.697556
+2026-03-21,CKG,departure,15:50,TVS Tangshan,GT1069,Air Guilin,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.697561
+2026-03-21,CKG,departure,15:50,XNN Xining,MF8853,XiamenAir,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697567
+2026-03-21,CKG,departure,15:50,LYA Luoyang,QW6054,Qingdao Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.697573
+2026-03-21,CKG,departure,15:55,HGH Hangzhou,PN6435,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697578
+2026-03-21,CKG,departure,15:55,WUH Wuhan,CZ6292,China Southern,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.697656
+2026-03-21,CKG,departure,16:00,ENY Yan'an,G52907,Gestair,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.697664
+2026-03-21,CKG,departure,16:00,SHE Shenyang,HU7101,Hainan Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:11.697670
+2026-03-21,CKG,departure,16:00,XMN Xiamen,3U8087,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697676
+2026-03-21,CKG,departure,16:00,TSN Tianjin,CA4001,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.697682
+2026-03-21,CKG,departure,16:05,DLC Dalian,3U8007,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.697687
+2026-03-21,CKG,departure,16:10,SJW Shijiazhuang,OQ2053,Chongqing Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697693
+2026-03-21,CKG,departure,16:10,ZUH Zhuhai,OQ2385,Chongqing Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697698
+2026-03-21,CKG,departure,16:15,JGS Ji'An,9C8751,Spring Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.697704
+2026-03-21,CKG,departure,16:15,YCU Yuncheng,MF8785,XiamenAir,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.697711
+2026-03-21,CKG,departure,16:15,PEK Beijing,CA1438,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.697807
+2026-03-21,CKG,departure,16:15,KMG Kunming,MU5856,China Eastern,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.697815
+2026-03-21,CKG,departure,16:20,NGB Ningbo,OQ2315,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.697821
+2026-03-21,CKG,departure,16:25,KHN Nanchang,ZH8854,Shenzhen Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.697827
+2026-03-21,CKG,departure,16:35,HGH Hangzhou,MF8478,XiamenAir,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.697833
+2026-03-21,CKG,departure,16:35,HAK Haikou,3U8067,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.697838
+2026-03-21,CKG,departure,16:40,TNA Jinan,SC8808,Shandong Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697844
+2026-03-21,CKG,departure,16:45,SHA Shanghai,MF8581,XiamenAir,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697849
+2026-03-21,CKG,departure,16:45,HIA Huai'an,8L9817,Lucky Air,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697855
+2026-03-21,CKG,departure,16:45,SWA Jieyang,3U8005,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.697860
+2026-03-21,CKG,departure,16:45,HGH Hangzhou,CA4577,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697946
+2026-03-21,CKG,departure,16:50,CSX Changsha,CZ3422,China Southern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.697953
+2026-03-21,CKG,departure,16:50,KRL Korla,PN6387,West Air (China),text,Duration: 4h 10m,,True,2026-02-19T09:34:11.697959
+2026-03-21,CKG,departure,16:55,UYN Yulin,GX8881,GX Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697964
+2026-03-21,CKG,departure,16:55,PVG Shanghai,CA4555,Air China,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.697970
+2026-03-21,CKG,departure,16:55,CAN Guangzhou,HU7242,Hainan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.697975
+2026-03-21,CKG,departure,16:55,FOC Fuzhou,PN6275,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697981
+2026-03-21,CKG,departure,16:55,PKX Beijing,CA8673,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.697986
+2026-03-21,CKG,departure,17:00,NKG Nanjing,3U8045,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.697992
+2026-03-21,CKG,departure,17:00,NGB Ningbo,GJ8398,Loong Air,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.697998
+2026-03-21,CKG,departure,17:00,SYX Sanya,CA4387,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.698073
+2026-03-21,CKG,departure,17:05,TYN Taiyuan,KY3006,Kunming Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.698080
+2026-03-21,CKG,departure,17:05,HAK Haikou,HU7372,Hainan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698086
+2026-03-21,CKG,departure,17:10,SHA Shanghai,MU2550,China Eastern,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.698091
+2026-03-21,CKG,departure,17:10,YNT Yantai,QW6032,Qingdao Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.698097
+2026-03-21,CKG,departure,17:20,WMT Zunyi,G54785,Gestair,text,Duration: 0h 50m,,True,2026-02-19T09:34:11.698102
+2026-03-21,CKG,departure,17:20,KUL Kuala Lumpur,MF8711,XiamenAir,text,Duration: 4h 40m,,True,2026-02-19T09:34:11.698108
+2026-03-21,CKG,departure,17:20,SHE Shenyang,CZ6470,China Southern,text,Duration: 3h 10m,,True,2026-02-19T09:34:11.698114
+2026-03-21,CKG,departure,17:20,TSN Tianjin,PN6237,West Air (China),text,Duration: 2h 40m,,True,2026-02-19T09:34:11.698120
+2026-03-21,CKG,departure,17:20,HKG Hong Kong,CX929,Cathay Pacific,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.698125
+2026-03-21,CKG,departure,17:25,SHA Shanghai,CA4541,Air China,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.698239
+2026-03-21,CKG,departure,17:25,TAO Qingdao,SC4842,Shandong Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.698251
+2026-03-21,CKG,departure,17:25,HGH Hangzhou,3U3182,Sichuan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.698259
+2026-03-21,CKG,departure,17:25,PKX Beijing,CZ8816,China Southern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.698267
+2026-03-21,CKG,departure,17:30,VTE Vientiane,G52805,Gestair,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.698275
+2026-03-21,CKG,departure,17:30,NGB Ningbo,OQ2357,Chongqing Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.698282
+2026-03-21,CKG,departure,17:30,SZX Shenzhen,CA4345,Air China,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.698289
+2026-03-21,CKG,departure,17:30,PEK Beijing,CA4147,Air China,text,Duration: 2h 45m,,True,2026-02-19T09:34:11.698296
+2026-03-21,CKG,departure,17:35,SHA Shanghai,HO1242,Juneyao Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.698303
+2026-03-21,CKG,departure,17:35,CAN Guangzhou,CZ3464,China Southern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698311
+2026-03-21,CKG,departure,17:40,NKG Nanjing,MU2738,China Eastern,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.698451
+2026-03-21,CKG,departure,17:40,CAN Guangzhou,CA4341,Air China,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698460
+2026-03-21,CKG,departure,17:45,CGO Zhengzhou,CZ8716,China Southern,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.698466
+2026-03-21,CKG,departure,17:45,SHA Shanghai,MU5434,China Eastern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.698473
+2026-03-21,CKG,departure,17:50,WUX Wuxi,MU9776,China Eastern,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.698479
+2026-03-21,CKG,departure,17:55,SYX Sanya,OQ2331,Chongqing Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:11.698485
+2026-03-21,CKG,departure,17:55,PVG Shanghai,9C8868,Spring Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.698491
+2026-03-21,CKG,departure,18:00,TYN Taiyuan,PN6539,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698497
+2026-03-21,CKG,departure,18:05,TNA Jinan,MU5472,China Eastern,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698503
+2026-03-21,CKG,departure,18:05,SZX Shenzhen,HU7358,Hainan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698509
+2026-03-21,CKG,departure,18:05,NKG Nanjing,CA4557,Air China,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.698613
+2026-03-21,CKG,departure,18:10,WHA Wuhu,3U8071,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.698621
+2026-03-21,CKG,departure,18:15,SZX Shenzhen,MU6611,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.698628
+2026-03-21,CKG,departure,18:20,HGH Hangzhou,GJ8692,Loong Air,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698633
+2026-03-21,CKG,departure,18:20,FOC Fuzhou,MF8412,XiamenAir,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.698639
+2026-03-21,CKG,departure,18:25,YZY Zhangye,GS7594,Tianjin Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.698645
+2026-03-21,CKG,departure,18:30,HYN Taizhou,G54509,Gestair,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.698651
+2026-03-21,CKG,departure,18:30,PEK Beijing,HU7368,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.698656
+2026-03-21,CKG,departure,18:30,FOC Fuzhou,CA4569,Air China,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.698662
+2026-03-21,CKG,departure,18:40,YNZ Yancheng,MF8777,XiamenAir,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698667
+2026-03-21,CKG,departure,18:45,KUL Kuala Lumpur,3U3773,Sichuan Airlines,text,Duration: 5h 0m,,True,2026-02-19T09:34:11.698778
+2026-03-21,CKG,departure,18:45,SHA Shanghai,FM9420,Shanghai Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.698787
+2026-03-21,CKG,departure,18:45,HAN Hanoi,PN6423,West Air (China),text,Duration: 1h 55m,,True,2026-02-19T09:34:11.698794
+2026-03-21,CKG,departure,18:50,TNA Jinan,SC8810,Shandong Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698800
+2026-03-21,CKG,departure,18:55,FOC Fuzhou,3U8105,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698806
+2026-03-21,CKG,departure,19:00,SZX Shenzhen,CZ6562,China Southern,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.698812
+2026-03-21,CKG,departure,19:00,WUH Wuhan,CA4381,Air China,text,Duration: 1h 25m,,True,2026-02-19T09:34:11.698818
+2026-03-21,CKG,departure,19:00,NGB Ningbo,MU2396,China Eastern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698823
+2026-03-21,CKG,departure,19:00,BKI Kota Kinabalu,OQ2193,Chongqing Airlines,text,Duration: 4h 15m,,True,2026-02-19T09:34:11.698829
+2026-03-21,CKG,departure,19:05,IQN Qingyang,NS8068,Hebei Airlines,text,Duration: 1h 20m,,True,2026-02-19T09:34:11.698835
+2026-03-21,CKG,departure,19:05,PVG Shanghai,MU5494,China Eastern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698941
+2026-03-21,CKG,departure,19:10,PVG Shanghai,PN6437,West Air (China),text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698949
+2026-03-21,CKG,departure,19:10,DXB Dubai,CA451,Air China,text,Duration: 8h 0m,,True,2026-02-19T09:34:11.698955
+2026-03-21,CKG,departure,19:10,ZHA Zhanjiang,CA4359,Air China,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698961
+2026-03-21,CKG,departure,19:15,PEK Beijing,CA1412,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.698967
+2026-03-21,CKG,departure,19:15,SZX Shenzhen,MF8389,XiamenAir,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698973
+2026-03-21,CKG,departure,19:15,LHW Lanzhou,9C6282,Spring Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.698979
+2026-03-21,CKG,departure,19:15,XAI Xinyang,MU5440,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.698985
+2026-03-21,CKG,departure,19:20,SWA Jieyang,3U8015,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.698991
+2026-03-21,CKG,departure,19:20,SZX Shenzhen,3U8785,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.698996
+2026-03-21,CKG,departure,19:25,NKG Nanjing,ZH9592,Shenzhen Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.699087
+2026-03-21,CKG,departure,19:30,XUZ Xuzhou,G54121,Gestair,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699095
+2026-03-21,CKG,departure,19:30,KMG Kunming,OQ2119,Chongqing Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.699101
+2026-03-21,CKG,departure,19:30,PKX Beijing,CZ8818,China Southern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.699107
+2026-03-21,CKG,departure,19:30,CAN Guangzhou,HU7442,Hainan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699112
+2026-03-21,CKG,departure,19:40,CGO Zhengzhou,CZ6354,China Southern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.699118
+2026-03-21,CKG,departure,19:45,DLC Dalian,CZ6580,China Southern,text,Duration: 2h 50m,,True,2026-02-19T09:34:11.699124
+2026-03-21,CKG,departure,19:45,PEK Beijing,3U8833,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699129
+2026-03-21,CKG,departure,19:50,NTG Nantong,DZ6294,Donghai Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699135
+2026-03-21,CKG,departure,19:55,DMK Bangkok,FD553,Thai AirAsia,text,Duration: 3h 15m,,True,2026-02-19T09:34:11.699140
+2026-03-21,CKG,departure,19:55,XMN Xiamen,MF8424,XiamenAir,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.699223
+2026-03-21,CKG,departure,20:00,JHG Jinghong,OQ2373,Chongqing Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699233
+2026-03-21,CKG,departure,20:00,YIW Yiwu,OQ2391,Chongqing Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699240
+2026-03-21,CKG,departure,20:00,SHA Shanghai,MU9194,China Eastern,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.699245
+2026-03-21,CKG,departure,20:00,WHA Wuhu,GT1118,Air Guilin,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699251
+2026-03-21,CKG,departure,20:00,HAK Haikou,HU7472,Hainan Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.699256
+2026-03-21,CKG,departure,20:00,KMG Kunming,MU5756,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.699262
+2026-03-21,CKG,departure,20:05,PKX Beijing,MU6686,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.699268
+2026-03-21,CKG,departure,20:05,HAK Haikou,PN6531,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.699273
+2026-03-21,CKG,departure,20:10,LUM Mangshi,3U8091,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.699279
+2026-03-21,CKG,departure,20:10,WNZ Wenzhou,PN6433,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699379
+2026-03-21,CKG,departure,20:10,HGH Hangzhou,MF8476,XiamenAir,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.699389
+2026-03-21,CKG,departure,20:10,CAN Guangzhou,3U8749,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.699396
+2026-03-21,CKG,departure,20:10,PEK Beijing,CA1410,Air China,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.699402
+2026-03-21,CKG,departure,20:15,LFQ Qiaoli,G54317,Gestair,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.699408
+2026-03-21,CKG,departure,20:15,SHA Shanghai,9C8996,Spring Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.699414
+2026-03-21,CKG,departure,20:15,WUX Wuxi,ZH9554,Shenzhen Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699420
+2026-03-21,CKG,departure,20:20,AKU Aksu,G54684,Gestair,text,Duration: 4h 35m,,True,2026-02-19T09:34:11.699426
+2026-03-21,CKG,departure,20:20,FOC Fuzhou,FU6508,Fuzhou Airline,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.699432
+2026-03-21,CKG,departure,20:25,KTI Phnom Penh,KR964,Cambodia Airways,text,Duration: 3h 15m,,True,2026-02-19T09:34:11.699437
+2026-03-21,CKG,departure,20:30,ZUH Zhuhai,PN6263,West Air (China),text,Duration: 1h 50m,,True,2026-02-19T09:34:11.699544
+2026-03-21,CKG,departure,20:30,HUZ Huizhou,OQ2137,Chongqing Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.699553
+2026-03-21,CKG,departure,20:30,CAN Guangzhou,PN6205,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:11.699559
+2026-03-21,CKG,departure,20:30,HGH Hangzhou,CA1762,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.699566
+2026-03-21,CKG,departure,20:35,LUM Mangshi,KY3110,Kunming Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.699572
+2026-03-21,CKG,departure,20:35,PVG Shanghai,FM9426,Shanghai Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.699578
+2026-03-21,CKG,departure,20:50,WUH Wuhan,CZ3644,China Southern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.699584
+2026-03-21,CKG,departure,20:55,SHA Shanghai,9C8998,Spring Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.699590
+2026-03-21,CKG,departure,21:00,TAO Qingdao,SC4834,Shandong Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.699595
+2026-03-21,CKG,departure,21:00,SZX Shenzhen,ZH9468,Shenzhen Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.699601
+2026-03-21,CKG,departure,21:05,PKX Beijing,OQ2148,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.699700
+2026-03-21,CKG,departure,21:05,YNZ Yancheng,9C7346,Spring Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699707
+2026-03-21,CKG,departure,21:05,HRB Harbin,CZ3710,China Southern,text,Duration: 3h 40m,,True,2026-02-19T09:34:11.699713
+2026-03-21,CKG,departure,21:05,NKG Nanjing,MU2846,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.699719
+2026-03-21,CKG,departure,21:05,CAN Guangzhou,CA4353,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699725
+2026-03-21,CKG,departure,21:10,TNA Jinan,3U3552,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.699731
+2026-03-21,CKG,departure,21:10,KHN Nanchang,PN6255,West Air (China),text,Duration: 1h 40m,,True,2026-02-19T09:34:11.699737
+2026-03-21,CKG,departure,21:10,NNG Nanning,CZ6798,China Southern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.699742
+2026-03-21,CKG,departure,21:15,CAN Guangzhou,OQ2325,Chongqing Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699748
+2026-03-21,CKG,departure,21:15,PVG Shanghai,Y87514,Suparna Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.699753
+2026-03-21,CKG,departure,21:15,BKK Bangkok,OQ2361,Chongqing Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:11.699833
+2026-03-21,CKG,departure,21:15,PEK Beijing,CA1436,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.699840
+2026-03-21,CKG,departure,21:20,WUX Wuxi,MU9786,China Eastern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699846
+2026-03-21,CKG,departure,21:20,NKG Nanjing,HO1692,Juneyao Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.699851
+2026-03-21,CKG,departure,21:20,KMG Kunming,8L9858,Lucky Air,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.699857
+2026-03-21,CKG,departure,21:25,TSN Tianjin,MF8621,XiamenAir,text,Duration: 2h 45m,,True,2026-02-19T09:34:11.699862
+2026-03-21,CKG,departure,21:25,PKX Beijing,CZ3260,China Southern,text,Duration: 2h 30m,,True,2026-02-19T09:34:11.699868
+2026-03-21,CKG,departure,21:30,CSX Changsha,BK2922,OkAir,text,Duration: 1h 35m,,True,2026-02-19T09:34:11.699874
+2026-03-21,CKG,departure,21:30,SHA Shanghai,MU5436,China Eastern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699880
+2026-03-21,CKG,departure,21:30,HAK Haikou,HU7272,Hainan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:11.699886
+2026-03-21,CKG,departure,21:40,SZX Shenzhen,CA4367,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699963
+2026-03-21,CKG,departure,21:40,XIY Xian,MU2268,China Eastern,text,Duration: 1h 15m,,True,2026-02-19T09:34:11.699970
+2026-03-21,CKG,departure,21:40,PVG Shanghai,HO2370,Juneyao Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.699975
+2026-03-21,CKG,departure,21:45,SHE Shenyang,CZ5356,China Southern,text,Duration: 3h 5m,,True,2026-02-19T09:34:11.699981
+2026-03-21,CKG,departure,21:50,HAK Haikou,HU785,Hainan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.699987
+2026-03-21,CKG,departure,21:55,INC Yinchuan,CA4269,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.699993
+2026-03-21,CKG,departure,21:55,XIY Xian,JD5078,Capital Airlines,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.699998
+2026-03-21,CKG,departure,22:00,JJN Jinjiang,MF8854,XiamenAir,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.700005
+2026-03-21,CKG,departure,22:10,KHN Nanchang,RY6682,Jiangxi Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.700011
+2026-03-21,CKG,departure,22:10,SZX Shenzhen,CZ5920,China Southern,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.700017
+2026-03-21,CKG,departure,22:15,CAN Guangzhou,MU6826,China Eastern,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.700106
+2026-03-21,CKG,departure,22:15,HFE Hefei,MU5484,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.700113
+2026-03-21,CKG,departure,22:20,SJW Shijiazhuang,9C8994,Spring Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.700119
+2026-03-21,CKG,departure,22:20,SZX Shenzhen,9C8616,Spring Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:11.700124
+2026-03-21,CKG,departure,22:20,ZUH Zhuhai,CZ8260,China Southern,text,Duration: 1h 55m,,True,2026-02-19T09:34:11.700130
+2026-03-21,CKG,departure,22:25,KMG Kunming,MU9756,China Eastern,text,Duration: 1h 30m,,True,2026-02-19T09:34:11.700136
+2026-03-21,CKG,departure,22:25,HAK Haikou,CZ8690,China Southern,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.700142
+2026-03-21,CKG,departure,22:25,SYX Sanya,HU7340,Hainan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:11.700148
+2026-03-21,CKG,departure,22:30,NKG Nanjing,MU2836,China Eastern,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.700154
+2026-03-21,CKG,departure,22:35,CAN Guangzhou,OQ2130,Chongqing Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.700159
+2026-03-21,CKG,departure,22:35,SZX Shenzhen,DZ6206,Donghai Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.700241
+2026-03-21,CKG,departure,22:35,XMN Xiamen,SC2142,Shandong Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:11.700248
+2026-03-21,CKG,departure,22:40,TNA Jinan,SC8804,Shandong Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.700254
+2026-03-21,CKG,departure,22:50,HAK Haikou,EU2737,Chengdu Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.700259
+2026-03-21,CKG,departure,22:50,LUM Mangshi,DR5312,Ruili Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.700265
+2026-03-21,CKG,departure,22:55,WUH Wuhan,MU2540,China Eastern,text,Duration: 1h 25m,,True,2026-02-19T09:34:11.700271
+2026-03-21,CKG,departure,23:00,CAN Guangzhou,AQ1102,9 Air,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.700277
+2026-03-21,CKG,departure,23:00,CZX Changzhou,MU2786,China Eastern,text,Duration: 2h 0m,,True,2026-02-19T09:34:11.700283
+2026-03-21,CKG,departure,23:00,SYX Sanya,3U3210,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:11.700289
+2026-03-21,CKG,departure,23:05,FOC Fuzhou,EU2224,Chengdu Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.700294
+2026-03-21,CKG,departure,23:05,JJN Jinjiang,PN6301,West Air (China),text,Duration: 2h 25m,,True,2026-02-19T09:34:11.700370
+2026-03-21,CKG,departure,23:10,WUH Wuhan,CZ5180,China Southern,text,Duration: 1h 40m,,True,2026-02-19T09:34:11.700377
+2026-03-21,CKG,departure,23:15,TAO Qingdao,MU5254,China Eastern,text,Duration: 2h 25m,,True,2026-02-19T09:34:11.700383
+2026-03-21,CKG,departure,23:20,HAK Haikou,GS6599,Tianjin Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:11.700389
+2026-03-21,CKG,departure,23:20,LJG Lijiang,8L9818,Lucky Air,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.700394
+2026-03-21,CKG,departure,23:25,KWL Guilin,GT1070,Air Guilin,text,Duration: 1h 25m,,True,2026-02-19T09:34:11.700400
+2026-03-21,CKG,departure,23:35,LJG Lijiang,JD5610,Capital Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:11.700406
+2026-03-21,CKG,arrival,00:05,FOC Fuzhou,3U8106,Sichuan Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.919356
+2026-03-21,CKG,arrival,00:05,FOC Fuzhou,CA4570,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.919368
+2026-03-21,CKG,arrival,00:05,WUA Wu Hai,G54279,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.919376
+2026-03-21,CKG,arrival,00:05,HTN Hotan,OQ2012,Chongqing Airlines,text,Duration: 4h 30m,,True,2026-02-19T09:34:24.919383
+2026-03-21,CKG,arrival,00:10,ZHA Zhanjiang,CA4360,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.919390
+2026-03-21,CKG,arrival,00:10,SJW Shijiazhuang,G52658,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.919397
+2026-03-21,CKG,arrival,00:10,SYX Sanya,OQ2332,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.919403
+2026-03-21,CKG,arrival,00:10,TAO Qingdao,SC4845,Shandong Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.919410
+2026-03-21,CKG,arrival,00:10,SYM Pu'er,TV9916,Tibet Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.919416
+2026-03-21,CKG,arrival,00:15,PEK Beijing,3U8834,Sichuan Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.919423
+2026-03-21,CKG,arrival,00:15,HAK Haikou,GS6600,Tianjin Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.919557
+2026-03-21,CKG,arrival,00:15,PVG Shanghai,MU5433,China Eastern,text,Duration: 3h 25m,,True,2026-02-19T09:34:24.919567
+2026-03-21,CKG,arrival,00:15,DLU Dali City,TV9810,Tibet Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.919574
+2026-03-21,CKG,arrival,00:20,JUH Chizhou,G52830,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.919580
+2026-03-21,CKG,arrival,00:20,URC Urumqi,GS6592,Tianjin Airlines,text,Duration: 4h 5m,,True,2026-02-19T09:34:24.919585
+2026-03-21,CKG,arrival,00:25,ACX Xingyi,G54680,Gestair,text,Duration: 1h 20m,,True,2026-02-19T09:34:24.919591
+2026-03-21,CKG,arrival,00:25,YIN Yining,OQ2020,Chongqing Airlines,text,Duration: 4h 25m,,True,2026-02-19T09:34:24.919596
+2026-03-21,CKG,arrival,00:30,XIY Xian,GS7665,Tianjin Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.919602
+2026-03-21,CKG,arrival,00:30,SZX Shenzhen,MF8390,XiamenAir,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.919607
+2026-03-21,CKG,arrival,00:30,NKG Nanjing,MU2835,China Eastern,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.919613
+2026-03-21,CKG,arrival,00:30,TNA Jinan,SC8817,Shandong Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.919709
+2026-03-21,CKG,arrival,00:35,NRT Tokyo,CA434,Air China,text,Duration: 6h 5m,,True,2026-02-19T09:34:24.919718
+2026-03-21,CKG,arrival,00:35,SHE Shenyang,HU7102,Hainan Airlines,text,Duration: 4h 10m,,True,2026-02-19T09:34:24.919724
+2026-03-21,CKG,arrival,00:35,CAN Guangzhou,OQ2326,Chongqing Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.919729
+2026-03-21,CKG,arrival,00:40,HYN Taizhou,G54510,Gestair,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.919735
+2026-03-21,CKG,arrival,00:40,JGN Jiayuguan,G54460,Gestair,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.919740
+2026-03-21,CKG,arrival,00:45,CSX Changsha,OQ2030,Chongqing Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.919746
+2026-03-21,CKG,arrival,00:45,HFE Hefei,PN6416,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:24.919751
+2026-03-21,CKG,arrival,00:50,XUZ Xuzhou,G54122,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.919757
+2026-03-21,CKG,arrival,00:50,HUZ Huizhou,OQ2338,Chongqing Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.919762
+2026-03-21,CKG,arrival,00:55,SZX Shenzhen,3U8786,Sichuan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.919870
+2026-03-21,CKG,arrival,00:55,PEK Beijing,HU7367,Hainan Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.919877
+2026-03-21,CKG,arrival,00:55,URC Urumqi,OQ2312,Chongqing Airlines,text,Duration: 3h 55m,,True,2026-02-19T09:34:24.919883
+2026-03-21,CKG,arrival,00:55,SJW Shijiazhuang,PN6336,West Air (China),text,Duration: 2h 10m,,True,2026-02-19T09:34:24.919889
+2026-03-21,CKG,arrival,01:00,LUM Mangshi,3U8092,Sichuan Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.919894
+2026-03-21,CKG,arrival,01:00,KRL Korla,G54006,Gestair,text,Duration: 3h 40m,,True,2026-02-19T09:34:24.919899
+2026-03-21,CKG,arrival,01:00,NKG Nanjing,ZH9591,Shenzhen Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.919905
+2026-03-21,CKG,arrival,01:10,KHG Kashi,CA4278,Air China,text,Duration: 4h 50m,,True,2026-02-19T09:34:24.919910
+2026-03-21,CKG,arrival,01:15,SQD Shangrao,GS6596,Tianjin Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.919915
+2026-03-21,CKG,arrival,01:15,KRL Korla,PN6388,West Air (China),text,Duration: 4h 0m,,True,2026-02-19T09:34:24.919921
+2026-03-21,CKG,arrival,01:15,SIN Singapore,SQ818,Singapore Airlines,text,Duration: 4h 55m,,True,2026-02-19T09:34:24.920011
+2026-03-21,CKG,arrival,01:25,PVG Shanghai,PN6438,West Air (China),text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920018
+2026-03-21,CKG,arrival,01:30,YIW Yiwu,OQ2392,Chongqing Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920024
+2026-03-21,CKG,arrival,01:30,HAK Haikou,PN6532,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920029
+2026-03-21,CKG,arrival,01:30,ZUH Zhuhai,PN6264,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920034
+2026-03-21,CKG,arrival,01:35,CGO Zhengzhou,PN6274,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:24.920040
+2026-03-21,CKG,arrival,01:45,KHN Nanchang,PN6256,West Air (China),text,Duration: 2h 5m,,True,2026-02-19T09:34:24.920045
+2026-03-21,CKG,arrival,01:50,DMK Bangkok,SL930,Thai Lion Air,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.920050
+2026-03-21,CKG,arrival,01:55,CAN Guangzhou,PN6206,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:24.920056
+2026-03-21,CKG,arrival,01:55,NKG Nanjing,PN6260,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:24.920061
+2026-03-21,CKG,arrival,01:55,SYX Sanya,PN6214,West Air (China),text,Duration: 2h 30m,,True,2026-02-19T09:34:24.920152
+2026-03-21,CKG,arrival,01:55,SZX Shenzhen,PN6230,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920159
+2026-03-21,CKG,arrival,01:55,URC Urumqi,PN6262,West Air (China),text,Duration: 3h 55m,,True,2026-02-19T09:34:24.920165
+2026-03-21,CKG,arrival,01:55,WNZ Wenzhou,PN6434,West Air (China),text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920170
+2026-03-21,CKG,arrival,02:05,PVG Shanghai,9C6107,Spring Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.920175
+2026-03-21,CKG,arrival,02:15,PEN Penang,FY3846,Firefly,text,Duration: 4h 25m,,True,2026-02-19T09:34:24.920181
+2026-03-21,CKG,arrival,03:50,SGN Ho Chi Minh City,CA408,Air China,text,Duration: 3h 30m,,True,2026-02-19T09:34:24.920187
+2026-03-21,CKG,arrival,05:00,MXP Milan,HU428,Hainan Airlines,text,Duration: 11h 5m,,True,2026-02-19T09:34:24.920192
+2026-03-21,CKG,arrival,05:00,BKK Bangkok,OQ2362,Chongqing Airlines,text,Duration: 3h 30m,,True,2026-02-19T09:34:24.920198
+2026-03-21,CKG,arrival,05:15,HKT Phuket,3U3706,Sichuan Airlines,text,Duration: 3h 45m,,True,2026-02-19T09:34:24.920203
+2026-03-21,CKG,arrival,05:45,SVO Moscow,GS7942,Tianjin Airlines,text,Duration: 8h 5m,,True,2026-02-19T09:34:24.920285
+2026-03-21,CKG,arrival,08:30,KMG Kunming,3U8283,Sichuan Airlines,text,Duration: 1h 25m,,True,2026-02-19T09:34:24.920292
+2026-03-21,CKG,arrival,08:30,KMG Kunming,8L9857,Lucky Air,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.920297
+2026-03-21,CKG,arrival,08:50,SZX Shenzhen,9C8613,Spring Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.920303
+2026-03-21,CKG,arrival,08:50,SZX Shenzhen,DZ6205,Donghai Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.920308
+2026-03-21,CKG,arrival,08:50,TYN Taiyuan,KY3005,Kunming Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.920314
+2026-03-21,CKG,arrival,08:55,CAN Guangzhou,CZ3463,China Southern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920319
+2026-03-21,CKG,arrival,08:55,CAN Guangzhou,MU5795,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920324
+2026-03-21,CKG,arrival,09:10,CAN Guangzhou,3U8750,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920329
+2026-03-21,CKG,arrival,09:10,XIY Xian,MU2261,China Eastern,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.920335
+2026-03-21,CKG,arrival,09:20,TSN Tianjin,GS7773,Tianjin Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920418
+2026-03-21,CKG,arrival,09:20,JNG Jining,GX8892,GX Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920425
+2026-03-21,CKG,arrival,09:25,BAV Baotou,G54180,Gestair,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.920431
+2026-03-21,CKG,arrival,09:30,HGH Hangzhou,GJ8691,Loong Air,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920436
+2026-03-21,CKG,arrival,09:30,CZX Changzhou,MU2903,China Eastern,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.920442
+2026-03-21,CKG,arrival,09:35,HGH Hangzhou,CA1759,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.920447
+2026-03-21,CKG,arrival,09:35,SZX Shenzhen,CA4368,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.920452
+2026-03-21,CKG,arrival,09:35,WUH Wuhan,CZ6175,China Southern,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.920459
+2026-03-21,CKG,arrival,09:35,LUM Mangshi,DR5311,Ruili Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.920464
+2026-03-21,CKG,arrival,09:35,TNA Jinan,SC8801,Shandong Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.920469
+2026-03-21,CKG,arrival,09:40,YTY Yangzhou,9C6195,Spring Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.920551
+2026-03-21,CKG,arrival,09:40,INC Yinchuan,CA4270,Air China,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.920557
+2026-03-21,CKG,arrival,09:40,PKX Beijing,CA8651,Air China,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.920563
+2026-03-21,CKG,arrival,09:40,CAN Guangzhou,JD5227,Capital Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.920568
+2026-03-21,CKG,arrival,09:40,SIN Singapore,PN6568,West Air (China),text,Duration: 5h 0m,,True,2026-02-19T09:34:24.920573
+2026-03-21,CKG,arrival,09:40,KHN Nanchang,ZH8845,Shenzhen Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.920579
+2026-03-21,CKG,arrival,09:45,HGH Hangzhou,3U3181,Sichuan Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.920584
+2026-03-21,CKG,arrival,09:45,CAN Guangzhou,CA4354,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.920589
+2026-03-21,CKG,arrival,09:45,NNG Nanning,CZ6797,China Southern,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.920595
+2026-03-21,CKG,arrival,09:45,FOC Fuzhou,MF8411,XiamenAir,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.920600
+2026-03-21,CKG,arrival,09:45,WUX Wuxi,MU9765,China Eastern,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.920674
+2026-03-21,CKG,arrival,09:50,PEK Beijing,CA1437,Air China,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920681
+2026-03-21,CKG,arrival,09:50,WNZ Wenzhou,CA8303,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.920686
+2026-03-21,CKG,arrival,09:50,HGH Hangzhou,JD5691,Capital Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.920693
+2026-03-21,CKG,arrival,09:50,JJN Jinjiang,MF8611,XiamenAir,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.920698
+2026-03-21,CKG,arrival,09:50,XMN Xiamen,SC2135,Shandong Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920704
+2026-03-21,CKG,arrival,09:55,PKX Beijing,MU6681,China Eastern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920709
+2026-03-21,CKG,arrival,10:00,CSX Changsha,BK2921,OkAir,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.920715
+2026-03-21,CKG,arrival,10:00,NKG Nanjing,HO1707,Juneyao Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.920720
+2026-03-21,CKG,arrival,10:00,HAK Haikou,HU786,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.920725
+2026-03-21,CKG,arrival,10:00,HAK Haikou,HU7171,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.920799
+2026-03-21,CKG,arrival,10:00,XMN Xiamen,MF8403,XiamenAir,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.920806
+2026-03-21,CKG,arrival,10:10,PVG Shanghai,MU6793,China Eastern,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.920811
+2026-03-21,CKG,arrival,10:10,TAO Qingdao,SC4831,Shandong Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.920816
+2026-03-21,CKG,arrival,10:10,SZX Shenzhen,ZH9461,Shenzhen Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.920822
+2026-03-21,CKG,arrival,10:20,PKX Beijing,CZ8917,China Southern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.920827
+2026-03-21,CKG,arrival,10:20,DMK Bangkok,FD556,Thai AirAsia,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.920832
+2026-03-21,CKG,arrival,10:20,PKX Beijing,JD5755,Capital Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.920837
+2026-03-21,CKG,arrival,10:25,PVG Shanghai,CA8543,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.920842
+2026-03-21,CKG,arrival,10:25,TSN Tianjin,CA2861,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.920848
+2026-03-21,CKG,arrival,10:25,WUH Wuhan,CZ5753,China Southern,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.920922
+2026-03-21,CKG,arrival,10:25,SYX Sanya,HU7349,Hainan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.920929
+2026-03-21,CKG,arrival,10:30,HAK Haikou,CZ6313,China Southern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.920935
+2026-03-21,CKG,arrival,10:30,PVG Shanghai,HO1249,Juneyao Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.920940
+2026-03-21,CKG,arrival,10:30,HFE Hefei,MU5483,China Eastern,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.920946
+2026-03-21,CKG,arrival,10:35,SZX Shenzhen,CZ3465,China Southern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.920952
+2026-03-21,CKG,arrival,10:35,NKG Nanjing,MU2925,China Eastern,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.920957
+2026-03-21,CKG,arrival,10:40,PEK Beijing,CA1431,Air China,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.920962
+2026-03-21,CKG,arrival,10:40,YIW Yiwu,CZ3887,China Southern,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.920967
+2026-03-21,CKG,arrival,10:40,SJW Shijiazhuang,NS3239,Hebei Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.920973
+2026-03-21,CKG,arrival,10:45,SWA Jieyang,CZ3859,China Southern,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.921045
+2026-03-21,CKG,arrival,10:45,WNZ Wenzhou,KN5297,China United Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.921052
+2026-03-21,CKG,arrival,10:45,HYN Taizhou,OQ2014,Chongqing Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.921057
+2026-03-21,CKG,arrival,10:50,HUZ Huizhou,OQ2344,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.921062
+2026-03-21,CKG,arrival,10:55,DLC Dalian,CZ5749,China Southern,text,Duration: 3h 20m,,True,2026-02-19T09:34:24.921068
+2026-03-21,CKG,arrival,10:55,SHA Shanghai,MU5421,China Eastern,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.921073
+2026-03-21,CKG,arrival,11:00,SYX Sanya,3U3209,Sichuan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921078
+2026-03-21,CKG,arrival,11:00,PEK Beijing,HU7167,Hainan Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.921083
+2026-03-21,CKG,arrival,11:00,WUX Wuxi,ZH9551,Shenzhen Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.921088
+2026-03-21,CKG,arrival,11:05,ZUH Zhuhai,CZ8285,China Southern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921094
+2026-03-21,CKG,arrival,11:05,BPX Bangda,PN6216,West Air (China),text,Duration: 1h 55m,,True,2026-02-19T09:34:24.921169
+2026-03-21,CKG,arrival,11:10,TNA Jinan,3U3551,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.921176
+2026-03-21,CKG,arrival,11:10,HAK Haikou,EU2738,Chengdu Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.921182
+2026-03-21,CKG,arrival,11:10,LJG Lijiang,PN6240,West Air (China),text,Duration: 1h 40m,,True,2026-02-19T09:34:24.921188
+2026-03-21,CKG,arrival,11:20,NTG Nantong,ZH8671,Shenzhen Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.921194
+2026-03-21,CKG,arrival,11:25,PKX Beijing,OQ2002,Chongqing Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.921199
+2026-03-21,CKG,arrival,11:25,TNA Jinan,SC8803,Shandong Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921204
+2026-03-21,CKG,arrival,11:30,CGO Zhengzhou,CZ3479,China Southern,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.921210
+2026-03-21,CKG,arrival,11:35,SHA Shanghai,9C8897,Spring Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.921216
+2026-03-21,CKG,arrival,11:40,SZX Shenzhen,HU7157,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921221
+2026-03-21,CKG,arrival,11:40,NKG Nanjing,MU2663,China Eastern,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.921295
+2026-03-21,CKG,arrival,11:45,NNG Nanning,3U8138,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.921302
+2026-03-21,CKG,arrival,11:45,XNN Xining,3U8074,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.921308
+2026-03-21,CKG,arrival,11:45,PVG Shanghai,9C7297,Spring Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.921313
+2026-03-21,CKG,arrival,11:45,FOC Fuzhou,EU2223,Chengdu Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.921319
+2026-03-21,CKG,arrival,11:45,HGH Hangzhou,MF8471,XiamenAir,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.921324
+2026-03-21,CKG,arrival,11:50,PEK Beijing,CA1429,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.921330
+2026-03-21,CKG,arrival,11:50,TAO Qingdao,SC4833,Shandong Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.921335
+2026-03-21,CKG,arrival,11:55,CZX Changzhou,3U8098,Sichuan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921340
+2026-03-21,CKG,arrival,11:55,CAN Guangzhou,CA4362,Air China,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.921346
+2026-03-21,CKG,arrival,11:55,CAN Guangzhou,CZ3405,China Southern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.921419
+2026-03-21,CKG,arrival,11:55,BPX Bangda,TV9908,Tibet Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.921425
+2026-03-21,CKG,arrival,12:00,JHG Jinghong,3U8080,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.921431
+2026-03-21,CKG,arrival,12:05,TYN Taiyuan,MU9833,China Eastern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921436
+2026-03-21,CKG,arrival,12:05,SJW Shijiazhuang,PN6350,West Air (China),text,Duration: 2h 35m,,True,2026-02-19T09:34:24.921442
+2026-03-21,CKG,arrival,12:10,CAN Guangzhou,3U8746,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.921447
+2026-03-21,CKG,arrival,12:10,XUZ Xuzhou,G52808,Gestair,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.921452
+2026-03-21,CKG,arrival,12:15,YTY Yangzhou,3U8168,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.921458
+2026-03-21,CKG,arrival,12:20,AKU Aksu,G54683,Gestair,text,Duration: 4h 10m,,True,2026-02-19T09:34:24.921463
+2026-03-21,CKG,arrival,12:20,CAN Guangzhou,HU7141,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921469
+2026-03-21,CKG,arrival,12:25,LXA Lhasa/Lasa,CA4419,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921544
+2026-03-21,CKG,arrival,12:25,XIY Xian,OQ2304,Chongqing Airlines,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.921551
+2026-03-21,CKG,arrival,12:30,SZX Shenzhen,CA4344,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.921557
+2026-03-21,CKG,arrival,12:35,CGQ Changchun,CZ6363,China Southern,text,Duration: 4h 25m,,True,2026-02-19T09:34:24.921562
+2026-03-21,CKG,arrival,12:35,SHA Shanghai,MU9195,China Eastern,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.921567
+2026-03-21,CKG,arrival,12:35,KMG Kunming,OQ2118,Chongqing Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:24.921573
+2026-03-21,CKG,arrival,12:40,PVG Shanghai,MU5493,China Eastern,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.921578
+2026-03-21,CKG,arrival,12:45,SHE Shenyang,CZ6403,China Southern,text,Duration: 4h 15m,,True,2026-02-19T09:34:24.921583
+2026-03-21,CKG,arrival,12:50,FOC Fuzhou,CA4572,Air China,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.921589
+2026-03-21,CKG,arrival,12:50,HAK Haikou,OQ2342,Chongqing Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.921594
+2026-03-21,CKG,arrival,12:50,LZY Nyingchi,TV9870,Tibet Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.921667
+2026-03-21,CKG,arrival,12:55,HAK Haikou,3U8066,Sichuan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.921674
+2026-03-21,CKG,arrival,12:55,SZX Shenzhen,3U8782,Sichuan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.921680
+2026-03-21,CKG,arrival,12:55,YIW Yiwu,GY7277,Colorful GuiZhou Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.921686
+2026-03-21,CKG,arrival,13:00,KOW Ganzhou,G54922,Gestair,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.921691
+2026-03-21,CKG,arrival,13:00,LYG Lianyungang,G52836,Gestair,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.921696
+2026-03-21,CKG,arrival,13:05,WUX Wuxi,3U8026,Sichuan Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.921702
+2026-03-21,CKG,arrival,13:05,KMG Kunming,MU5865,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.921707
+2026-03-21,CKG,arrival,13:05,RKZ Shigatse,TV9762,Tibet Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.921712
+2026-03-21,CKG,arrival,13:10,HFE Hefei,3U8198,Sichuan Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.921718
+2026-03-21,CKG,arrival,13:10,HZA Heze,GJ8291,Loong Air,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921791
+2026-03-21,CKG,arrival,13:10,SHA Shanghai,MU5425,China Eastern,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.921798
+2026-03-21,CKG,arrival,13:20,URC Urumqi,CA780,Air China,text,Duration: 4h 15m,,True,2026-02-19T09:34:24.921803
+2026-03-21,CKG,arrival,13:20,URC Urumqi,CZ6985,China Southern,text,Duration: 3h 50m,,True,2026-02-19T09:34:24.921809
+2026-03-21,CKG,arrival,13:20,ZUH Zhuhai,CZ5725,China Southern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.921814
+2026-03-21,CKG,arrival,13:25,TSN Tianjin,3U8014,Sichuan Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.921819
+2026-03-21,CKG,arrival,13:25,SZX Shenzhen,HU7457,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921824
+2026-03-21,CKG,arrival,13:25,SZX Shenzhen,OQ2336,Chongqing Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.921830
+2026-03-21,CKG,arrival,13:30,ZUH Zhuhai,CA4372,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.921835
+2026-03-21,CKG,arrival,13:35,DLU Dali City,OQ2348,Chongqing Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:24.921841
+2026-03-21,CKG,arrival,13:45,PEK Beijing,CA4148,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.921914
+2026-03-21,CKG,arrival,13:45,ZAT Zhaotong,G54604,Gestair,text,Duration: 1h 10m,,True,2026-02-19T09:34:24.921921
+2026-03-21,CKG,arrival,13:45,FOC Fuzhou,MF8461,XiamenAir,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.921926
+2026-03-21,CKG,arrival,13:45,SZX Shenzhen,ZH9463,Shenzhen Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.921932
+2026-03-21,CKG,arrival,13:50,BHY Beihai,3U8124,Sichuan Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.921937
+2026-03-21,CKG,arrival,13:55,NGB Ningbo,CA4550,Air China,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.921943
+2026-03-21,CKG,arrival,13:55,CAN Guangzhou,HU7341,Hainan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.921948
+2026-03-21,CKG,arrival,13:55,XMN Xiamen,MF8413,XiamenAir,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.921954
+2026-03-21,CKG,arrival,13:55,TSN Tianjin,OQ2082,Chongqing Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.921960
+2026-03-21,CKG,arrival,14:00,PVG Shanghai,3U8972,Sichuan Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.921965
+2026-03-21,CKG,arrival,14:00,FOC Fuzhou,HU7264,Hainan Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.922038
+2026-03-21,CKG,arrival,14:00,IQN Qingyang,NS8067,Hebei Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.922045
+2026-03-21,CKG,arrival,14:00,CAN Guangzhou,OQ2306,Chongqing Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.922051
+2026-03-21,CKG,arrival,14:05,WNZ Wenzhou,3U8022,Sichuan Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.922057
+2026-03-21,CKG,arrival,14:05,WUX Wuxi,HO2013,Juneyao Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.922062
+2026-03-21,CKG,arrival,14:10,HGH Hangzhou,3U8082,Sichuan Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.922068
+2026-03-21,CKG,arrival,14:10,INC Yinchuan,3U8284,Sichuan Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.922074
+2026-03-21,CKG,arrival,14:15,XMN Xiamen,CA4566,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.922079
+2026-03-21,CKG,arrival,14:15,HAK Haikou,HU7271,Hainan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.922084
+2026-03-21,CKG,arrival,14:20,SZX Shenzhen,CZ3455,China Southern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.922090
+2026-03-21,CKG,arrival,14:20,PVG Shanghai,FM7347,Shanghai Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.922163
+2026-03-21,CKG,arrival,14:20,JHG Jinghong,G54264,Gestair,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.922170
+2026-03-21,CKG,arrival,14:25,HIA Huai'an,OQ2036,Chongqing Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.922176
+2026-03-21,CKG,arrival,14:35,LZY Nyingchi,3U8030,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.922181
+2026-03-21,CKG,arrival,14:35,SHA Shanghai,MU5427,China Eastern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.922186
+2026-03-21,CKG,arrival,14:35,PKX Beijing,OQ2147,Chongqing Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.922192
+2026-03-21,CKG,arrival,14:40,SHA Shanghai,CA4544,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922197
+2026-03-21,CKG,arrival,14:40,HGH Hangzhou,OQ2380,Chongqing Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922203
+2026-03-21,CKG,arrival,14:40,NKG Nanjing,OQ2322,Chongqing Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.922209
+2026-03-21,CKG,arrival,14:40,TNA Jinan,PN6266,West Air (China),text,Duration: 2h 25m,,True,2026-02-19T09:34:24.922214
+2026-03-21,CKG,arrival,14:45,WUH Wuhan,CZ6291,China Southern,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.922287
+2026-03-21,CKG,arrival,14:45,KWL Guilin,GT1069,Air Guilin,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.922293
+2026-03-21,CKG,arrival,14:45,JJN Jinjiang,MF8853,XiamenAir,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.922298
+2026-03-21,CKG,arrival,14:45,LYA Luoyang,QW6053,Qingdao Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.922304
+2026-03-21,CKG,arrival,14:50,YCU Yuncheng,MF8786,XiamenAir,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.922309
+2026-03-21,CKG,arrival,14:55,XIC Xichang,G54166,Gestair,text,Duration: 1h 20m,,True,2026-02-19T09:34:24.922314
+2026-03-21,CKG,arrival,14:55,PVG Shanghai,HU7493,Hainan Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.922320
+2026-03-21,CKG,arrival,15:00,LXA Lhasa/Lasa,3U8634,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.922325
+2026-03-21,CKG,arrival,15:00,HGH Hangzhou,CA4554,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922330
+2026-03-21,CKG,arrival,15:00,PEK Beijing,CA4132,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922335
+2026-03-21,CKG,arrival,15:05,LZH Liuzhou,G54770,Gestair,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.922408
+2026-03-21,CKG,arrival,15:05,PKX Beijing,MF8453,XiamenAir,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.922415
+2026-03-21,CKG,arrival,15:10,JGS Ji'An,9C8752,Spring Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.922420
+2026-03-21,CKG,arrival,15:10,KUL Kuala Lumpur,MF8712,XiamenAir,text,Duration: 4h 30m,,True,2026-02-19T09:34:24.922427
+2026-03-21,CKG,arrival,15:15,KMG Kunming,MU5855,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.922432
+2026-03-21,CKG,arrival,15:15,PVG Shanghai,OQ2308,Chongqing Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.922437
+2026-03-21,CKG,arrival,15:20,KHN Nanchang,ZH8853,Shenzhen Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.922442
+2026-03-21,CKG,arrival,15:25,TYN Taiyuan,3U8058,Sichuan Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.922447
+2026-03-21,CKG,arrival,15:35,TNA Jinan,SC8807,Shandong Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.922453
+2026-03-21,CKG,arrival,15:40,LJG Lijiang,8L9817,Lucky Air,text,Duration: 1h 35m,,True,2026-02-19T09:34:24.922458
+2026-03-21,CKG,arrival,15:40,HAK Haikou,CA4380,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.922531
+2026-03-21,CKG,arrival,15:40,PEK Beijing,CA4138,Air China,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.922538
+2026-03-21,CKG,arrival,15:40,HGH Hangzhou,MF8473,XiamenAir,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922544
+2026-03-21,CKG,arrival,15:40,SWA Jieyang,PN6386,West Air (China),text,Duration: 2h 40m,,True,2026-02-19T09:34:24.922549
+2026-03-21,CKG,arrival,15:45,CSX Changsha,CZ3421,China Southern,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.922554
+2026-03-21,CKG,arrival,15:45,PVG Shanghai,PN6374,West Air (China),text,Duration: 3h 5m,,True,2026-02-19T09:34:24.922560
+2026-03-21,CKG,arrival,15:50,HFE Hefei,CA4564,Air China,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.922565
+2026-03-21,CKG,arrival,15:50,PVG Shanghai,CA4576,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.922570
+2026-03-21,CKG,arrival,15:50,UYN Yulin,GX8882,GX Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.922575
+2026-03-21,CKG,arrival,15:50,TCZ Tengchong,KY3006,Kunming Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.922581
+2026-03-21,CKG,arrival,15:50,SHA Shanghai,MU5429,China Eastern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.922653
+2026-03-21,CKG,arrival,15:55,LZY Nyingchi,3U3182,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.922660
+2026-03-21,CKG,arrival,15:55,SHE Shenyang,3U8038,Sichuan Airlines,text,Duration: 3h 50m,,True,2026-02-19T09:34:24.922666
+2026-03-21,CKG,arrival,15:55,NGB Ningbo,GJ8397,Loong Air,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922671
+2026-03-21,CKG,arrival,15:55,HAK Haikou,HU7371,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.922677
+2026-03-21,CKG,arrival,15:55,WUH Wuhan,MU2539,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.922682
+2026-03-21,CKG,arrival,16:05,HKG Hong Kong,CX966,Cathay Pacific,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.922688
+2026-03-21,CKG,arrival,16:05,YNT Yantai,QW6031,Qingdao Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.922694
+2026-03-21,CKG,arrival,16:10,TAO Qingdao,SC4835,Shandong Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922699
+2026-03-21,CKG,arrival,16:15,CAN Guangzhou,CA4348,Air China,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.922704
+2026-03-21,CKG,arrival,16:15,SHE Shenyang,CZ6469,China Southern,text,Duration: 4h 15m,,True,2026-02-19T09:34:24.922777
+2026-03-21,CKG,arrival,16:15,BKK Bangkok,HU424,Hainan Airlines,text,Duration: 3h 25m,,True,2026-02-19T09:34:24.922784
+2026-03-21,CKG,arrival,16:20,PKX Beijing,CZ8815,China Southern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.922789
+2026-03-21,CKG,arrival,16:20,XUZ Xuzhou,G54608,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.922794
+2026-03-21,CKG,arrival,16:25,SZX Shenzhen,9C8615,Spring Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.922800
+2026-03-21,CKG,arrival,16:25,CGQ Changchun,CA4016,Air China,text,Duration: 3h 55m,,True,2026-02-19T09:34:24.922805
+2026-03-21,CKG,arrival,16:25,HRB Harbin,CA4012,Air China,text,Duration: 4h 25m,,True,2026-02-19T09:34:24.922811
+2026-03-21,CKG,arrival,16:25,JIC Jinchang,G52750,Gestair,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.922816
+2026-03-21,CKG,arrival,16:30,PVG Shanghai,HO1241,Juneyao Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.922822
+2026-03-21,CKG,arrival,16:35,AKU Aksu,CA4276,Air China,text,Duration: 4h 5m,,True,2026-02-19T09:34:24.922828
+2026-03-21,CKG,arrival,16:35,LXA Lhasa/Lasa,CZ3464,China Southern,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.922901
+2026-03-21,CKG,arrival,16:35,NKG Nanjing,MU2737,China Eastern,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.922908
+2026-03-21,CKG,arrival,16:40,CGO Zhengzhou,CZ8715,China Southern,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.922913
+2026-03-21,CKG,arrival,16:45,WUX Wuxi,MU9775,China Eastern,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.922919
+2026-03-21,CKG,arrival,16:50,SHS Shashi,G54754,Gestair,text,Duration: 1h 25m,,True,2026-02-19T09:34:24.922924
+2026-03-21,CKG,arrival,16:50,TNA Jinan,MU5471,China Eastern,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.922929
+2026-03-21,CKG,arrival,16:55,AKU Aksu,OQ2008,Chongqing Airlines,text,Duration: 4h 15m,,True,2026-02-19T09:34:24.922935
+2026-03-21,CKG,arrival,17:00,ICN Seoul,CA440,Air China,text,Duration: 4h 0m,,True,2026-02-19T09:34:24.922940
+2026-03-21,CKG,arrival,17:00,PEK Beijing,HU7267,Hainan Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.922946
+2026-03-21,CKG,arrival,17:10,JNH Jiaxing,GJ8784,Loong Air,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.922951
+2026-03-21,CKG,arrival,17:10,XIY Xian,MU2267,China Eastern,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.923024
+2026-03-21,CKG,arrival,17:15,CAN Guangzhou,HU7441,Hainan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.923031
+2026-03-21,CKG,arrival,17:15,LXA Lhasa/Lasa,MF8412,XiamenAir,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.923037
+2026-03-21,CKG,arrival,17:20,CSX Changsha,GS6588,Tianjin Airlines,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.923043
+2026-03-21,CKG,arrival,17:25,YCU Yuncheng,CA4014,Air China,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.923048
+2026-03-21,CKG,arrival,17:25,SHA Shanghai,FM9419,Shanghai Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.923054
+2026-03-21,CKG,arrival,17:25,CIH Changzhi,G52722,Gestair,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.923059
+2026-03-21,CKG,arrival,17:30,CAN Guangzhou,OQ2318,Chongqing Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.923065
+2026-03-21,CKG,arrival,17:30,TNA Jinan,SC8809,Shandong Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.923070
+2026-03-21,CKG,arrival,17:35,CGQ Changchun,MF8038,XiamenAir,text,Duration: 4h 10m,,True,2026-02-19T09:34:24.923076
+2026-03-21,CKG,arrival,17:40,CSX Changsha,3U8010,Sichuan Airlines,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.923150
+2026-03-21,CKG,arrival,17:40,SZX Shenzhen,CZ6561,China Southern,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.923157
+2026-03-21,CKG,arrival,17:40,FUG Fuyang,PN6220,West Air (China),text,Duration: 2h 15m,,True,2026-02-19T09:34:24.923162
+2026-03-21,CKG,arrival,17:40,SJW Shijiazhuang,PN6336,West Air (China),text,Duration: 2h 30m,,True,2026-02-19T09:34:24.923168
+2026-03-21,CKG,arrival,17:50,URC Urumqi,CA4256,Air China,text,Duration: 3h 55m,,True,2026-02-19T09:34:24.923173
+2026-03-21,CKG,arrival,17:50,AEB Baise,MU5494,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.923179
+2026-03-21,CKG,arrival,17:50,NGB Ningbo,MU2395,China Eastern,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.923184
+2026-03-21,CKG,arrival,17:50,CGQ Changchun,OQ2078,Chongqing Airlines,text,Duration: 4h 30m,,True,2026-02-19T09:34:24.923190
+2026-03-21,CKG,arrival,17:55,DLU Dali City,CA4486,Air China,text,Duration: 1h 35m,,True,2026-02-19T09:34:24.923197
+2026-03-21,CKG,arrival,17:55,HKG Hong Kong,CA420,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.923203
+2026-03-21,CKG,arrival,17:55,PEK Beijing,CA1411,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.923277
+2026-03-21,CKG,arrival,18:00,WUH Wuhan,3U8156,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.923284
+2026-03-21,CKG,arrival,18:00,PKX Beijing,NS8035,Hebei Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.923290
+2026-03-21,CKG,arrival,18:05,XAI Xinyang,MU5439,China Eastern,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.923295
+2026-03-21,CKG,arrival,18:05,LYI Linyi,OQ2364,Chongqing Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.923301
+2026-03-21,CKG,arrival,18:05,YIC Yichun,PN6480,West Air (China),text,Duration: 1h 50m,,True,2026-02-19T09:34:24.923307
+2026-03-21,CKG,arrival,18:10,BHY Beihai,3U8122,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.923312
+2026-03-21,CKG,arrival,18:10,LHW Lanzhou,9C6281,Spring Airlines,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.923318
+2026-03-21,CKG,arrival,18:10,KUL Kuala Lumpur,MF8688,XiamenAir,text,Duration: 4h 20m,,True,2026-02-19T09:34:24.923324
+2026-03-21,CKG,arrival,18:15,NKG Nanjing,3U8044,Sichuan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.923331
+2026-03-21,CKG,arrival,18:15,LHW Lanzhou,G54034,Gestair,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.923404
+2026-03-21,CKG,arrival,18:20,SZX Shenzhen,ZH9465,Shenzhen Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.923411
+2026-03-21,CKG,arrival,18:25,PKX Beijing,CZ8817,China Southern,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.923417
+2026-03-21,CKG,arrival,18:25,LLV Luliang,G52914,Gestair,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.923422
+2026-03-21,CKG,arrival,18:25,HAK Haikou,HU7471,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.923428
+2026-03-21,CKG,arrival,18:25,HET Hohhot,OQ2176,Chongqing Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.923433
+2026-03-21,CKG,arrival,18:30,SHA Shanghai,MU9193,China Eastern,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.923439
+2026-03-21,CKG,arrival,18:35,CGO Zhengzhou,CZ6353,China Southern,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.923444
+2026-03-21,CKG,arrival,18:40,SZX Shenzhen,3U8784,Sichuan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.923450
+2026-03-21,CKG,arrival,18:40,DLC Dalian,CZ6579,China Southern,text,Duration: 3h 40m,,True,2026-02-19T09:34:24.923455
+2026-03-21,CKG,arrival,18:40,PKX Beijing,MU6685,China Eastern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.923527
+2026-03-21,CKG,arrival,18:45,SIN Singapore,CA450,Air China,text,Duration: 5h 0m,,True,2026-02-19T09:34:24.923534
+2026-03-21,CKG,arrival,18:45,NTG Nantong,DZ6293,Donghai Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.923540
+2026-03-21,CKG,arrival,18:50,PEK Beijing,CA1409,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.923545
+2026-03-21,CKG,arrival,18:50,DMK Bangkok,FD552,Thai AirAsia,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.923551
+2026-03-21,CKG,arrival,18:50,JGN Jiayuguan,G52852,Gestair,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.923556
+2026-03-21,CKG,arrival,18:50,XMN Xiamen,MF8423,XiamenAir,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.923562
+2026-03-21,CKG,arrival,18:50,CAN Guangzhou,OQ2324,Chongqing Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.923567
+2026-03-21,CKG,arrival,18:55,CGO Zhengzhou,3U8160,Sichuan Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.923572
+2026-03-21,CKG,arrival,18:55,HGH Hangzhou,CA1761,Air China,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.923578
+2026-03-21,CKG,arrival,18:55,WHA Wuhu,GT1117,Air Guilin,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.923662
+2026-03-21,CKG,arrival,18:55,HGH Hangzhou,OQ2390,Chongqing Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.923672
+2026-03-21,CKG,arrival,18:55,WUX Wuxi,ZH9553,Shenzhen Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.923679
+2026-03-21,CKG,arrival,19:00,KMG Kunming,MU5755,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.923685
+2026-03-21,CKG,arrival,19:05,SHA Shanghai,9C8995,Spring Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.923692
+2026-03-21,CKG,arrival,19:05,FOC Fuzhou,FU6507,Fuzhou Airline,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.923699
+2026-03-21,CKG,arrival,19:05,HGH Hangzhou,MF8475,XiamenAir,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.923705
+2026-03-21,CKG,arrival,19:10,CAN Guangzhou,3U8748,Sichuan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.923711
+2026-03-21,CKG,arrival,19:10,LXA Lhasa/Lasa,3U8636,Sichuan Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.923717
+2026-03-21,CKG,arrival,19:10,"JUZ Quzhou, Zhejiang Province",G54684,Gestair,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.923724
+2026-03-21,CKG,arrival,19:10,WNZ Wenzhou,PN6284,West Air (China),text,Duration: 3h 0m,,True,2026-02-19T09:34:24.923832
+2026-03-21,CKG,arrival,19:15,JHG Jinghong,PN6404,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:24.923841
+2026-03-21,CKG,arrival,19:15,TAO Qingdao,SC4837,Shandong Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.923848
+2026-03-21,CKG,arrival,19:15,PVG Shanghai,Y87513,Suparna Airlines,text,Duration: 3h 20m,,True,2026-02-19T09:34:24.923854
+2026-03-21,CKG,arrival,19:20,PVG Shanghai,FM9425,Shanghai Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.923860
+2026-03-21,CKG,arrival,19:25,KTI Phnom Penh,KR963,Cambodia Airways,text,Duration: 3h 25m,,True,2026-02-19T09:34:24.923866
+2026-03-21,CKG,arrival,19:25,SYX Sanya,PN6204,West Air (China),text,Duration: 2h 20m,,True,2026-02-19T09:34:24.923872
+2026-03-21,CKG,arrival,19:30,SZX Shenzhen,OQ2346,Chongqing Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.923877
+2026-03-21,CKG,arrival,19:30,TNA Jinan,SC8811,Shandong Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.923883
+2026-03-21,CKG,arrival,19:35,PEK Beijing,3U8832,Sichuan Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.923889
+2026-03-21,CKG,arrival,19:35,LUM Mangshi,KY3109,Kunming Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.924013
+2026-03-21,CKG,arrival,19:35,NKG Nanjing,MU2845,China Eastern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924021
+2026-03-21,CKG,arrival,19:35,SIN Singapore,OQ2096,Chongqing Airlines,text,Duration: 5h 0m,,True,2026-02-19T09:34:24.924027
+2026-03-21,CKG,arrival,19:35,SZX Shenzhen,ZH9467,Shenzhen Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924036
+2026-03-21,CKG,arrival,19:40,CAN Guangzhou,CA4350,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924042
+2026-03-21,CKG,arrival,19:45,WUH Wuhan,CZ3643,China Southern,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.924049
+2026-03-21,CKG,arrival,19:50,SHA Shanghai,9C8997,Spring Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.924056
+2026-03-21,CKG,arrival,19:50,PEK Beijing,CA1435,Air China,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.924061
+2026-03-21,CKG,arrival,20:00,JHG Jinghong,3U3552,Sichuan Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.924068
+2026-03-21,CKG,arrival,20:00,YNZ Yancheng,9C7345,Spring Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.924074
+2026-03-21,CKG,arrival,20:00,HRB Harbin,CZ3709,China Southern,text,Duration: 4h 20m,,True,2026-02-19T09:34:24.924182
+2026-03-21,CKG,arrival,20:05,JHG Jinghong,8L9605,Lucky Air,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.924191
+2026-03-21,CKG,arrival,20:05,URC Urumqi,CZ6798,China Southern,text,Duration: 4h 5m,,True,2026-02-19T09:34:24.924198
+2026-03-21,CKG,arrival,20:05,DIG Diqing,OQ2148,Chongqing Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.924205
+2026-03-21,CKG,arrival,20:10,LXA Lhasa/Lasa,PN6392,West Air (China),text,Duration: 2h 50m,,True,2026-02-19T09:34:24.924211
+2026-03-21,CKG,arrival,20:15,NKG Nanjing,HO1691,Juneyao Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.924217
+2026-03-21,CKG,arrival,20:15,SHA Shanghai,MU5435,China Eastern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.924223
+2026-03-21,CKG,arrival,20:15,WUX Wuxi,MU9785,China Eastern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.924229
+2026-03-21,CKG,arrival,20:20,PKX Beijing,CZ3259,China Southern,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.924235
+2026-03-21,CKG,arrival,20:20,YYA Yueyang,DZ6286,Donghai Airlines,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.924241
+2026-03-21,CKG,arrival,20:20,TSN Tianjin,MF8622,XiamenAir,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.924348
+2026-03-21,CKG,arrival,20:20,TAO Qingdao,SC4839,Shandong Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.924356
+2026-03-21,CKG,arrival,20:20,TYN Taiyuan,SC2268,Shandong Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924362
+2026-03-21,CKG,arrival,20:25,ACX Xingyi,BK2954,OkAir,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.924368
+2026-03-21,CKG,arrival,20:25,INC Yinchuan,HU7272,Hainan Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.924374
+2026-03-21,CKG,arrival,20:25,LXA Lhasa/Lasa,PN6272,West Air (China),text,Duration: 2h 50m,,True,2026-02-19T09:34:24.924380
+2026-03-21,CKG,arrival,20:30,HAK Haikou,CA9658,Air China,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.924386
+2026-03-21,CKG,arrival,20:35,HET Hohhot,CA4008,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924392
+2026-03-21,CKG,arrival,20:35,PVG Shanghai,HO2369,Juneyao Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.924398
+2026-03-21,CKG,arrival,20:35,SZX Shenzhen,MU6612,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924403
+2026-03-21,CKG,arrival,20:40,SHE Shenyang,CZ5355,China Southern,text,Duration: 4h 10m,,True,2026-02-19T09:34:24.924496
+2026-03-21,CKG,arrival,20:50,PEK Beijing,CA4142,Air China,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.924504
+2026-03-21,CKG,arrival,20:50,LXA Lhasa/Lasa,EU2737,Chengdu Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924510
+2026-03-21,CKG,arrival,20:50,XIY Xian,JD5077,Capital Airlines,text,Duration: 1h 35m,,True,2026-02-19T09:34:24.924515
+2026-03-21,CKG,arrival,20:55,NGB Ningbo,3U8110,Sichuan Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.924521
+2026-03-21,CKG,arrival,20:55,XMN Xiamen,HU7426,Hainan Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.924527
+2026-03-21,CKG,arrival,20:55,XNN Xining,MF8854,XiamenAir,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.924533
+2026-03-21,CKG,arrival,21:00,SZX Shenzhen,CZ5919,China Southern,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.924539
+2026-03-21,CKG,arrival,21:00,HFE Hefei,MU9982,China Eastern,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.924544
+2026-03-21,CKG,arrival,21:00,CAN Guangzhou,OQ2340,Chongqing Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.924550
+2026-03-21,CKG,arrival,21:05,KHN Nanchang,RY6681,Jiangxi Airlines,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.924641
+2026-03-21,CKG,arrival,21:10,SYX Sanya,HU7339,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.924649
+2026-03-21,CKG,arrival,21:10,CAN Guangzhou,MU6825,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924655
+2026-03-21,CKG,arrival,21:15,PVG Shanghai,9C8867,Spring Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.924662
+2026-03-21,CKG,arrival,21:15,SJW Shijiazhuang,9C8993,Spring Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.924668
+2026-03-21,CKG,arrival,21:15,ZUH Zhuhai,CZ8259,China Southern,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924673
+2026-03-21,CKG,arrival,21:15,KMG Kunming,MU9755,China Eastern,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.924678
+2026-03-21,CKG,arrival,21:20,HAK Haikou,CZ8689,China Southern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924684
+2026-03-21,CKG,arrival,21:20,LXA Lhasa/Lasa,TV9844,Tibet Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.924690
+2026-03-21,CKG,arrival,21:25,HGH Hangzhou,3U8084,Sichuan Airlines,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.924696
+2026-03-21,CKG,arrival,21:25,NKG Nanjing,MU2745,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924806
+2026-03-21,CKG,arrival,21:30,CAN Guangzhou,OQ2129,Chongqing Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924818
+2026-03-21,CKG,arrival,21:30,ZUH Zhuhai,SC2266,Shandong Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.924825
+2026-03-21,CKG,arrival,21:35,TNA Jinan,SC8813,Shandong Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.924831
+2026-03-21,CKG,arrival,21:40,URC Urumqi,3U3210,Sichuan Airlines,text,Duration: 4h 0m,,True,2026-02-19T09:34:24.924838
+2026-03-21,CKG,arrival,21:45,PEK Beijing,CA1449,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.924844
+2026-03-21,CKG,arrival,21:45,TYN Taiyuan,DR5312,Ruili Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.924850
+2026-03-21,CKG,arrival,21:50,SHA Shanghai,MU2549,China Eastern,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.924856
+2026-03-21,CKG,arrival,21:55,CAN Guangzhou,AQ1101,9 Air,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.924862
+2026-03-21,CKG,arrival,21:55,CZX Changzhou,MU2785,China Eastern,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.924868
+2026-03-21,CKG,arrival,22:00,PVG Shanghai,3U8974,Sichuan Airlines,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.924972
+2026-03-21,CKG,arrival,22:00,DHH Hami,EU2224,Chengdu Airlines,text,Duration: 3h 40m,,True,2026-02-19T09:34:24.924979
+2026-03-21,CKG,arrival,22:00,PEK Beijing,HU7567,Hainan Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.924986
+2026-03-21,CKG,arrival,22:00,WNZ Wenzhou,HU7464,Hainan Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.924992
+2026-03-21,CKG,arrival,22:00,SJW Shijiazhuang,OQ2054,Chongqing Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.924998
+2026-03-21,CKG,arrival,22:00,TNA Jinan,PN6328,West Air (China),text,Duration: 2h 45m,,True,2026-02-19T09:34:24.925004
+2026-03-21,CKG,arrival,22:05,WUH Wuhan,CZ5179,China Southern,text,Duration: 1h 50m,,True,2026-02-19T09:34:24.925010
+2026-03-21,CKG,arrival,22:05,PKX Beijing,MU6689,China Eastern,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.925016
+2026-03-21,CKG,arrival,22:10,PEK Beijing,CA4144,Air China,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.925022
+2026-03-21,CKG,arrival,22:10,TAO Qingdao,MU5253,China Eastern,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.925027
+2026-03-21,CKG,arrival,22:15,HAK Haikou,3U8068,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.925115
+2026-03-21,CKG,arrival,22:15,HIA Huai'an,8L9818,Lucky Air,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.925123
+2026-03-21,CKG,arrival,22:15,LFQ Qiaoli,G54318,Gestair,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.925129
+2026-03-21,CKG,arrival,22:15,TAO Qingdao,SC4841,Shandong Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.925134
+2026-03-21,CKG,arrival,22:20,XMN Xiamen,3U8088,Sichuan Airlines,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.925140
+2026-03-21,CKG,arrival,22:20,TSN Tianjin,GS7905,Tianjin Airlines,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.925146
+2026-03-21,CKG,arrival,22:20,TVS Tangshan,GT1070,Air Guilin,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.925151
+2026-03-21,CKG,arrival,22:20,ZUH Zhuhai,OQ2386,Chongqing Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.925157
+2026-03-21,CKG,arrival,22:25,CAN Guangzhou,HU7241,Hainan Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.925163
+2026-03-21,CKG,arrival,22:30,SWA Jieyang,3U8006,Sichuan Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.925168
+2026-03-21,CKG,arrival,22:30,LJG Lijiang,JD5609,Capital Airlines,text,Duration: 1h 40m,,True,2026-02-19T09:34:24.925245
+2026-03-21,CKG,arrival,22:30,HGH Hangzhou,PN6436,West Air (China),text,Duration: 2h 55m,,True,2026-02-19T09:34:24.925252
+2026-03-21,CKG,arrival,22:40,SZX Shenzhen,ZH9469,Shenzhen Airlines,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.925258
+2026-03-21,CKG,arrival,22:50,NKG Nanjing,3U8046,Sichuan Airlines,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.925264
+2026-03-21,CKG,arrival,22:50,SHA Shanghai,MU5431,China Eastern,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.925270
+2026-03-21,CKG,arrival,22:55,SYX Sanya,CA4388,Air China,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.925275
+2026-03-21,CKG,arrival,22:55,TPE Taipei,CA410,Air China,text,Duration: 3h 35m,,True,2026-02-19T09:34:24.925281
+2026-03-21,CKG,arrival,22:55,TSN Tianjin,CA4002,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.925286
+2026-03-21,CKG,arrival,22:55,PKX Beijing,CZ5643,China Southern,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.925292
+2026-03-21,CKG,arrival,22:55,HGH Hangzhou,MF8477,XiamenAir,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.925297
+2026-03-21,CKG,arrival,22:55,FOC Fuzhou,PN6276,West Air (China),text,Duration: 2h 40m,,True,2026-02-19T09:34:24.925371
+2026-03-21,CKG,arrival,23:00,SZX Shenzhen,CA4346,Air China,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.925378
+2026-03-21,CKG,arrival,23:00,HGH Hangzhou,GS6582,Tianjin Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.925384
+2026-03-21,CKG,arrival,23:00,HFE Hefei,MU6470,China Eastern,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.925390
+2026-03-21,CKG,arrival,23:00,SJW Shijiazhuang,NS3242,Hebei Airlines,text,Duration: 2h 45m,,True,2026-02-19T09:34:24.925395
+2026-03-21,CKG,arrival,23:05,HGH Hangzhou,CA4578,Air China,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.925401
+2026-03-21,CKG,arrival,23:05,PEK Beijing,CA4136,Air China,text,Duration: 2h 35m,,True,2026-02-19T09:34:24.925407
+2026-03-21,CKG,arrival,23:05,XNN Xining,TV9912,Tibet Airlines,text,Duration: 1h 55m,,True,2026-02-19T09:34:24.925413
+2026-03-21,CKG,arrival,23:10,WUH Wuhan,CA4382,Air China,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.925419
+2026-03-21,CKG,arrival,23:15,DLC Dalian,3U8008,Sichuan Airlines,text,Duration: 3h 30m,,True,2026-02-19T09:34:24.925425
+2026-03-21,CKG,arrival,23:15,SHA Shanghai,MF8582,XiamenAir,text,Duration: 3h 5m,,True,2026-02-19T09:34:24.925499
+2026-03-21,CKG,arrival,23:15,NGB Ningbo,OQ2316,Chongqing Airlines,text,Duration: 3h 20m,,True,2026-02-19T09:34:24.925506
+2026-03-21,CKG,arrival,23:20,KHN Nanchang,3U8182,Sichuan Airlines,text,Duration: 2h 0m,,True,2026-02-19T09:34:24.925512
+2026-03-21,CKG,arrival,23:20,WHA Wuhu,3U8072,Sichuan Airlines,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.925517
+2026-03-21,CKG,arrival,23:20,HNY Hengyang,GS7436,Tianjin Airlines,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.925523
+2026-03-21,CKG,arrival,23:20,XMN Xiamen,SC2141,Shandong Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.925529
+2026-03-21,CKG,arrival,23:25,HKG Hong Kong,HX496,Hong Kong Airlines,text,Duration: 2h 40m,,True,2026-02-19T09:34:24.925535
+2026-03-21,CKG,arrival,23:25,SHE Shenyang,OQ2074,Chongqing Airlines,text,Duration: 4h 25m,,True,2026-02-19T09:34:24.925542
+2026-03-21,CKG,arrival,23:25,NNG Nanning,ZH9381,Shenzhen Airlines,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.925547
+2026-03-21,CKG,arrival,23:30,BKK Bangkok,3U3772,Sichuan Airlines,text,Duration: 3h 10m,,True,2026-02-19T09:34:24.925553
+2026-03-21,CKG,arrival,23:30,CAN Guangzhou,CA4342,Air China,text,Duration: 2h 15m,,True,2026-02-19T09:34:24.925639
+2026-03-21,CKG,arrival,23:30,NKG Nanjing,CA4558,Air China,text,Duration: 2h 20m,,True,2026-02-19T09:34:24.925647
+2026-03-21,CKG,arrival,23:30,DOY Dongying,G54010,Gestair,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.925652
+2026-03-21,CKG,arrival,23:30,VTE Vientiane,G52806,Gestair,text,Duration: 2h 25m,,True,2026-02-19T09:34:24.925658
+2026-03-21,CKG,arrival,23:30,HRB Harbin,OQ2328,Chongqing Airlines,text,Duration: 4h 35m,,True,2026-02-19T09:34:24.925664
+2026-03-21,CKG,arrival,23:30,YNT Yantai,SC7654,Shandong Airlines,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.925670
+2026-03-21,CKG,arrival,23:40,CGO Zhengzhou,CZ6649,China Southern,text,Duration: 2h 5m,,True,2026-02-19T09:34:24.925676
+2026-03-21,CKG,arrival,23:40,UCB Ulanqab,G54918,Gestair,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.925681
+2026-03-21,CKG,arrival,23:40,SZX Shenzhen,HU7357,Hainan Airlines,text,Duration: 2h 30m,,True,2026-02-19T09:34:24.925687
+2026-03-21,CKG,arrival,23:40,HAN Hanoi,PN6424,West Air (China),text,Duration: 2h 0m,,True,2026-02-19T09:34:24.925693
+2026-03-21,CKG,arrival,23:45,TSN Tianjin,PN6238,West Air (China),text,Duration: 2h 30m,,True,2026-02-19T09:34:24.925771
+2026-03-21,CKG,arrival,23:50,PVG Shanghai,CA4556,Air China,text,Duration: 3h 15m,,True,2026-02-19T09:34:24.925778
+2026-03-21,CKG,arrival,23:50,URC Urumqi,CA4258,Air China,text,Duration: 3h 20m,,True,2026-02-19T09:34:24.925784
+2026-03-21,CKG,arrival,23:50,HDG Handan,G54302,Gestair,text,Duration: 2h 10m,,True,2026-02-19T09:34:24.925790
+2026-03-21,CKG,arrival,23:50,WUH Wuhan,MF8030,XiamenAir,text,Duration: 1h 45m,,True,2026-02-19T09:34:24.925796
+2026-03-21,CKG,arrival,23:50,KMG Kunming,MU5450,China Eastern,text,Duration: 1h 30m,,True,2026-02-19T09:34:24.925802
+2026-03-21,CKG,arrival,23:55,PKX Beijing,CA8674,Air China,text,Duration: 3h 0m,,True,2026-02-19T09:34:24.925808
+2026-03-21,CKG,arrival,23:55,SHA Shanghai,CA4542,Air China,text,Duration: 2h 55m,,True,2026-02-19T09:34:24.925814
+2026-03-21,CKG,arrival,23:55,WMT Zunyi,G54786,Gestair,text,Duration: 0h 40m,,True,2026-02-19T09:34:24.925820
+2026-03-21,CKG,arrival,23:55,XMN Xiamen,MF8433,XiamenAir,text,Duration: 2h 50m,,True,2026-02-19T09:34:24.925826
