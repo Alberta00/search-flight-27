@@ -94,6 +94,23 @@ const SummaryDefaults = {
   totalFlights: 0,
 }
 
+// Helper to parse date string that might be YYYYMMDD or YYYY-MM-DD
+const parseFlightDate = (dateStr: any): Date | null => {
+  if (!dateStr) return null
+  if (dateStr instanceof Date) return dateStr
+  const str = String(dateStr)
+  // YYYYMMDD
+  if (/^\d{8}$/.test(str)) {
+    const y = parseInt(str.substring(0, 4))
+    const m = parseInt(str.substring(4, 6)) - 1
+    const d = parseInt(str.substring(6, 8))
+    return new Date(y, m, d)
+  }
+  // YYYY-MM-DD
+  const d = new Date(str)
+  return isNaN(d.getTime()) ? null : d
+}
+
 export function FlightRoutesAnalysis() {
   const [origin, setOrigin] = useState('')
   const [originName, setOriginName] = useState('')
@@ -114,7 +131,7 @@ export function FlightRoutesAnalysis() {
   const [routes, setRoutes] = useState<any[]>([])
   const [summary, setSummary] = useState(SummaryDefaults)
   const [loading, setLoading] = useState(false)
-  const [expandedRouteKeys, setExpandedRouteKeys] = useState<Set<string>>(new Set())
+  const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
 
   // ตรวจจับมือถือแนวตั้ง (สำหรับแสดงข้อความแนะนำให้หมุน)
   useEffect(() => {
@@ -272,12 +289,7 @@ export function FlightRoutesAnalysis() {
   const sortedGroupKeys = Object.keys(groupedRoutes).sort()
 
   const toggleRouteExpand = (key: string) => {
-    setExpandedRouteKeys(prev => {
-      const next = new Set(prev)
-      if (next.has(key)) next.delete(key)
-      else next.add(key)
-      return next
-    })
+    setExpandedRouteKey(prev => prev === key ? null : key)
   }
 
 
@@ -306,7 +318,7 @@ export function FlightRoutesAnalysis() {
                     setDestinationName('')
                   }
                 }}
-                placeholder="เลือกสนามบินต้นทาง"
+                placeholder={destination ? "คุณกำลังดูข้อมูลปลายทาง" : "เลือกสนามบินต้นทาง"}
                 excludeCode={destination || undefined}
                 className="pl-9"
                 disabled={!!destination}
@@ -329,7 +341,7 @@ export function FlightRoutesAnalysis() {
                     setOriginName('')
                   }
                 }}
-                placeholder="เลือกสนามบินปลายทาง"
+                placeholder={origin ? "คุณกำลังดูข้อมูลต้นทาง" : "เลือกสนามบินปลายทาง"}
                 excludeCode={origin || undefined}
                 className="pl-9"
                 disabled={!!origin}
@@ -702,18 +714,96 @@ export function FlightRoutesAnalysis() {
                   ? `เส้นทางการบิน (${sortedGroupKeys.length} เส้นทาง)`
                   : `เส้นทางการบิน (${routes.length} เที่ยวบิน)`}
               </h2>
-              <ScrollArea className="h-[280px] sm:h-[320px] w-full rounded-md border bg-muted/20">
+              <ScrollArea className="h-[500px] sm:h-[600px] w-full rounded-md border bg-muted/20">
                 <div className="p-1 space-y-2">
                   {sortedGroupKeys.length > 0 ? (
                     sortedGroupKeys.map((key) => {
                       const group = groupedRoutes[key]
-                      const isExpanded = expandedRouteKeys.has(key)
+                      const isExpanded = expandedRouteKey === key
                       const flights = group.flights.sort((a: any, b: any) => (a.departureTime || '').localeCompare(b.departureTime || ''))
                       const flightCount = flights.length
                       
                       // First and Last flight
-                      const firstFlight = flights[0]
-                      const lastFlight = flights[flights.length - 1]
+                      const processFlight = (flight: any) => {
+                        // Fallback date if flight.date is missing
+                        const baseDate = flight.date 
+                          ? parseFlightDate(flight.date) 
+                          : (dateRange?.from ? new Date(dateRange.from) : new Date())
+
+                        let depDateObj = baseDate
+                        let arrDateObj = parseFlightDate(flight.arrivalDate)
+                        
+                        // 1. Parse Duration from string "4h 45m" to minutes
+                        let durationVal = 0
+                        if (typeof flight.duration === 'number') {
+                          durationVal = flight.duration
+                        } else if (typeof flight.duration === 'string') {
+                          const hMatch = flight.duration.match(/(\d+)h/)
+                          const mMatch = flight.duration.match(/(\d+)m/)
+                          if (hMatch) durationVal += parseInt(hMatch[1]) * 60
+                          if (mMatch) durationVal += parseInt(mMatch[1])
+                        }
+
+                        let depTime = flight.departureTime || flight.time
+                        let arrTime = flight.arrivalTime
+                        let durationStr = flight.duration
+
+                        // 2. Handle Direction: Swap time/date for Arrival flights
+                        if (flight.direction === 'arrival') {
+                          // If we have time but it's in the wrong slot (mapped to departure by default)
+                          if (depTime && !arrTime) {
+                            arrTime = depTime
+                            depTime = null
+                          }
+                          // The 'date' column for arrival flights is actually Arrival Date
+                          if (depDateObj && !arrDateObj) {
+                            arrDateObj = depDateObj
+                            depDateObj = null
+                          }
+                        }
+
+                        // Calculate if duration is numeric (minutes)
+                        if (!isNaN(durationVal) && durationVal > 0) {
+                          durationStr = `${Math.floor(durationVal / 60)} ชม. ${durationVal % 60} นาที`
+                          
+                          // Case 1: Have Departure Time, Calculate Arrival
+                          if (depTime && (depDateObj || baseDate)) {
+                            const [h, m] = depTime.split(':').map(Number)
+                            const start = new Date(depDateObj || baseDate!)
+                            start.setHours(h, m, 0, 0)
+                            
+                            const end = new Date(start.getTime() + durationVal * 60000)
+                            if (!arrTime) arrTime = format(end, 'HH:mm')
+                            if (!arrDateObj) arrDateObj = end
+                            if (!depDateObj) depDateObj = start
+                          }
+                          // Case 2: Have Arrival Time, Missing Departure Time
+                          else if (arrTime && (arrDateObj || baseDate)) {
+                            const [h, m] = arrTime.split(':').map(Number)
+                            // If arrDateObj is missing, assume baseDate (approx)
+                            const end = new Date(arrDateObj || baseDate!)
+                            end.setHours(h, m, 0, 0)
+                            
+                            const start = new Date(end.getTime() - durationVal * 60000)
+                            depTime = format(start, 'HH:mm')
+                            depDateObj = start
+                            if (!arrDateObj) arrDateObj = end
+                          }
+                        }
+                        
+                        return { 
+                          ...flight, 
+                          depDateObj, 
+                          departureTime: depTime || '-', 
+                          arrivalTime: arrTime || '-', 
+                          arrTime: arrTime || '-', // Keep for compatibility
+                          arrDateObj, 
+                          durationStr 
+                        }
+                      }
+
+                      const firstFlight = processFlight(flights[0])
+                      const lastFlight = processFlight(flights[flights.length - 1])
 
                       return (
                         <div
@@ -752,7 +842,7 @@ export function FlightRoutesAnalysis() {
                                 {/* First Flight */}
                                 <div className="space-y-3">
                                   <div className="flex items-center gap-2">
-                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] px-2 py-0.5 h-5 font-normal">
+                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] px-2 py-0.5 h-4 font-normal">
                                       เที่ยวบินแรก (First Flight)
                                     </Badge>
                                   </div>
@@ -766,6 +856,10 @@ export function FlightRoutesAnalysis() {
                                         {firstFlight.departureTime || '-'}
                                         <span className="text-xs text-muted-foreground font-normal">({firstFlight.departureCode})</span>
                                       </div>
+                                      <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
+                                        <CalendarIcon className="w-3 h-3" />
+                                        <span className="text-[10px] sm:text-xs">{firstFlight.depDateObj ? format(firstFlight.depDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
+                                      </div>
                                     </div>
                                     <div className="space-y-1">
                                       <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -773,8 +867,12 @@ export function FlightRoutesAnalysis() {
                                         <span className="text-[10px] sm:text-xs">เวลาถึง (Arrival)</span>
                                       </div>
                                       <div className="font-semibold text-sm flex items-baseline gap-1">
-                                        {firstFlight.arrivalTime || '-'}
+                                        {firstFlight.arrTime}
                                         <span className="text-xs text-muted-foreground font-normal">({firstFlight.arrivalCode})</span>
+                                      </div>
+                                      <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
+                                        <CalendarIcon className="w-3 h-3" />
+                                        <span className="text-[10px] sm:text-xs">{firstFlight.arrDateObj ? format(firstFlight.arrDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
                                       </div>
                                     </div>
                                     <div className="space-y-1">
@@ -783,7 +881,7 @@ export function FlightRoutesAnalysis() {
                                         <span className="text-[10px] sm:text-xs">ระยะเวลา (Duration)</span>
                                       </div>
                                       <div className="font-medium text-sm">
-                                        {firstFlight.duration || '-'}
+                                        {firstFlight.durationStr || '-'}
                                       </div>
                                     </div>
                                     <div className="space-y-1">
@@ -818,6 +916,10 @@ export function FlightRoutesAnalysis() {
                                             {lastFlight.departureTime || '-'}
                                             <span className="text-xs text-muted-foreground font-normal">({lastFlight.departureCode})</span>
                                           </div>
+                                          <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
+                                            <CalendarIcon className="w-3 h-3" />
+                                            <span className="text-[10px] sm:text-xs">{lastFlight.depDateObj ? format(lastFlight.depDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
+                                          </div>
                                         </div>
                                         <div className="space-y-1">
                                           <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -825,8 +927,12 @@ export function FlightRoutesAnalysis() {
                                             <span className="text-[10px] sm:text-xs">เวลาถึง (Arrival)</span>
                                           </div>
                                           <div className="font-semibold text-sm flex items-baseline gap-1">
-                                            {lastFlight.arrivalTime || '-'}
+                                            {lastFlight.arrTime}
                                             <span className="text-xs text-muted-foreground font-normal">({lastFlight.arrivalCode})</span>
+                                          </div>
+                                          <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
+                                            <CalendarIcon className="w-3 h-3" />
+                                            <span className="text-[10px] sm:text-xs">{lastFlight.arrDateObj ? format(lastFlight.arrDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
                                           </div>
                                         </div>
                                         <div className="space-y-1">
@@ -835,7 +941,7 @@ export function FlightRoutesAnalysis() {
                                             <span className="text-[10px] sm:text-xs">ระยะเวลา (Duration)</span>
                                           </div>
                                           <div className="font-medium text-sm">
-                                            {lastFlight.duration || '-'}
+                                            {lastFlight.durationStr || '-'}
                                           </div>
                                         </div>
                                         <div className="space-y-1">
