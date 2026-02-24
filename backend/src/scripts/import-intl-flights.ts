@@ -307,10 +307,14 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
             const departureDateObj = new Date(departureTimeUTC);
             departureDateObj.setUTCHours(0, 0, 0, 0);
 
+            const arrivalDateObj = new Date(arrivalTimeUTC);
+            arrivalDateObj.setUTCHours(0, 0, 0, 0);
+
             const flightRecord = {
                 route_id: route.id,
                 airline_id: airline.id,
                 departure_date: departureDateObj,
+                arrival_date: arrivalDateObj,
                 departure_time: departureTimeUTC,
                 arrival_time: arrivalTimeUTC,
                 duration: durationMinutes,
@@ -339,7 +343,8 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 const uniqueMap = new Map();
                 for (const record of departureBatch) {
                     const departureDateStr = record.departure_date.toISOString().split('T')[0];
-                    const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+                    const arrivalDateStr = record.arrival_date.toISOString().split('T')[0];
+                    const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${arrivalDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
                     uniqueMap.set(key, record);
                 }
                 const deduplicatedBatch = Array.from(uniqueMap.values());
@@ -352,7 +357,8 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 const uniqueMap = new Map();
                 for (const record of arrivalBatch) {
                     const departureDateStr = record.departure_date.toISOString().split('T')[0];
-                    const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+                    const arrivalDateStr = record.arrival_date.toISOString().split('T')[0];
+                    const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${arrivalDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
                     uniqueMap.set(key, record);
                 }
                 const deduplicatedBatch = Array.from(uniqueMap.values());
@@ -370,7 +376,8 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
         const uniqueMap = new Map();
         for (const record of departureBatch) {
             const departureDateStr = record.departure_date.toISOString().split('T')[0];
-            const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+            const arrivalDateStr = record.arrival_date.toISOString().split('T')[0];
+            const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${arrivalDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
             uniqueMap.set(key, record);
         }
         const deduplicatedBatch = Array.from(uniqueMap.values());
@@ -382,7 +389,8 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
         const uniqueMap = new Map();
         for (const record of arrivalBatch) {
             const departureDateStr = record.departure_date.toISOString().split('T')[0];
-            const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
+            const arrivalDateStr = record.arrival_date.toISOString().split('T')[0];
+            const key = `${record.route_id}_${record.airline_id}_${departureDateStr}_${arrivalDateStr}_${record.trip_type}_${record.flight_number}_${record.departure_time}`;
             uniqueMap.set(key, record);
         }
         const deduplicatedBatch = Array.from(uniqueMap.values());
