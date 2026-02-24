@@ -1,0 +1,643 @@
+﻿date,airport,direction,time,destination,flight,airline,airline_source,duration,aircraft,page_date_verified,scraped_at
+2026-08-31,DMK,departure,00:05,PVG Shanghai,XJ760,Thai AirAsia X,text,4h 25m,Airbus A330-300,True,2026-02-15T22:30:59.236867
+2026-08-31,DMK,departure,00:30,CCU Kolkata,SL242,Thai Lion Air,text,2h 35m,Boeing 737-800 Passenger,True,2026-02-15T22:31:00.858447
+2026-08-31,DMK,departure,01:10,KIX Osaka,XJ612,Thai AirAsia X,text,5h 30m,Airbus A330-300,True,2026-02-15T22:31:04.617182
+2026-08-31,DMK,departure,02:00,CGK Jakarta,SL116,Thai Lion Air,text,3h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:31:06.077925
+2026-08-31,DMK,departure,02:15,NRT Tokyo,XJ602,Thai AirAsia X,text,6h 30m,Airbus A330-300,True,2026-02-15T22:31:07.503648
+2026-08-31,DMK,departure,02:30,ICN Seoul,XJ700,Thai AirAsia X,text,5h 35m,Airbus A330-300,True,2026-02-15T22:31:08.870049
+2026-08-31,DMK,departure,02:45,KHH Kaohsiung,FD234,Thai AirAsia,text,3h 30m,Airbus A320neo,True,2026-02-15T22:31:10.326760
+2026-08-31,DMK,departure,03:00,TPE Taipei,SL398,Thai Lion Air,text,3h 55m,Boeing 737-800 Passenger,True,2026-02-15T22:31:11.720769
+2026-08-31,DMK,departure,03:15,ICN Seoul,SL352,Thai Lion Air,text,5h 40m,Boeing 737-800 Passenger,True,2026-02-15T22:31:13.326087
+2026-08-31,DMK,departure,05:10,CNX Chiang Mai,FD3416,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:31:14.934635
+2026-08-31,DMK,departure,05:35,KHH Kaohsiung,SL392,Thai Lion Air,text,3h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:31:16.949605
+2026-08-31,DMK,departure,06:00,CKG Chongqing,FD556,Thai AirAsia,text,3h 10m,Airbus A320,True,2026-02-15T22:31:18.461125
+2026-08-31,DMK,departure,06:00,NST Nakhon Si Thammarat,DD550,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:31:19.861662
+2026-08-31,DMK,departure,06:00,URT Surat Thani,DD570,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:31:21.317450
+2026-08-31,DMK,departure,06:00,UTH Udon Thani,DD300,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:31:22.869290
+2026-08-31,DMK,departure,06:15,CNX Chiang Mai,SL502,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:31:24.399034
+2026-08-31,DMK,departure,06:15,DPS Denpasar,FD396,Thai AirAsia,text,4h 15m,Airbus A320,True,2026-02-15T22:31:26.213514
+2026-08-31,DMK,departure,06:15,HDY Hat Yai,SL702,Thai Lion Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:31:27.884401
+2026-08-31,DMK,departure,06:20,HKT Phuket,FD3001,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:31:29.800702
+2026-08-31,DMK,departure,06:20,UTH Udon Thani,FD3348,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:31:31.828166
+2026-08-31,DMK,departure,06:25,KBV Krabi,SL800,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:31:33.264834
+2026-08-31,DMK,departure,06:25,VTE Vientiane,FD1042,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:31:34.606510
+2026-08-31,DMK,departure,06:30,CNX Chiang Mai,DD120,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:31:35.997175
+2026-08-31,DMK,departure,06:35,CEB Cebu City,5J5959,Cebu Pacific,text,4h 0m,Airbus A321neo,True,2026-02-15T22:31:37.400019
+2026-08-31,DMK,departure,06:40,HAN Hanoi,FD642,Thai AirAsia,text,1h 50m,Airbus A321neo,True,2026-02-15T22:31:38.759231
+2026-08-31,DMK,departure,06:40,HDY Hat Yai,FD3102,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:31:40.356485
+2026-08-31,DMK,departure,06:45,CNX Chiang Mai,FD3437,Thai AirAsia,text,1h 10m,Airbus A321neo,True,2026-02-15T22:31:42.172963
+2026-08-31,DMK,departure,06:45,HKT Phuket,SL750,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:31:44.197780
+2026-08-31,DMK,departure,06:50,NST Nakhon Si Thammarat,FD3188,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:31:45.640758
+2026-08-31,DMK,departure,06:50,ROI Roi Et,FD3566,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:31:46.999323
+2026-08-31,DMK,departure,07:00,KBV Krabi,FD3213,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:31:48.576069
+2026-08-31,DMK,departure,07:00,KKC Khon Kaen,FD3250,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:31:49.993129
+2026-08-31,DMK,departure,07:00,NST Nakhon Si Thammarat,SL782,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:31:51.387892
+2026-08-31,DMK,departure,07:00,URT Surat Thani,FD3235,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:31:52.795760
+2026-08-31,DMK,departure,07:05,CEI Chiang Rai,FD3199,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:31:54.286698
+2026-08-31,DMK,departure,07:05,KUL Kuala Lumpur,FD311,Thai AirAsia,text,2h 10m,Airbus A320,True,2026-02-15T22:31:55.890249
+2026-08-31,DMK,departure,07:05,UBP Ubon Ratchathani,FD3370,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:31:58.236081
+2026-08-31,DMK,departure,07:15,RGN Yangon,FD251,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:31:59.646050
+2026-08-31,DMK,departure,07:15,SNO Sakon Nakhon,DD360,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:32:01.054763
+2026-08-31,DMK,departure,07:20,HDY Hat Yai,FD3116,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:32:02.454571
+2026-08-31,DMK,departure,07:20,KOP Nakhon Phanom,SL670,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:32:03.857018
+2026-08-31,DMK,departure,07:25,CJM Chumphon,FD3148,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:32:05.258401
+2026-08-31,DMK,departure,07:25,DAD Da Nang,FD634,Thai AirAsia,text,1h 40m,Airbus A321neo,True,2026-02-15T22:32:06.638066
+2026-08-31,DMK,departure,07:25,TPE Taipei,FD230,Thai AirAsia,text,3h 55m,Airbus A321neo,True,2026-02-15T22:32:08.126765
+2026-08-31,DMK,departure,07:25,URT Surat Thani,SL734,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:32:09.758598
+2026-08-31,DMK,departure,07:30,CNX Chiang Mai,FD3445,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:32:12.014452
+2026-08-31,DMK,departure,07:30,NNT Nan,FD3554,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:32:13.467296
+2026-08-31,DMK,departure,07:30,PHS Phitsanulok,SL550,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:32:14.984425
+2026-08-31,DMK,departure,07:30,SGN Ho Chi Minh City,FD656,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:32:16.384877
+2026-08-31,DMK,departure,07:30,SNO Sakon Nakhon,FD3510,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:32:17.736902
+2026-08-31,DMK,departure,07:30,UBP Ubon Ratchathani,SL620,Thai Lion Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:32:19.184313
+2026-08-31,DMK,departure,07:35,HKT Phuket,FD3029,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:32:20.612144
+2026-08-31,DMK,departure,07:35,PEN Penang,SL132,Thai Lion Air,text,1h 55m,Boeing 737-800 Passenger,True,2026-02-15T22:32:22.091387
+2026-08-31,DMK,departure,07:45,HKT Phuket,SL752,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:32:23.938151
+2026-08-31,DMK,departure,07:45,KOP Nakhon Phanom,FD3398,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:32:25.850399
+2026-08-31,DMK,departure,07:45,KTI Phnom Penh,FD608,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:32:30.354568
+2026-08-31,DMK,departure,07:45,SIN Singapore,SL100,Thai Lion Air,text,2h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:32:31.756322
+2026-08-31,DMK,departure,07:45,TST Trang,FD3241,Thai AirAsia,text,1h 35m,Airbus A320,True,2026-02-15T22:32:33.120777
+2026-08-31,DMK,departure,07:50,CSX Changsha,FD480,Thai AirAsia,text,3h 20m,Airbus A320,True,2026-02-15T22:32:34.504576
+2026-08-31,DMK,departure,07:55,BFV Buri Ram,FD3522,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:32:36.153162
+2026-08-31,DMK,departure,08:00,CXR Nha Trang,FD646,Thai AirAsia,text,2h 0m,Airbus A320,True,2026-02-15T22:32:37.581408
+2026-08-31,DMK,departure,08:00,JHB Johor Bharu,FD512,Thai AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:32:38.962708
+2026-08-31,DMK,departure,08:00,KKC Khon Kaen,SL642,Thai Lion Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:32:40.481470
+2026-08-31,DMK,departure,08:00,KMG Kunming,FD582,Thai AirAsia,text,2h 25m,Airbus A320,True,2026-02-15T22:32:42.136826
+2026-08-31,DMK,departure,08:00,UTH Udon Thani,FD3354,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:32:43.691433
+2026-08-31,DMK,departure,08:00,UTH Udon Thani,SL600,Thai Lion Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:32:45.771151
+2026-08-31,DMK,departure,08:05,CEI Chiang Rai,FD3201,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:32:47.174723
+2026-08-31,DMK,departure,08:05,TST Trang,SL824,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:32:48.567335
+2026-08-31,DMK,departure,08:10,CEI Chiang Rai,SL532,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:32:49.969507
+2026-08-31,DMK,departure,08:10,HKG Hong Kong,FD518,Thai AirAsia,text,2h 50m,Airbus A320,True,2026-02-15T22:32:51.401505
+2026-08-31,DMK,departure,08:10,PHS Phitsanulok,FD3308,Thai AirAsia,text,0h 55m,Airbus A320,True,2026-02-15T22:32:52.774048
+2026-08-31,DMK,departure,08:25,CNX Chiang Mai,FD8435,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:32:54.183378
+2026-08-31,DMK,departure,08:25,KKC Khon Kaen,FD3248,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:32:55.820781
+2026-08-31,DMK,departure,08:35,CNX Chiang Mai,SL506,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:32:57.453369
+2026-08-31,DMK,departure,08:35,HDY Hat Yai,SL704,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:32:59.272983
+2026-08-31,DMK,departure,08:35,KUL Kuala Lumpur,AK891,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:33:00.648933
+2026-08-31,DMK,departure,08:40,CEI Chiang Rai,DD100,Nok Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:33:02.068141
+2026-08-31,DMK,departure,08:40,SUB Surabaya,SL268,Thai Lion Air,text,4h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:33:03.467197
+2026-08-31,DMK,departure,08:45,HKT Phuket,SL758,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:33:04.841983
+2026-08-31,DMK,departure,08:50,RGN Yangon,8M365,MAI,text,1h 20m,Embraer 190,True,2026-02-15T22:33:06.255586
+2026-08-31,DMK,departure,08:55,KBV Krabi,FD3229,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:33:07.660005
+2026-08-31,DMK,departure,08:55,KBV Krabi,SL806,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:33:09.139649
+2026-08-31,DMK,departure,09:05,USM Koh Samui,PG451,Bangkok Airways,text,1h 30m,ATR 42 / ATR 72,True,2026-02-15T22:33:10.679298
+2026-08-31,DMK,departure,09:05,UTH Udon Thani,SL602,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:33:12.898196
+2026-08-31,DMK,departure,09:10,NNT Nan,DD172,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:33:14.386156
+2026-08-31,DMK,departure,09:15,CNX Chiang Mai,FD3435,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:33:15.784030
+2026-08-31,DMK,departure,09:15,KUL Kuala Lumpur,OD525,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:33:17.182554
+2026-08-31,DMK,departure,09:15,MLE Male,FD175,Thai AirAsia,text,4h 20m,Airbus A320,True,2026-02-15T22:33:18.689819
+2026-08-31,DMK,departure,09:20,HKG Hong Kong,SL360,Thai Lion Air,text,2h 45m,Boeing 737-900 Passenger,True,2026-02-15T22:33:20.067649
+2026-08-31,DMK,departure,09:35,HKT Phuket,DD522,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:33:21.518329
+2026-08-31,DMK,departure,09:40,UBP Ubon Ratchathani,DD322,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:33:22.994694
+2026-08-31,DMK,departure,09:45,DAD Da Nang,FD636,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:33:24.648080
+2026-08-31,DMK,departure,09:45,HKT Phuket,FD3037,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:33:26.516922
+2026-08-31,DMK,departure,09:45,UBP Ubon Ratchathani,SL624,Thai Lion Air,text,1h 5m,Boeing 737-900 Passenger,True,2026-02-15T22:33:28.475086
+2026-08-31,DMK,departure,09:55,HAN Hanoi,FD640,Thai AirAsia,text,1h 55m,Airbus A320,True,2026-02-15T22:33:29.929968
+2026-08-31,DMK,departure,09:55,MFM Macau,FD762,Thai AirAsia,text,2h 50m,Airbus A320,True,2026-02-15T22:33:31.309811
+2026-08-31,DMK,departure,09:55,NST Nakhon Si Thammarat,FD3180,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:33:32.716872
+2026-08-31,DMK,departure,09:55,URT Surat Thani,FD3237,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:33:34.084613
+2026-08-31,DMK,departure,10:00,KBV Krabi,DD542,Nok Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:33:35.708647
+2026-08-31,DMK,departure,10:00,KUL Kuala Lumpur,AK881,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:33:37.065405
+2026-08-31,DMK,departure,10:05,HKT Phuket,SL754,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:33:38.632254
+2026-08-31,DMK,departure,10:10,MFM Macau,SL372,Thai Lion Air,text,2h 40m,Boeing 737-800 Passenger,True,2026-02-15T22:33:40.274788
+2026-08-31,DMK,departure,10:10,SAI Siem Reap,FD610,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:33:41.853854
+2026-08-31,DMK,departure,10:15,CNX Chiang Mai,FD3427,Thai AirAsia,text,1h 10m,Airbus A321neo,True,2026-02-15T22:33:44.078022
+2026-08-31,DMK,departure,10:20,HDY Hat Yai,FD3118,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:33:45.432465
+2026-08-31,DMK,departure,10:20,LOE Loei,FD3542,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:33:48.240587
+2026-08-31,DMK,departure,10:25,CNX Chiang Mai,DD124,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:33:49.876041
+2026-08-31,DMK,departure,10:30,KBV Krabi,FD3212,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:33:51.308517
+2026-08-31,DMK,departure,10:30,NAW Narathiwat,FD3130,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:33:52.678874
+2026-08-31,DMK,departure,10:40,HDY Hat Yai,SL706,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:33:54.075845
+2026-08-31,DMK,departure,10:40,SIN Singapore,FD357,Thai AirAsia,text,2h 25m,Airbus A321neo,True,2026-02-15T22:33:55.653860
+2026-08-31,DMK,departure,10:50,PEN Penang,FD323,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:33:57.299983
+2026-08-31,DMK,departure,10:55,NST Nakhon Si Thammarat,DD552,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:34:02.189363
+2026-08-31,DMK,departure,10:55,ROI Roi Et,FD3564,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:34:03.599931
+2026-08-31,DMK,departure,10:55,UBP Ubon Ratchathani,FD3374,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:34:05.015595
+2026-08-31,DMK,departure,11:00,KKC Khon Kaen,SL644,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:34:06.454504
+2026-08-31,DMK,departure,11:00,KTM Kathmandu,SL220,Thai Lion Air,text,3h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:34:07.842856
+2026-08-31,DMK,departure,11:05,CNX Chiang Mai,SL508,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:34:09.228466
+2026-08-31,DMK,departure,11:05,HKT Phuket,FD3025,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:34:10.658217
+2026-08-31,DMK,departure,11:10,LPT Lampang,FD3923,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:34:12.099775
+2026-08-31,DMK,departure,11:15,UTH Udon Thani,SL604,Thai Lion Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:34:13.671448
+2026-08-31,DMK,departure,11:20,CEI Chiang Rai,FD3209,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:34:15.901895
+2026-08-31,DMK,departure,11:20,CGK Jakarta,QZ251,Indonesia AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:34:17.339342
+2026-08-31,DMK,departure,11:20,TST Trang,DD592,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:34:18.707503
+2026-08-31,DMK,departure,11:25,HDY Hat Yai,SL708,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:34:20.445173
+2026-08-31,DMK,departure,11:30,CNX Chiang Mai,SL510,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:34:22.161897
+2026-08-31,DMK,departure,11:30,HKT Phuket,FD3003,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:34:23.581802
+2026-08-31,DMK,departure,11:30,KBV Krabi,FD3225,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:34:24.908649
+2026-08-31,DMK,departure,11:35,NST Nakhon Si Thammarat,SL784,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:34:27.391162
+2026-08-31,DMK,departure,11:40,NNT Nan,FD3552,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:34:29.753182
+2026-08-31,DMK,departure,11:40,UNN Ranong,FD3140,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:34:31.586528
+2026-08-31,DMK,departure,11:40,URT Surat Thani,FD3239,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:34:33.969689
+2026-08-31,DMK,departure,11:45,KKC Khon Kaen,FD3254,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:34:35.415338
+2026-08-31,DMK,departure,11:45,KTM Kathmandu,FD182,Thai AirAsia,text,3h 30m,Airbus A320neo,True,2026-02-15T22:34:36.828463
+2026-08-31,DMK,departure,11:45,NST Nakhon Si Thammarat,FD3184,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:34:38.289371
+2026-08-31,DMK,departure,11:50,KUL Kuala Lumpur,OD521,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:34:40.244333
+2026-08-31,DMK,departure,11:55,NRT Tokyo,XJ606,Thai AirAsia X,text,6h 5m,Airbus A330-300,True,2026-02-15T22:34:41.789367
+2026-08-31,DMK,departure,12:00,DPS Denpasar,SL258,Thai Lion Air,text,4h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:34:43.212106
+2026-08-31,DMK,departure,12:00,HGH Hangzhou,FD496,Thai AirAsia,text,4h 10m,Airbus A320,True,2026-02-15T22:34:44.738965
+2026-08-31,DMK,departure,12:00,JHB Johor Bharu,FD510,Thai AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:34:46.513106
+2026-08-31,DMK,departure,12:00,KIX Osaka,XJ610,Thai AirAsia X,text,5h 30m,Airbus A330-300,True,2026-02-15T22:34:48.243126
+2026-08-31,DMK,departure,12:00,PQC Phu Quoc,FD660,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:34:50.493982
+2026-08-31,DMK,departure,12:05,UTH Udon Thani,FD3358,Thai AirAsia,text,1h 5m,Airbus A321neo,True,2026-02-15T22:34:51.901507
+2026-08-31,DMK,departure,12:10,VTE Vientiane,FD1040,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:34:53.294492
+2026-08-31,DMK,departure,12:20,CGO Zhengzhou,SL964,Thai Lion Air,text,4h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:34:54.706592
+2026-08-31,DMK,departure,12:20,MNL Manila,Z2286,Philippines AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:34:56.089416
+2026-08-31,DMK,departure,12:20,UBP Ubon Ratchathani,SL626,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:34:57.441230
+2026-08-31,DMK,departure,12:25,HDY Hat Yai,SL710,Thai Lion Air,text,1h 20m,Boeing 737-900 Passenger,True,2026-02-15T22:34:58.856857
+2026-08-31,DMK,departure,12:25,HKT Phuket,SL756,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:35:00.408244
+2026-08-31,DMK,departure,12:25,URT Surat Thani,SL736,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:35:01.980123
+2026-08-31,DMK,departure,12:30,HKT Phuket,FD3005,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:35:04.394474
+2026-08-31,DMK,departure,12:35,CEI Chiang Rai,SL538,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:35:05.804868
+2026-08-31,DMK,departure,12:35,HKT Phuket,DD524,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:35:07.244708
+2026-08-31,DMK,departure,12:40,KNO Kuala Namu,QZ155,Indonesia AirAsia,text,2h 0m,Airbus A320,True,2026-02-15T22:35:08.619909
+2026-08-31,DMK,departure,12:40,LPQ Luang Prabang,FD1030,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:35:10.059138
+2026-08-31,DMK,departure,12:45,CNX Chiang Mai,FD3433,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:35:11.479889
+2026-08-31,DMK,departure,12:45,KOP Nakhon Phanom,FD3394,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:35:12.877977
+2026-08-31,DMK,departure,12:50,UTH Udon Thani,DD306,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:35:15.028334
+2026-08-31,DMK,departure,12:50,WUH Wuhan,FD572,Thai AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:35:16.582198
+2026-08-31,DMK,departure,13:00,BFV Buri Ram,FD3520,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:35:18.920457
+2026-08-31,DMK,departure,13:00,HKT Phuket,FD3091,Thai AirAsia,text,1h 30m,Airbus A321neo,True,2026-02-15T22:35:20.327398
+2026-08-31,DMK,departure,13:05,NAW Narathiwat,FD3134,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:35:21.764644
+2026-08-31,DMK,departure,13:10,CNX Chiang Mai,SL512,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:35:23.228326
+2026-08-31,DMK,departure,13:10,KUL Kuala Lumpur,AK883,AirAsia,text,2h 10m,Airbus A320,True,2026-02-15T22:35:24.646666
+2026-08-31,DMK,departure,13:20,CNX Chiang Mai,FD3425,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:35:26.132279
+2026-08-31,DMK,departure,13:20,MDL Mandalay,8M361,MAI,text,1h 50m,Embraer 190,True,2026-02-15T22:35:27.514734
+2026-08-31,DMK,departure,13:20,NST Nakhon Si Thammarat,SL786,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:35:29.087838
+2026-08-31,DMK,departure,13:25,USM Koh Samui,PG453,Bangkok Airways,text,1h 30m,ATR 42 / ATR 72,True,2026-02-15T22:35:30.827585
+2026-08-31,DMK,departure,13:30,HDY Hat Yai,SL712,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:35:32.404512
+2026-08-31,DMK,departure,13:30,SAI Siem Reap,FD614,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:35:34.671110
+2026-08-31,DMK,departure,13:30,SNO Sakon Nakhon,DD364,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:35:36.121065
+2026-08-31,DMK,departure,13:35,SNO Sakon Nakhon,FD3514,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:35:37.529242
+2026-08-31,DMK,departure,13:35,URT Surat Thani,DD574,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:35:38.930182
+2026-08-31,DMK,departure,13:40,CEI Chiang Rai,FD3203,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:35:40.331579
+2026-08-31,DMK,departure,13:40,CJM Chumphon,FD3146,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:35:41.783494
+2026-08-31,DMK,departure,13:40,DEL Delhi,SL244,Thai Lion Air,text,4h 0m,Boeing 737-900 Passenger,True,2026-02-15T22:35:43.183105
+2026-08-31,DMK,departure,13:40,SGN Ho Chi Minh City,FD654,Thai AirAsia,text,1h 40m,Airbus A321neo,True,2026-02-15T22:35:44.723904
+2026-08-31,DMK,departure,13:50,KBV Krabi,FD3223,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:35:46.361347
+2026-08-31,DMK,departure,13:50,URT Surat Thani,FD3233,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:35:48.350669
+2026-08-31,DMK,departure,13:55,HKT Phuket,FD3023,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:35:49.857411
+2026-08-31,DMK,departure,13:55,HKT Phuket,SL768,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:35:51.432129
+2026-08-31,DMK,departure,14:00,KUL Kuala Lumpur,OD527,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:35:52.859509
+2026-08-31,DMK,departure,14:00,PHS Phitsanulok,SL556,Thai Lion Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:35:54.272602
+2026-08-31,DMK,departure,14:05,CNX Chiang Mai,DD132,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:35:55.685747
+2026-08-31,DMK,departure,14:15,HDY Hat Yai,FD3108,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:35:57.166820
+2026-08-31,DMK,departure,14:20,NST Nakhon Si Thammarat,DD554,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:35:58.645816
+2026-08-31,DMK,departure,14:25,KKC Khon Kaen,FD3260,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:36:00.378015
+2026-08-31,DMK,departure,14:25,NST Nakhon Si Thammarat,SL788,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:36:02.123534
+2026-08-31,DMK,departure,14:30,URT Surat Thani,FD3231,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:36:04.259997
+2026-08-31,DMK,departure,14:35,CEI Chiang Rai,DD104,Nok Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:36:05.627986
+2026-08-31,DMK,departure,14:35,URT Surat Thani,SL740,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:36:07.032177
+2026-08-31,DMK,departure,14:40,CNX Chiang Mai,FD3439,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:36:08.633112
+2026-08-31,DMK,departure,14:40,HKT Phuket,FD3007,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:36:10.040670
+2026-08-31,DMK,departure,14:40,HKT Phuket,SL766,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:36:11.438150
+2026-08-31,DMK,departure,14:50,UBP Ubon Ratchathani,SL628,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:36:12.926955
+2026-08-31,DMK,departure,14:55,ROI Roi Et,FD3568,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:36:14.478952
+2026-08-31,DMK,departure,15:00,HDY Hat Yai,SL714,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:36:16.046203
+2026-08-31,DMK,departure,15:00,KOP Nakhon Phanom,FD3396,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:36:20.824739
+2026-08-31,DMK,departure,15:05,KTI Phnom Penh,FD606,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:36:22.256725
+2026-08-31,DMK,departure,15:10,LOE Loei,FD3548,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:36:23.983658
+2026-08-31,DMK,departure,15:15,KBV Krabi,FD3215,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:36:25.597062
+2026-08-31,DMK,departure,15:15,KUL Kuala Lumpur,AK885,AirAsia,text,2h 20m,Airbus A320,True,2026-02-15T22:36:27.263907
+2026-08-31,DMK,departure,15:15,UTH Udon Thani,SL610,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:36:28.893430
+2026-08-31,DMK,departure,15:20,HKT Phuket,FD3017,Thai AirAsia,text,1h 35m,Airbus A320,True,2026-02-15T22:36:30.679865
+2026-08-31,DMK,departure,15:20,UBP Ubon Ratchathani,FD3360,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:36:32.508448
+2026-08-31,DMK,departure,15:25,PHS Phitsanulok,FD3306,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:36:34.645923
+2026-08-31,DMK,departure,15:30,HKG Hong Kong,SL364,Thai Lion Air,text,2h 45m,Boeing 737-900 Passenger,True,2026-02-15T22:36:36.619350
+2026-08-31,DMK,departure,15:30,MAQ Mae Sot,DD196,Nok Air,text,0h 55m,Boeing 737-800 Passenger,True,2026-02-15T22:36:38.983738
+2026-08-31,DMK,departure,15:30,TST Trang,SL826,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:36:40.437056
+2026-08-31,DMK,departure,15:35,HDY Hat Yai,FD3114,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:36:41.799115
+2026-08-31,DMK,departure,15:35,PEN Penang,FD321,Thai AirAsia,text,1h 50m,Airbus A320,True,2026-02-15T22:36:43.191923
+2026-08-31,DMK,departure,15:35,UNN Ranong,FD3142,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:36:44.611401
+2026-08-31,DMK,departure,15:40,KKC Khon Kaen,SL646,Thai Lion Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:36:46.074933
+2026-08-31,DMK,departure,15:40,UTH Udon Thani,FD3362,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:36:47.607337
+2026-08-31,DMK,departure,15:45,CNX Chiang Mai,FD3431,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:36:49.189279
+2026-08-31,DMK,departure,15:55,CEI Chiang Rai,FD3207,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:36:50.811217
+2026-08-31,DMK,departure,15:55,DAD Da Nang,FD638,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:36:53.124792
+2026-08-31,DMK,departure,16:00,CGK Jakarta,SL118,Thai Lion Air,text,3h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:36:54.783820
+2026-08-31,DMK,departure,16:00,KUL Kuala Lumpur,AK887,AirAsia,text,2h 20m,Airbus A320,True,2026-02-15T22:36:56.365738
+2026-08-31,DMK,departure,16:00,UBP Ubon Ratchathani,DD326,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:36:57.767763
+2026-08-31,DMK,departure,16:15,KBV Krabi,FD3221,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:36:59.155167
+2026-08-31,DMK,departure,16:15,URT Surat Thani,FD3331,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:37:00.649572
+2026-08-31,DMK,departure,16:25,HKT Phuket,SL760,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:37:02.041486
+2026-08-31,DMK,departure,16:25,KBV Krabi,SL814,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:37:03.502102
+2026-08-31,DMK,departure,16:30,HKT Phuket,FD3021,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:37:05.188380
+2026-08-31,DMK,departure,16:30,TST Trang,FD3245,Thai AirAsia,text,1h 35m,Airbus A320,True,2026-02-15T22:37:07.521271
+2026-08-31,DMK,departure,16:35,CNX Chiang Mai,DD134,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:37:09.648296
+2026-08-31,DMK,departure,16:45,CNX Chiang Mai,SL514,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:37:11.064095
+2026-08-31,DMK,departure,16:45,SIN Singapore,FD351,Thai AirAsia,text,2h 20m,Airbus A320,True,2026-02-15T22:37:12.481881
+2026-08-31,DMK,departure,16:45,TSN Tianjin,SL992,Thai Lion Air,text,4h 40m,Boeing 737-900 Passenger,True,2026-02-15T22:37:13.872860
+2026-08-31,DMK,departure,16:45,URT Surat Thani,SL746,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:37:15.233546
+2026-08-31,DMK,departure,16:45,XIY Xian,FD588,Thai AirAsia,text,3h 50m,Airbus A320,True,2026-02-15T22:37:16.734264
+2026-08-31,DMK,departure,16:50,CNX Chiang Mai,FD3441,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:37:18.190358
+2026-08-31,DMK,departure,16:55,HKT Phuket,DD528,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:37:19.670403
+2026-08-31,DMK,departure,16:55,KKC Khon Kaen,FD3256,Thai AirAsia,text,1h 5m,Airbus A321neo,True,2026-02-15T22:37:21.314570
+2026-08-31,DMK,departure,16:55,RGN Yangon,FD253,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:37:22.981537
+2026-08-31,DMK,departure,16:55,UBP Ubon Ratchathani,FD3378,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:37:25.044263
+2026-08-31,DMK,departure,17:00,DEL Delhi,XJ230,Thai AirAsia X,text,4h 20m,Airbus A330-300,True,2026-02-15T22:37:26.473141
+2026-08-31,DMK,departure,17:00,LPT Lampang,FD3925,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:37:27.900906
+2026-08-31,DMK,departure,17:00,PHS Phitsanulok,FD3310,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:37:29.466750
+2026-08-31,DMK,departure,17:05,KBV Krabi,DD546,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:37:31.011674
+2026-08-31,DMK,departure,17:05,SIN Singapore,SL104,Thai Lion Air,text,2h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:37:32.423751
+2026-08-31,DMK,departure,17:10,CGK Jakarta,QG513,Citilink,text,3h 20m,Airbus A320,True,2026-02-15T22:37:33.837099
+2026-08-31,DMK,departure,17:10,KBV Krabi,SL812,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:37:35.553961
+2026-08-31,DMK,departure,17:15,TFU Chengdu,SL932,Thai Lion Air,text,3h 0m,Boeing 737-900 Passenger,True,2026-02-15T22:37:37.139998
+2026-08-31,DMK,departure,17:20,HGH Hangzhou,SL920,Thai Lion Air,text,4h 0m,Boeing 737-900 Passenger,True,2026-02-15T22:37:41.219164
+2026-08-31,DMK,departure,17:20,KBV Krabi,FD3227,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:37:42.661931
+2026-08-31,DMK,departure,17:25,KOP Nakhon Phanom,SL674,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:37:44.088404
+2026-08-31,DMK,departure,17:25,MFM Macau,SL370,Thai Lion Air,text,2h 40m,Boeing 737-800 Passenger,True,2026-02-15T22:37:45.467798
+2026-08-31,DMK,departure,17:35,NST Nakhon Si Thammarat,SL792,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:37:46.845433
+2026-08-31,DMK,departure,17:35,SZB Kuala Lumpur,OD533,Batik Air,text,2h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:37:48.244267
+2026-08-31,DMK,departure,17:40,HDY Hat Yai,FD3110,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:37:49.620979
+2026-08-31,DMK,departure,17:45,NNT Nan,FD3558,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:37:51.122870
+2026-08-31,DMK,departure,17:50,HKT Phuket,FD3027,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:37:52.695348
+2026-08-31,DMK,departure,17:55,CJM Chumphon,DD604,Nok Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:37:54.850370
+2026-08-31,DMK,departure,17:55,KOP Nakhon Phanom,FD3342,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:37:56.316198
+2026-08-31,DMK,departure,17:55,UBP Ubon Ratchathani,FD3372,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:37:57.925419
+2026-08-31,DMK,departure,18:00,HKT Phuket,SL762,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:37:59.297228
+2026-08-31,DMK,departure,18:00,PHS Phitsanulok,DD208,Nok Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:38:00.688763
+2026-08-31,DMK,departure,18:00,UTH Udon Thani,FD3356,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:38:02.207951
+2026-08-31,DMK,departure,18:05,KUL Kuala Lumpur,OD529,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:38:03.544357
+2026-08-31,DMK,departure,18:10,CNX Chiang Mai,FD3429,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:38:05.073311
+2026-08-31,DMK,departure,18:15,AMD Ahmedabad,FD144,Thai AirAsia,text,4h 25m,Airbus A320neo,True,2026-02-15T22:38:06.757135
+2026-08-31,DMK,departure,18:15,ROI Roi Et,FD3562,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:38:08.329783
+2026-08-31,DMK,departure,18:15,USM Koh Samui,PG455,Bangkok Airways,text,1h 30m,ATR 42 / ATR 72,True,2026-02-15T22:38:10.337910
+2026-08-31,DMK,departure,18:20,CGK Jakarta,QZ257,Indonesia AirAsia,text,3h 30m,Airbus A320,True,2026-02-15T22:38:11.743028
+2026-08-31,DMK,departure,18:20,HDY Hat Yai,DD508,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:38:13.156542
+2026-08-31,DMK,departure,18:20,HDY Hat Yai,FD3104,Thai AirAsia,text,1h 30m,Airbus A321neo,True,2026-02-15T22:38:14.629606
+2026-08-31,DMK,departure,18:20,HDY Hat Yai,SL716,Thai Lion Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:38:16.032197
+2026-08-31,DMK,departure,18:25,HAN Hanoi,FD644,Thai AirAsia,text,1h 55m,Airbus A320,True,2026-02-15T22:38:17.425873
+2026-08-31,DMK,departure,18:25,NST Nakhon Si Thammarat,FD3182,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:38:18.813130
+2026-08-31,DMK,departure,18:30,CEI Chiang Rai,SL544,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:38:20.395525
+2026-08-31,DMK,departure,18:30,SZX Shenzhen,FD596,Thai AirAsia,text,2h 55m,Airbus A320,True,2026-02-15T22:38:22.088151
+2026-08-31,DMK,departure,18:35,HKT Phuket,FD3009,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:38:24.396491
+2026-08-31,DMK,departure,18:35,KUL Kuala Lumpur,AK893,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:38:25.863465
+2026-08-31,DMK,departure,18:45,NST Nakhon Si Thammarat,SL794,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:38:27.241720
+2026-08-31,DMK,departure,18:50,UTH Udon Thani,SL616,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:38:28.646966
+2026-08-31,DMK,departure,18:55,KKC Khon Kaen,FD3258,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:38:30.070629
+2026-08-31,DMK,departure,18:55,RGN Yangon,8M363,MAI,text,1h 20m,Embraer 190,True,2026-02-15T22:38:31.531439
+2026-08-31,DMK,departure,19:05,CAN Guangzhou,FD530,Thai AirAsia,text,3h 5m,Airbus A320,True,2026-02-15T22:38:32.968199
+2026-08-31,DMK,departure,19:05,UTH Udon Thani,FD3350,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:38:34.415178
+2026-08-31,DMK,departure,19:10,HKT Phuket,FD3011,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:38:36.111769
+2026-08-31,DMK,departure,19:25,CNX Chiang Mai,FD3443,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:38:37.675741
+2026-08-31,DMK,departure,19:25,SGN Ho Chi Minh City,FD658,Thai AirAsia,text,1h 40m,Airbus A320,True,2026-02-15T22:38:41.530097
+2026-08-31,DMK,departure,19:30,ALA Almaty,XJ864,Thai AirAsia X,text,6h 40m,Airbus A330-300,True,2026-02-15T22:38:42.947159
+2026-08-31,DMK,departure,19:30,CNX Chiang Mai,SL520,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:38:44.303492
+2026-08-31,DMK,departure,19:30,HKT Phuket,SL764,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:38:45.714942
+2026-08-31,DMK,departure,19:40,KUL Kuala Lumpur,AK889,AirAsia,text,2h 10m,Airbus A320,True,2026-02-15T22:38:47.092739
+2026-08-31,DMK,departure,19:45,CEI Chiang Rai,FD3205,Thai AirAsia,text,1h 20m,Airbus A321neo,True,2026-02-15T22:38:48.473029
+2026-08-31,DMK,departure,19:45,HDY Hat Yai,SL724,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:38:49.905436
+2026-08-31,DMK,departure,19:55,ATQ Amritsar,SL214,Thai Lion Air,text,4h 35m,Boeing 737-800 Passenger,True,2026-02-15T22:38:51.902245
+2026-08-31,DMK,departure,19:55,HKT Phuket,FD3031,Thai AirAsia,text,1h 35m,Airbus A321neo,True,2026-02-15T22:38:53.968342
+2026-08-31,DMK,departure,20:00,XIY Xian,SL950,Thai Lion Air,text,3h 35m,Boeing 737-800 Passenger,True,2026-02-15T22:38:55.557452
+2026-08-31,DMK,departure,20:05,HDY Hat Yai,FD3112,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:38:57.587136
+2026-08-31,DMK,departure,20:15,KUL Kuala Lumpur,OD523,Batik Air,text,2h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:38:58.972501
+2026-08-31,DMK,departure,20:15,LKO Lucknow,FD146,Thai AirAsia,text,3h 50m,Airbus A320neo,True,2026-02-15T22:39:00.359637
+2026-08-31,DMK,departure,20:20,CMB Colombo,FD140,Thai AirAsia,text,3h 25m,Airbus A320,True,2026-02-15T22:39:01.755972
+2026-08-31,DMK,departure,20:20,COK Kochi,FD170,Thai AirAsia,text,3h 40m,Airbus A320,True,2026-02-15T22:39:03.227084
+2026-08-31,DMK,departure,20:35,BLR Bengaluru,FD137,Thai AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:39:04.577587
+2026-08-31,DMK,departure,20:35,HKT Phuket,FD3013,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:39:05.969888
+2026-08-31,DMK,departure,20:40,CGK Jakarta,QZ253,Indonesia AirAsia,text,3h 25m,Airbus A320,True,2026-02-15T22:39:07.559163
+2026-08-31,DMK,departure,20:50,BOM Mumbai,SL218,Thai Lion Air,text,4h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:39:09.141563
+2026-08-31,DMK,departure,20:50,CNX Chiang Mai,FD8439,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:39:11.198544
+2026-08-31,DMK,departure,20:50,HYD Hyderabad,FD118,Thai AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:39:12.565585
+2026-08-31,DMK,departure,21:00,CNX Chiang Mai,DD148,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:39:13.985809
+2026-08-31,DMK,departure,21:05,BLR Bengaluru,SL216,Thai Lion Air,text,3h 55m,Boeing 737-900 Passenger,True,2026-02-15T22:39:15.405367
+2026-08-31,DMK,departure,21:05,HKT Phuket,DD536,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:39:16.755723
+2026-08-31,DMK,departure,21:10,MAA Chennai,FD153,Thai AirAsia,text,3h 15m,Airbus A320,True,2026-02-15T22:39:18.185725
+2026-08-31,DMK,departure,21:15,DVO Davao,5J5965,Cebu Pacific,text,4h 30m,Airbus A320neo,True,2026-02-15T22:39:19.587319
+2026-08-31,DMK,departure,21:30,KUL Kuala Lumpur,AK897,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:39:21.005379
+2026-08-31,DMK,departure,21:45,CKG Chongqing,SL930,Thai Lion Air,text,3h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:39:22.661273
+2026-08-31,DMK,departure,21:45,CNX Chiang Mai,FD3419,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:39:24.599919
+2026-08-31,DMK,departure,21:50,HKT Phuket,SL770,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:39:27.346380
+2026-08-31,DMK,departure,21:50,TFU Chengdu,FD562,Thai AirAsia,text,3h 10m,Airbus A320,True,2026-02-15T22:39:28.882787
+2026-08-31,DMK,departure,21:55,GAU Guwahati,FD124,Thai AirAsia,text,2h 45m,Airbus A320,True,2026-02-15T22:39:30.435169
+2026-08-31,DMK,departure,22:00,CAN Guangzhou,SL900,Thai Lion Air,text,2h 50m,Boeing 737-800 Passenger,True,2026-02-15T22:39:32.150682
+2026-08-31,DMK,departure,22:55,CCU Kolkata,FD120,Thai AirAsia,text,2h 34m,Airbus A320,True,2026-02-15T22:39:33.666835
+2026-08-31,DMK,departure,23:10,MNL Manila,5J864,Cebu Pacific,text,3h 35m,Airbus A321neo,True,2026-02-15T22:39:35.116990
+2026-08-31,DMK,departure,23:55,NRT Tokyo,XJ600,Thai AirAsia X,text,6h 5m,Airbus A330-300,True,2026-02-15T22:39:36.547492
+2026-08-31,DMK,arrival,00:15,TPE Taipei,SL395,Thai Lion Air,text,3h 55m,Boeing 737-900 Passenger,True,2026-02-15T22:40:06.386631
+2026-08-31,DMK,arrival,00:20,TFU Chengdu,SL933,Thai Lion Air,text,3h 5m,Boeing 737-900 Passenger,True,2026-02-15T22:40:08.000003
+2026-08-31,DMK,arrival,00:40,CNX Chiang Mai,FD3420,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:40:09.605368
+2026-08-31,DMK,arrival,01:15,SZX Shenzhen,FD597,Thai AirAsia,text,2h 45m,Airbus A320,True,2026-02-15T22:40:13.453995
+2026-08-31,DMK,arrival,01:30,KIX Osaka,XJ611,Thai AirAsia X,text,6h 30m,Airbus A330-300,True,2026-02-15T22:40:14.857371
+2026-08-31,DMK,arrival,01:40,XIY Xian,FD589,Thai AirAsia,text,3h 50m,Airbus A320,True,2026-02-15T22:40:16.306952
+2026-08-31,DMK,arrival,01:55,CAN Guangzhou,FD531,Thai AirAsia,text,2h 45m,Airbus A320,True,2026-02-15T22:40:17.821932
+2026-08-31,DMK,arrival,02:40,HGH Hangzhou,SL921,Thai Lion Air,text,4h 20m,Boeing 737-900 Passenger,True,2026-02-15T22:40:19.447814
+2026-08-31,DMK,arrival,02:40,DEL Delhi,XJ231,Thai AirAsia X,text,4h 15m,Airbus A330-300,True,2026-02-15T22:40:20.888163
+2026-08-31,DMK,arrival,02:40,NRT Tokyo,XJ607,Thai AirAsia X,text,7h 25m,Airbus A330-300,True,2026-02-15T22:40:22.304879
+2026-08-31,DMK,arrival,03:45,GAU Guwahati,FD125,Thai AirAsia,text,2h 35m,Airbus A320,True,2026-02-15T22:40:23.781217
+2026-08-31,DMK,arrival,04:00,LKO Lucknow,FD147,Thai AirAsia,text,3h 25m,Airbus A320neo,True,2026-02-15T22:40:25.371343
+2026-08-31,DMK,arrival,04:15,CMB Colombo,FD141,Thai AirAsia,text,3h 30m,Airbus A320,True,2026-02-15T22:40:27.738022
+2026-08-31,DMK,arrival,04:15,JAI Jaipur,FD131,Thai AirAsia,text,4h 10m,Airbus A320neo,True,2026-02-15T22:40:29.184654
+2026-08-31,DMK,arrival,04:20,MAA Chennai,FD154,Thai AirAsia,text,3h 25m,Airbus A320,True,2026-02-15T22:40:30.593113
+2026-08-31,DMK,arrival,04:25,BLR Bengaluru,FD138,Thai AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:40:32.013896
+2026-08-31,DMK,arrival,04:30,CCU Kolkata,FD121,Thai AirAsia,text,2h 30m,Airbus A320,True,2026-02-15T22:40:33.432532
+2026-08-31,DMK,arrival,04:30,HYD Hyderabad,FD119,Thai AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:40:35.008307
+2026-08-31,DMK,arrival,04:40,COK Kochi,FD171,Thai AirAsia,text,4h 0m,Airbus A320,True,2026-02-15T22:40:36.415808
+2026-08-31,DMK,arrival,04:40,XIY Xian,SL951,Thai Lion Air,text,4h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:40:37.892292
+2026-08-31,DMK,arrival,04:50,CAN Guangzhou,SL901,Thai Lion Air,text,3h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:40:39.574240
+2026-08-31,DMK,arrival,05:00,TFU Chengdu,FD563,Thai AirAsia,text,3h 10m,Airbus A320,True,2026-02-15T22:40:41.148393
+2026-08-31,DMK,arrival,05:00,CKG Chongqing,SL931,Thai Lion Air,text,3h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:40:43.365654
+2026-08-31,DMK,arrival,05:25,SZX Shenzhen,SL903,Thai Lion Air,text,2h 45m,Boeing 737-800 Passenger,True,2026-02-15T22:40:44.945534
+2026-08-31,DMK,arrival,05:35,CEB Cebu City,5J5958,Cebu Pacific,text,4h 5m,Airbus A321neo,True,2026-02-15T22:40:46.546663
+2026-08-31,DMK,arrival,06:10,BLR Bengaluru,SL217,Thai Lion Air,text,4h 10m,Boeing 737-900 Passenger,True,2026-02-15T22:40:48.058118
+2026-08-31,DMK,arrival,06:10,PVG Shanghai,SL927,Thai Lion Air,text,4h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:40:49.504712
+2026-08-31,DMK,arrival,06:30,BOM Mumbai,SL219,Thai Lion Air,text,4h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:40:50.976560
+2026-08-31,DMK,arrival,06:35,CCU Kolkata,SL243,Thai Lion Air,text,2h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:40:52.511548
+2026-08-31,DMK,arrival,07:15,AMD Ahmedabad,SL213,Thai Lion Air,text,4h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:40:54.063736
+2026-08-31,DMK,arrival,07:15,MAA Chennai,SL241,Thai Lion Air,text,3h 45m,Boeing 737-800 Passenger,True,2026-02-15T22:40:55.763564
+2026-08-31,DMK,arrival,07:50,RGN Yangon,8M364,MAI,text,1h 20m,Embraer 190,True,2026-02-15T22:40:57.542600
+2026-08-31,DMK,arrival,07:50,KUL Kuala Lumpur,AK890,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:40:59.928569
+2026-08-31,DMK,arrival,08:05,CNX Chiang Mai,DD123,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:41:01.639299
+2026-08-31,DMK,arrival,08:05,CNX Chiang Mai,FD3417,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:41:02.977822
+2026-08-31,DMK,arrival,08:15,KUL Kuala Lumpur,OD524,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:41:04.394508
+2026-08-31,DMK,arrival,08:15,COK Kochi,SL211,Thai Lion Air,text,4h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:41:05.809393
+2026-08-31,DMK,arrival,08:25,USM Koh Samui,PG450,Bangkok Airways,text,1h 30m,ATR 42 / ATR 72,True,2026-02-15T22:41:07.185096
+2026-08-31,DMK,arrival,08:40,UTH Udon Thani,DD301,Nok Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:41:08.594736
+2026-08-31,DMK,arrival,09:00,URT Surat Thani,DD571,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:41:10.169935
+2026-08-31,DMK,arrival,09:00,UTH Udon Thani,FD3349,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:41:11.801277
+2026-08-31,DMK,arrival,09:10,HKT Phuket,DD539,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:41:14.167230
+2026-08-31,DMK,arrival,09:10,NST Nakhon Si Thammarat,DD551,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:41:15.708501
+2026-08-31,DMK,arrival,09:15,HKT Phuket,FD3036,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:41:17.122599
+2026-08-31,DMK,arrival,09:15,HKT Phuket,SL771,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:41:18.670307
+2026-08-31,DMK,arrival,09:20,VTE Vientiane,FD1043,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:41:20.194843
+2026-08-31,DMK,arrival,09:25,KKC Khon Kaen,FD3251,Thai AirAsia,text,0h 50m,Airbus A320,True,2026-02-15T22:41:21.565004
+2026-08-31,DMK,arrival,09:25,ROI Roi Et,FD3567,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:41:22.966930
+2026-08-31,DMK,arrival,09:25,CNX Chiang Mai,SL503,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:41:24.546299
+2026-08-31,DMK,arrival,09:30,KUL Kuala Lumpur,AK880,AirAsia,text,2h 10m,Airbus A320,True,2026-02-15T22:41:26.195726
+2026-08-31,DMK,arrival,09:30,CNX Chiang Mai,DD121,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:41:31.055046
+2026-08-31,DMK,arrival,09:40,CNX Chiang Mai,FD3438,Thai AirAsia,text,1h 10m,Airbus A321neo,True,2026-02-15T22:41:32.529601
+2026-08-31,DMK,arrival,09:40,HKT Phuket,FD3002,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:41:33.873558
+2026-08-31,DMK,arrival,09:45,KBV Krabi,SL801,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:41:35.297555
+2026-08-31,DMK,arrival,09:50,NST Nakhon Si Thammarat,FD3189,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:41:36.774285
+2026-08-31,DMK,arrival,09:50,UBP Ubon Ratchathani,FD3371,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:41:38.125711
+2026-08-31,DMK,arrival,09:50,HDY Hat Yai,SL703,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:41:39.525556
+2026-08-31,DMK,arrival,10:00,CJM Chumphon,FD3149,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:41:40.959293
+2026-08-31,DMK,arrival,10:00,CGK Jakarta,SL117,Thai Lion Air,text,3h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:41:42.687769
+2026-08-31,DMK,arrival,10:05,HDY Hat Yai,FD3103,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:41:44.228645
+2026-08-31,DMK,arrival,10:05,URT Surat Thani,FD3236,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:41:46.553544
+2026-08-31,DMK,arrival,10:10,SNO Sakon Nakhon,DD361,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:41:47.989862
+2026-08-31,DMK,arrival,10:10,SNO Sakon Nakhon,FD3511,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:41:49.389501
+2026-08-31,DMK,arrival,10:10,HKT Phuket,SL751,Thai Lion Air,text,1h 20m,Boeing 737-900 Passenger,True,2026-02-15T22:41:50.784428
+2026-08-31,DMK,arrival,10:10,KBV Krabi,SL815,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:41:52.173917
+2026-08-31,DMK,arrival,10:10,PVG Shanghai,XJ761,Thai AirAsia X,text,4h 20m,Airbus A330-300,True,2026-02-15T22:41:53.589340
+2026-08-31,DMK,arrival,10:15,CEI Chiang Rai,FD3200,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:41:54.949239
+2026-08-31,DMK,arrival,10:15,KBV Krabi,FD3214,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:41:56.669596
+2026-08-31,DMK,arrival,10:15,RGN Yangon,FD252,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:41:58.257968
+2026-08-31,DMK,arrival,10:15,NST Nakhon Si Thammarat,SL783,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:42:00.055474
+2026-08-31,DMK,arrival,10:15,PHS Phitsanulok,SL551,Thai Lion Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:42:01.495173
+2026-08-31,DMK,arrival,10:15,ALA Almaty,XJ865,Thai AirAsia X,text,6h 45m,Airbus A330-300,True,2026-02-15T22:42:03.136560
+2026-08-31,DMK,arrival,10:20,PHS Phitsanulok,FD3309,Thai AirAsia,text,0h 45m,Airbus A320,True,2026-02-15T22:42:04.585127
+2026-08-31,DMK,arrival,10:25,BFV Buri Ram,FD3523,Thai AirAsia,text,0h 55m,Airbus A320,True,2026-02-15T22:42:05.979246
+2026-08-31,DMK,arrival,10:25,CNX Chiang Mai,FD3446,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:42:07.367572
+2026-08-31,DMK,arrival,10:25,HKT Phuket,FD3038,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:42:08.741744
+2026-08-31,DMK,arrival,10:25,NNT Nan,FD3555,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:42:10.241484
+2026-08-31,DMK,arrival,10:25,UBP Ubon Ratchathani,SL621,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:42:11.851671
+2026-08-31,DMK,arrival,10:35,URT Surat Thani,SL735,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:42:14.190868
+2026-08-31,DMK,arrival,10:40,UTH Udon Thani,FD3355,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:42:15.603489
+2026-08-31,DMK,arrival,10:40,KOP Nakhon Phanom,SL671,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:42:17.041190
+2026-08-31,DMK,arrival,10:40,UTH Udon Thani,SL601,Thai Lion Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:42:18.427805
+2026-08-31,DMK,arrival,10:50,KOP Nakhon Phanom,FD3399,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:42:19.827241
+2026-08-31,DMK,arrival,10:50,CGK Jakarta,QZ250,Indonesia AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:42:21.245503
+2026-08-31,DMK,arrival,10:55,HAN Hanoi,FD643,Thai AirAsia,text,1h 50m,Airbus A321neo,True,2026-02-15T22:42:23.011479
+2026-08-31,DMK,arrival,10:55,KKC Khon Kaen,FD3249,Thai AirAsia,text,0h 55m,Airbus A320,True,2026-02-15T22:42:24.575882
+2026-08-31,DMK,arrival,11:00,HKT Phuket,FD3030,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:42:26.213386
+2026-08-31,DMK,arrival,11:00,KKC Khon Kaen,SL643,Thai Lion Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:42:28.710941
+2026-08-31,DMK,arrival,11:05,KUL Kuala Lumpur,OD520,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:42:30.461850
+2026-08-31,DMK,arrival,11:10,KTI Phnom Penh,FD609,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:42:32.012912
+2026-08-31,DMK,arrival,11:15,CEI Chiang Rai,FD3202,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:42:33.779581
+2026-08-31,DMK,arrival,11:15,TST Trang,FD3242,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:42:35.255826
+2026-08-31,DMK,arrival,11:15,HKT Phuket,SL753,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:42:36.703378
+2026-08-31,DMK,arrival,11:20,DAD Da Nang,FD635,Thai AirAsia,text,1h 40m,Airbus A321neo,True,2026-02-15T22:42:38.097027
+2026-08-31,DMK,arrival,11:25,CNX Chiang Mai,FD8436,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:42:39.566839
+2026-08-31,DMK,arrival,11:25,MNL Manila,Z2285,Philippines AirAsia,text,3h 20m,Airbus A320,True,2026-02-15T22:42:41.228679
+2026-08-31,DMK,arrival,11:30,SGN Ho Chi Minh City,FD657,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:42:42.815422
+2026-08-31,DMK,arrival,11:30,CEI Chiang Rai,SL533,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:42:45.131216
+2026-08-31,DMK,arrival,11:35,TST Trang,SL825,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:42:46.659497
+2026-08-31,DMK,arrival,11:40,FUK Fukuoka,FD237,Thai AirAsia,text,5h 25m,Airbus A321neo,True,2026-02-15T22:42:48.072124
+2026-08-31,DMK,arrival,11:45,CNX Chiang Mai,SL507,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:42:49.510091
+2026-08-31,DMK,arrival,11:50,KUL Kuala Lumpur,OD526,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:42:50.925633
+2026-08-31,DMK,arrival,11:55,CEI Chiang Rai,DD101,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:42:52.316894
+2026-08-31,DMK,arrival,12:00,KUL Kuala Lumpur,FD312,Thai AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:42:53.725644
+2026-08-31,DMK,arrival,12:05,NNT Nan,DD173,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:42:55.249831
+2026-08-31,DMK,arrival,12:10,KBV Krabi,FD3230,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:42:56.828231
+2026-08-31,DMK,arrival,12:10,KNO Kuala Namu,QZ154,Indonesia AirAsia,text,2h 5m,Airbus A320,True,2026-02-15T22:43:01.540290
+2026-08-31,DMK,arrival,12:15,CNX Chiang Mai,FD3436,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:43:02.951319
+2026-08-31,DMK,arrival,12:15,HDY Hat Yai,SL705,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:43:04.327488
+2026-08-31,DMK,arrival,12:15,PEN Penang,SL133,Thai Lion Air,text,1h 45m,Boeing 737-800 Passenger,True,2026-02-15T22:43:05.736862
+2026-08-31,DMK,arrival,12:20,RGN Yangon,8M360,MAI,text,1h 20m,Embraer 190,True,2026-02-15T22:43:07.148821
+2026-08-31,DMK,arrival,12:25,UBP Ubon Ratchathani,DD323,Nok Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:43:08.522859
+2026-08-31,DMK,arrival,12:30,CXR Nha Trang,FD647,Thai AirAsia,text,2h 0m,Airbus A320,True,2026-02-15T22:43:09.931531
+2026-08-31,DMK,arrival,12:30,KBV Krabi,SL807,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:43:11.394269
+2026-08-31,DMK,arrival,12:35,KUL Kuala Lumpur,AK882,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:43:13.003668
+2026-08-31,DMK,arrival,12:40,HKT Phuket,SL759,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:43:14.591734
+2026-08-31,DMK,arrival,12:40,UBP Ubon Ratchathani,SL625,Thai Lion Air,text,1h 10m,Boeing 737-900 Passenger,True,2026-02-15T22:43:17.206891
+2026-08-31,DMK,arrival,12:45,USM Koh Samui,PG452,Bangkok Airways,text,1h 30m,ATR 42 / ATR 72,True,2026-02-15T22:43:18.605519
+2026-08-31,DMK,arrival,12:50,URT Surat Thani,FD3238,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:43:20.007387
+2026-08-31,DMK,arrival,12:55,LOE Loei,FD3543,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:43:21.455617
+2026-08-31,DMK,arrival,13:00,SAI Siem Reap,FD611,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:43:22.879838
+2026-08-31,DMK,arrival,13:05,HKT Phuket,DD523,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:43:24.240922
+2026-08-31,DMK,arrival,13:05,CNX Chiang Mai,FD3428,Thai AirAsia,text,1h 5m,Airbus A321neo,True,2026-02-15T22:43:25.640406
+2026-08-31,DMK,arrival,13:05,NST Nakhon Si Thammarat,FD3181,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:43:27.311656
+2026-08-31,DMK,arrival,13:10,JHB Johor Bharu,FD513,Thai AirAsia,text,2h 25m,Airbus A320,True,2026-02-15T22:43:28.900812
+2026-08-31,DMK,arrival,13:20,KBV Krabi,DD543,Nok Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:43:31.206768
+2026-08-31,DMK,arrival,13:20,CKG Chongqing,FD557,Thai AirAsia,text,3h 10m,Airbus A320,True,2026-02-15T22:43:32.770722
+2026-08-31,DMK,arrival,13:25,CNX Chiang Mai,DD125,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:43:34.190127
+2026-08-31,DMK,arrival,13:25,ROI Roi Et,FD3565,Thai AirAsia,text,0h 55m,Airbus A320,True,2026-02-15T22:43:35.607421
+2026-08-31,DMK,arrival,13:25,HKT Phuket,SL755,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:43:37.105111
+2026-08-31,DMK,arrival,13:40,SIN Singapore,SL101,Thai Lion Air,text,2h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:43:38.553715
+2026-08-31,DMK,arrival,13:45,DAD Da Nang,FD637,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:43:40.005618
+2026-08-31,DMK,arrival,13:45,UBP Ubon Ratchathani,FD3375,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:43:41.525900
+2026-08-31,DMK,arrival,13:50,KMG Kunming,FD583,Thai AirAsia,text,2h 20m,Airbus A320,True,2026-02-15T22:43:43.120151
+2026-08-31,DMK,arrival,13:50,KKC Khon Kaen,SL645,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:43:45.101467
+2026-08-31,DMK,arrival,13:55,KBV Krabi,FD3211,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:43:46.485654
+2026-08-31,DMK,arrival,14:00,NAW Narathiwat,FD3131,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:43:47.971115
+2026-08-31,DMK,arrival,14:00,UTH Udon Thani,SL605,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:43:49.319403
+2026-08-31,DMK,arrival,14:05,NST Nakhon Si Thammarat,DD553,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:43:50.717366
+2026-08-31,DMK,arrival,14:05,LPT Lampang,FD3924,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:43:52.149435
+2026-08-31,DMK,arrival,14:10,HAN Hanoi,FD641,Thai AirAsia,text,1h 50m,Airbus A320,True,2026-02-15T22:43:53.489988
+2026-08-31,DMK,arrival,14:10,HDY Hat Yai,SL707,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:43:54.955615
+2026-08-31,DMK,arrival,14:15,HDY Hat Yai,FD3117,Thai AirAsia,text,1h 35m,Airbus A320,True,2026-02-15T22:43:56.606889
+2026-08-31,DMK,arrival,14:25,CEI Chiang Rai,FD3210,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:43:58.239582
+2026-08-31,DMK,arrival,14:25,KKC Khon Kaen,FD3255,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:44:00.434985
+2026-08-31,DMK,arrival,14:25,CNX Chiang Mai,SL509,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:44:01.871714
+2026-08-31,DMK,arrival,14:25,KIX Osaka,XJ613,Thai AirAsia X,text,6h 30m,Airbus A330-300,True,2026-02-15T22:44:03.269939
+2026-08-31,DMK,arrival,14:30,NNT Nan,FD3553,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:44:04.725757
+2026-08-31,DMK,arrival,14:35,UNN Ranong,FD3141,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:44:06.167430
+2026-08-31,DMK,arrival,14:40,URT Surat Thani,FD3240,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:44:07.516418
+2026-08-31,DMK,arrival,14:40,NRT Tokyo,XJ601,Thai AirAsia X,text,7h 25m,Airbus A330-300,True,2026-02-15T22:44:09.016509
+2026-08-31,DMK,arrival,14:45,KUL Kuala Lumpur,AK884,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:44:10.675763
+2026-08-31,DMK,arrival,14:45,TST Trang,DD593,Nok Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:44:12.529538
+2026-08-31,DMK,arrival,14:45,HKT Phuket,FD3026,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:44:16.980356
+2026-08-31,DMK,arrival,14:45,CNX Chiang Mai,SL511,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:44:18.409916
+2026-08-31,DMK,arrival,14:45,NST Nakhon Si Thammarat,SL785,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:44:19.876686
+2026-08-31,DMK,arrival,14:50,KBV Krabi,FD3226,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:44:22.309383
+2026-08-31,DMK,arrival,14:50,NST Nakhon Si Thammarat,FD3185,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:44:23.830184
+2026-08-31,DMK,arrival,14:55,PEN Penang,FD324,Thai AirAsia,text,1h 50m,Airbus A320,True,2026-02-15T22:44:25.220132
+2026-08-31,DMK,arrival,14:55,UTH Udon Thani,FD3359,Thai AirAsia,text,1h 10m,Airbus A321neo,True,2026-02-15T22:44:26.631164
+2026-08-31,DMK,arrival,15:00,HKT Phuket,FD3004,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:44:28.103384
+2026-08-31,DMK,arrival,15:00,VTE Vientiane,FD1041,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:44:29.750015
+2026-08-31,DMK,arrival,15:10,CSX Changsha,FD481,Thai AirAsia,text,3h 15m,Airbus A320,True,2026-02-15T22:44:31.377084
+2026-08-31,DMK,arrival,15:10,UBP Ubon Ratchathani,SL627,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:44:33.391019
+2026-08-31,DMK,arrival,15:15,PQC Phu Quoc,FD661,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:44:34.979015
+2026-08-31,DMK,arrival,15:25,BFV Buri Ram,FD3521,Thai AirAsia,text,0h 55m,Airbus A320,True,2026-02-15T22:44:36.409479
+2026-08-31,DMK,arrival,15:30,KUL Kuala Lumpur,AK886,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:44:37.877188
+2026-08-31,DMK,arrival,15:30,UTH Udon Thani,DD307,Nok Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:44:39.294844
+2026-08-31,DMK,arrival,15:30,ICN Seoul,XJ701,Thai AirAsia X,text,6h 10m,Airbus A330-300,True,2026-02-15T22:44:40.751168
+2026-08-31,DMK,arrival,15:35,DPS Denpasar,FD397,Thai AirAsia,text,4h 35m,Airbus A320,True,2026-02-15T22:44:42.147748
+2026-08-31,DMK,arrival,15:40,URT Surat Thani,SL737,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:44:43.799109
+2026-08-31,DMK,arrival,15:45,KOP Nakhon Phanom,FD3395,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:44:45.396888
+2026-08-31,DMK,arrival,15:50,CNX Chiang Mai,FD3434,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:44:47.564570
+2026-08-31,DMK,arrival,15:50,HKT Phuket,SL757,Thai Lion Air,text,1h 20m,Boeing 737-900 Passenger,True,2026-02-15T22:44:49.022430
+2026-08-31,DMK,arrival,15:55,HKT Phuket,FD3006,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:44:50.384280
+2026-08-31,DMK,arrival,15:55,HDY Hat Yai,SL711,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:44:52.179959
+2026-08-31,DMK,arrival,16:00,MFM Macau,FD763,Thai AirAsia,text,2h 45m,Airbus A320,True,2026-02-15T22:44:53.589547
+2026-08-31,DMK,arrival,16:05,HKT Phuket,DD525,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:44:55.041816
+2026-08-31,DMK,arrival,16:05,LPQ Luang Prabang,FD1031,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:44:56.427145
+2026-08-31,DMK,arrival,16:05,CEI Chiang Rai,SL539,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:44:57.944793
+2026-08-31,DMK,arrival,16:05,HKG Hong Kong,SL361,Thai Lion Air,text,2h 45m,Boeing 737-900 Passenger,True,2026-02-15T22:44:59.619602
+2026-08-31,DMK,arrival,16:10,CGK Jakarta,QG512,Citilink,text,3h 40m,Airbus A320,True,2026-02-15T22:45:01.299567
+2026-08-31,DMK,arrival,16:15,CJM Chumphon,FD3147,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:45:03.720240
+2026-08-31,DMK,arrival,16:20,CNX Chiang Mai,FD3426,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:45:05.182738
+2026-08-31,DMK,arrival,16:20,SIN Singapore,FD356,Thai AirAsia,text,2h 40m,Airbus A321neo,True,2026-02-15T22:45:06.544577
+2026-08-31,DMK,arrival,16:20,UTH Udon Thani,SL607,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:45:08.086668
+2026-08-31,DMK,arrival,16:25,SNO Sakon Nakhon,DD365,Nok Air,text,1h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:45:09.517466
+2026-08-31,DMK,arrival,16:25,SAI Siem Reap,FD615,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:45:10.964062
+2026-08-31,DMK,arrival,16:25,SNO Sakon Nakhon,FD3515,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:45:12.414070
+2026-08-31,DMK,arrival,16:25,CNX Chiang Mai,SL513,Thai Lion Air,text,1h 20m,Boeing 737-900 Passenger,True,2026-02-15T22:45:13.890031
+2026-08-31,DMK,arrival,16:25,MFM Macau,SL373,Thai Lion Air,text,2h 40m,Boeing 737-800 Passenger,True,2026-02-15T22:45:15.480020
+2026-08-31,DMK,arrival,16:30,HKT Phuket,FD3092,Thai AirAsia,text,1h 20m,Airbus A321neo,True,2026-02-15T22:45:17.069125
+2026-08-31,DMK,arrival,16:30,NAW Narathiwat,FD3135,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:45:19.366571
+2026-08-31,DMK,arrival,16:35,URT Surat Thani,DD575,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:45:20.720933
+2026-08-31,DMK,arrival,16:35,NST Nakhon Si Thammarat,SL787,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:45:22.126165
+2026-08-31,DMK,arrival,16:40,PHS Phitsanulok,SL557,Thai Lion Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:45:23.552200
+2026-08-31,DMK,arrival,16:45,CEI Chiang Rai,FD3204,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:45:24.959786
+2026-08-31,DMK,arrival,16:45,SZB Kuala Lumpur,OD532,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:45:26.395604
+2026-08-31,DMK,arrival,16:50,URT Surat Thani,FD3234,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:45:27.854110
+2026-08-31,DMK,arrival,16:55,NRT Tokyo,XJ603,Thai AirAsia X,text,6h 45m,Airbus A330-300,True,2026-02-15T22:45:29.507295
+2026-08-31,DMK,arrival,17:05,CNX Chiang Mai,DD133,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:45:31.108533
+2026-08-31,DMK,arrival,17:05,KUL Kuala Lumpur,OD528,Batik Air,text,2h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:45:34.970251
+2026-08-31,DMK,arrival,17:05,ICN Seoul,SL353,Thai Lion Air,text,5h 35m,Boeing 737-800 Passenger,True,2026-02-15T22:45:36.420535
+2026-08-31,DMK,arrival,17:10,HDY Hat Yai,FD3119,Thai AirAsia,text,1h 35m,Airbus A320,True,2026-02-15T22:45:37.805612
+2026-08-31,DMK,arrival,17:10,JHB Johor Bharu,FD511,Thai AirAsia,text,2h 25m,Airbus A320,True,2026-02-15T22:45:39.194618
+2026-08-31,DMK,arrival,17:10,KBV Krabi,FD3224,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:45:40.599681
+2026-08-31,DMK,arrival,17:10,HDY Hat Yai,SL713,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:45:41.981411
+2026-08-31,DMK,arrival,17:15,KKC Khon Kaen,FD3261,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:45:43.358386
+2026-08-31,DMK,arrival,17:25,HKT Phuket,FD3024,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:45:44.934176
+2026-08-31,DMK,arrival,17:25,USM Koh Samui,PG454,Bangkok Airways,text,1h 30m,ATR 42 / ATR 72,True,2026-02-15T22:45:46.626855
+2026-08-31,DMK,arrival,17:25,HKT Phuket,SL769,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:45:48.177925
+2026-08-31,DMK,arrival,17:30,NST Nakhon Si Thammarat,DD555,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:45:50.708473
+2026-08-31,DMK,arrival,17:30,URT Surat Thani,FD3232,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:45:52.406632
+2026-08-31,DMK,arrival,17:35,ROI Roi Et,FD3569,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:45:53.922097
+2026-08-31,DMK,arrival,17:35,SGN Ho Chi Minh City,FD655,Thai AirAsia,text,1h 40m,Airbus A321neo,True,2026-02-15T22:45:55.370961
+2026-08-31,DMK,arrival,17:35,NST Nakhon Si Thammarat,SL789,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:45:56.773317
+2026-08-31,DMK,arrival,17:40,CNX Chiang Mai,FD3440,Thai AirAsia,text,1h 10m,Airbus A321neo,True,2026-02-15T22:45:58.135981
+2026-08-31,DMK,arrival,17:40,UBP Ubon Ratchathani,SL629,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:45:59.701294
+2026-08-31,DMK,arrival,17:45,HDY Hat Yai,FD3109,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:46:01.298228
+2026-08-31,DMK,arrival,17:45,LOE Loei,FD3549,Thai AirAsia,text,0h 55m,Airbus A320,True,2026-02-15T22:46:02.888025
+2026-08-31,DMK,arrival,17:45,PHS Phitsanulok,FD3307,Thai AirAsia,text,0h 50m,Airbus A320,True,2026-02-15T22:46:04.831102
+2026-08-31,DMK,arrival,17:50,CEI Chiang Rai,DD105,Nok Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:46:06.252115
+2026-08-31,DMK,arrival,17:50,CGK Jakarta,QZ256,Indonesia AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:46:07.659203
+2026-08-31,DMK,arrival,17:50,SUB Surabaya,SL269,Thai Lion Air,text,4h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:46:09.021208
+2026-08-31,DMK,arrival,17:50,URT Surat Thani,SL741,Thai Lion Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:46:10.444652
+2026-08-31,DMK,arrival,17:55,MDL Mandalay,8M362,MAI,text,1h 50m,Embraer 190,True,2026-02-15T22:46:11.881816
+2026-08-31,DMK,arrival,18:00,KUL Kuala Lumpur,AK892,AirAsia,text,2h 20m,Airbus A320,True,2026-02-15T22:46:13.240556
+2026-08-31,DMK,arrival,18:00,KOP Nakhon Phanom,FD3397,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:46:14.728285
+2026-08-31,DMK,arrival,18:05,UBP Ubon Ratchathani,FD3361,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:46:16.385124
+2026-08-31,DMK,arrival,18:10,MAQ Mae Sot,DD197,Nok Air,text,0h 55m,Boeing 737-800 Passenger,True,2026-02-15T22:46:17.991521
+2026-08-31,DMK,arrival,18:15,HKT Phuket,FD3008,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:46:19.876652
+2026-08-31,DMK,arrival,18:15,HKT Phuket,SL767,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:46:21.306518
+2026-08-31,DMK,arrival,18:15,UTH Udon Thani,SL611,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:46:22.833997
+2026-08-31,DMK,arrival,18:25,KBV Krabi,FD3216,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:46:24.260187
+2026-08-31,DMK,arrival,18:25,KTI Phnom Penh,FD607,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:46:25.618951
+2026-08-31,DMK,arrival,18:25,UTH Udon Thani,FD3363,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:46:27.147881
+2026-08-31,DMK,arrival,18:30,UNN Ranong,FD3143,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:46:28.535273
+2026-08-31,DMK,arrival,18:35,KKC Khon Kaen,SL647,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:46:30.193103
+2026-08-31,DMK,arrival,18:40,HDY Hat Yai,SL715,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:46:31.792824
+2026-08-31,DMK,arrival,18:45,UBP Ubon Ratchathani,DD327,Nok Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:46:33.418255
+2026-08-31,DMK,arrival,18:45,CNX Chiang Mai,FD3432,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:46:35.958123
+2026-08-31,DMK,arrival,18:45,KTM Kathmandu,SL221,Thai Lion Air,text,3h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:46:37.453209
+2026-08-31,DMK,arrival,18:55,HKT Phuket,FD3018,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:46:38.912746
+2026-08-31,DMK,arrival,19:00,TST Trang,SL827,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:46:40.342989
+2026-08-31,DMK,arrival,19:10,KUL Kuala Lumpur,AK888,AirAsia,text,2h 20m,Airbus A320,True,2026-02-15T22:46:41.701666
+2026-08-31,DMK,arrival,19:10,HDY Hat Yai,FD3115,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:46:43.258622
+2026-08-31,DMK,arrival,19:10,MLE Male,FD176,Thai AirAsia,text,4h 40m,Airbus A320,True,2026-02-15T22:46:44.644616
+2026-08-31,DMK,arrival,19:10,URT Surat Thani,FD3332,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:46:46.437809
+2026-08-31,DMK,arrival,19:15,CEI Chiang Rai,FD3208,Thai AirAsia,text,1h 20m,Airbus A321neo,True,2026-02-15T22:46:48.275721
+2026-08-31,DMK,arrival,19:15,KUL Kuala Lumpur,OD522,Batik Air,text,2h 10m,Boeing 737-800 Passenger,True,2026-02-15T22:46:52.543035
+2026-08-31,DMK,arrival,19:25,PEN Penang,FD322,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:46:53.917797
+2026-08-31,DMK,arrival,19:30,KKC Khon Kaen,FD3257,Thai AirAsia,text,0h 55m,Airbus A321neo,True,2026-02-15T22:46:55.445824
+2026-08-31,DMK,arrival,19:30,PHS Phitsanulok,FD3311,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:46:56.838877
+2026-08-31,DMK,arrival,19:30,TPE Taipei,SL399,Thai Lion Air,text,3h 50m,Boeing 737-800 Passenger,True,2026-02-15T22:46:58.289811
+2026-08-31,DMK,arrival,19:35,CNX Chiang Mai,DD135,Nok Air,text,1h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:46:59.725228
+2026-08-31,DMK,arrival,19:35,KBV Krabi,FD3222,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:47:01.215383
+2026-08-31,DMK,arrival,19:40,KTM Kathmandu,FD183,Thai AirAsia,text,3h 25m,Airbus A320neo,True,2026-02-15T22:47:02.721065
+2026-08-31,DMK,arrival,19:45,CNX Chiang Mai,FD3442,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:47:04.359484
+2026-08-31,DMK,arrival,19:45,LPT Lampang,FD3926,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:47:06.556064
+2026-08-31,DMK,arrival,19:45,UBP Ubon Ratchathani,FD3379,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:47:08.020901
+2026-08-31,DMK,arrival,19:55,DAD Da Nang,FD639,Thai AirAsia,text,1h 45m,Airbus A320,True,2026-02-15T22:47:09.443173
+2026-08-31,DMK,arrival,20:00,HKT Phuket,FD3022,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:47:10.856734
+2026-08-31,DMK,arrival,20:00,RGN Yangon,FD254,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:47:12.308905
+2026-08-31,DMK,arrival,20:00,TST Trang,FD3246,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:47:13.728469
+2026-08-31,DMK,arrival,20:00,CNX Chiang Mai,SL515,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:47:15.116997
+2026-08-31,DMK,arrival,20:00,URT Surat Thani,SL747,Thai Lion Air,text,1h 20m,Boeing 737-900 Passenger,True,2026-02-15T22:47:16.535611
+2026-08-31,DMK,arrival,20:05,HKT Phuket,SL761,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:47:18.188458
+2026-08-31,DMK,arrival,20:10,CGK Jakarta,QZ252,Indonesia AirAsia,text,3h 35m,Airbus A320,True,2026-02-15T22:47:19.818288
+2026-08-31,DMK,arrival,20:15,KHH Kaohsiung,FD235,Thai AirAsia,text,3h 25m,Airbus A320neo,True,2026-02-15T22:47:21.778664
+2026-08-31,DMK,arrival,20:20,KBV Krabi,DD547,Nok Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:47:23.209116
+2026-08-31,DMK,arrival,20:20,CNX Chiang Mai,FD8440,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:47:24.747717
+2026-08-31,DMK,arrival,20:25,HKT Phuket,DD529,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:47:26.097248
+2026-08-31,DMK,arrival,20:25,PHS Phitsanulok,DD209,Nok Air,text,0h 55m,Boeing 737-800 Passenger,True,2026-02-15T22:47:27.521009
+2026-08-31,DMK,arrival,20:30,DVO Davao,5J5964,Cebu Pacific,text,4h 35m,Airbus A320neo,True,2026-02-15T22:47:28.944196
+2026-08-31,DMK,arrival,20:30,CJM Chumphon,DD605,Nok Air,text,1h 0m,Boeing 737-800 Passenger,True,2026-02-15T22:47:30.355541
+2026-08-31,DMK,arrival,20:40,UBP Ubon Ratchathani,FD3373,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:47:31.874162
+2026-08-31,DMK,arrival,20:45,NNT Nan,FD3559,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:47:33.433370
+2026-08-31,DMK,arrival,20:45,UTH Udon Thani,FD3357,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:47:35.359340
+2026-08-31,DMK,arrival,20:45,KOP Nakhon Phanom,SL675,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:47:37.786249
+2026-08-31,DMK,arrival,20:50,KUL Kuala Lumpur,AK896,AirAsia,text,2h 15m,Airbus A320,True,2026-02-15T22:47:39.356946
+2026-08-31,DMK,arrival,20:50,KBV Krabi,FD3228,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:47:41.138703
+2026-08-31,DMK,arrival,20:50,ROI Roi Et,FD3563,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:47:42.677942
+2026-08-31,DMK,arrival,20:50,KBV Krabi,SL813,Thai Lion Air,text,1h 30m,Boeing 737-900 Passenger,True,2026-02-15T22:47:44.733766
+2026-08-31,DMK,arrival,20:50,NST Nakhon Si Thammarat,SL793,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:47:46.623845
+2026-08-31,DMK,arrival,20:55,KOP Nakhon Phanom,FD3343,Thai AirAsia,text,1h 10m,Airbus A320,True,2026-02-15T22:47:48.269382
+2026-08-31,DMK,arrival,20:55,WUH Wuhan,FD573,Thai AirAsia,text,3h 30m,Airbus A320,True,2026-02-15T22:47:50.016917
+2026-08-31,DMK,arrival,21:00,HDY Hat Yai,SL719,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:47:52.012309
+2026-08-31,DMK,arrival,21:10,HDY Hat Yai,FD3111,Thai AirAsia,text,1h 30m,Airbus A320,True,2026-02-15T22:47:53.784181
+2026-08-31,DMK,arrival,21:10,HKT Phuket,FD3028,Thai AirAsia,text,1h 20m,Airbus A321neo,True,2026-02-15T22:47:56.638245
+2026-08-31,DMK,arrival,21:15,CNX Chiang Mai,FD3430,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:47:58.263686
+2026-08-31,DMK,arrival,21:20,HGH Hangzhou,FD497,Thai AirAsia,text,4h 10m,Airbus A320,True,2026-02-15T22:47:59.905632
+2026-08-31,DMK,arrival,21:20,TPE Taipei,FD231,Thai AirAsia,text,3h 50m,Airbus A321neo,True,2026-02-15T22:48:01.901118
+2026-08-31,DMK,arrival,21:25,NST Nakhon Si Thammarat,FD3183,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:48:03.736152
+2026-08-31,DMK,arrival,21:30,KKC Khon Kaen,FD3259,Thai AirAsia,text,1h 0m,Airbus A320,True,2026-02-15T22:48:05.469400
+2026-08-31,DMK,arrival,21:35,CGO Zhengzhou,SL965,Thai Lion Air,text,4h 15m,Boeing 737-800 Passenger,True,2026-02-15T22:48:07.142183
+2026-08-31,DMK,arrival,21:40,DPS Denpasar,SL259,Thai Lion Air,text,4h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:48:08.856011
+2026-08-31,DMK,arrival,21:40,HKT Phuket,SL763,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:48:10.800276
+2026-08-31,DMK,arrival,21:40,UTH Udon Thani,SL617,Thai Lion Air,text,1h 5m,Boeing 737-800 Passenger,True,2026-02-15T22:48:12.667384
+2026-08-31,DMK,arrival,21:50,HDY Hat Yai,DD509,Nok Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:48:14.458029
+2026-08-31,DMK,arrival,21:50,UTH Udon Thani,FD3351,Thai AirAsia,text,1h 5m,Airbus A320,True,2026-02-15T22:48:17.308827
+2026-08-31,DMK,arrival,21:55,HDY Hat Yai,FD3105,Thai AirAsia,text,1h 30m,Airbus A321neo,True,2026-02-15T22:48:18.913875
+2026-08-31,DMK,arrival,21:55,HKT Phuket,FD3010,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:48:20.520965
+2026-08-31,DMK,arrival,22:00,CEI Chiang Rai,SL545,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:48:22.955988
+2026-08-31,DMK,arrival,22:00,HDY Hat Yai,SL717,Thai Lion Air,text,1h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:48:24.583340
+2026-08-31,DMK,arrival,22:00,NST Nakhon Si Thammarat,SL795,Thai Lion Air,text,1h 20m,Boeing 737-800 Passenger,True,2026-02-15T22:48:26.164131
+2026-08-31,DMK,arrival,22:05,HKG Hong Kong,SL365,Thai Lion Air,text,2h 45m,Boeing 737-900 Passenger,True,2026-02-15T22:48:27.889175
+2026-08-31,DMK,arrival,22:10,MNL Manila,5J863,Cebu Pacific,text,3h 45m,Airbus A321neo,True,2026-02-15T22:48:29.562819
+2026-08-31,DMK,arrival,22:10,HKG Hong Kong,FD519,Thai AirAsia,text,2h 50m,Airbus A320,True,2026-02-15T22:48:31.405452
+2026-08-31,DMK,arrival,22:10,SIN Singapore,FD350,Thai AirAsia,text,2h 30m,Airbus A320,True,2026-02-15T22:48:33.302363
+2026-08-31,DMK,arrival,22:30,CNX Chiang Mai,FD3444,Thai AirAsia,text,1h 15m,Airbus A320,True,2026-02-15T22:48:36.535368
+2026-08-31,DMK,arrival,22:30,HKT Phuket,FD3012,Thai AirAsia,text,1h 20m,Airbus A320,True,2026-02-15T22:48:38.195081
+2026-08-31,DMK,arrival,22:45,HAN Hanoi,FD645,Thai AirAsia,text,1h 50m,Airbus A320,True,2026-02-15T22:48:40.551754
+2026-08-31,DMK,arrival,22:45,CNX Chiang Mai,SL521,Thai Lion Air,text,1h 15m,Boeing 737-900 Passenger,True,2026-02-15T22:48:42.116601
+2026-08-31,DMK,arrival,22:45,DEL Delhi,SL245,Thai Lion Air,text,4h 5m,Boeing 737-900 Passenger,True,2026-02-15T22:48:43.712720
+2026-08-31,DMK,arrival,22:55,CEI Chiang Rai,FD3206,Thai AirAsia,text,1h 15m,Airbus A321neo,True,2026-02-15T22:48:45.083313
+2026-08-31,DMK,arrival,23:00,SIN Singapore,SL105,Thai Lion Air,text,2h 30m,Boeing 737-800 Passenger,True,2026-02-15T22:48:46.446376
+2026-08-31,DMK,arrival,23:15,SGN Ho Chi Minh City,FD659,Thai AirAsia,text,1h 40m,Airbus A320,True,2026-02-15T22:48:47.945944
+2026-08-31,DMK,arrival,23:15,HDY Hat Yai,SL725,Thai Lion Air,text,1h 25m,Boeing 737-800 Passenger,True,2026-02-15T22:48:50.010159
+2026-08-31,DMK,arrival,23:30,HKT Phuket,SL765,Thai Lion Air,text,1h 25m,Boeing 737-900 Passenger,True,2026-02-15T22:48:52.637153
+2026-08-31,DMK,arrival,23:40,HDY Hat Yai,FD3113,Thai AirAsia,text,1h 35m,Airbus A321neo,True,2026-02-15T22:48:54.045774
+2026-08-31,DMK,arrival,23:40,HKT Phuket,FD3032,Thai AirAsia,text,1h 25m,Airbus A321neo,True,2026-02-15T22:48:55.457798
+2026-08-31,DMK,arrival,23:50,HKT Phuket,FD3014,Thai AirAsia,text,1h 25m,Airbus A320,True,2026-02-15T22:48:56.805049
+2026-08-31,DMK,arrival,23:50,MFM Macau,SL371,Thai Lion Air,text,2h 45m,Boeing 737-800 Passenger,True,2026-02-15T22:48:58.156790
