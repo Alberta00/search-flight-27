@@ -34,6 +34,7 @@ export interface FlightPathRecord {
   route_id: number;
   airline_id: number;
   departure_date: Date;
+  arrival_date: Date;
   departure_time: string;
   arrival_time: string;
   duration: number;
@@ -664,6 +665,7 @@ export class FlightModel {
       route_id: number;
       airline_id: number;
       departure_date: Date;
+      arrival_date: Date;
       departure_time: Date | string;
       arrival_time: Date | string;
       duration: number;
@@ -703,6 +705,7 @@ export class FlightModel {
         placeholdersRow.push(`$${paramIndex++}`); // route_id
         placeholdersRow.push(`$${paramIndex++}`); // airline_id
         placeholdersRow.push(`$${paramIndex++}`); // departure_date
+        placeholdersRow.push(`$${paramIndex++}`); // arrival_date
         placeholdersRow.push(`$${paramIndex++}`); // departure_time
         placeholdersRow.push(`$${paramIndex++}`); // arrival_time
         placeholdersRow.push(`$${paramIndex++}`); // duration
@@ -726,6 +729,7 @@ export class FlightModel {
           fp.route_id,
           fp.airline_id,
           fp.departure_date,
+          fp.arrival_date,
           fp.departure_time,
           fp.arrival_time,
           fp.duration,
@@ -745,7 +749,7 @@ export class FlightModel {
 
       const query = `
         INSERT INTO ${tableName} (
-          route_id, airline_id, departure_date, departure_time, arrival_time,
+          route_id, airline_id, departure_date, arrival_date, departure_time, arrival_time,
           duration, flight_number, trip_type, travel_class, stops,
           dep_airport, arr_airport, destination, airline_name, airline_code,
           aircraft, source, created_at, updated_at
@@ -939,8 +943,8 @@ export class FlightModel {
       INNER JOIN airlines a ON ifi.airline_id = a.id
       WHERE r.origin = ANY($1)
         AND r.destination = $2
-        AND DATE(ifi.departure_date) >= DATE($3)
-        AND DATE(ifi.departure_date) <= DATE($4)
+        AND DATE(ifi.${isDeparture ? 'departure_date' : 'arrival_date'}) >= DATE($3)
+        AND DATE(ifi.${isDeparture ? 'departure_date' : 'arrival_date'}) <= DATE($4)
           `;
 
     const params: any[] = [originCodes, destination, startDateStr, endDateStr];
@@ -970,7 +974,7 @@ export class FlightModel {
       paramIndex++;
     }
 
-    query += ` ORDER BY ifi.departure_date, ifi.departure_time ASC LIMIT 5000`;
+    query += ` ORDER BY ifi.${isDeparture ? 'departure_date' : 'arrival_date'}, ifi.departure_time ASC LIMIT 5000`;
 
     const result = await pool.query(query, params);
     return result.rows;
@@ -1016,13 +1020,13 @@ export class FlightModel {
     // 1. Daily Frequency (Monthly Trend)
     const dailyQuery = `
         SELECT
-        departure_date as date,
+        ${isDeparture ? 'departure_date' : 'arrival_date'} as date,
           COUNT(*):: INTEGER as flights
       FROM ${tableName}
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-        AND departure_date >= $2
-        AND departure_date <= $3
-      GROUP BY departure_date
+        AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2
+        AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3
+      GROUP BY ${isDeparture ? 'departure_date' : 'arrival_date'}
       ORDER BY date
           `;
     const dailyResult = await pool.query(dailyQuery, [airportParam, startDateStr, endDateStr]);
@@ -1030,6 +1034,8 @@ export class FlightModel {
     // 2. Routes List (Specific to Selected Date - including flight number, departure time, duration)
     const routesQuery = `
       SELECT DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)
+        departure_date,
+        arrival_date,
         dep_airport as departure_code,
           arr_airport as arrival_code,
           destination as destination_name,
@@ -1041,7 +1047,7 @@ export class FlightModel {
           duration
       FROM ${tableName}
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-        AND departure_date = $2
+        AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2
       ORDER BY dep_airport, arr_airport, airline_code, flight_number, departure_time
           `;
     const routesResult = await pool.query(routesQuery, [airportParam, selectedDateStr]);
@@ -1055,17 +1061,17 @@ export class FlightModel {
             COUNT(*) as flight_count
         FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-          AND departure_date = $2
+          AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2
         GROUP BY airline_code, dep_hour
           ),
           month_stats AS(
             SELECT 
           COUNT(*):: INTEGER as total_flights_month,
-            COUNT(DISTINCT departure_date) as active_days_month
+            COUNT(DISTINCT ${isDeparture ? 'departure_date' : 'arrival_date'}) as active_days_month
         FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-          AND departure_date >= $3
-          AND departure_date <= $4
+          AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $3
+          AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $4
           ),
             peak_hour AS(
               SELECT dep_hour
@@ -1082,7 +1088,7 @@ export class FlightModel {
         LIMIT 1
               )
         SELECT
-          (SELECT COUNT(*) FROM ${tableName} WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 AND departure_date = $2):: INTEGER as total_flights_day,
+          (SELECT COUNT(*) FROM ${tableName} WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2):: INTEGER as total_flights_day,
             ms.total_flights_month,
             ms.active_days_month,
             ph.dep_hour as peak_hour,
@@ -1155,7 +1161,13 @@ export class FlightModel {
           airlineName: r.airline_name || r.airline_code,
           flightNumber: r.flight_number,
           departureTime: depTime,
-          duration: durationStr
+          duration: durationStr,
+          date: isDeparture ?
+            (r.departure_date instanceof Date ? r.departure_date.toISOString().split('T')[0] : r.departure_date) :
+            (r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date),
+          departureDate: r.departure_date instanceof Date ? r.departure_date.toISOString().split('T')[0] : r.departure_date,
+          arrivalDate: r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date,
+          direction: isDeparture ? 'departure' : 'arrival'
         };
       }),
       summary: {
