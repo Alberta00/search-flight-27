@@ -24,22 +24,26 @@ function codesToExclude(code: string | undefined): string[] {
 
 interface DestinationSelectProps {
     value: string
+    displayValue?: string
     onChange: (value: string, name: string) => void
     placeholder?: string
     className?: string
     error?: string
     excludeCode?: string // Airport code to exclude from results (e.g., the other field's value)
     disabled?: boolean
+    enableCountrySelection?: boolean
 }
 
 export function DestinationSelect({
     value,
+    displayValue,
     onChange,
     placeholder = 'ค้นหาเมือง หรือ สนามบิน',
     className,
     error,
     excludeCode,
-    disabled = false
+    disabled = false,
+    enableCountrySelection = false
 }: DestinationSelectProps) {
     const [search, setSearch] = useState('')
     const [results, setResults] = useState<Airport[]>([])
@@ -55,10 +59,18 @@ export function DestinationSelect({
     useEffect(() => {
         const loadPopular = async () => {
             try {
-                const [data, total] = await Promise.all([
-                    airportApi.getPopularAirports(8),
-                    airportApi.getTotalCount(),
-                ])
+                // Split promises to handle failures independently (e.g. if DB is down for count but popular is cached/static)
+                const popularPromise = airportApi.getPopularAirports(8).catch(err => {
+                    console.error('Failed to load popular airports', err)
+                    return []
+                })
+                
+                const totalPromise = airportApi.getTotalCount().catch(err => {
+                    console.error('Failed to load total count', err)
+                    return null
+                })
+
+                const [data, total] = await Promise.all([popularPromise, totalPromise])
                 const localizedData = data.map(localizeAirport)
                 const excludeCodes = codesToExclude(excludeCode)
                 const filteredData = excludeCodes.length > 0
@@ -67,7 +79,7 @@ export function DestinationSelect({
                 setPopular(filteredData)
                 setTotalAirportsInSystem(total)
             } catch (err) {
-                console.error('Failed to load popular airports', err)
+                console.error('Failed to load initial data', err)
             }
         }
         loadPopular()
@@ -78,6 +90,12 @@ export function DestinationSelect({
         if (!value) {
             setSelectedName('')
             setSearch('')
+            return
+        }
+
+        // If displayValue is provided, use it directly
+        if (displayValue) {
+            setSelectedName(displayValue)
             return
         }
 
@@ -100,7 +118,7 @@ export function DestinationSelect({
         if (value && !selectedName.includes(value)) {
             fetchName()
         }
-    }, [value])
+    }, [value, displayValue])
 
     const debouncedSearch = useDebouncedCallback(async (query: string) => {
         if (!query || query.length < 2) {
@@ -170,6 +188,17 @@ export function DestinationSelect({
         if (!open && !value) {
             setSearch('')
         }
+    }
+
+    const handleSelectCountry = (country: string, airports: Airport[]) => {
+        // Try to use country_code if available (more reliable for backend), otherwise use name
+        const countryCode = airports[0]?.country_code
+        const valueToSend = countryCode || country
+        const displayName = `${country} (ทั้งประเทศ)`
+        setSelectedName(displayName)
+        setSearch('')
+        setIsPopoverOpen(false)
+        onChange(valueToSend, displayName)
     }
 
     // Helper to group airports by country
@@ -266,8 +295,22 @@ export function DestinationSelect({
                                     {popular.length > 0 ? (
                                         Object.entries(groupedPopular).map(([country, airports]) => (
                                             <div key={country} className="mb-4 last:mb-0">
-                                                <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center gap-2 mb-2 rounded-md shadow-sm border border-blue-100">
-                                                    <Globe className="h-3.5 w-3.5" /> {country}
+                                                <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center justify-between mb-2 rounded-md shadow-sm border border-blue-100">
+                                                    <div className="flex items-center gap-2">
+                                                        <Globe className="h-3.5 w-3.5" /> {country}
+                                                    </div>
+                                                    {enableCountrySelection && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                handleSelectCountry(country, airports)
+                                                            }}
+                                                            className="text-[10px] bg-white border border-blue-200 hover:bg-blue-100 text-blue-600 px-2 py-0.5 rounded transition-colors normal-case tracking-normal font-medium"
+                                                        >
+                                                            เลือกทั้งประเทศ
+                                                        </button>
+                                                    )}
                                                 </div>
                                                 <div className="space-y-0.5">
                                                     {airports.map((airport) => (
@@ -311,8 +354,22 @@ export function DestinationSelect({
                             <div className="px-1 py-1">
                                 {Object.entries(groupedResults).map(([country, airports]) => (
                                     <div key={country} className="mb-4 last:mb-0">
-                                        <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center gap-2 mb-2 rounded-md shadow-sm border border-blue-100">
-                                            <Globe className="h-3.5 w-3.5" /> {country}
+                                        <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center justify-between mb-2 rounded-md shadow-sm border border-blue-100">
+                                            <div className="flex items-center gap-2">
+                                                <Globe className="h-3.5 w-3.5" /> {country}
+                                            </div>
+                                            {enableCountrySelection && (
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        handleSelectCountry(country, airports)
+                                                    }}
+                                                    className="text-[10px] bg-white border border-blue-200 hover:bg-blue-100 text-blue-600 px-2 py-0.5 rounded transition-colors normal-case tracking-normal font-medium"
+                                                >
+                                                    เลือกทั้งประเทศ
+                                                </button>
+                                            )}
                                         </div>
 
                                         <div className="space-y-0.5">
