@@ -1166,7 +1166,225 @@ export class FlightModel {
       }
     };
   }
+
+  /**
+   * Get flight route analysis data by Country
+   */
+  static async getIntlFlightAnalysisByCountry(
+    countryName: string,
+    isDeparture: boolean,
+    startDate: Date,
+    endDate: Date,
+    selectedDate: Date
+  ): Promise<{
+    dailyFrequency: Array<{ date: string; flights: number }>;
+    routes: Array<{
+      departureCode: string;
+      departureName: string;
+      arrivalCode: string;
+      arrivalCity: string;
+      direct: boolean;
+      airlineCode: string;
+      airlineName: string;
+      flightNumber: string;
+      departureTime: string;
+      duration: string;
+    }>;
+    summary: {
+      avgFlightsPerDay: number;
+      peakHourRange: string;
+      mostActiveCarrier: string;
+      totalFlights: number;
+    };
+  }> {
+    const startDateStr = startDate.toISOString().split('T')[0];
+    const endDateStr = endDate.toISOString().split('T')[0];
+    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+
+    const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
+    const joinColumn = isDeparture ? 'dep_airport' : 'arr_airport';
+
+    // Check if countryName is likely a country code (2 chars)
+    const isCountryCode = countryName.length === 2;
+    
+    let whereClause = '';
+    let queryParams: any[] = [];
+
+    if (isCountryCode) {
+      // Exact match for country code
+      whereClause = `(a.country = $1)`;
+      queryParams = [countryName.toUpperCase(), startDateStr, endDateStr];
+    } else {
+      // Fuzzy match for country name
+      whereClause = `(a.country_name ILIKE $1 OR a.country ILIKE $1)`;
+      queryParams = [`%${countryName}%`, startDateStr, endDateStr];
+    }
+
+    // 1. Daily Frequency (Monthly Trend)
+    const dailyQuery = `
+        SELECT
+        departure_date as date,
+          COUNT(*):: INTEGER as flights
+      FROM ${tableName} fp
+      JOIN airports a ON fp.${joinColumn} = a.code
+      WHERE ${whereClause}
+        AND departure_date >= $2
+        AND departure_date <= $3
+      GROUP BY departure_date
+      ORDER BY date
+    `;
+    const dailyResult = await pool.query(dailyQuery, queryParams);
+
+    // 2. Routes List (Specific to Selected Date)
+    
+    // Re-prepare params for routes query (only needs country and selectedDate)
+    let routesQueryParams: any[] = [];
+    if (isCountryCode) {
+       routesQueryParams = [countryName.toUpperCase(), selectedDateStr];
+    } else {
+       routesQueryParams = [`%${countryName}%`, selectedDateStr];
+    }
+
+    const routesQuery = `
+      SELECT DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)
+        dep_airport as departure_code,
+        arr_airport as arrival_code,
+        destination as destination_name,
+        airline_code,
+        airline_name,
+        flight_number,
+        stops = 0 as direct,
+        departure_time,
+        duration,
+        a.name as airport_name,
+        a.city as airport_city
+      FROM ${tableName} fp
+      JOIN airports a ON fp.${joinColumn} = a.code
+      WHERE ${whereClause}
+        AND departure_date = $2
+      ORDER BY dep_airport, arr_airport, airline_code, flight_number, departure_time
+    `;
+    const routesResult = await pool.query(routesQuery, routesQueryParams);
+
+    // 3. Summary Stats (Stats for Selected Date)
+    
+    // Re-prepare params for summary query
+    let summaryQueryParams: any[] = [];
+    if (isCountryCode) {
+       summaryQueryParams = [countryName.toUpperCase(), selectedDateStr, startDateStr, endDateStr];
+    } else {
+       summaryQueryParams = [`%${countryName}%`, selectedDateStr, startDateStr, endDateStr];
+    }
+
+    // Note: For country level summary, we might want to aggregate differently, but keeping consistent structure for now
+    const summaryQuery = `
+      WITH day_stats AS(
+        SELECT 
+          airline_code,
+          EXTRACT(HOUR FROM departure_time) as dep_hour,
+          COUNT(*) as flight_count
+        FROM ${tableName} fp
+        JOIN airports a ON fp.${joinColumn} = a.code
+        WHERE ${whereClause}
+          AND departure_date = $2
+        GROUP BY airline_code, dep_hour
+      ),
+      month_stats AS(
+        SELECT 
+          COUNT(*):: INTEGER as total_flights_month,
+          COUNT(DISTINCT departure_date) as active_days_month
+        FROM ${tableName} fp
+        JOIN airports a ON fp.${joinColumn} = a.code
+        WHERE ${whereClause}
+          AND departure_date >= $3
+          AND departure_date <= $4
+      ),
+      peak_hour AS(
+        SELECT dep_hour FROM day_stats GROUP BY dep_hour ORDER BY SUM(flight_count) DESC LIMIT 1
+      ),
+      top_carrier AS(
+        SELECT airline_code FROM day_stats GROUP BY airline_code ORDER BY SUM(flight_count) DESC LIMIT 1
+      )
+      SELECT
+        (SELECT COUNT(*) FROM ${tableName} fp JOIN airports a ON fp.${joinColumn} = a.code WHERE ${whereClause} AND departure_date = $2):: INTEGER as total_flights_day,
+        ms.total_flights_month,
+        ms.active_days_month,
+        ph.dep_hour as peak_hour,
+        tc.airline_code as top_carrier
+      FROM month_stats ms
+      LEFT JOIN peak_hour ph ON true
+      LEFT JOIN top_carrier tc ON true
+    `;
+    const summaryResult = await pool.query(summaryQuery, summaryQueryParams);
+
+    // Fallback if no data
+    if (!summaryResult.rows[0] || (summaryResult.rows[0].total_flights_day === 0 && summaryResult.rows[0].total_flights_month === 0)) {
+      return {
+        dailyFrequency: [],
+        routes: [],
+        summary: {
+          avgFlightsPerDay: 0,
+          peakHourRange: 'ไม่พบข้อมูล',
+          mostActiveCarrier: 'ไม่พบข้อมูล',
+          totalFlights: 0
+        }
+      };
+    }
+
+    const row = summaryResult.rows[0];
+    const totalFlightsDay = parseInt(row.total_flights_day) || 0;
+    const totalFlightsMonth = parseInt(row.total_flights_month) || 0;
+    const activeDaysMonth = parseInt(row.active_days_month) || 1;
+    const peakHour = row.peak_hour !== null ? parseInt(row.peak_hour) : 0;
+
+    const startHour = String(peakHour).padStart(2, '0') + ':00';
+    const endHour = String((peakHour + 2) % 24).padStart(2, '0') + ':00';
+
+    return {
+      dailyFrequency: dailyResult.rows.map(r => ({
+        date: r.date instanceof Date ? r.date.toISOString().split('T')[0] : r.date,
+        flights: r.flights
+      })),
+      routes: routesResult.rows.map(r => {
+        let arrivalCity = r.destination_name || r.arrival_code;
+        if (isDeparture && r.destination_name && r.destination_name.includes(' ')) {
+          arrivalCity = r.destination_name.substring(r.destination_name.indexOf(' ') + 1);
+        }
+
+        const depTime = r.departure_time != null
+          ? (() => {
+            const d = new Date(r.departure_time);
+            const h = d.getUTCHours();
+            const m = d.getUTCMinutes();
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          })()
+          : '';
+
+        const durMins = parseInt(r.duration, 10) || 0;
+        const durH = Math.floor(durMins / 60);
+        const durM = durMins % 60;
+        const durationStr = durH > 0 ? `${durH}h ${durM}m` : `${durM}m`;
+
+        return {
+          departureCode: r.departure_code,
+          // Use airport name if available (from join), otherwise fallback to country name or code
+          departureName: isDeparture ? (r.airport_name || countryName) : r.departure_code,
+          arrivalCode: r.arrival_code,
+          arrivalCity: arrivalCity,
+          direct: r.direct,
+          airlineCode: r.airline_code,
+          airlineName: r.airline_name || r.airline_code,
+          flightNumber: r.flight_number,
+          departureTime: depTime,
+          duration: durationStr
+        };
+      }),
+      summary: {
+        avgFlightsPerDay: Math.ceil(totalFlightsMonth / activeDaysMonth),
+        peakHourRange: totalFlightsDay > 0 ? `${startHour} - ${endHour} ` : 'ไม่พบข้อมูล',
+        mostActiveCarrier: row.top_carrier || 'ไม่พบข้อมูล',
+        totalFlights: totalFlightsDay
+      }
+    };
+  }
 }
-
-
-

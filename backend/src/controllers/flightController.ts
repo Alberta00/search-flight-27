@@ -596,18 +596,19 @@ export async function getFlightRoutesAnalysis(
   next: NextFunction
 ): Promise<void> {
   try {
-    const { origin, destination, date } = req.query;
+    const { origin, destination, origin_country, destination_country, date } = req.query;
 
-    if (!origin && !destination) {
+    if (!origin && !destination && !origin_country && !destination_country) {
       res.status(400).json({
         success: false,
-        message: 'Origin or destination is required',
+        message: 'Origin or destination (airport or country) is required',
       });
       return;
     }
 
-    const airportCode = (origin as string) || (destination as string);
-    const isDeparture = !!origin;
+    const isCountryQuery = !!(origin_country || destination_country);
+    const locationValue = (origin || destination || origin_country || destination_country) as string;
+    const isDeparture = !!(origin || origin_country);
 
     // Parse date or use current date - ensure UTC consistency
     const selectedDate = (() => {
@@ -626,13 +627,24 @@ export async function getFlightRoutesAnalysis(
     endDate.setUTCDate(0); // Last day of month
     endDate.setUTCHours(23, 59, 59, 999);
 
-    const analysis = await FlightModel.getIntlFlightAnalysis(
-      airportCode,
-      isDeparture,
-      startDate,
-      endDate,
-      selectedDate
-    );
+    let analysis;
+    if (isCountryQuery) {
+      analysis = await FlightModel.getIntlFlightAnalysisByCountry(
+        locationValue,
+        isDeparture,
+        startDate,
+        endDate,
+        selectedDate
+      );
+    } else {
+      analysis = await FlightModel.getIntlFlightAnalysis(
+        locationValue,
+        isDeparture,
+        startDate,
+        endDate,
+        selectedDate
+      );
+    }
 
     res.json(analysis);
   } catch (error) {
@@ -655,6 +667,3 @@ export async function getPriceAnalysis(
     message: 'This endpoint is no longer available. Please use /api/flights/analyze for price analysis.',
   });
 }
-
-
-
