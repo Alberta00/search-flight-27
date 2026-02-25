@@ -340,6 +340,7 @@ async function main() {
 
     console.log(`found ${files.length} files.`);
 
+    let skipCount = 0;
     for (const file of files) {
         const filePath = path.join(dataDir, file);
         const fileName = path.basename(file);
@@ -347,7 +348,7 @@ async function main() {
         if (!forceImport) {
             const alreadyImported = await ImportModel.isFileImported(fileName);
             if (alreadyImported) {
-                console.log(`⏩ Skipping already imported file: ${fileName}`);
+                skipCount++;
                 continue;
             }
         }
@@ -360,6 +361,10 @@ async function main() {
         } else if (result.stored > 0) {
             console.log(`⚠️  Imported with some errors, not marking as complete: ${fileName}`);
         }
+    }
+
+    if (skipCount > 0) {
+        console.log(`⏩ Skipped ${skipCount} already imported file(s)`);
     }
 
     console.log('\n✅ All imports finished.');

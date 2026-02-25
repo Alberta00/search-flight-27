@@ -152,7 +152,7 @@ async function main() {
         if (!forceImport) {
             const alreadyImported = await ImportModel.isFileImported(fileName);
             if (alreadyImported) {
-                console.log(`⏩ Skipping already imported file: ${fileName}`);
+                console.log(`⏩ Skipped already imported file: ${fileName}`);
                 return;
             }
         }
