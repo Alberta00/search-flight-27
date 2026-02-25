@@ -898,129 +898,148 @@ export function FlightRoutesAnalysis() {
 
                           {/* Expanded Content */}
                           {isExpanded && (
-                            <div className="px-4 pb-4 pt-4 border-t bg-muted/5 space-y-6">
-                                {/* First Flight */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] px-2 py-0.5 h-4 font-normal">
-                                      เที่ยวบินแรก (First Flight)
-                                    </Badge>
-                                  </div>
-                                  <div className="grid grid-cols-2 gap-y-4 gap-x-4">
-                                    <div className="space-y-1">
-                                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                                        <PlaneTakeoff className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] sm:text-xs">เวลาออก (Departure)</span>
-                                      </div>
-                                      <div className="font-semibold text-sm flex items-baseline gap-1">
-                                        {firstFlight.departureTime || '-'}
-                                        <span className="text-xs text-muted-foreground font-normal">({firstFlight.departureCode})</span>
-                                      </div>
-                                      <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
-                                        <CalendarIcon className="w-3 h-3" />
-                                        <span className="text-[10px] sm:text-xs">{firstFlight.depDateObj ? format(firstFlight.depDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
-                                      </div>
-                                    </div>
-                                    <div className="space-y-1">
-                                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                                        <PlaneLanding className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] sm:text-xs">เวลาถึง (Arrival)</span>
-                                      </div>
-                                      <div className="font-semibold text-sm flex items-baseline gap-1">
-                                        {firstFlight.arrTime}
-                                        <span className="text-xs text-muted-foreground font-normal">({firstFlight.arrivalCode})</span>
-                                      </div>
-                                      <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
-                                        <CalendarIcon className="w-3 h-3" />
-                                        <span className="text-[10px] sm:text-xs">{firstFlight.arrDateObj ? format(firstFlight.arrDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
-                                      </div>
-                                    </div>
-                                    <div className="space-y-1">
-                                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                                        <Clock className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] sm:text-xs">ระยะเวลา (Duration)</span>
-                                      </div>
-                                      <div className="font-medium text-sm">
-                                        {firstFlight.durationStr || '-'}
-                                      </div>
-                                    </div>
-                                    <div className="space-y-1">
-                                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                                        <ArrowRightLeft className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] sm:text-xs">แวะพัก (Stops)</span>
-                                      </div>
-                                      <div className="font-medium text-sm">
-                                        {firstFlight.direct ? 'บินตรง (Direct)' : 'ต่อเครื่อง (Connecting)'}
-                                      </div>
-                                    </div>
-                                  </div>
+                            <div className="px-4 py-5 border-t bg-muted/5 space-y-6">
+                              {/* First Flight */}
+                              <div>
+                                <div className="mb-4 flex items-center gap-2">
+                                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] px-2 py-0.5 h-5 font-normal">
+                                    เที่ยวบินแรก (First Flight)
+                                  </Badge>
                                 </div>
 
-                                {/* Last Flight (if different) */}
-                                {flightCount > 1 && (
-                                  <>
-                                    <div className="h-px bg-border/50 border-dashed" />
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-[10px] px-2 py-0.5 h-5 font-normal">
-                                          เที่ยวบินสุดท้าย (Last Flight)
-                                        </Badge>
+                                {/* ===== SUMMARY ROW (First Flight) ===== */}
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+                                  {/* LEFT - Departure */}
+                                  <div className="flex flex-col items-start text-left min-w-[90px]">
+                                    <span className="text-2xl font-bold leading-none">
+                                      {firstFlight.departureTime || '--:--'}
+                                    </span>
+                                    <span className="text-sm font-medium">
+                                      {firstFlight.departureCode}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      {firstFlight.depDateObj
+                                        ? format(firstFlight.depDateObj, 'EEE, d MMM', { locale: th })
+                                        : '-'}
+                                    </span>
+                                  </div>
+
+                                  {/* CENTER - Duration + Stops */}
+                                  <div className="flex-1 flex flex-col items-center relative">
+                                    {/* duration */}
+                                    <span className="text-sm font-medium mb-1">
+                                      {firstFlight.durationStr || '-'}
+                                    </span>
+
+                                    {/* line + plane */}
+                                    <div className="w-full flex items-center gap-2">
+                                      <div className="flex-1 h-px bg-border" />
+                                      <Plane className="w-4 h-4 text-muted-foreground" />
+                                      <div className="flex-1 h-px bg-border" />
+                                    </div>
+
+                                    {/* stops */}
+                                    <span className="text-xs text-muted-foreground mt-1">
+                                      {firstFlight.direct
+                                        ? 'Direct'
+                                        : 'Connecting'}
+                                    </span>
+                                  </div>
+
+                                  {/* RIGHT - Arrival */}
+                                  <div className="flex flex-col items-end text-right min-w-[90px]">
+                                    <span className="text-2xl font-bold leading-none">
+                                      {firstFlight.arrTime || '--:--'}
+                                    </span>
+                                    <span className="text-sm font-medium">
+                                      {firstFlight.arrivalCode}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      {firstFlight.arrDateObj
+                                        ? format(firstFlight.arrDateObj, 'EEE, d MMM', { locale: th })
+                                        : '-'}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Last Flight (if different) */}
+                              {flightCount > 1 && (
+                                <>
+                                  <div className="h-px bg-border/50 border-dashed" />
+                                  <div>
+                                    <div className="mb-4 flex items-center gap-2">
+                                      <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-[10px] px-2 py-0.5 h-5 font-normal">
+                                        เที่ยวบินสุดท้าย (Last Flight)
+                                      </Badge>
+                                    </div>
+
+                                    {/* ===== SUMMARY ROW (Last Flight) ===== */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+                                      {/* LEFT - Departure */}
+                                      <div className="flex flex-col items-start text-left min-w-[90px]">
+                                        <span className="text-2xl font-bold leading-none">
+                                          {lastFlight.departureTime || '--:--'}
+                                        </span>
+                                        <span className="text-sm font-medium">
+                                          {lastFlight.departureCode}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                          {lastFlight.depDateObj
+                                            ? format(lastFlight.depDateObj, 'EEE, d MMM', { locale: th })
+                                            : '-'}
+                                        </span>
                                       </div>
-                                      <div className="grid grid-cols-2 gap-y-4 gap-x-4">
-                                        <div className="space-y-1">
-                                          <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <PlaneTakeoff className="w-3.5 h-3.5" />
-                                            <span className="text-[10px] sm:text-xs">เวลาออก (Departure)</span>
-                                          </div>
-                                          <div className="font-semibold text-sm flex items-baseline gap-1">
-                                            {lastFlight.departureTime || '-'}
-                                            <span className="text-xs text-muted-foreground font-normal">({lastFlight.departureCode})</span>
-                                          </div>
-                                          <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
-                                            <CalendarIcon className="w-3 h-3" />
-                                            <span className="text-[10px] sm:text-xs">{lastFlight.depDateObj ? format(lastFlight.depDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
-                                          </div>
+
+                                      {/* CENTER - Duration + Stops */}
+                                      <div className="flex-1 flex flex-col items-center relative">
+                                        {/* duration */}
+                                        <span className="text-sm font-medium mb-1">
+                                          {lastFlight.durationStr || '-'}
+                                        </span>
+
+                                        {/* line + plane */}
+                                        <div className="w-full flex items-center gap-2">
+                                          <div className="flex-1 h-px bg-border" />
+                                          <Plane className="w-4 h-4 text-muted-foreground" />
+                                          <div className="flex-1 h-px bg-border" />
                                         </div>
-                                        <div className="space-y-1">
-                                          <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <PlaneLanding className="w-3.5 h-3.5" />
-                                            <span className="text-[10px] sm:text-xs">เวลาถึง (Arrival)</span>
-                                          </div>
-                                          <div className="font-semibold text-sm flex items-baseline gap-1">
-                                            {lastFlight.arrTime}
-                                            <span className="text-xs text-muted-foreground font-normal">({lastFlight.arrivalCode})</span>
-                                          </div>
-                                          <div className="flex items-center gap-1.5 text-muted-foreground mt-1">
-                                            <CalendarIcon className="w-3 h-3" />
-                                            <span className="text-[10px] sm:text-xs">{lastFlight.arrDateObj ? format(lastFlight.arrDateObj, 'd MMM yyyy', { locale: th }) : '-'}</span>
-                                          </div>
-                                        </div>
-                                        <div className="space-y-1">
-                                          <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <Clock className="w-3.5 h-3.5" />
-                                            <span className="text-[10px] sm:text-xs">ระยะเวลา (Duration)</span>
-                                          </div>
-                                          <div className="font-medium text-sm">
-                                            {lastFlight.durationStr || '-'}
-                                          </div>
-                                        </div>
-                                        <div className="space-y-1">
-                                          <div className="flex items-center gap-1.5 text-muted-foreground">
-                                            <ArrowRightLeft className="w-3.5 h-3.5" />
-                                            <span className="text-[10px] sm:text-xs">แวะพัก (Stops)</span>
-                                          </div>
-                                          <div className="font-medium text-sm">
-                                            {lastFlight.direct ? 'บินตรง (Direct)' : 'ต่อเครื่อง (Connecting)'}
-                                          </div>
-                                        </div>
+
+                                        {/* stops */}
+                                        <span className="text-xs text-muted-foreground mt-1">
+                                          {lastFlight.direct
+                                            ? 'Direct'
+                                            : 'Connecting'}
+                                        </span>
+                                      </div>
+
+                                      {/* RIGHT - Arrival */}
+                                      <div className="flex flex-col items-end text-right min-w-[90px]">
+                                        <span className="text-2xl font-bold leading-none">
+                                          {lastFlight.arrTime || '--:--'}
+                                        </span>
+                                        <span className="text-sm font-medium">
+                                          {lastFlight.arrivalCode}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                          {lastFlight.arrDateObj
+                                            ? format(lastFlight.arrDateObj, 'EEE, d MMM', { locale: th })
+                                            : '-'}
+                                        </span>
                                       </div>
                                     </div>
-                                  </>
-                                )}
+                                  </div>
+                                </>
+                              )}
 
-                                <Button variant="outline" size="sm" className="w-full mt-2 text-xs h-9">
-                                  ดูตารางเที่ยวบินทั้งหมด
-                                </Button>
+                              {/* BUTTON */}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full mt-6 text-xs h-9"
+                              >
+                                ดูรายละเอียดเที่ยวบิน
+                              </Button>
                             </div>
                           )}
                         </div>
