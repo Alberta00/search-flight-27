@@ -518,6 +518,7 @@ async function main() {
   let totalStored = 0;
   let totalSkipped = 0;
   let totalErrors = 0;
+  let skipCount = 0;
 
   try {
     for (const csvFile of csvFiles) {
@@ -526,7 +527,7 @@ async function main() {
       if (!forceImport) {
         const alreadyImported = await ImportModel.isFileImported(fileName);
         if (alreadyImported) {
-          console.log(`⏩ Skipping already imported file: ${fileName}`);
+          skipCount++;
           continue;
         }
       }
@@ -544,6 +545,10 @@ async function main() {
       totalStored += result.stored;
       totalSkipped += result.skipped;
       totalErrors += result.errors;
+    }
+
+    if (skipCount > 0) {
+      console.log(`⏩ Skipped ${skipCount} already imported file(s)`);
     }
 
     console.log('\n' + '='.repeat(80));
