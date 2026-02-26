@@ -5,7 +5,7 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, subDays, differenceInDays, addDays, parseISO, differenceInCalendarDays, startOfDay, parse } from 'date-fns'
+import { format, subDays, differenceInDays, parseISO } from 'date-fns'
 import { th } from 'date-fns/locale/th'
 import {
   Area,
@@ -35,8 +35,7 @@ const chartConfig = {
 }
 
 interface FlightRoutesChartProps {
-  dailyData: any[]
-  dailyDataCompare: any[]
+  chartData: any[]
   dateRange: DateRange | undefined
   setDateRange: (range: DateRange | undefined) => void
   compareMode: boolean
@@ -45,8 +44,7 @@ interface FlightRoutesChartProps {
 }
 
 export function FlightRoutesChart({
-  dailyData,
-  dailyDataCompare,
+  chartData,
   dateRange,
   setDateRange,
   compareMode,
@@ -64,80 +62,6 @@ export function FlightRoutesChart({
   const currentDaysDiff = dateRange?.from && dateRange?.to 
     ? differenceInDays(dateRange.to, dateRange.from) + 1 
     : 0
-
-  // Prepare data with full date range (fill missing dates with 0)
-  const prepareData = (data: any[]) => {
-    // If no date range (All), just sort existing data
-    if (!dateRange?.from || !dateRange?.to) {
-      return [...data].sort((a, b) => a.date.localeCompare(b.date))
-    }
-
-    const filledData: any[] = []
-    // Normalize data keys to YYYY-MM-DD to ensure matching (fix data disappearing)
-    const dataMap = new Map(
-    data.map(item => {
-        const dateKey = format(new Date(item.date), 'yyyy-MM-dd')
-        return [dateKey, item]
-    })
-    )
-    
-    // Use startOfDay to normalize dates and avoid time-related issues
-    const startDate = new Date(
-    dateRange.from.getFullYear(),
-    dateRange.from.getMonth(),
-    dateRange.from.getDate()
-    )
-
-    const endDate = new Date(
-    dateRange.to.getFullYear(),
-    dateRange.to.getMonth(),
-    dateRange.to.getDate()
-    )
-
-    // const startDate = startOfDay(dateRange.from)
-    // const endDate = startOfDay(dateRange.to)
-    const days = differenceInCalendarDays(endDate, startDate)
-
-    for (let i = 0; i <= days; i++) {
-      const curr = addDays(startDate, i)
-      const dateStr = format(curr, 'yyyy-MM-dd')
-      
-      if (dataMap.has(dateStr)) {
-        // Use the dateStr we generated to ensure consistency
-        filledData.push({ ...dataMap.get(dateStr), date: dateStr })
-      } else {
-        filledData.push({ date: dateStr, flights: 0 })
-      }
-
-    }
-    // console.log(startDate)
-    // console.log(endDate)
-    // console.log("day",differenceInCalendarDays(endDate, startDate))
-    return filledData
-  }
-  
-
-  const baseData = prepareData(dailyData)
-  const compareBaseData = prepareData(dailyDataCompare)
-
-  // Format date for x-axis
-  const formatChartDate = (dateStr: string) =>
-    format(new Date(dateStr), 'd MMM', { locale: th })
-
-  // Align dates for comparison if needed
-  const displayData = compareMode
-    ? baseData.map((row) => {
-      const compareRow = compareBaseData.find(cr => cr.date === row.date)
-      return {
-        ...row,
-        flightsCompare: compareRow ? compareRow.flights : 0,
-        displayDate: formatChartDate(row.date)
-      }
-    })
-    : baseData.map(row => ({
-      ...row,
-      displayDate: formatChartDate(row.date)
-    }))
 
   // ตรวจจับมือถือแนวตั้ง
   useEffect(() => {
@@ -248,8 +172,8 @@ export function FlightRoutesChart({
         </div>
         <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
           <div className="h-[260px] sm:h-[320px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
-            <ChartContainer config={chartConfig} className="h-full w-full aspect-auto">
-              <AreaChart data={displayData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+            <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                 <defs>
                   <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
@@ -286,7 +210,7 @@ export function FlightRoutesChart({
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null
                     const p = payload[0].payload
-                    const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : p.displayDate
+                    const tooltipDate = p.displayDate || (p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : '')
                     return (
                       <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
                         <p className="font-medium mb-2">{tooltipDate}</p>
@@ -362,8 +286,8 @@ export function FlightRoutesChart({
             </DialogHeader>
             <div className="w-full min-w-0 mt-2">
               <div className="h-[280px] sm:h-[340px] w-full min-w-[320px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
-                <ChartContainer config={chartConfig} className="h-full w-full aspect-auto">
-                  <AreaChart data={displayData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+                <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
+                  <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                     <defs>
                       <linearGradient id="flightGradientZoom" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
@@ -400,7 +324,7 @@ export function FlightRoutesChart({
                       content={({ active, payload }) => {
                         if (!active || !payload?.length) return null
                         const p = payload[0].payload
-                        const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : p.displayDate
+                        const tooltipDate = p.displayDate || (p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : '')
                         return (
                           <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
                             <p className="font-medium mb-2">{tooltipDate}</p>

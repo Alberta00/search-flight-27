@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { format, subDays } from 'date-fns'
+import { format, subDays, addDays, differenceInCalendarDays } from 'date-fns'
 import {th } from 'date-fns/locale/th'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
@@ -69,13 +69,6 @@ const mockDailyDataCompare = [
 ]
 
 
-const SummaryDefaults = {
-  avgFlightsPerDay: 0,
-  peakHourRange: 'ไม่พบข้อมูล',
-  mostActiveCarrier: 'ไม่พบข้อมูล',
-  totalFlights: 0,
-}
-
 // Helper to parse date string that might be YYYYMMDD or YYYY-MM-DD
 const parseFlightDate = (dateStr: any): Date | null => {
   if (!dateStr) return null
@@ -108,7 +101,6 @@ export function FlightRoutesAnalysis() {
   const [dailyData, setDailyData] = useState<any[]>([])
   const [dailyDataCompare, setDailyDataCompare] = useState<any[]>([])
   const [routes, setRoutes] = useState<any[]>([])
-  const [summary, setSummary] = useState(SummaryDefaults)
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
 
@@ -167,8 +159,8 @@ useEffect(() => {
 
       if (data) {
         setDailyData(data.dailyFrequency || [])
-        setRoutes(data.routes || [])
-        setSummary(data.summary || SummaryDefaults)
+        
+        // Map routes to ensure camelCase properties
         
         // Map routes to ensure camelCase properties
         const mappedRoutes = (data.routes || []).map((r: any) => ({
@@ -179,15 +171,6 @@ useEffect(() => {
           arrivalCode: r.arrivalCode || r.arrival_code,
         }))
         setRoutes(mappedRoutes)
-
-        // Map summary to ensure camelCase properties
-        const s = data.summary || {}
-        setSummary({
-          avgFlightsPerDay: s.avgFlightsPerDay || s.avg_flights_per_day || 0,
-          peakHourRange: s.peakHourRange || s.peak_hour_range || 'ไม่พบข้อมูล',
-          mostActiveCarrier: s.mostActiveCarrier || s.most_active_carrier || 'ไม่พบข้อมูล',
-          totalFlights: s.totalFlights || s.total_flights || 0,
-        })
         
         fetchedDataBounds.current.main = requiredRange
         console.log('Daily data:', data.dailyFrequency)
@@ -246,6 +229,138 @@ useEffect(() => {
     // Reset bounds when the main query target changes
     fetchedDataBounds.current = { main: null, compare: null };
   }, [origin, destination]);
+
+  // Helper to prepare data (fill missing dates)
+  const prepareChartData = (data: any[], range: DateRange | undefined) => {
+    if (!range?.from || !range?.to) {
+      return [...data].sort((a: any, b: any) => a.date.localeCompare(b.date))
+    }
+
+    const dataMap = new Map(
+      data.map((item: any) => {
+        const dateKey = format(new Date(item.date), 'yyyy-MM-dd')
+        return [dateKey, item]
+      })
+    )
+    
+    const startDate = new Date(
+      range.from.getFullYear(),
+      range.from.getMonth(),
+      range.from.getDate()
+    )
+
+    const endDate = new Date(
+      range.to.getFullYear(),
+      range.to.getMonth(),
+      range.to.getDate()
+    )
+
+    const days = differenceInCalendarDays(endDate, startDate)
+    const filledData: any[] = []
+
+    for (let i = 0; i <= days; i++) {
+      const curr = addDays(startDate, i)
+      const dateStr = format(curr, 'yyyy-MM-dd')
+      
+      if (dataMap.has(dateStr)) {
+        filledData.push({ ...dataMap.get(dateStr), date: dateStr })
+      } else {
+        filledData.push({ date: dateStr, flights: 0 })
+      }
+    }
+    return filledData
+  }
+
+  // Format date for chart display
+  const formatChartDate = (dateStr: string) =>
+    format(new Date(dateStr), 'd MMM', { locale: th })
+
+  const processedDailyData = prepareChartData(dailyData, dateRange)
+  const processedDailyDataCompare = compareMode ? prepareChartData(dailyDataCompare, dateRange) : []
+
+  // Calculate total flights from processed data to ensure it matches the date range
+  const calculatedTotalFlights = processedDailyData.reduce((sum, item) => sum + (item.flights || 0), 0)
+
+  // Calculate average flights per day based on the selected date range
+  const numberOfDays = processedDailyData.length || 1
+  const calculatedAvgFlights =
+    numberOfDays > 0
+      ? Math.round(calculatedTotalFlights / numberOfDays)
+      : 0
+
+  // Calculate Most Active Carrier from routes data
+  const calculateMostActiveCarrier = (routesData: any[]) => {
+    if (!routesData || routesData.length === 0) return 'ไม่พบข้อมูล'
+    
+    const carrierCounts: Record<string, number> = {}
+    routesData.forEach(r => {
+      // Try to find airline name, fallback to code
+      const name = r.airlineName || r.airline_name || r.airline || r.airlineCode || r.airline_code || 'Unknown'
+      carrierCounts[name] = (carrierCounts[name] || 0) + 1
+    })
+    
+    let maxCarrier = 'ไม่พบข้อมูล'
+    let maxCount = 0
+    
+    Object.entries(carrierCounts).forEach(([carrier, count]) => {
+      if (count > maxCount) {
+        maxCount = count
+        maxCarrier = carrier
+      }
+    })
+    
+    return maxCarrier
+  }
+
+  // Calculate Peak Hour Range from routes data
+  const calculatePeakHourRange = (routesData: any[]) => {
+    if (!routesData || routesData.length === 0) return 'ไม่พบข้อมูล'
+    
+    const hourCounts: Record<number, number> = {}
+    
+    routesData.forEach(r => {
+      const timeStr = r.departureTime || r.departure_time || r.time
+      if (timeStr) {
+        // Handle "HH:mm:ss" or "HH:mm"
+        const parts = timeStr.split(':')
+        if (parts.length >= 1) {
+          const hour = parseInt(parts[0], 10)
+          if (!isNaN(hour) && hour >= 0 && hour <= 23) {
+            hourCounts[hour] = (hourCounts[hour] || 0) + 1
+          }
+        }
+      }
+    })
+    
+    let maxHour = -1
+    let maxCount = 0
+    
+    Object.entries(hourCounts).forEach(([h, count]) => {
+      if (count > maxCount) {
+        maxCount = count
+        maxHour = parseInt(h, 10)
+      }
+    })
+    
+    if (maxHour === -1) return 'ไม่พบข้อมูล'
+    
+    // Format: "08:00 - 09:00"
+    const start = String(maxHour).padStart(2, '0') + ':00'
+    const end = String((maxHour + 1) % 24).padStart(2, '0') + ':00'
+    return `${start} - ${end}`
+  }
+
+  const calculatedMostActiveCarrier = calculateMostActiveCarrier(routes)
+  const calculatedPeakHourRange = calculatePeakHourRange(routes)
+
+  const chartData = processedDailyData.map(row => {
+    const compareRow = processedDailyDataCompare.find((cr: any) => cr.date === row.date)
+    return {
+      ...row,
+      flightsCompare: compareRow ? compareRow.flights : 0,
+      displayDate: formatChartDate(row.date)
+    }
+  })
 
   // Group routes by Origin-Destination
   const groupedRoutes = routes.reduce((acc, route) => {
@@ -307,9 +422,9 @@ useEffect(() => {
 
   return (
     <div className="space-y-6 sm:space-y-8 w-full min-w-0">
-      <h1 className="text-xl sm:text-2xl font-bold text-foreground">
+      {/* <h1 className="text-xl sm:text-2xl font-bold text-foreground">
         เส้นทางการบิน
-      </h1>
+      </h1> */}
 
       {/* Filter bar - responsive: stack on mobile */}
       <Card className="p-3 sm:p-6 border bg-card">
@@ -454,8 +569,7 @@ useEffect(() => {
           <div className="lg:col-span-2 flex flex-col gap-4 sm:gap-6 min-w-0">
             {/* Daily frequency chart - responsive */}
             <FlightRoutesChart
-              dailyData={dailyData}
-              dailyDataCompare={dailyDataCompare}
+              chartData={chartData}
               dateRange={dateRange}
               setDateRange={setDateRange}
               compareMode={compareMode}
@@ -479,6 +593,7 @@ useEffect(() => {
                       const isExpanded = expandedRouteKey === key
                       const flights = group.flights.sort((a: any, b: any) => (a.departureTime || '').localeCompare(b.departureTime || ''))
                       const flightCount = flights.length
+                      const totalFlightsInRange = flightCount * numberOfDays
                       
                       // First and Last flight
                       const processFlight = (flight: any) => {
@@ -581,10 +696,10 @@ useEffect(() => {
                                   <p className="font-medium text-foreground text-sm sm:text-base truncate">
                                     {group.departureName || group.departureCode} → {group.arrivalCity || group.arrivalCode}
                                   </p>
-                                  <span className="text-xs text-muted-foreground hidden sm:inline-block">ต้นทาง - ปลายทาง</span>
+                                  <span className="text-sm text-muted-foreground hidden sm:inline-block">ต้นทาง - ปลายทาง</span>
                                 </div>
-                                <p className="text-xs text-muted-foreground mt-0.5">
-                                  เที่ยวบินทั้งหมด (ต่อวัน): <span className="font-medium text-primary">{flightCount}</span>
+                                <p className="text-sm text-muted-foreground mt-0.5">
+                                  เที่ยวบินทั้งหมด: <span className="font-medium text-primary">{totalFlightsInRange}</span> <span className="text-[10px] text-muted-foreground">({flightCount}  เที่ยวบินต่อวัน)</span>
                                 </p>
                               </div>
                             </div>
@@ -774,7 +889,7 @@ useEffect(() => {
                   จำนวนเที่ยวบินเฉลี่ย/วัน
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                  {summary.avgFlightsPerDay} เที่ยว
+                  {calculatedAvgFlights} เที่ยว
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">อ้างอิงข้อมูลช่วงที่เลือก</p>
               </div>
@@ -783,7 +898,7 @@ useEffect(() => {
                   ช่วงเวลาที่คนนิยมที่สุด
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                  {summary.peakHourRange}
+                  {calculatedPeakHourRange}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Peak Hour Range</p>
               </div>
@@ -792,7 +907,7 @@ useEffect(() => {
                   สายการบินที่มีเที่ยวบินสูงสุด
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                  {summary.mostActiveCarrier}
+                  {calculatedMostActiveCarrier}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Most Active Carrier</p>
               </div>
@@ -801,7 +916,7 @@ useEffect(() => {
                   รวมจำนวนเที่ยวบินทั้งหมด
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                  {summary.totalFlights} เที่ยว
+                  {calculatedTotalFlights} เที่ยว
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">ตามช่วงเวลาที่เลือก</p>
               </div>
@@ -820,7 +935,8 @@ useEffect(() => {
                       {mostActive.maxDep}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      จำนวน {mostActive.maxDepCount} เที่ยวบิน
+                      จำนวน {mostActive.maxDepCount * numberOfDays} เที่ยวบิน
+                      <span className="text-[10px] ml-1">({mostActive.maxDepCount} เที่ยวบินต่อวัน)</span>
                     </p>
                   </div>
                 )}
@@ -834,7 +950,8 @@ useEffect(() => {
                       {mostActive.maxArr}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      จำนวน {mostActive.maxArrCount} เที่ยวบิน
+                      จำนวน {mostActive.maxArrCount * numberOfDays} เที่ยวบิน
+                      <span className="text-[10px] ml-1">({mostActive.maxArrCount} เที่ยวบินต่อวัน)</span>
                     </p>
                   </div>
                 )}
