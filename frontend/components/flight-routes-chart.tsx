@@ -110,6 +110,9 @@ export function FlightRoutesChart({
       }
 
     }
+    // console.log(startDate)
+    // console.log(endDate)
+    // console.log("day",differenceInCalendarDays(endDate, startDate))
     return filledData
   }
   

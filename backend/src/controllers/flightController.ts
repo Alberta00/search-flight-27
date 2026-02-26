@@ -621,7 +621,6 @@ export async function getFlightRoutesAnalysisRange(
     // Parse date range from query params, ensuring UTC context
     const startDate = parseISO(start_date + 'T00:00:00.000Z');
     const endDate = parseISO(end_date + 'T23:59:59.999Z');
-    
 
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
         res.status(400).json({

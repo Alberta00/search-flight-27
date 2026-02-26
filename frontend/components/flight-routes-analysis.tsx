@@ -169,8 +169,29 @@ useEffect(() => {
         setDailyData(data.dailyFrequency || [])
         setRoutes(data.routes || [])
         setSummary(data.summary || SummaryDefaults)
+        
+        // Map routes to ensure camelCase properties
+        const mappedRoutes = (data.routes || []).map((r: any) => ({
+          ...r,
+          departureName: r.departureName || r.departure_name,
+          departureCode: r.departureCode || r.departure_code,
+          arrivalCity: r.arrivalCity || r.arrival_city,
+          arrivalCode: r.arrivalCode || r.arrival_code,
+        }))
+        setRoutes(mappedRoutes)
+
+        // Map summary to ensure camelCase properties
+        const s = data.summary || {}
+        setSummary({
+          avgFlightsPerDay: s.avgFlightsPerDay || s.avg_flights_per_day || 0,
+          peakHourRange: s.peakHourRange || s.peak_hour_range || 'ไม่พบข้อมูล',
+          mostActiveCarrier: s.mostActiveCarrier || s.most_active_carrier || 'ไม่พบข้อมูล',
+          totalFlights: s.totalFlights || s.total_flights || 0,
+        })
+        
         fetchedDataBounds.current.main = requiredRange
         console.log('Daily data:', data.dailyFrequency)
+        
       }
       
       // ===== COMPARE =====
@@ -217,7 +238,7 @@ useEffect(() => {
   }
 
   fetchAnalysis()
-  console.log('Fetching with:', origin, destination)
+  // console.log('Fetching with:', origin, destination)
   
 }, [origin, destination, dateRange, compareMode])
 

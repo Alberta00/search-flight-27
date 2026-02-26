@@ -1010,9 +1010,18 @@ export class FlightModel {
       totalFlights: number;
     };
   }> {
+    const formatLocalDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };    
+    
     const airportParam = airportCode.toUpperCase();
-    const startDateStr = startDate.toISOString().split('T')[0];
-    const endDateStr = endDate.toISOString().split('T')[0];
+
+    const startDateStr = formatLocalDate(startDate);
+    const endDateStr   = formatLocalDate(endDate);
+
     const selectedDateStr = selectedDate.toISOString().split('T')[0];
 
     const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
@@ -1209,8 +1218,15 @@ export class FlightModel {
       totalFlights: number;
     };
   }> {
-    const startDateStr = startDate.toISOString().split('T')[0];
-    const endDateStr = endDate.toISOString().split('T')[0];
+    const formatLocalDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    const startDateStr = formatLocalDate(startDate);
+    const endDateStr   = formatLocalDate(endDate);
     const selectedDateStr = selectedDate.toISOString().split('T')[0];
 
     const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
