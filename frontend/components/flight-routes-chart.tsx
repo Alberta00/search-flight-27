@@ -5,7 +5,7 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, subDays, differenceInDays, addDays, parseISO } from 'date-fns'
+import { format, subDays, differenceInDays, addDays, parseISO, differenceInCalendarDays, startOfDay, parse } from 'date-fns'
 import { th } from 'date-fns/locale/th'
 import {
   Area,
@@ -74,15 +74,32 @@ export function FlightRoutesChart({
 
     const filledData: any[] = []
     // Normalize data keys to YYYY-MM-DD to ensure matching (fix data disappearing)
-    const dataMap = new Map(data.map(item => {
-      const dateKey = typeof item.date === 'string' ? item.date.split('T')[0] : item.date
-      return [dateKey, item]
-    }))
+    const dataMap = new Map(
+    data.map(item => {
+        const dateKey = format(new Date(item.date), 'yyyy-MM-dd')
+        return [dateKey, item]
+    })
+    )
     
-    const days = differenceInDays(dateRange.to, dateRange.from)
+    // Use startOfDay to normalize dates and avoid time-related issues
+    const startDate = new Date(
+    dateRange.from.getFullYear(),
+    dateRange.from.getMonth(),
+    dateRange.from.getDate()
+    )
+
+    const endDate = new Date(
+    dateRange.to.getFullYear(),
+    dateRange.to.getMonth(),
+    dateRange.to.getDate()
+    )
+
+    // const startDate = startOfDay(dateRange.from)
+    // const endDate = startOfDay(dateRange.to)
+    const days = differenceInCalendarDays(endDate, startDate)
 
     for (let i = 0; i <= days; i++) {
-      const curr = addDays(dateRange.from, i)
+      const curr = addDays(startDate, i)
       const dateStr = format(curr, 'yyyy-MM-dd')
       
       if (dataMap.has(dateStr)) {
@@ -91,9 +108,11 @@ export function FlightRoutesChart({
       } else {
         filledData.push({ date: dateStr, flights: 0 })
       }
+
     }
     return filledData
   }
+  
 
   const baseData = prepareData(dailyData)
   const compareBaseData = prepareData(dailyDataCompare)

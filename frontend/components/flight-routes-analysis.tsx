@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Plane, Calendar as CalendarIcon, Search, Send, TrendingUp, ChevronDown, ChevronUp, Clock, PlaneTakeoff, PlaneLanding, ArrowRightLeft, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -112,84 +112,119 @@ export function FlightRoutesAnalysis() {
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
 
+  const fetchedDataBounds = useRef<{ main: DateRange | null, compare: DateRange | null }>({ main: null, compare: null });
+
   // Fetch analysis data
-  useEffect(() => {
-    async function fetchAnalysis() {
-      if (!origin && !destination) {
-        setHasAnalyzed(false)
-        return
-      }
-
-      setLoading(true)
-      setHasAnalyzed(true)
-
-      try {
-        const dateStr = dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
-
-        // Fetch main analysis
-        const params = new URLSearchParams()
-        
-        // Helper to check if value is likely an airport code (3 uppercase letters)
-        const isAirportCode = (val: string) => /^[A-Z]{3}$/.test(val)
-
-        if (origin) {
-          if (isAirportCode(origin)) params.append('origin', origin)
-          else params.append('origin_country', origin)
-        }
-        
-        if (destination) {
-          if (isAirportCode(destination)) params.append('destination', destination)
-          else params.append('destination_country', destination)
-        }
-        
-        params.append('date', dateStr)
-
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
-        const response = await fetch(`${baseUrl}/flights/analysis?${params.toString()}`)
-        const data = await response.json()
-
-        if (data) {
-          setDailyData(data.dailyFrequency || [])
-          setRoutes(data.routes || [])
-          setSummary(data.summary || SummaryDefaults)
-        }
-
-        // Fetch comparison data if mode is active
-        if (compareMode) {
-          const compareParams = new URLSearchParams()
-          // If we have origin, compare with it as destination (arrivals)
-          // If we have destination, compare with it as origin (departures)
-          if (origin) {
-            if (isAirportCode(origin)) compareParams.append('destination', origin)
-            else compareParams.append('destination_country', origin)
-          }
-          
-          if (destination) {
-            if (isAirportCode(destination)) compareParams.append('origin', destination)
-            else compareParams.append('origin_country', destination)
-          }
-          
-          compareParams.append('date', dateStr)
-
-          const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
-          const compareResponse = await fetch(`${baseUrl}/flights/analysis?${compareParams.toString()}`)
-          const compareData = await compareResponse.json()
-
-          if (compareData) {
-            setDailyDataCompare(compareData.dailyFrequency || [])
-          }
-        } else {
-          setDailyDataCompare([])
-        }
-      } catch (error) {
-        console.error('Failed to fetch flight analysis:', error)
-      } finally {
-        setLoading(false)
-      }
+useEffect(() => {
+  async function fetchAnalysis() {
+    if (!origin && !destination) {
+      setHasAnalyzed(false)
+      return
     }
 
-    fetchAnalysis()
-  }, [origin, destination, dateRange, compareMode])
+    setLoading(true)
+    setHasAnalyzed(true)
+
+    try {
+      const requiredRange = {
+        from: dateRange?.from || subDays(new Date(), 29),
+        to: dateRange?.to || new Date(),
+      }
+
+      const baseUrl =
+        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
+
+      const isAirportCode = (val: string) => /^[A-Z]{3}$/.test(val)
+
+      const params = new URLSearchParams()
+
+      if (origin) {
+        if (isAirportCode(origin)) params.append('origin', origin)
+        else params.append('origin_country', origin)
+      }
+
+      if (destination) {
+        if (isAirportCode(destination))
+          params.append('destination', destination)
+        else params.append('destination_country', destination)
+      }
+
+      params.append(
+        'start_date',
+        format(requiredRange.from, 'yyyy-MM-dd')
+      )
+      params.append(
+        'end_date',
+        format(requiredRange.to, 'yyyy-MM-dd')
+      )
+
+      // ===== MAIN FETCH =====
+      const response = await fetch(
+        `${baseUrl}/flights/analysis-range?${params.toString()}`
+      )
+
+      const data = await response.json()
+
+      if (data) {
+        setDailyData(data.dailyFrequency || [])
+        setRoutes(data.routes || [])
+        setSummary(data.summary || SummaryDefaults)
+        fetchedDataBounds.current.main = requiredRange
+        console.log('Daily data:', data.dailyFrequency)
+      }
+      
+      // ===== COMPARE =====
+      if (compareMode) {
+        const compareParams = new URLSearchParams()
+
+        if (origin) {
+          if (isAirportCode(origin))
+            compareParams.append('destination', origin)
+          else compareParams.append('destination_country', origin)
+        }
+
+        if (destination) {
+          if (isAirportCode(destination))
+            compareParams.append('origin', destination)
+          else compareParams.append('origin_country', destination)
+        }
+
+        compareParams.append(
+          'start_date',
+          format(requiredRange.from, 'yyyy-MM-dd')
+        )
+        compareParams.append(
+          'end_date',
+          format(requiredRange.to, 'yyyy-MM-dd')
+        )
+
+        const compareResponse = await fetch(
+          `${baseUrl}/flights/analysis-range?${compareParams.toString()}`
+        )
+
+        const compareData = await compareResponse.json()
+
+        setDailyDataCompare(compareData.dailyFrequency || [])
+        fetchedDataBounds.current.compare = requiredRange
+      } else {
+        setDailyDataCompare([])
+      }
+    } catch (error) {
+      console.error('Failed to fetch flight analysis:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  fetchAnalysis()
+  console.log('Fetching with:', origin, destination)
+  
+}, [origin, destination, dateRange, compareMode])
+
+  useEffect(() => {
+    // Reset bounds when the main query target changes
+    fetchedDataBounds.current = { main: null, compare: null };
+  }, [origin, destination]);
 
   // Group routes by Origin-Destination
   const groupedRoutes = routes.reduce((acc, route) => {
@@ -198,7 +233,6 @@ export function FlightRoutesAnalysis() {
       acc[key] = {
         departureName: route.departureName,
         departureCode: route.departureCode,
-        arrivalCity: route.arrivalCity,
         arrivalCode: route.arrivalCode,
         flights: []
       }
