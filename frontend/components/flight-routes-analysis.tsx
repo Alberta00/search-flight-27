@@ -230,6 +230,108 @@ useEffect(() => {
     fetchedDataBounds.current = { main: null, compare: null };
   }, [origin, destination]);
 
+  // Helper to process flight data (dates, duration, etc.)
+  const processFlightData = (flight: any) => {
+    // Fallback date if flight.date is missing
+    const baseDate = flight.date 
+      ? parseFlightDate(flight.date) 
+      : (dateRange?.from ? new Date(dateRange.from) : new Date())
+
+    let depDateObj = baseDate
+    let arrDateObj = parseFlightDate(flight.arrivalDate)
+    
+    // 1. Parse Duration from string "4h 45m" to minutes
+    let durationVal = 0
+    if (typeof flight.duration === 'number') {
+      durationVal = flight.duration
+    } else if (typeof flight.duration === 'string') {
+      const hMatch = flight.duration.match(/(\d+)h/)
+      const mMatch = flight.duration.match(/(\d+)m/)
+      if (hMatch) durationVal += parseInt(hMatch[1]) * 60
+      if (mMatch) durationVal += parseInt(mMatch[1])
+    }
+
+    let depTime = flight.departureTime || flight.time
+    let arrTime = flight.arrivalTime
+    let durationStr = flight.duration
+
+    // 2. Handle Direction: Swap time/date for Arrival flights
+    if (flight.direction === 'arrival') {
+      // If we have time but it's in the wrong slot (mapped to departure by default)
+      if (depTime && !arrTime) {
+        arrTime = depTime
+        depTime = null
+      }
+      // The 'date' column for arrival flights is actually Arrival Date
+      if (depDateObj && !arrDateObj) {
+        arrDateObj = depDateObj
+        depDateObj = null
+      }
+    }
+
+    // Calculate if duration is numeric (minutes)
+    if (!isNaN(durationVal) && durationVal > 0) {
+      durationStr = `${Math.floor(durationVal / 60)} ชม. ${durationVal % 60} นาที`
+      
+      // Case 1: Have Departure Time, Calculate Arrival
+      if (depTime && (depDateObj || baseDate)) {
+        const [h, m] = depTime.split(':').map(Number)
+        const start = new Date(depDateObj || baseDate!)
+        start.setHours(h, m, 0, 0)
+        
+        const end = new Date(start.getTime() + durationVal * 60000)
+        if (!arrTime) arrTime = format(end, 'HH:mm')
+        if (!arrDateObj) arrDateObj = end
+        if (!depDateObj) depDateObj = start
+      }
+      // Case 2: Have Arrival Time, Missing Departure Time
+      else if (arrTime && (arrDateObj || baseDate)) {
+        const [h, m] = arrTime.split(':').map(Number)
+        // If arrDateObj is missing, assume baseDate (approx)
+        const end = new Date(arrDateObj || baseDate!)
+        end.setHours(h, m, 0, 0)
+        
+        const start = new Date(end.getTime() - durationVal * 60000)
+        depTime = format(start, 'HH:mm')
+        depDateObj = start
+        if (!arrDateObj) arrDateObj = end
+      }
+    }
+    
+    return { 
+      ...flight, 
+      depDateObj, 
+      departureTime: depTime || '-', 
+      arrivalTime: arrTime || '-', 
+      arrTime: arrTime || '-', // Keep for compatibility
+      arrDateObj, 
+      durationStr 
+    }
+  }
+
+  const [selectedRouteFlights, setSelectedRouteFlights] = useState<any[]>([])
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const handleShowFlightDetails = (flights: any[]) => {
+    if (dateRange?.from && dateRange?.to) {
+      const startDate = new Date(dateRange.from)
+      const endDate = new Date(dateRange.to)
+      const days = differenceInCalendarDays(endDate, startDate) + 1
+      const allFlights = []
+
+      for (let i = 0; i < days; i++) {
+        const currentDate = addDays(startDate, i)
+        const dailyFlights = flights.map(flight => processFlightData({ ...flight, date: currentDate }))
+        allFlights.push(...dailyFlights)
+      }
+      setSelectedRouteFlights(allFlights)
+    } else {
+      const processed = flights.map(processFlightData)
+      setSelectedRouteFlights(processed)
+    }
+    setIsDialogOpen(true)
+  }
+
   // Helper to prepare data (fill missing dates)
   const prepareChartData = (data: any[], range: DateRange | undefined) => {
     if (!range?.from || !range?.to) {
@@ -596,86 +698,8 @@ useEffect(() => {
                       const totalFlightsInRange = flightCount * numberOfDays
                       
                       // First and Last flight
-                      const processFlight = (flight: any) => {
-                        // Fallback date if flight.date is missing
-                        const baseDate = flight.date 
-                          ? parseFlightDate(flight.date) 
-                          : (dateRange?.from ? new Date(dateRange.from) : new Date())
-
-                        let depDateObj = baseDate
-                        let arrDateObj = parseFlightDate(flight.arrivalDate)
-                        
-                        // 1. Parse Duration from string "4h 45m" to minutes
-                        let durationVal = 0
-                        if (typeof flight.duration === 'number') {
-                          durationVal = flight.duration
-                        } else if (typeof flight.duration === 'string') {
-                          const hMatch = flight.duration.match(/(\d+)h/)
-                          const mMatch = flight.duration.match(/(\d+)m/)
-                          if (hMatch) durationVal += parseInt(hMatch[1]) * 60
-                          if (mMatch) durationVal += parseInt(mMatch[1])
-                        }
-
-                        let depTime = flight.departureTime || flight.time
-                        let arrTime = flight.arrivalTime
-                        let durationStr = flight.duration
-
-                        // 2. Handle Direction: Swap time/date for Arrival flights
-                        if (flight.direction === 'arrival') {
-                          // If we have time but it's in the wrong slot (mapped to departure by default)
-                          if (depTime && !arrTime) {
-                            arrTime = depTime
-                            depTime = null
-                          }
-                          // The 'date' column for arrival flights is actually Arrival Date
-                          if (depDateObj && !arrDateObj) {
-                            arrDateObj = depDateObj
-                            depDateObj = null
-                          }
-                        }
-
-                        // Calculate if duration is numeric (minutes)
-                        if (!isNaN(durationVal) && durationVal > 0) {
-                          durationStr = `${Math.floor(durationVal / 60)} ชม. ${durationVal % 60} นาที`
-                          
-                          // Case 1: Have Departure Time, Calculate Arrival
-                          if (depTime && (depDateObj || baseDate)) {
-                            const [h, m] = depTime.split(':').map(Number)
-                            const start = new Date(depDateObj || baseDate!)
-                            start.setHours(h, m, 0, 0)
-                            
-                            const end = new Date(start.getTime() + durationVal * 60000)
-                            if (!arrTime) arrTime = format(end, 'HH:mm')
-                            if (!arrDateObj) arrDateObj = end
-                            if (!depDateObj) depDateObj = start
-                          }
-                          // Case 2: Have Arrival Time, Missing Departure Time
-                          else if (arrTime && (arrDateObj || baseDate)) {
-                            const [h, m] = arrTime.split(':').map(Number)
-                            // If arrDateObj is missing, assume baseDate (approx)
-                            const end = new Date(arrDateObj || baseDate!)
-                            end.setHours(h, m, 0, 0)
-                            
-                            const start = new Date(end.getTime() - durationVal * 60000)
-                            depTime = format(start, 'HH:mm')
-                            depDateObj = start
-                            if (!arrDateObj) arrDateObj = end
-                          }
-                        }
-                        
-                        return { 
-                          ...flight, 
-                          depDateObj, 
-                          departureTime: depTime || '-', 
-                          arrivalTime: arrTime || '-', 
-                          arrTime: arrTime || '-', // Keep for compatibility
-                          arrDateObj, 
-                          durationStr 
-                        }
-                      }
-
-                      const firstFlight = processFlight(flights[0])
-                      const lastFlight = processFlight(flights[flights.length - 1])
+                      const firstFlight = processFlightData(flights[0])
+                      const lastFlight = processFlightData(flights[flights.length - 1])
 
                       return (
                         <div
@@ -849,6 +873,7 @@ useEffect(() => {
                                 variant="outline"
                                 size="sm"
                                 className="w-full mt-6 text-xs h-9"
+                                onClick={() => handleShowFlightDetails(flights)}
                               >
                                 ดูรายละเอียดเที่ยวบิน
                               </Button>
@@ -960,6 +985,64 @@ useEffect(() => {
           </Card>
         </div>
       )}
+
+      {/* Flight Details Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>รายละเอียดเที่ยวบิน</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            {Object.entries(
+              selectedRouteFlights.reduce((acc: any, flight: any) => {
+                const dateKey = flight.depDateObj ? format(flight.depDateObj, 'yyyy-MM-dd') : 'unknown'
+                if (!acc[dateKey]) acc[dateKey] = []
+                acc[dateKey].push(flight)
+                return acc
+              }, {})
+            ).sort().map(([dateKey, flights]: any) => (
+              <div key={dateKey} className="space-y-3">
+                <h3 className="font-semibold text-lg border-b pb-2">
+                  {dateKey !== 'unknown' ? format(new Date(dateKey), 'EEEE, d MMMM yyyy', { locale: th }) : 'ไม่ระบุวันที่'}
+                </h3>
+                <div className="grid gap-3">
+                  {flights.map((flight: any, index: number) => (
+                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-muted/30 rounded-lg border gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <Plane className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">{flight.airlineCode || flight.airline} {flight.flightNumber}</div>
+                          <div className="text-sm text-muted-foreground">{flight.airlineName || flight.airline_name}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 flex-1 justify-center sm:justify-end">
+                        <div className="text-right">
+                          <div className="font-bold text-lg">{flight.departureTime}</div>
+                          <div className="text-xs text-muted-foreground">{flight.departureCode}</div>
+                        </div>
+                        <div className="flex flex-col items-center px-2">
+                          <span className="text-xs text-muted-foreground mb-1">{flight.durationStr}</span>
+                          <div className="w-20 h-px bg-border relative">
+                            <Plane className="w-3 h-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground" />
+                          </div>
+                          <span className="text-[10px] text-muted-foreground mt-1">{flight.direct ? 'Direct' : 'Connecting'}</span>
+                        </div>
+                        <div className="text-left">
+                          <div className="font-bold text-lg">{flight.arrivalTime}</div>
+                          <div className="text-xs text-muted-foreground">{flight.arrivalCode}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
