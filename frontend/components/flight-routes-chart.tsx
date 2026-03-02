@@ -5,7 +5,7 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, subDays, differenceInDays, parseISO } from 'date-fns'
+import { format, subDays, differenceInDays, parseISO, addYears, subMonths } from 'date-fns'
 import { th } from 'date-fns/locale/th'
 import {
   Area,
@@ -98,6 +98,25 @@ export function FlightRoutesChart({
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
   }, [chartZoomed])
 
+  // Filter chartData to remove leading and trailing zero-data days
+  // Keep days in between even if they are zero
+  const filteredChartData = (() => {
+    if (!chartData || chartData.length === 0) return []
+
+    let firstIndex = -1
+    let lastIndex = -1
+
+    for (let i = 0; i < chartData.length; i++) {
+      const hasData = chartData[i].flights > 0 || (compareMode && chartData[i].flightsCompare > 0)
+      if (hasData) {
+        if (firstIndex === -1) firstIndex = i
+        lastIndex = i
+      }
+    }
+
+    return firstIndex !== -1 ? chartData.slice(firstIndex, lastIndex + 1) : chartData
+  })()
+
   return (
     <>
       {/* Daily frequency chart - responsive */}
@@ -110,10 +129,13 @@ export function FlightRoutesChart({
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex rounded-lg border bg-muted/30 p-0.5">
               <Button
-                variant={!dateRange?.from && !dateRange?.to ? 'default' : 'ghost'}
+                variant={currentDaysDiff > 360 ? 'default' : 'ghost'}
                 size="sm"
                 className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                onClick={() => setDateRange(undefined)}
+                onClick={() => {
+                  const today = new Date()
+                  setDateRange({ from: subMonths(today, 1), to: addYears(today, 1) })
+                }}
               >
                 ทั้งหมด
               </Button>
@@ -173,7 +195,7 @@ export function FlightRoutesChart({
         <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
           <div className="h-[260px] sm:h-[320px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
             <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+              <AreaChart data={filteredChartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                 <defs>
                   <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
@@ -287,7 +309,7 @@ export function FlightRoutesChart({
             <div className="w-full min-w-0 mt-2">
               <div className="h-[280px] sm:h-[340px] w-full min-w-[320px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
                 <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-                  <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+                  <AreaChart data={filteredChartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
                     <defs>
                       <linearGradient id="flightGradientZoom" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
