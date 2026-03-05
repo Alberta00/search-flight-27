@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   analyzeFlightPrices,
   getFlightPrices,
+  getFlightRoutesAnalysisRange,
   getAvailableAirlines,
   predictPrice,
   getPriceTrend,
@@ -115,5 +116,11 @@ router.post('/cheapest-dates', validateBody(cheapestDatesSchema), getCheapestDat
  */
 router.get('/analysis', getFlightRoutesAnalysis);
 
-export default router;
+/**
+ * @route   GET /api/flights/analysis-range
+ * @desc    Get flight route analysis data for a date range
+ * @access  Public
+ */
+router.get('/analysis-range', getFlightRoutesAnalysisRange);
 
+export default router;

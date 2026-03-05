@@ -587,6 +587,63 @@ export async function getCheapestDates(
 }
 
 /**
+ * Get flight route analysis data for a specific date range
+ * GET /api/flights/analysis-range
+ */
+export async function getFlightRoutesAnalysisRange(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { origin, destination, origin_country, destination_country, start_date, end_date } = req.query;
+
+    if (!origin && !destination && !origin_country && !destination_country) {
+      res.status(400).json({
+        success: false,
+        message: 'Origin or destination (airport or country) is required',
+      });
+      return;
+    }
+    
+    if (!start_date || !end_date || typeof start_date !== 'string' || typeof end_date !== 'string') {
+      res.status(400).json({
+        success: false,
+        message: 'start_date and end_date query parameters are required in YYYY-MM-DD format.',
+      });
+      return;
+    }
+
+    const isCountryQuery = !!(origin_country || destination_country);
+    const locationValue = (origin || destination || origin_country || destination_country) as string;
+    const isDeparture = !!(origin || origin_country);
+
+    // Parse date range from query params, ensuring UTC context
+    const startDate = parseISO(start_date + 'T00:00:00.000Z');
+    const endDate = parseISO(end_date + 'T23:59:59.999Z');
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        res.status(400).json({
+            success: false,
+            message: 'Invalid date format for start_date or end_date. Please use YYYY-MM-DD.',
+        });
+        return;
+    }
+
+    let analysis;
+    if (isCountryQuery) {
+      analysis = await FlightModel.getIntlFlightAnalysisByCountry(locationValue, isDeparture, startDate, endDate, undefined);
+    } else {
+      analysis = await FlightModel.getIntlFlightAnalysis(locationValue, isDeparture, startDate, endDate, undefined);
+    }
+
+    res.json(analysis);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * Get flight route analysis data
  * GET /api/flights/analysis
  */
