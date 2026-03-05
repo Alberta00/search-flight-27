@@ -988,7 +988,7 @@ export class FlightModel {
     isDeparture: boolean,
     startDate: Date,
     endDate: Date,
-    selectedDate: Date
+    selectedDate?: Date
   ): Promise<{
     dailyFrequency: Array<{ date: string; flights: number }>;
     routes: Array<{
@@ -1022,7 +1022,7 @@ export class FlightModel {
     const startDateStr = formatLocalDate(startDate);
     const endDateStr   = formatLocalDate(endDate);
 
-    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+    const selectedDateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : null;
 
     const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
 
@@ -1040,9 +1040,24 @@ export class FlightModel {
           `;
     const dailyResult = await pool.query(dailyQuery, [airportParam, startDateStr, endDateStr]);
 
+    console.log(`[FlightModel] Analysis for ${airportCode} (${isDeparture ? 'Dep' : 'Arr'})`);
+    console.log(`[FlightModel] Date Range: ${startDateStr} to ${endDateStr}`);
+    if (selectedDateStr) {
+      console.log(`[FlightModel] Mode: Single Date Analysis (${selectedDateStr})`);
+    } else {
+      console.log(`[FlightModel] Mode: Range Analysis (Stats calculated over full range)`);
+    }
+
+    // Calculate days difference
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // If range is small (<= 60 days), return ALL flights (Daily view)
+    // If range is large, return DISTINCT routes (Schedule view)
+    const useDistinct = diffDays > 60;
+
     // 2. Routes List (Specific to Selected Date - including flight number, departure time, duration)
     const routesQuery = `
-      SELECT DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)
+      SELECT ${useDistinct ? 'DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)' : ''}
         departure_date,
         arrival_date,
         dep_airport as departure_code,
@@ -1056,10 +1071,18 @@ export class FlightModel {
           duration
       FROM ${tableName}
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-        AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2
-      ORDER BY dep_airport, arr_airport, airline_code, flight_number, departure_time
+        ${selectedDateStr 
+          ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2` 
+          : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
+        }
+      ORDER BY ${useDistinct ? 'dep_airport, arr_airport, airline_code, flight_number, departure_time' : 'departure_date, departure_time'}
           `;
-    const routesResult = await pool.query(routesQuery, [airportParam, selectedDateStr]);
+    
+    const routesParams = selectedDateStr 
+      ? [airportParam, selectedDateStr] 
+      : [airportParam, startDateStr, endDateStr];
+      
+    const routesResult = await pool.query(routesQuery, routesParams);
 
     // 3. Summary Stats (Stats for Selected Date, except average which is monthly)
     const summaryQuery = `
@@ -1070,7 +1093,10 @@ export class FlightModel {
             COUNT(*) as flight_count
         FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-          AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2
+          ${selectedDateStr 
+            ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
+            : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
+          }
         GROUP BY airline_code, dep_hour
           ),
           month_stats AS(
@@ -1079,8 +1105,8 @@ export class FlightModel {
             COUNT(DISTINCT ${isDeparture ? 'departure_date' : 'arrival_date'}) as active_days_month
         FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-          AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $3
-          AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $4
+          AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= ${selectedDateStr ? '$3' : '$2'}
+          AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= ${selectedDateStr ? '$4' : '$3'}
           ),
             peak_hour AS(
               SELECT dep_hour
@@ -1097,7 +1123,12 @@ export class FlightModel {
         LIMIT 1
               )
         SELECT
-          (SELECT COUNT(*) FROM ${tableName} WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2):: INTEGER as total_flights_day,
+          (SELECT COUNT(*) FROM ${tableName} WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 
+            ${selectedDateStr 
+              ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
+              : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
+            }
+          ):: INTEGER as total_flights_day,
             ms.total_flights_month,
             ms.active_days_month,
             ph.dep_hour as peak_hour,
@@ -1106,7 +1137,12 @@ export class FlightModel {
       LEFT JOIN peak_hour ph ON true
       LEFT JOIN top_carrier tc ON true
     `;
-    const summaryResult = await pool.query(summaryQuery, [airportParam, selectedDateStr, startDateStr, endDateStr]);
+    
+    const summaryParams = selectedDateStr
+      ? [airportParam, selectedDateStr, startDateStr, endDateStr]
+      : [airportParam, startDateStr, endDateStr];
+      
+    const summaryResult = await pool.query(summaryQuery, summaryParams);
 
     // Fallback if no data
     if (!summaryResult.rows[0] || (summaryResult.rows[0].total_flights_day === 0 && summaryResult.rows[0].total_flights_month === 0)) {
@@ -1175,8 +1211,7 @@ export class FlightModel {
             (r.departure_date instanceof Date ? r.departure_date.toISOString().split('T')[0] : r.departure_date) :
             (r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date),
           departureDate: r.departure_date instanceof Date ? r.departure_date.toISOString().split('T')[0] : r.departure_date,
-          arrivalDate: r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date,
-          direction: isDeparture ? 'departure' : 'arrival'
+          arrivalDate: r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date,          direction: isDeparture ? 'departure' : 'arrival'
         };
       }),
       summary: {
@@ -1196,7 +1231,7 @@ export class FlightModel {
     isDeparture: boolean,
     startDate: Date,
     endDate: Date,
-    selectedDate: Date
+    selectedDate?: Date
   ): Promise<{
     dailyFrequency: Array<{ date: string; flights: number }>;
     routes: Array<{
@@ -1227,7 +1262,7 @@ export class FlightModel {
 
     const startDateStr = formatLocalDate(startDate);
     const endDateStr   = formatLocalDate(endDate);
-    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+    const selectedDateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : null;
 
     const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
     const joinColumn = isDeparture ? 'dep_airport' : 'arr_airport';
@@ -1246,6 +1281,14 @@ export class FlightModel {
       // Fuzzy match for country name
       whereClause = `(a.country_name ILIKE $1 OR a.country ILIKE $1)`;
       queryParams = [`%${countryName}%`, startDateStr, endDateStr];
+    }
+
+    console.log(`[FlightModel] Country Analysis for ${countryName} (${isDeparture ? 'Dep' : 'Arr'})`);
+    console.log(`[FlightModel] Date Range: ${startDateStr} to ${endDateStr}`);
+    if (selectedDateStr) {
+      console.log(`[FlightModel] Mode: Single Date Analysis (${selectedDateStr})`);
+    } else {
+      console.log(`[FlightModel] Mode: Range Analysis (Stats calculated over full range)`);
     }
 
     // 1. Daily Frequency (Monthly Trend)
@@ -1268,13 +1311,24 @@ export class FlightModel {
     // Re-prepare params for routes query (only needs country and selectedDate)
     let routesQueryParams: any[] = [];
     if (isCountryCode) {
-       routesQueryParams = [countryName.toUpperCase(), selectedDateStr];
+       routesQueryParams = selectedDateStr 
+        ? [countryName.toUpperCase(), selectedDateStr]
+        : [countryName.toUpperCase(), startDateStr, endDateStr];
     } else {
-       routesQueryParams = [`%${countryName}%`, selectedDateStr];
+       routesQueryParams = selectedDateStr
+        ? [`%${countryName}%`, selectedDateStr]
+        : [`%${countryName}%`, startDateStr, endDateStr];
     }
 
+    // Calculate days difference
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // If range is small (<= 60 days), return ALL flights (Daily view)
+    // If range is large, return DISTINCT routes (Schedule view)
+    const useDistinct = diffDays > 60;
+
     const routesQuery = `
-      SELECT DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)
+      SELECT ${useDistinct ? 'DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)' : ''}
         dep_airport as departure_code,
         arr_airport as arrival_code,
         destination as destination_name,
@@ -1289,8 +1343,8 @@ export class FlightModel {
       FROM ${tableName} fp
       JOIN airports a ON fp.${joinColumn} = a.code
       WHERE ${whereClause}
-        AND departure_date = $2
-      ORDER BY dep_airport, arr_airport, airline_code, flight_number, departure_time
+        ${selectedDateStr ? 'AND departure_date = $2' : 'AND departure_date >= $2 AND departure_date <= $3'}
+      ORDER BY ${useDistinct ? 'dep_airport, arr_airport, airline_code, flight_number, departure_time' : 'departure_date, departure_time'}
     `;
     const routesResult = await pool.query(routesQuery, routesQueryParams);
 
@@ -1299,9 +1353,13 @@ export class FlightModel {
     // Re-prepare params for summary query
     let summaryQueryParams: any[] = [];
     if (isCountryCode) {
-       summaryQueryParams = [countryName.toUpperCase(), selectedDateStr, startDateStr, endDateStr];
+       summaryQueryParams = selectedDateStr
+        ? [countryName.toUpperCase(), selectedDateStr, startDateStr, endDateStr]
+        : [countryName.toUpperCase(), startDateStr, endDateStr];
     } else {
-       summaryQueryParams = [`%${countryName}%`, selectedDateStr, startDateStr, endDateStr];
+       summaryQueryParams = selectedDateStr
+        ? [`%${countryName}%`, selectedDateStr, startDateStr, endDateStr]
+        : [`%${countryName}%`, startDateStr, endDateStr];
     }
 
     // Note: For country level summary, we might want to aggregate differently, but keeping consistent structure for now
@@ -1314,7 +1372,7 @@ export class FlightModel {
         FROM ${tableName} fp
         JOIN airports a ON fp.${joinColumn} = a.code
         WHERE ${whereClause}
-          AND departure_date = $2
+          ${selectedDateStr ? 'AND departure_date = $2' : 'AND departure_date >= $2 AND departure_date <= $3'}
         GROUP BY airline_code, dep_hour
       ),
       month_stats AS(
@@ -1324,8 +1382,8 @@ export class FlightModel {
         FROM ${tableName} fp
         JOIN airports a ON fp.${joinColumn} = a.code
         WHERE ${whereClause}
-          AND departure_date >= $3
-          AND departure_date <= $4
+          AND departure_date >= ${selectedDateStr ? '$3' : '$2'}
+          AND departure_date <= ${selectedDateStr ? '$4' : '$3'}
       ),
       peak_hour AS(
         SELECT dep_hour FROM day_stats GROUP BY dep_hour ORDER BY SUM(flight_count) DESC LIMIT 1
@@ -1334,7 +1392,11 @@ export class FlightModel {
         SELECT airline_code FROM day_stats GROUP BY airline_code ORDER BY SUM(flight_count) DESC LIMIT 1
       )
       SELECT
-        (SELECT COUNT(*) FROM ${tableName} fp JOIN airports a ON fp.${joinColumn} = a.code WHERE ${whereClause} AND departure_date = $2):: INTEGER as total_flights_day,
+        (SELECT COUNT(*) FROM ${tableName} fp JOIN airports a ON fp.${joinColumn} = a.code WHERE ${whereClause} 
+          ${selectedDateStr 
+            ? 'AND departure_date = $2' 
+            : 'AND departure_date >= $2 AND departure_date <= $3'}
+        ):: INTEGER as total_flights_day,
         ms.total_flights_month,
         ms.active_days_month,
         ph.dep_hour as peak_hour,
@@ -1370,7 +1432,7 @@ export class FlightModel {
 
     return {
       dailyFrequency: dailyResult.rows.map(r => ({
-        date: r.date instanceof Date ? r.date.toISOString().split('T')[0] : r.date,
+        date: r.date instanceof Date ? formatLocalDate(r.date) : r.date,
         flights: r.flights
       })),
       routes: routesResult.rows.map(r => {

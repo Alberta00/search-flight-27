@@ -632,9 +632,9 @@ export async function getFlightRoutesAnalysisRange(
 
     let analysis;
     if (isCountryQuery) {
-      analysis = await FlightModel.getIntlFlightAnalysisByCountry(locationValue, isDeparture, startDate, endDate, startDate);
+      analysis = await FlightModel.getIntlFlightAnalysisByCountry(locationValue, isDeparture, startDate, endDate, undefined);
     } else {
-      analysis = await FlightModel.getIntlFlightAnalysis(locationValue, isDeparture, startDate, endDate, startDate);
+      analysis = await FlightModel.getIntlFlightAnalysis(locationValue, isDeparture, startDate, endDate, undefined);
     }
 
     res.json(analysis);

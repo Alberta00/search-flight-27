@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Plane, Calendar as CalendarIcon, Search, Send, TrendingUp, ChevronDown, ChevronUp, Clock, PlaneTakeoff, PlaneLanding, ArrowRightLeft, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -91,11 +91,10 @@ export function FlightRoutesAnalysis() {
   const [originName, setOriginName] = useState('')
   const [destination, setDestination] = useState('')
   const [destinationName, setDestinationName] = useState('')
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: subDays(new Date(), 29),
-    to: new Date(),
-  })
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
+  const [dateError, setDateError] = useState(false)
   const [compareMode, setCompareMode] = useState(false)
+  const [durationMode, setDurationMode] = useState<'7' | '30' | 'all' | null>(null)
   const [hasAnalyzed, setHasAnalyzed] = useState(false)
 
   const [dailyData, setDailyData] = useState<any[]>([])
@@ -104,7 +103,16 @@ export function FlightRoutesAnalysis() {
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
 
-  const fetchedDataBounds = useRef<{ main: DateRange | null, compare: DateRange | null }>({ main: null, compare: null });
+  const fetchedDataBounds = useRef<{ 
+    main: { range: DateRange, origin: string, destination: string } | null, 
+    compare: { range: DateRange, origin: string, destination: string } | null 
+  }>({ main: null, compare: null });
+
+  // Helper to check if range A is inside range B
+  const isRangeCovered = (inner: DateRange, outer: DateRange | null) => {
+    if (!outer || !outer.from || !outer.to || !inner.from || !inner.to) return false
+    return inner.from.getTime() >= outer.from.getTime() && inner.to.getTime() <= outer.to.getTime()
+  }
 
   // Fetch analysis data
 useEffect(() => {
@@ -114,14 +122,37 @@ useEffect(() => {
       return
     }
 
-    setLoading(true)
-    setHasAnalyzed(true)
+    if (!dateRange?.from) {
+      setDateError(true)
+      setHasAnalyzed(false)
+      return
+    }
+    setDateError(false)
 
     try {
       const requiredRange = {
-        from: dateRange?.from || subDays(new Date(), 29),
-        to: dateRange?.to || new Date(),
+        from: dateRange.from,
+        to: dateRange.to || dateRange.from,
       }
+
+      // Check if we already have this data cached
+      const isMainCached = fetchedDataBounds.current.main && 
+        fetchedDataBounds.current.main.origin === origin &&
+        fetchedDataBounds.current.main.destination === destination &&
+        isRangeCovered(requiredRange, fetchedDataBounds.current.main.range)
+
+      const isCompareCached = !compareMode || (fetchedDataBounds.current.compare && 
+        fetchedDataBounds.current.compare.origin === destination && // Swapped for compare
+        fetchedDataBounds.current.compare.destination === origin && // Swapped for compare
+        isRangeCovered(requiredRange, fetchedDataBounds.current.compare.range))
+
+      if (isMainCached && isCompareCached) {
+        setHasAnalyzed(true)
+        return
+      }
+
+      setLoading(true)
+      setHasAnalyzed(true)
 
       const baseUrl =
         process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
@@ -150,6 +181,7 @@ useEffect(() => {
         format(requiredRange.to, 'yyyy-MM-dd')
       )
 
+      if (!isMainCached) {
       // ===== MAIN FETCH =====
       const response = await fetch(
         `${baseUrl}/flights/analysis-range?${params.toString()}`
@@ -158,28 +190,66 @@ useEffect(() => {
       const data = await response.json()
 
       if (data) {
+        console.log('📊 Flight Analysis Data Received:', data)
+        console.log(`   - Daily Data Points: ${data.dailyFrequency?.length || 0}`)
+        console.log(`   - Routes Found: ${data.routes?.length || 0}`)
+        
         setDailyData(data.dailyFrequency || [])
         
         // Map routes to ensure camelCase properties
-        
-        // Map routes to ensure camelCase properties
-        const mappedRoutes = (data.routes || []).map((r: any) => ({
-          ...r,
-          departureName: r.departureName || r.departure_name,
-          departureCode: r.departureCode || r.departure_code,
-          arrivalCity: r.arrivalCity || r.arrival_city,
-          arrivalCode: r.arrivalCode || r.arrival_code,
-        }))
+        const mappedRoutes = (data.routes || []).map((r: any) => {
+          // Helper to extract time from date string if time is missing
+          const getTimeFromDate = (dateStr: string) => {
+            if (!dateStr) return null
+            try {
+              const d = new Date(dateStr)
+              if (isNaN(d.getTime())) return null
+              return format(d, 'HH:mm')
+            } catch { return null }
+          }
+
+          // Calculate duration if missing and we have both dates
+          let duration = r.duration
+          if ((!duration || duration === 0) && r.departure_date && r.arrival_date) {
+            const start = new Date(r.departure_date)
+            const end = new Date(r.arrival_date)
+            if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+              const diffMs = end.getTime() - start.getTime()
+              if (diffMs > 0) {
+                duration = Math.floor(diffMs / 60000) // minutes
+              }
+            }
+          }
+
+          return {
+            ...r,
+            departureName: r.departureName || r.departure_name,
+            departureCode: r.departureCode || r.departure_code,
+            arrivalCity: r.arrivalCity || r.arrival_city,
+            arrivalCode: r.arrivalCode || r.arrival_code,
+            airlineName: r.airlineName || r.airline_name,
+            airlineCode: r.airlineCode || r.airline_code,
+            // Map time fields - prioritize existing time, then extract from date
+            departureTime: r.departureTime || r.departure_time || r.time || getTimeFromDate(r.departure_date) || getTimeFromDate(r.departureDate),
+            arrivalTime: r.arrivalTime || r.arrival_time || getTimeFromDate(r.arrival_date) || getTimeFromDate(r.arrivalDate),
+            // Map date fields
+            date: r.date || r.departure_date || r.departureDate,
+            arrivalDate: r.arrivalDate || r.arrival_date || r.arrivalDate,
+            duration: duration
+          }
+        })
         setRoutes(mappedRoutes)
         
-        fetchedDataBounds.current.main = requiredRange
-        console.log('Daily data:', data.dailyFrequency)
+        fetchedDataBounds.current.main = { range: requiredRange, origin, destination }
+        // console.log('Daily data:', data.dailyFrequency)
         
+      }
       }
       
       // ===== COMPARE =====
       if (compareMode) {
-        const compareParams = new URLSearchParams()
+        if (!isCompareCached) {
+          const compareParams = new URLSearchParams()
 
         if (origin) {
           if (isAirportCode(origin))
@@ -209,9 +279,11 @@ useEffect(() => {
         const compareData = await compareResponse.json()
 
         setDailyDataCompare(compareData.dailyFrequency || [])
-        fetchedDataBounds.current.compare = requiredRange
+        fetchedDataBounds.current.compare = { range: requiredRange, origin: destination, destination: origin }
+        }
       } else {
         setDailyDataCompare([])
+        fetchedDataBounds.current.compare = null
       }
     } catch (error) {
       console.error('Failed to fetch flight analysis:', error)
@@ -225,16 +297,11 @@ useEffect(() => {
   
 }, [origin, destination, dateRange, compareMode])
 
-  useEffect(() => {
-    // Reset bounds when the main query target changes
-    fetchedDataBounds.current = { main: null, compare: null };
-  }, [origin, destination]);
-
   // Helper to process flight data (dates, duration, etc.)
   const processFlightData = (flight: any) => {
     // Fallback date if flight.date is missing
     const baseDate = flight.date 
-      ? parseFlightDate(flight.date) 
+      ? parseFlightDate(flight.date) || parseFlightDate(flight.departure_date) || parseFlightDate(flight.departureDate)
       : (dateRange?.from ? new Date(dateRange.from) : new Date())
 
     let depDateObj = baseDate
@@ -313,24 +380,30 @@ useEffect(() => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleShowFlightDetails = (flights: any[]) => {
-    if (dateRange?.from && dateRange?.to) {
-      const startDate = new Date(dateRange.from)
-      const endDate = new Date(dateRange.to)
-      const days = differenceInCalendarDays(endDate, startDate) + 1
-      const allFlights = []
-
-      for (let i = 0; i < days; i++) {
-        const currentDate = addDays(startDate, i)
-        const dailyFlights = flights.map(flight => processFlightData({ ...flight, date: currentDate }))
-        allFlights.push(...dailyFlights)
-      }
-      setSelectedRouteFlights(allFlights)
-    } else {
-      const processed = flights.map(processFlightData)
-      setSelectedRouteFlights(processed)
-    }
+    // Show unique flights only (Schedule view) - do not expand by date range
+    const processed = flights.map(processFlightData)
+    setSelectedRouteFlights(processed)
     setIsDialogOpen(true)
   }
+
+  // Filter routes based on the current dateRange to sync with the chart
+  const filteredRoutes = useMemo(() => {
+    if (!routes || !dateRange?.from) return []
+
+    const from = new Date(dateRange.from)
+    from.setHours(0, 0, 0, 0)
+    const to = dateRange.to ? new Date(dateRange.to) : new Date(from)
+    to.setHours(23, 59, 59, 999)
+
+    return routes.filter(route => {
+      const routeDate = parseFlightDate(route.date)
+      if (!routeDate) return false
+      
+      // console.log(`Checking route date: ${format(routeDate, 'yyyy-MM-dd')} vs Range: ${format(from, 'yyyy-MM-dd')} - ${format(to, 'yyyy-MM-dd')}`)
+      // Ensure routeDate is within the selected range
+      return routeDate.getTime() >= from.getTime() && routeDate.getTime() <= to.getTime()
+    })
+  }, [routes, dateRange])
 
   // Helper to prepare data (fill missing dates)
   const prepareChartData = (data: any[], range: DateRange | undefined) => {
@@ -380,22 +453,38 @@ useEffect(() => {
   const processedDailyData = prepareChartData(dailyData, dateRange)
   const processedDailyDataCompare = compareMode ? prepareChartData(dailyDataCompare, dateRange) : []
 
-  // Calculate total flights from processed data to ensure it matches the date range
-  const calculatedTotalFlights = processedDailyData.reduce((sum, item) => sum + (item.flights || 0), 0)
+  // Filter out leading/trailing zero days for statistics calculation
+  // This ensures stats reflect the actual data period, not the full selected range
+  const effectiveDailyData = (() => {
+    if (!processedDailyData || processedDailyData.length === 0) return []
+    
+    let firstIndex = -1
+    let lastIndex = -1
+    
+    for (let i = 0; i < processedDailyData.length; i++) {
+      if (processedDailyData[i].flights > 0) {
+        if (firstIndex === -1) firstIndex = i
+        lastIndex = i
+      }
+    }
+    
+    if (firstIndex === -1) return []
+    return processedDailyData.slice(firstIndex, lastIndex + 1)
+  })()
 
-  // Calculate average flights per day based on the selected date range
-  const numberOfDays = processedDailyData.length || 1
+  const calculatedTotalFlights = effectiveDailyData.reduce((sum, item) => sum + (item.flights || 0), 0)
+  const numberOfDays = effectiveDailyData.length || 1
   const calculatedAvgFlights =
-    numberOfDays > 0
-      ? Math.round(calculatedTotalFlights / numberOfDays)
+    effectiveDailyData.length > 0
+      ? Math.round(calculatedTotalFlights / effectiveDailyData.length)
       : 0
 
   // Calculate Most Active Carrier from routes data
-  const calculateMostActiveCarrier = (routesData: any[]) => {
-    if (!routesData || routesData.length === 0) return 'ไม่พบข้อมูล'
+  const calculateMostActiveCarrier = (filteredRoutesData: any[]) => {
+    if (!filteredRoutesData || filteredRoutesData.length === 0) return 'ไม่พบข้อมูล'
     
     const carrierCounts: Record<string, number> = {}
-    routesData.forEach(r => {
+    filteredRoutesData.forEach(r => {
       // Try to find airline name, fallback to code
       const name = r.airlineName || r.airline_name || r.airline || r.airlineCode || r.airline_code || 'Unknown'
       carrierCounts[name] = (carrierCounts[name] || 0) + 1
@@ -415,12 +504,12 @@ useEffect(() => {
   }
 
   // Calculate Peak Hour Range from routes data
-  const calculatePeakHourRange = (routesData: any[]) => {
-    if (!routesData || routesData.length === 0) return 'ไม่พบข้อมูล'
+  const calculatePeakHourRange = (filteredRoutesData: any[]) => {
+    if (!filteredRoutesData || filteredRoutesData.length === 0) return 'ไม่พบข้อมูล'
     
     const hourCounts: Record<number, number> = {}
     
-    routesData.forEach(r => {
+    filteredRoutesData.forEach(r => {
       const timeStr = r.departureTime || r.departure_time || r.time
       if (timeStr) {
         // Handle "HH:mm:ss" or "HH:mm"
@@ -452,8 +541,8 @@ useEffect(() => {
     return `${start} - ${end}`
   }
 
-  const calculatedMostActiveCarrier = calculateMostActiveCarrier(routes)
-  const calculatedPeakHourRange = calculatePeakHourRange(routes)
+  const calculatedMostActiveCarrier = calculateMostActiveCarrier(filteredRoutes)
+  const calculatedPeakHourRange = calculatePeakHourRange(filteredRoutes)
 
   const chartData = processedDailyData.map(row => {
     const compareRow = processedDailyDataCompare.find((cr: any) => cr.date === row.date)
@@ -465,7 +554,7 @@ useEffect(() => {
   })
 
   // Group routes by Origin-Destination
-  const groupedRoutes = routes.reduce((acc, route) => {
+  const groupedRoutes = filteredRoutes.reduce((acc, route) => {
     const key = `${route.departureCode}-${route.arrivalCode}`
     if (!acc[key]) {
       acc[key] = {
@@ -487,12 +576,12 @@ useEffect(() => {
 
   // Calculate most active airport in the selected region (Country)
   const getMostActiveAirport = () => {
-    if (!routes.length) return null
+    if (!filteredRoutes.length) return null
     
     const depCounts: Record<string, number> = {}
     const arrCounts: Record<string, number> = {}
     
-    routes.forEach(r => {
+    filteredRoutes.forEach(r => {
         // Fix duplicate code display: Check if name already ends with (CODE)
         const formatName = (name: string, code: string) => {
             if (!name) return code || 'Unknown'
@@ -592,7 +681,8 @@ useEffect(() => {
                     variant="outline"
                     className={cn(
                       'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
-                      !dateRange?.from && 'text-muted-foreground'
+                      !dateRange?.from && 'text-muted-foreground',
+                      dateError && !dateRange?.from && 'border-red-500 ring-1 ring-red-500/20'
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
@@ -605,7 +695,15 @@ useEffect(() => {
                   <Calendar
                     mode="single"
                     selected={dateRange?.from}
-                    onSelect={(date) => setDateRange((prev) => ({ from: date, to: prev?.to }))}
+                    onSelect={(date) => {
+                      if (durationMode === '7' && date) {
+                        setDateRange({ from: date, to: addDays(date, 6) })
+                      } else if (durationMode === '30' && date) {
+                        setDateRange({ from: date, to: addDays(date, 29) })
+                      } else {
+                        setDateRange((prev) => ({ from: date, to: prev?.to }))
+                      }
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
@@ -629,7 +727,10 @@ useEffect(() => {
                   <Calendar
                     mode="single"
                     selected={dateRange?.to}
-                    onSelect={(date) => setDateRange((prev) => ({ from: prev?.from, to: date }))}
+                    onSelect={(date) => {
+                      setDurationMode(null)
+                      setDateRange((prev) => ({ from: prev?.from, to: date }))
+                    }}
                     disabled={(date) => dateRange?.from ? date < dateRange.from : false}
                     initialFocus
                   />
@@ -677,6 +778,8 @@ useEffect(() => {
               compareMode={compareMode}
               setCompareMode={setCompareMode}
               isDeparture={!!origin}
+              durationMode={durationMode}
+              setDurationMode={setDurationMode}
             />
 
             {/* รายการเส้นทางสายการบิน - ใต้กราฟ */}
@@ -685,7 +788,7 @@ useEffect(() => {
                 <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
                 {originName || destinationName 
                   ? `เส้นทางการบิน (${sortedGroupKeys.length} เส้นทาง)`
-                  : `เส้นทางการบิน (${routes.length} เที่ยวบิน)`}
+                  : `เส้นทางการบิน (${filteredRoutes.length} เที่ยวบิน)`}
               </h2>
               <ScrollArea className="h-[500px] sm:h-[600px] w-full rounded-md border bg-muted/20">
                 <div className="p-1 space-y-2">
@@ -909,6 +1012,16 @@ useEffect(() => {
               </h2>
             </div>
             <div className="space-y-3 sm:space-y-4">
+              {loading ? (
+                [...Array(4)].map((_, i) => (
+                  <div key={i} className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
+                    <div className="h-3 w-1/2 bg-muted-foreground/20 rounded animate-pulse mb-2" />
+                    <div className="h-6 w-3/4 bg-muted-foreground/20 rounded animate-pulse mb-2" />
+                    <div className="h-2 w-1/3 bg-muted-foreground/20 rounded animate-pulse" />
+                  </div>
+                ))
+              ) : (
+                <>
               <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
                 <p className="text-xs sm:text-sm font-medium text-foreground">
                   จำนวนเที่ยวบินเฉลี่ย/วัน
@@ -945,10 +1058,20 @@ useEffect(() => {
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">ตามช่วงเวลาที่เลือก</p>
               </div>
+                </>
+              )}
             </div>
 
             {/* Most Active Airport Block (Show only if multiple airports involved) */}
-            {(mostActive?.maxDep || mostActive?.maxArr) && (
+            {loading ? (
+              <div className="mt-4 space-y-3 sm:space-y-4">
+                <div className="p-3 sm:p-4 rounded-lg bg-blue-50/50 border border-blue-100">
+                  <div className="h-3 w-1/2 bg-blue-200 rounded animate-pulse mb-2" />
+                  <div className="h-6 w-3/4 bg-blue-200 rounded animate-pulse mb-2" />
+                  <div className="h-2 w-1/3 bg-blue-200 rounded animate-pulse" />
+                </div>
+              </div>
+            ) : (mostActive?.maxDep || mostActive?.maxArr) && (
               <div className="mt-4 space-y-3 sm:space-y-4">
                 {mostActive.maxDep && (
                   <div className="p-3 sm:p-4 rounded-lg bg-blue-50/50 border border-blue-100">
@@ -988,58 +1111,105 @@ useEffect(() => {
 
       {/* Flight Details Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-none sm:max-w-none w-[35vw] max-h-[80vh] overflow-x-auto">
           <DialogHeader>
             <DialogTitle>รายละเอียดเที่ยวบิน</DialogTitle>
           </DialogHeader>
-          <div className="space-y-6">
+          <div className="space-y-6 overflow-y-auto max-h-[60vh] pr-1 flight-routes-accent">
             {Object.entries(
               selectedRouteFlights.reduce((acc: any, flight: any) => {
-                const dateKey = flight.depDateObj ? format(flight.depDateObj, 'yyyy-MM-dd') : 'unknown'
-                if (!acc[dateKey]) acc[dateKey] = []
-                acc[dateKey].push(flight)
+                // Determine grouping key based on date range
+                let key = 'ตารางเที่ยวบิน (Flight Schedule)'
+                
+                // If we have a date range and it's small enough (e.g. <= 60 days), group by date
+                // We can infer this if we have multiple different dates in the flights list
+                // Or simply check if we have a valid date object
+                if (dateRange?.from && dateRange?.to) {
+                   const daysDiff = differenceInCalendarDays(dateRange.to, dateRange.from)
+                   if (daysDiff <= 60 && flight.depDateObj) {
+                       key = format(flight.depDateObj, 'yyyy-MM-dd')
+                   }
+                }
+
+                if (!acc[key]) acc[key] = []
+                acc[key].push(flight)
                 return acc
               }, {})
-            ).sort().map(([dateKey, flights]: any) => (
-              <div key={dateKey} className="space-y-3">
-                <h3 className="font-semibold text-lg border-b pb-2">
-                  {dateKey !== 'unknown' ? format(new Date(dateKey), 'EEEE, d MMMM yyyy', { locale: th }) : 'ไม่ระบุวันที่'}
-                </h3>
+            ).sort((a: any, b: any) => a[0].localeCompare(b[0])).map(([key, flights]: any) => {
+              // Format header date if it's a date key
+              const isDateKey = /^\d{4}-\d{2}-\d{2}$/.test(key)
+              const headerTitle = isDateKey ? format(new Date(key), 'EEEE, d MMMM yyyy', { locale: th }) : key
+
+              return (
+              <div key={key} className="space-y-3">
+                <div className="flex items-center gap-4 pt-2">
+                  <h3 className="font-medium text-sm text-muted-foreground/70 shrink-0">
+                    {headerTitle}
+                  </h3>
+                  <div className="h-px bg-border/60 flex-1" />
+                </div>
                 <div className="grid gap-3">
                   {flights.map((flight: any, index: number) => (
                     <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-muted/30 rounded-lg border gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                          <Plane className="w-5 h-5 text-primary" />
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 overflow-hidden border relative">
+                          <img
+                            src={`https://airhex.com/images/airline-logos/${(flight.airlineName || flight.airline_name || '').trim().toLowerCase().replace(/\s+/g, '-')}.png`}
+                            alt={flight.airlineName || flight.airline_name}
+                            className="w-full h-full object-contain p-1"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none'
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                            }}
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center bg-primary/10 hidden">
+                            <Plane className="w-5 h-5 text-primary" />
+                          </div>
                         </div>
                         <div>
-                          <div className="font-bold text-lg">{flight.airlineCode || flight.airline} {flight.flightNumber}</div>
+                          <div className="font-bold text-lg">
+                            {(() => {
+                              const airlineCode = flight.airlineCode || flight.airline || '';
+                              const flightNum = flight.flightNumber || '';
+                              // Check if flight number already starts with airline code (case insensitive)
+                              const showCode = !flightNum.toLowerCase().startsWith(airlineCode.toLowerCase());
+                              return `${showCode ? airlineCode + ' ' : ''}${flightNum}`;
+                            })()}
+                          </div>
                           <div className="text-sm text-muted-foreground">{flight.airlineName || flight.airline_name}</div>
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-4 flex-1 justify-center sm:justify-end">
-                        <div className="text-right">
+                      <div className="flex items-center gap-4 flex-1 justify-center sm:justify-end min-w-0">
+                        <div className="text-right min-w-[80px] sm:min-w-[140px]">
                           <div className="font-bold text-lg">{flight.departureTime}</div>
-                          <div className="text-xs text-muted-foreground">{flight.departureCode}</div>
+                          <div className="text-xs text-muted-foreground truncate" title={flight.departureName}>
+                            <span className="hidden sm:inline">{flight.departureName} ({flight.departureCode})</span>
+                            <span className="sm:hidden">{flight.departureCode}</span>
+                          </div>
                         </div>
-                        <div className="flex flex-col items-center px-2">
+                        <div className="flex flex-col items-center px-2 min-w-[100px]">
                           <span className="text-xs text-muted-foreground mb-1">{flight.durationStr}</span>
-                          <div className="w-20 h-px bg-border relative">
-                            <Plane className="w-3 h-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground" />
+                          <div className="w-full flex items-center">
+                            <div className="h-px bg-border flex-1" />
+                            <Plane className="w-3 h-3 text-muted-foreground ml-1 rotate-90" />
                           </div>
                           <span className="text-[10px] text-muted-foreground mt-1">{flight.direct ? 'Direct' : 'Connecting'}</span>
                         </div>
-                        <div className="text-left">
+                        <div className="text-left min-w-[80px] sm:min-w-[140px]">
                           <div className="font-bold text-lg">{flight.arrivalTime}</div>
-                          <div className="text-xs text-muted-foreground">{flight.arrivalCode}</div>
+                          <div className="text-xs text-muted-foreground truncate" title={flight.arrivalCity || flight.arrivalCode}>
+                            <span className="hidden sm:inline">{flight.arrivalCity || flight.arrivalCode} ({flight.arrivalCode})</span>
+                            <span className="sm:hidden">{flight.arrivalCode}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </DialogContent>
       </Dialog>

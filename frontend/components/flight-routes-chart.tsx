@@ -5,7 +5,7 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, subDays, differenceInDays, parseISO, addYears, subMonths } from 'date-fns'
+import { format, subDays, differenceInDays, parseISO, addYears, subMonths, addDays } from 'date-fns'
 import { th } from 'date-fns/locale/th'
 import {
   Area,
@@ -41,6 +41,8 @@ interface FlightRoutesChartProps {
   compareMode: boolean
   setCompareMode: React.Dispatch<React.SetStateAction<boolean>>
   isDeparture: boolean
+  durationMode?: '7' | '30' | 'all' | null
+  setDurationMode?: (mode: '7' | '30' | 'all' | null) => void
 }
 
 export function FlightRoutesChart({
@@ -49,7 +51,9 @@ export function FlightRoutesChart({
   setDateRange,
   compareMode,
   setCompareMode,
-  isDeparture
+  isDeparture,
+  durationMode,
+  setDurationMode
 }: FlightRoutesChartProps) {
   const [chartZoomed, setChartZoomed] = useState(false)
   const [isPortraitMobile, setIsPortraitMobile] = useState(false)
@@ -129,34 +133,37 @@ export function FlightRoutesChart({
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex rounded-lg border bg-muted/30 p-0.5">
               <Button
-                variant={currentDaysDiff > 360 ? 'default' : 'ghost'}
+                variant={durationMode === 'all' || (!durationMode && currentDaysDiff > 360) ? 'default' : 'ghost'}
                 size="sm"
                 className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
                 onClick={() => {
                   const today = new Date()
                   setDateRange({ from: subMonths(today, 1), to: addYears(today, 1) })
+                  setDurationMode?.('all')
                 }}
               >
                 ทั้งหมด
               </Button>
               <Button
-                variant={currentDaysDiff === 7 ? 'default' : 'ghost'}
+                variant={durationMode === '7' ? 'default' : 'ghost'}
                 size="sm"
                 className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
                 onClick={() => {
-                  const to = new Date()
-                  setDateRange({ from: subDays(to, 6), to })
+                  const today = new Date()
+                  setDateRange({ from: today, to: addDays(today, 6) })
+                  setDurationMode?.('7')
                 }}
               >
                 7 วัน
               </Button>
               <Button
-                variant={currentDaysDiff === 30 ? 'default' : 'ghost'}
+                variant={durationMode === '30' ? 'default' : 'ghost'}
                 size="sm"
                 className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
                 onClick={() => {
-                  const to = new Date()
-                  setDateRange({ from: subDays(to, 29), to })
+                  const today = new Date()
+                  setDateRange({ from: today, to: addDays(today, 29) })
+                  setDurationMode?.('30')
                 }}
               >
                 30 วัน
@@ -207,14 +214,40 @@ export function FlightRoutesChart({
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                <Area
+                  type="monotone"
+                  dataKey="flights"
+                  name={mainLabel}
+                  stroke="hsl(221, 83%, 53%)"
+                  strokeWidth={2}
+                  fill="url(#flightGradient)"
+                />
+                {compareMode && (
+                  <Area
+                    type="monotone"
+                    dataKey="flightsCompare"
+                    name={compareLabel}
+                    stroke="hsl(142, 76%, 36%)"
+                    strokeWidth={2}
+                    fill="url(#flightCompareGradient)"
+                  />
+                )}
                 <XAxis
                   dataKey="date"
-                  stroke="hsl(var(--muted-foreground))"
                   fontSize={11}
+                  axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
+                  tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
+                  tickSize={10}
                   tick={{ fill: 'hsl(var(--muted-foreground))' }}
                   tickFormatter={(value) => {
                     if (!value) return ''
-                    return format(parseISO(value), 'd MMM', { locale: th })
+                    const date = parseISO(value)
+                    if (currentDaysDiff > 120) {
+                      return format(date, 'MMM yy', { locale: th })
+                    } else if (currentDaysDiff > 60) {
+                      return format(date, 'd MMM', { locale: th })
+                    }
+                    return format(date, 'd MMM', { locale: th })
                   }}
                   minTickGap={30}
                   angle={0}
@@ -248,24 +281,6 @@ export function FlightRoutesChart({
                     )
                   }}
                 />
-                <Area
-                  type="monotone"
-                  dataKey="flights"
-                  name={mainLabel}
-                  stroke="hsl(221, 83%, 53%)"
-                  strokeWidth={2}
-                  fill="url(#flightGradient)"
-                />
-                {compareMode && (
-                  <Area
-                    type="monotone"
-                    dataKey="flightsCompare"
-                    name={compareLabel}
-                    stroke="hsl(142, 76%, 36%)"
-                    strokeWidth={2}
-                    fill="url(#flightCompareGradient)"
-                  />
-                )}
               </AreaChart>
             </ChartContainer>
           </div>
@@ -321,14 +336,40 @@ export function FlightRoutesChart({
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                  <Area
+                    type="monotone"
+                    dataKey="flights"
+                    name={mainLabel}
+                    stroke="hsl(221, 83%, 53%)"
+                    strokeWidth={2}
+                    fill="url(#flightGradientZoom)"
+                  />
+                  {compareMode && (
+                    <Area
+                      type="monotone"
+                      dataKey="flightsCompare"
+                      name={compareLabel}
+                      stroke="hsl(142, 76%, 36%)"
+                      strokeWidth={2}
+                      fill="url(#flightCompareGradientZoom)"
+                    />
+                  )}
                     <XAxis
                       dataKey="date"
-                      stroke="hsl(var(--muted-foreground))"
                       fontSize={11}
+                    axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
+                    tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
+                    tickSize={10}
                       tick={{ fill: 'hsl(var(--muted-foreground))' }}
                       tickFormatter={(value) => {
                         if (!value) return ''
-                        return format(parseISO(value), 'd MMM', { locale: th })
+                        const date = parseISO(value)
+                        if (currentDaysDiff > 120) {
+                          return format(date, 'MMM yy', { locale: th })
+                        } else if (currentDaysDiff > 60) {
+                          return format(date, 'd MMM', { locale: th })
+                        }
+                        return format(date, 'd MMM', { locale: th })
                       }}
                       minTickGap={30}
                       angle={0}
@@ -362,24 +403,6 @@ export function FlightRoutesChart({
                         )
                       }}
                     />
-                    <Area
-                      type="monotone"
-                      dataKey="flights"
-                      name={mainLabel}
-                      stroke="hsl(221, 83%, 53%)"
-                      strokeWidth={2}
-                      fill="url(#flightGradientZoom)"
-                    />
-                    {compareMode && (
-                      <Area
-                        type="monotone"
-                        dataKey="flightsCompare"
-                        name={compareLabel}
-                        stroke="hsl(142, 76%, 36%)"
-                        strokeWidth={2}
-                        fill="url(#flightCompareGradientZoom)"
-                      />
-                    )}
                   </AreaChart>
                 </ChartContainer>
               </div>
