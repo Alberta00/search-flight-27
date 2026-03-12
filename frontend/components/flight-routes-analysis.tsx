@@ -69,22 +69,22 @@ const mockDailyDataCompare = [
 ]
 
 
-// Helper to parse date string that might be YYYYMMDD or YYYY-MM-DD
-const parseFlightDate = (dateStr: any): Date | null => {
-  if (!dateStr) return null
-  if (dateStr instanceof Date) return dateStr
-  const str = String(dateStr)
-  // YYYYMMDD
-  if (/^\d{8}$/.test(str)) {
-    const y = parseInt(str.substring(0, 4))
-    const m = parseInt(str.substring(4, 6)) - 1
-    const d = parseInt(str.substring(6, 8))
-    return new Date(y, m, d)
-  }
-  // YYYY-MM-DD
-  const d = new Date(str)
-  return isNaN(d.getTime()) ? null : d
-}
+// // Helper to parse date string that might be YYYYMMDD or YYYY-MM-DD
+// const parseFlightDate = (dateStr: any): Date | null => {
+//   if (!dateStr) return null
+//   if (dateStr instanceof Date) return dateStr
+//   const str = String(dateStr)
+//   // YYYYMMDD
+//   if (/^\d{8}$/.test(str)) {
+//     const y = parseInt(str.substring(0, 4))
+//     const m = parseInt(str.substring(4, 6)) - 1
+//     const d = parseInt(str.substring(6, 8))
+//     return new Date(y, m, d)
+//   }
+//   // YYYY-MM-DD
+//   const d = new Date(str)
+//   return isNaN(d.getTime()) ? null : d
+// }
 
 // Helper to parse date string that might be YYYYMMDD or YYYY-MM-DD
 const parseFlightDate = (dateStr: any): Date | null => {

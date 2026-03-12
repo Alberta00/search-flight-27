@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
@@ -57,6 +57,8 @@ export function FlightRoutesChart({
 }: FlightRoutesChartProps) {
   const [chartZoomed, setChartZoomed] = useState(false)
   const [isPortraitMobile, setIsPortraitMobile] = useState(false)
+  const [xZoomPercent, setXZoomPercent] = useState(0)
+  const [yGapStep, setYGapStep] = useState(0)
   const zoomDialogRef = useRef<HTMLDivElement>(null)
 
   const mainLabel = isDeparture ? 'ขาออก (Departure)' : 'ขาเข้า (Arrival)'
@@ -121,6 +123,90 @@ export function FlightRoutesChart({
     return firstIndex !== -1 ? chartData.slice(firstIndex, lastIndex + 1) : chartData
   })()
 
+  const formatXAxisDate = (value: string) => {
+    if (!value) return ''
+    const date = parseISO(value)
+    if (currentDaysDiff > 120) {
+      return format(date, 'MMM yy', { locale: th })
+    } else if (currentDaysDiff > 60) {
+      return format(date, 'd MMM', { locale: th })
+    }
+    return format(date, 'd MMM', { locale: th })
+  }
+
+  const zoomedChartData = (() => {
+    if (!filteredChartData.length) return []
+    if (xZoomPercent <= 0) return filteredChartData
+
+    const zoomIn = Math.min(1, Math.max(0, xZoomPercent / 100))
+    const full = filteredChartData.length
+    const minWindow = Math.min(2, full)
+    const windowSize = Math.max(
+      minWindow,
+      Math.ceil(full - (full - minWindow) * zoomIn)
+    )
+    // Anchor to start date, do not extend beyond end date
+    return filteredChartData.slice(0, windowSize)
+  })()
+
+  const yAxisStats = (() => {
+    if (!zoomedChartData.length) return { min: 0, max: 1 }
+    let minVal = Infinity
+    let maxVal = -Infinity
+    for (const item of zoomedChartData) {
+      if (typeof item.flights === 'number') {
+        minVal = Math.min(minVal, item.flights)
+        maxVal = Math.max(maxVal, item.flights)
+      }
+      if (compareMode && typeof item.flightsCompare === 'number') {
+        minVal = Math.min(minVal, item.flightsCompare)
+        maxVal = Math.max(maxVal, item.flightsCompare)
+      }
+    }
+    if (!isFinite(minVal) || !isFinite(maxVal)) return { min: 0, max: 1 }
+    return { min: minVal, max: maxVal }
+  })()
+
+  const yAxisMin = (() => {
+    const minVal = yAxisStats.min
+    const stepFactor = yGapStep / 4
+    if (stepFactor >= 1) return Math.floor(minVal)
+
+    const range = Math.max(1, yAxisStats.max - minVal)
+    const pad = range * 0.2 * (1 - stepFactor)
+    let nextMin = Math.max(0, minVal - pad)
+
+    // Keep original rule for non-100%: min - 1 and round down to end with 0
+    nextMin = Math.max(0, nextMin - 1)
+    nextMin = Math.floor(nextMin / 10) * 10
+    return Math.floor(nextMin)
+  })()
+
+  const yAxisMax = (() => {
+    const minVal = yAxisStats.min
+    const maxVal = yAxisStats.max
+    const stepFactor = yGapStep / 4
+    if (stepFactor >= 1) return Math.ceil(maxVal)
+
+    const range = Math.max(1, maxVal - minVal)
+    const pad = range * 0.2 * (1 - stepFactor)
+    return Math.ceil(maxVal + pad)
+  })()
+
+  const yAxisTicks = (() => {
+    if (yGapStep !== 4) return undefined
+    const min = yAxisMin
+    const max = yAxisMax
+    const step = (max - min) / 4
+    return [min, min + step, min + step * 2, min + step * 3, max]
+  })()
+
+  const formatYAxisTick = (value: number) => {
+    if (Number.isInteger(value)) return `${value}`
+    return `${value.toFixed(1)}`
+  }
+
+
   return (
     <>
       {/* Daily frequency chart - responsive */}
@@ -131,6 +217,40 @@ export function FlightRoutesChart({
             สถิติความถี่เที่ยวบินรายวัน
           </h2>
           <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 rounded-lg border bg-muted/30 px-2 py-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] text-muted-foreground">X</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={xZoomPercent}
+                  onChange={(e) => setXZoomPercent(Number(e.target.value))}
+                  className="w-20 sm:w-24 accent-blue-500"
+                  aria-label="Zoom X axis"
+                />
+                <span className="text-[10px] w-8 text-right text-muted-foreground">
+                  {xZoomPercent}%
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] text-muted-foreground">Y</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={4}
+                  step={1}
+                  value={yGapStep}
+                  onChange={(e) => setYGapStep(Number(e.target.value))}
+                  className="w-20 sm:w-24 accent-emerald-500"
+                  aria-label="Zoom Y axis"
+                />
+                <span className="text-[10px] w-8 text-right text-muted-foreground">
+                  {Math.round((yGapStep / 4) * 100)}%
+                </span>
+              </div>
+            </div>
             <div className="flex rounded-lg border bg-muted/30 p-0.5">
               <Button
                 variant={durationMode === 'all' || (!durationMode && currentDaysDiff > 360) ? 'default' : 'ghost'}
@@ -200,9 +320,9 @@ export function FlightRoutesChart({
           </div>
         </div>
         <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
-          <div className="h-[260px] sm:h-[320px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
+          <div className="h-[380px] sm:h-[440px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
             <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-              <AreaChart data={filteredChartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+              <AreaChart data={zoomedChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
@@ -239,25 +359,18 @@ export function FlightRoutesChart({
                   tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
                   tickSize={10}
                   tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                  tickFormatter={(value) => {
-                    if (!value) return ''
-                    const date = parseISO(value)
-                    if (currentDaysDiff > 120) {
-                      return format(date, 'MMM yy', { locale: th })
-                    } else if (currentDaysDiff > 60) {
-                      return format(date, 'd MMM', { locale: th })
-                    }
-                    return format(date, 'd MMM', { locale: th })
-                  }}
+                  tickFormatter={formatXAxisDate}
                   minTickGap={30}
                   angle={0}
                   textAnchor="middle"
-                  height={50}
+                  height={44}
                 />
                 <YAxis
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={11}
                   tickFormatter={(v) => `${v}`}
+                  domain={[yAxisMin, yAxisMax]}
+                  ticks={yAxisTicks}
                   label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
                   width={45}
                 />
@@ -265,7 +378,7 @@ export function FlightRoutesChart({
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null
                     const p = payload[0].payload
-                    const tooltipDate = p.displayDate || (p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : '')
+                    const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
                     return (
                       <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
                         <p className="font-medium mb-2">{tooltipDate}</p>
@@ -322,9 +435,9 @@ export function FlightRoutesChart({
               </DialogTitle>
             </DialogHeader>
             <div className="w-full min-w-0 mt-2">
-              <div className="h-[280px] sm:h-[340px] w-full min-w-[320px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
+              <div className="h-[400px] sm:h-[500px] w-full min-w-[320px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
                 <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-                  <AreaChart data={filteredChartData} margin={{ top: 10, right: 10, left: 0, bottom: 30 }}>
+                  <AreaChart data={zoomedChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="flightGradientZoom" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
@@ -358,28 +471,21 @@ export function FlightRoutesChart({
                       dataKey="date"
                       fontSize={11}
                     axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                    tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                    tickSize={10}
+                      tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
+                      tickSize={10}
                       tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                      tickFormatter={(value) => {
-                        if (!value) return ''
-                        const date = parseISO(value)
-                        if (currentDaysDiff > 120) {
-                          return format(date, 'MMM yy', { locale: th })
-                        } else if (currentDaysDiff > 60) {
-                          return format(date, 'd MMM', { locale: th })
-                        }
-                        return format(date, 'd MMM', { locale: th })
-                      }}
+                      tickFormatter={formatXAxisDate}
                       minTickGap={30}
                       angle={0}
                       textAnchor="middle"
-                      height={50}
+                      height={44}
                     />
                     <YAxis
                       stroke="hsl(var(--muted-foreground))"
                       fontSize={11}
                       tickFormatter={(v) => `${v}`}
+                      domain={[yAxisMin, yAxisMax]}
+                      ticks={yAxisTicks}
                       label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
                       width={45}
                     />
@@ -387,7 +493,7 @@ export function FlightRoutesChart({
                       content={({ active, payload }) => {
                         if (!active || !payload?.length) return null
                         const p = payload[0].payload
-                        const tooltipDate = p.displayDate || (p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : '')
+                        const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
                         return (
                           <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
                             <p className="font-medium mb-2">{tooltipDate}</p>
