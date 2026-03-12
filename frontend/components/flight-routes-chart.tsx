@@ -55,6 +55,15 @@ export function FlightRoutesChart({
   durationMode,
   setDurationMode
 }: FlightRoutesChartProps) {
+  const CHART_FONT = {
+    xTick: 11,
+    yTick: 10,
+    yLabel: 16,
+    tooltipTitle: 14,
+    tooltipText: 14,
+    dialogTitle: 24,
+    headerTitle: 26,
+  }
   const [chartZoomed, setChartZoomed] = useState(false)
   const [isPortraitMobile, setIsPortraitMobile] = useState(false)
   const [xZoomPercent, setXZoomPercent] = useState(0)
@@ -212,10 +221,13 @@ export function FlightRoutesChart({
       {/* Daily frequency chart - responsive */}
       <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden flight-routes-accent">
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
-          <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0">
+          <h1
+            className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0"
+            style={{ fontSize: CHART_FONT.headerTitle }}
+          >
             <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             สถิติความถี่เที่ยวบินรายวัน
-          </h2>
+          </h1>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-2 rounded-lg border bg-muted/30 px-2 py-1">
               <div className="flex items-center gap-1.5">
@@ -354,7 +366,7 @@ export function FlightRoutesChart({
                 )}
                 <XAxis
                   dataKey="date"
-                  fontSize={11}
+                  fontSize={CHART_FONT.xTick}
                   axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
                   tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
                   tickSize={10}
@@ -367,11 +379,11 @@ export function FlightRoutesChart({
                 />
                 <YAxis
                   stroke="hsl(var(--muted-foreground))"
-                  fontSize={11}
+                  fontSize={CHART_FONT.yTick}
                   tickFormatter={(v) => `${v}`}
                   domain={[yAxisMin, yAxisMax]}
                   ticks={yAxisTicks}
-                  label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
+                  label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: CHART_FONT.yLabel }}
                   width={45}
                 />
                 <Tooltip
@@ -381,12 +393,14 @@ export function FlightRoutesChart({
                     const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
                     return (
                       <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
-                        <p className="font-medium mb-2">{tooltipDate}</p>
-                        <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)' }}>
+                        <p className="font-medium mb-2" style={{ fontSize: CHART_FONT.tooltipTitle }}>
+                          {tooltipDate}
+                        </p>
+                        <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)', fontSize: CHART_FONT.tooltipText }}>
                           {mainLabel}: {p.flights} เที่ยว
                         </p>
                         {compareMode && (
-                          <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)' }}>
+                          <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)', fontSize: CHART_FONT.tooltipText }}>
                             {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
                           </p>
                         )}
@@ -429,7 +443,10 @@ export function FlightRoutesChart({
               </div>
             )}
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <DialogTitle
+                className="flex items-center gap-2 text-base sm:text-lg"
+                style={{ fontSize: CHART_FONT.dialogTitle }}
+              >
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 สถิติความถี่เที่ยวบินรายวัน
               </DialogTitle>
