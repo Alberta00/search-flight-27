@@ -5,7 +5,7 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, subDays, differenceInDays, parseISO, addYears, subMonths, addDays } from 'date-fns'
+import { format, differenceInDays, parseISO, addYears, subMonths, addDays } from 'date-fns'
 import { th } from 'date-fns/locale/th'
 import {
   Area,
@@ -209,12 +209,6 @@ export function FlightRoutesChart({
     const step = (max - min) / 4
     return [min, min + step, min + step * 2, min + step * 3, max]
   })()
-
-  const formatYAxisTick = (value: number) => {
-    if (Number.isInteger(value)) return `${value}`
-    return `${value.toFixed(1)}`
-  }
-
 
   return (
     <>
