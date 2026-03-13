@@ -13,6 +13,7 @@ import * as fs from 'fs';
 import { FlightModel } from '../models/Flight';
 import { ImportModel } from '../models/Import';
 import { pool } from '../config/database';
+import { GoogleDriveService } from '../services/GoogleDriveService';
 
 // Load environment variables
 const envPaths = [
@@ -60,6 +61,35 @@ function parseCSVLine(line: string): string[] {
 }
 
 /**
+ * Normalize date to YYYY-MM-DD format
+ * Handles both formats:
+ * - YYYY-MM-DD (already normalized)
+ * - DD/M/YYYY or DD/MM/YYYY (Indonesian format)
+ */
+function normalizeDateFormat(dateStr: string): string {
+    if (!dateStr) return '';
+
+    const trimmedDate = dateStr.trim();
+
+    // Already in YYYY-MM-DD format
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmedDate)) {
+        return trimmedDate;
+    }
+
+    // Handle DD/M/YYYY or DD/MM/YYYY format (Indonesian format)
+    // Supports / or - as delimiters
+    const dateMatch = trimmedDate.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+    if (dateMatch) {
+        const day = dateMatch[1].padStart(2, '0');
+        const month = dateMatch[2].padStart(2, '0');
+        const year = dateMatch[3];
+        return `${year}-${month}-${day}`;
+    }
+
+    return trimmedDate;
+}
+
+/**
  * Extract airline code from flight number (e.g., "TG483" -> "TG")
  */
 function extractAirlineCodeFromFlight(flight: string): string {
@@ -99,17 +129,32 @@ function parseDurationToMinutes(durationStr: string): number {
  * Calculate arrival time based on departure date, time, and duration
  */
 function calculateArrivalTime(dateStr: string, timeStr: string, durationMinutes: number): string {
+    // Ensure date is in YYYY-MM-DD format
+    const normalizedDate = normalizeDateFormat(dateStr);
+    if (!normalizedDate || !timeStr) return '';
+
     // Construct UTC date-time
     // timeStr format: HH:MM or H:MM
-    let [hours, minutes] = timeStr.split(':');
+    const timeParts = timeStr.trim().split(':');
+    if (timeParts.length < 2) return '';
+
+    let [hours, minutes] = timeParts;
 
     // Pad hours with leading zero if necessary
     if (hours.length === 1) {
         hours = '0' + hours;
     }
+    if (minutes.length === 1) {
+        minutes = '0' + minutes;
+    }
 
-    const departure = new Date(`${dateStr}T${hours}:${minutes}:00Z`);
-    if (isNaN(departure.getTime())) return '';
+    // Ensure minutes are only 2 digits
+    minutes = minutes.substring(0, 2);
+
+    const departure = new Date(`${normalizedDate}T${hours}:${minutes}:00Z`);
+    if (isNaN(departure.getTime())) {
+        return '';
+    }
 
     const arrival = new Date(departure.getTime() + durationMinutes * 60000);
     return arrival.toISOString();
@@ -174,20 +219,23 @@ function getAirportDisplayName(code: string): string {
 /**
  * Import flight data from a single CSV file (FlightsFrom.com format)
  */
-async function importIntlCSVFile(csvFilePath: string): Promise<{
+async function importIntlCSVFile(
+    csvContent: string, 
+    fileName: string,
+    routeCache: Map<string, any>,
+    airlineCache: Map<string, any>
+): Promise<{
     processed: number;
     stored: number;
     skipped: number;
     errors: number;
 }> {
-    console.log(`\n📄 Processing International Data: ${path.basename(csvFilePath)}`);
+    console.log(`\n📄 Processing International Data: ${fileName}`);
 
-    if (!fs.existsSync(csvFilePath)) {
-        console.error(`❌ CSV file not found: ${csvFilePath}`);
+    if (!csvContent) {
+        console.error(`❌ No content found for: ${fileName}`);
         return { processed: 0, stored: 0, skipped: 0, errors: 1 };
     }
-
-    const csvContent = fs.readFileSync(csvFilePath, 'utf-8');
     const lines = csvContent.split('\n').filter(line => line.trim());
 
     if (lines.length <= 1) {
@@ -213,14 +261,13 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
     let totalSkipped = 0;
     let totalErrors = 0;
 
-    const routeCache = new Map<string, any>();
-    const airlineCache = new Map<string, any>();
+    // Caches are now passed as arguments for global reuse
 
     const BATCH_SIZE = 500;
     const departureBatch: any[] = [];
     const arrivalBatch: any[] = [];
 
-    console.log(`   📊 Processing ${lines.length - 1} rows...`);
+    console.log(`[${fileName}] 📊 Processing ${lines.length - 1} rows...`);
 
     for (let i = 1; i < lines.length; i++) {
         try {
@@ -230,6 +277,14 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
 
             if (!row.flight || !row.time || !row.date || !row.destination) {
                 totalSkipped++;
+                continue;
+            }
+
+            // Normalize date format to YYYY-MM-DD
+            row.date = normalizeDateFormat(row.date);
+            if (!row.date) {
+                console.error(`   ❌ Error processing row ${i + 1}: Invalid date format`);
+                totalErrors++;
                 continue;
             }
 
@@ -256,13 +311,30 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 // Flight arriving at csvAirport (BKK) from otherAirport (PER)
                 originCode = otherAirport;
                 destinationCode = csvAirport;
+                
                 // For arrivals, the CSV time is the arrival time
                 // timeStr format: HH:MM or H:MM
-                let [hours, minutes] = row.time.split(':');
+                const timeParts = row.time.trim().split(':');
+                if (timeParts.length < 2) {
+                    console.warn(`   ⚠️  Row ${i + 1}: Invalid time format '${row.time}'`);
+                    totalErrors++;
+                    continue;
+                }
+                
+                let [hours, minutes] = timeParts;
                 if (hours.length === 1) hours = '0' + hours;
+                if (minutes.length === 1) minutes = '0' + minutes;
+                minutes = minutes.substring(0, 2);
 
                 arrivalTimeUTC = `${row.date}T${hours}:${minutes}:00Z`;
                 const arrivalDate = new Date(arrivalTimeUTC);
+                
+                if (isNaN(arrivalDate.getTime())) {
+                    console.error(`   ❌ Row ${i + 1}: Invalid arrival date-time resulting from '${row.date}T${hours}:${minutes}:00Z'`);
+                    totalErrors++;
+                    continue;
+                }
+
                 const departureDate = new Date(arrivalDate.getTime() - durationMinutes * 60000);
                 departureTimeUTC = departureDate.toISOString();
                 displayDestination = getAirportDisplayName(csvAirport);
@@ -270,13 +342,22 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
                 // Flight departing from csvAirport (BKK) to otherAirport (PER)
                 originCode = csvAirport;
                 destinationCode = otherAirport;
+                
                 // For departures, the CSV time is the departure time
-                // timeStr format: HH:MM or H:MM
-                let [hours, minutes] = row.time.split(':');
-                if (hours.length === 1) hours = '0' + hours;
-
-                departureTimeUTC = `${row.date}T${hours}:${minutes}:00Z`;
+                departureTimeUTC = calculateArrivalTime(row.date, row.time, 0); // Get ISO string for departure
+                if (!departureTimeUTC) {
+                    console.error(`   ❌ Row ${i + 1}: Invalid departure date-time from date '${row.date}', time '${row.time}'`);
+                    totalErrors++;
+                    continue;
+                }
+                
                 arrivalTimeUTC = calculateArrivalTime(row.date, row.time, durationMinutes);
+                if (!arrivalTimeUTC) {
+                    console.error(`   ❌ Row ${i + 1}: Error calculating arrival time for date '${row.date}', time '${row.time}', duration ${durationMinutes}`);
+                    totalErrors++;
+                    continue;
+                }
+                
                 displayDestination = row.destination; // Keeps "PER Perth"
             }
 
@@ -398,8 +479,80 @@ async function importIntlCSVFile(csvFilePath: string): Promise<{
         totalStored += deduplicatedBatch.length;
     }
 
-    console.log(`   ✅ Completed: ${totalStored} stored, ${totalSkipped} skipped, ${totalErrors} errors`);
+    console.log(`[${fileName}] ✅ Completed: ${totalStored} stored, ${totalSkipped} skipped, ${totalErrors} errors`);
     return { processed: totalProcessed, stored: totalStored, skipped: totalSkipped, errors: totalErrors };
+}
+
+/**
+ * Process a batch of files with a concurrency limit
+ */
+async function processFilesParallel(
+    files: Array<{ name: string, id?: string, localPath?: string }>,
+    concurrency: number,
+    driveService: GoogleDriveService | null,
+    routeCache: Map<string, any>,
+    airlineCache: Map<string, any>,
+    forceImport: boolean = false
+) {
+    let totalStored = 0;
+    let skippedCount = 0;
+    let errorCount = 0;
+    let processedFileCount = 0;
+
+    const queue = [...files];
+    const activeTasks: Promise<void>[] = [];
+
+    const processNext = async (): Promise<void> => {
+        if (queue.length === 0) return;
+
+        const fileInfo = queue.shift()!;
+        const fileName = fileInfo.name;
+        const currentIdx = ++processedFileCount;
+
+        try {
+            if (!forceImport) {
+                const alreadyImported = await ImportModel.isFileImported(fileName);
+                if (alreadyImported) {
+                    skippedCount++;
+                    return processNext();
+                }
+            }
+
+            console.log(`⏳ [${currentIdx}/${files.length}] Processing ${fileName}...`);
+            let content = '';
+            if (fileInfo.localPath) {
+                content = fs.readFileSync(fileInfo.localPath, 'utf-8');
+            } else if (fileInfo.id && driveService) {
+                content = await driveService.downloadFileContent(fileInfo.id);
+            }
+
+            if (content) {
+                const result = await importIntlCSVFile(content, fileName, routeCache, airlineCache);
+
+                if (result.stored > 0 && result.errors === 0) {
+                    await ImportModel.markFileImported(fileName);
+                    console.log(`✅ Marked as imported: ${fileName}`);
+                } else if (result.stored > 0) {
+                    console.log(`⚠️  Imported with some errors, not marking as complete: ${fileName}`);
+                }
+                totalStored += result.stored;
+            }
+        } catch (err: any) {
+            console.error(`❌ Failed to process ${fileName}:`, err.message);
+            errorCount++;
+        }
+
+        return processNext();
+    };
+
+    // Start initial workers
+    for (let i = 0; i < Math.min(concurrency, files.length); i++) {
+        activeTasks.push(processNext());
+    }
+
+    await Promise.all(activeTasks);
+
+    return { totalStored, skippedCount, errorCount };
 }
 
 /**
@@ -415,12 +568,21 @@ async function main() {
 
     const csvDir = args.find(arg => arg.startsWith('--dir='))?.split('=')[1] || defaultDir;
     const csvFile = args.find(arg => arg.startsWith('--file='))?.split('=')[1];
+    const useDrive = args.includes('--drive');
+    const folderId = args.find(arg => arg.startsWith('--folder-id='))?.split('=')[1] || '1GOFxWqbZQABNylMAL7xORETo85XJw8vv';
+    const limit = parseInt(args.find(arg => arg.startsWith('--limit='))?.split('=')[1] || '0');
 
     // Check for force import
     const forceImport = process.env.FORCE_IMPORT === 'true' || args.includes('--force');
 
     console.log('\n' + '='.repeat(80));
     console.log('✈️  International Flight Data CSV Importer (FlightsFrom.com)');
+    if (useDrive) {
+        console.log(`📂 Source: Google Drive (Folder ID: ${folderId})`);
+    } else {
+        console.log(`📂 Source: Local Directory (${csvFile || csvDir})`);
+    }
+    console.log(`DEBUG: Script Version - Recursive Drive Support Active`);
     console.log('='.repeat(80));
 
     let csvFiles: string[] = [];
@@ -455,38 +617,76 @@ async function main() {
         }
     }
 
-    if (csvFiles.length === 0) {
-        console.error(`❌ No CSV files found.`);
-        process.exit(1);
-    }
 
     let totalStored = 0;
     let skippedCount = 0;
-    try {
-        for (const file of csvFiles) {
-            const fileName = path.basename(file);
+    let errorCount = 0;
 
-            if (!forceImport) {
-                const alreadyImported = await ImportModel.isFileImported(fileName);
-                if (alreadyImported) {
-                    skippedCount++;
-                    continue;
+    const routeCache = new Map<string, any>();
+    const airlineCache = new Map<string, any>();
+    const CONCURRENCY = 5;
+
+    try {
+        if (useDrive) {
+            const serviceAccountPath = path.join(process.cwd(), 'flight-data-import-f13fe24a45ef.json');
+            if (!fs.existsSync(serviceAccountPath)) {
+                console.error(`❌ Google Service Account file not found at: ${serviceAccountPath}`);
+                process.exit(1);
+            }
+
+            const driveService = new GoogleDriveService(serviceAccountPath);
+            console.log(`🔍 Stage 1/2: Discovering files from Google Drive (this may take a few minutes)...`);
+            
+            const driveFiles: Array<{ name: string, id: string }> = [];
+            await driveService.walkCSVFiles(folderId, async (file) => {
+                if (limit > 0 && driveFiles.length >= limit) return;
+                driveFiles.push({ name: file.name || 'unknown.csv', id: file.id! });
+            });
+
+            console.log(`📊 Stage 2/2: Found ${driveFiles.length} files. Starting parallel import with concurrency ${CONCURRENCY}...`);
+            const result = await processFilesParallel(driveFiles, CONCURRENCY, driveService, routeCache, airlineCache, forceImport);
+            
+            totalStored = result.totalStored;
+            skippedCount = result.skippedCount;
+            errorCount = result.errorCount;
+
+        } else {
+            let localFiles: string[] = [];
+
+            if (csvFile) {
+                const fullPath = path.isAbsolute(csvFile) ? csvFile : path.join(process.cwd(), csvFile);
+                localFiles = [fullPath];
+            } else {
+                const fullDir = path.isAbsolute(csvDir) ? csvDir : path.join(process.cwd(), csvDir);
+                if (fs.existsSync(fullDir)) {
+                    localFiles = getFilesRecursively(fullDir);
                 }
             }
 
-            const result = await importIntlCSVFile(file);
-
-            if (result.stored > 0 && result.errors === 0) {
-                await ImportModel.markFileImported(fileName);
-                console.log(`✅ Marked as imported: ${fileName}`);
-            } else if (result.stored > 0) {
-                console.log(`⚠️  Imported with some errors, not marking as complete: ${fileName}`);
+            if (localFiles.length === 0) {
+                console.error(`❌ No CSV files found locally.`);
+                process.exit(1);
             }
 
-            totalStored += result.stored;
+            if (limit > 0) {
+                console.log(`ℹ️  Limiting to first ${limit} files.`);
+                localFiles = localFiles.slice(0, limit);
+            }
+
+            const formattedLocalFiles = localFiles.map(f => ({ name: path.basename(f), localPath: f }));
+            console.log(`📊 Found ${formattedLocalFiles.length} local files. Starting parallel import with concurrency ${CONCURRENCY}...`);
+            const result = await processFilesParallel(formattedLocalFiles, CONCURRENCY, null, routeCache, airlineCache, forceImport);
+            
+            totalStored = result.totalStored;
+            skippedCount = result.skippedCount;
+            errorCount = result.errorCount;
         }
+
         if (skippedCount > 0) {
             console.log(`⏩ Skipped ${skippedCount} already imported file(s)`);
+        }
+        if (errorCount > 0) {
+            console.log(`❌ Failed to process ${errorCount} file(s)`);
         }
         console.log(`\n🎉 Total successfully stored: ${totalStored}`);
     } catch (error: any) {

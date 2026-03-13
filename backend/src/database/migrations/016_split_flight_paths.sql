@@ -1,11 +1,11 @@
 -- Migration 016: Split flight_paths into departure_flight_paths and arrival_flight_paths
 
--- 1. Create departure_flight_paths table
 CREATE TABLE IF NOT EXISTS departure_flight_paths (
     id SERIAL PRIMARY KEY,
     route_id INTEGER NOT NULL REFERENCES routes(id) ON DELETE CASCADE,
     airline_id INTEGER NOT NULL REFERENCES airlines(id) ON DELETE CASCADE,
     departure_date DATE NOT NULL,
+    arrival_date DATE NOT NULL,
     departure_time TIMESTAMP NOT NULL,
     arrival_time TIMESTAMP NOT NULL,
     duration INTEGER NOT NULL, -- in minutes
@@ -25,12 +25,12 @@ CREATE TABLE IF NOT EXISTS departure_flight_paths (
     UNIQUE(route_id, airline_id, departure_date, trip_type, flight_number, departure_time)
 );
 
--- 2. Create arrival_flight_paths table
 CREATE TABLE IF NOT EXISTS arrival_flight_paths (
     id SERIAL PRIMARY KEY,
     route_id INTEGER NOT NULL REFERENCES routes(id) ON DELETE CASCADE,
     airline_id INTEGER NOT NULL REFERENCES airlines(id) ON DELETE CASCADE,
     departure_date DATE NOT NULL,
+    arrival_date DATE NOT NULL,
     departure_time TIMESTAMP NOT NULL,
     arrival_time TIMESTAMP NOT NULL,
     duration INTEGER NOT NULL, -- in minutes
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS arrival_flight_paths (
     source VARCHAR(50),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(route_id, airline_id, departure_date, trip_type, flight_number, departure_time)
+    UNIQUE(route_id, airline_id, arrival_date, trip_type, flight_number, departure_time)
 );
 
 -- 3. Create indexes for departure_flight_paths

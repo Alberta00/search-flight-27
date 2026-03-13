@@ -12,6 +12,8 @@ npm install --legacy-peer-deps
 ```bash 
 cd backend 
 npm install
+npm install googleapis
+
 ```
 
 - create .env file 
@@ -118,5 +120,25 @@ docker exec -it flight_search_backend sh
 /app $ npm run import-airports
 /app $ npm run import-airpaz-flights  
 /app $ npm run import-intl-flights
+npm run import-intl-flights -- --dir=/app/data/intl_flight_data/asia/americansamoa 
+npm run import-intl-flights -- --drive
+npm run import-intl-flights -- --drive --folder-id=YOUR_FOLDER_ID
+```
+for running migration 
+```bash
+npm run migrate
+```
+
+in the backend folder 
+```bash 
+npm list googleapis 
+```
+
+after every changes, run this 
+```bash 
+docker-compose build backend && docker-compose up -d backend
+docker compose build --no-cache backend && docker compose up -d backend
 ```
 ...
+
+

@@ -41,6 +41,8 @@ COPY --from=builder /app/src/database/migrations ./src/database/migrations
 # Copy source TypeScript files and dependencies for running with tsx
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
+# Copy service account JSON
+COPY --from=builder /app/flight-data-import-f13fe24a45ef.json ./
 # Copy entrypoint script from builder stage
 COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
 

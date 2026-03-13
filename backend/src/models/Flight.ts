@@ -298,22 +298,24 @@ export class FlightModel {
     basePrice: number,
     avgDuration: number
   ): Promise<Route> {
-    // Try to get existing route
-    const existingRoute = await this.getRoute(origin, destination);
+    try {
+      // Use atomic ON CONFLICT to avoid race conditions
+      const result = await pool.query(
+        `INSERT INTO routes (origin, destination, base_price, avg_duration_minutes, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, NOW(), NOW())
+         ON CONFLICT (origin, destination) 
+         DO UPDATE SET updated_at = NOW()
+         RETURNING id, origin, destination, base_price, avg_duration_minutes AS avg_duration, created_at, updated_at`,
+        [origin, destination, basePrice, avgDuration]
+      );
 
-    if (existingRoute) {
-      return existingRoute;
+      return result.rows[0];
+    } catch (error: any) {
+      // Fallback: If for some reason the above failed, try to just get it
+      const existing = await this.getRoute(origin, destination);
+      if (existing) return existing;
+      throw error;
     }
-
-    // Create new route
-    const result = await pool.query(
-      `INSERT INTO routes (origin, destination, base_price, avg_duration_minutes, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, NOW(), NOW())
-       RETURNING id, origin, destination, base_price, avg_duration_minutes AS avg_duration, created_at, updated_at`,
-      [origin, destination, basePrice, avgDuration]
-    );
-
-    return result.rows[0];
   }
 
   /**
@@ -324,25 +326,103 @@ export class FlightModel {
     name: string,
     nameTh: string
   ): Promise<Airline> {
-    // Try to get existing airline
-    const existingAirline = await pool.query(
-      'SELECT * FROM airlines WHERE code = $1',
-      [code]
-    );
+    try {
+      // Use atomic ON CONFLICT to avoid race conditions
+      const result = await pool.query(
+        `INSERT INTO airlines (code, name, name_th, created_at, updated_at)
+         VALUES ($1, $2, $3, NOW(), NOW())
+         ON CONFLICT (code) 
+         DO UPDATE SET updated_at = NOW()
+         RETURNING *`,
+        [code, name, nameTh]
+      );
 
-    if (existingAirline.rows.length > 0) {
-      return existingAirline.rows[0];
+      return result.rows[0];
+    } catch (error: any) {
+      // Fallback: If for some reason the above failed, try to just get it
+      const existingResult = await pool.query(
+        'SELECT * FROM airlines WHERE code = $1',
+        [code]
+      );
+
+      if (existingResult.rows.length > 0) {
+        return existingResult.rows[0];
+      }
+      throw error;
     }
+  }
 
-    // Create new airline
-    const result = await pool.query(
-      `INSERT INTO airlines (code, name, name_th, created_at, updated_at)
-       VALUES ($1, $2, $3, NOW(), NOW())
-       RETURNING *`,
-      [code, name, nameTh]
-    );
+  /**
+   * Bulk get or create airlines
+   */
+  static async bulkGetOrCreateAirlines(airlinesToCreate: Array<{ code: string, name: string, nameTh: string }>): Promise<Map<string, Airline>> {
+    if (airlinesToCreate.length === 0) return new Map();
 
-    return result.rows[0];
+    const airlineMap = new Map<string, Airline>();
+    
+    // Process in chunks to avoid large query limits
+    const chunkSize = 100;
+    for (let i = 0; i < airlinesToCreate.length; i += chunkSize) {
+      const chunk = airlinesToCreate.slice(i, i + chunkSize);
+      
+      const placeholders: string[] = [];
+      const values: any[] = [];
+      let paramIndex = 1;
+      
+      chunk.forEach(a => {
+        placeholders.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, NOW(), NOW())`);
+        values.push(a.code, a.name, a.nameTh);
+      });
+
+      const query = `
+        INSERT INTO airlines (code, name, name_th, created_at, updated_at)
+        VALUES ${placeholders.join(', ')}
+        ON CONFLICT (code) 
+        DO UPDATE SET updated_at = NOW()
+        RETURNING *
+      `;
+      
+      const result = await pool.query(query, values);
+      result.rows.forEach(row => airlineMap.set(row.code, row));
+    }
+    
+    return airlineMap;
+  }
+
+  /**
+   * Bulk get or create routes
+   */
+  static async bulkGetOrCreateRoutes(routesToCreate: Array<{ origin: string, destination: string, basePrice: number, avgDuration: number }>): Promise<Map<string, Route>> {
+    if (routesToCreate.length === 0) return new Map();
+
+    const routeMap = new Map<string, Route>();
+    
+    const chunkSize = 100;
+    for (let i = 0; i < routesToCreate.length; i += chunkSize) {
+      const chunk = routesToCreate.slice(i, i + chunkSize);
+      
+      const placeholders: string[] = [];
+      const values: any[] = [];
+      let paramIndex = 1;
+      
+      chunk.forEach(r => {
+        placeholders.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, NOW(), NOW())`);
+        values.push(r.origin, r.destination, r.basePrice || 0, r.avgDuration || 0);
+      });
+
+      const query = `
+        INSERT INTO routes (origin, destination, base_price, avg_duration_minutes, created_at, updated_at)
+        VALUES ${placeholders.join(', ')}
+        ON CONFLICT (origin, destination) 
+        DO UPDATE SET updated_at = NOW()
+        RETURNING id, origin, destination, base_price, avg_duration_minutes AS avg_duration, created_at, updated_at
+      `;
+      
+      const result = await pool.query(query, values);
+      result.rows.forEach(row => routeMap.set(`${row.origin}-${row.destination}`, row));
+    }
+    
+    return routeMap;
   }
 
   /**
@@ -747,6 +827,8 @@ export class FlightModel {
         );
       });
 
+      const dateColumn = isDeparture ? 'departure_date' : 'arrival_date';
+
       const query = `
         INSERT INTO ${tableName} (
           route_id, airline_id, departure_date, arrival_date, departure_time, arrival_time,
@@ -755,7 +837,7 @@ export class FlightModel {
           aircraft, source, created_at, updated_at
         )
         VALUES ${placeholders.join(', ')}
-        ON CONFLICT (route_id, airline_id, departure_date, trip_type, flight_number, departure_time)
+        ON CONFLICT (route_id, airline_id, ${dateColumn}, trip_type, flight_number, departure_time)
         DO UPDATE SET
           arrival_time = EXCLUDED.arrival_time,
           duration = EXCLUDED.duration,
@@ -1015,12 +1097,12 @@ export class FlightModel {
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
-    };    
-    
+    };
+
     const airportParam = airportCode.toUpperCase();
 
     const startDateStr = formatLocalDate(startDate);
-    const endDateStr   = formatLocalDate(endDate);
+    const endDateStr = formatLocalDate(endDate);
 
     const selectedDateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : null;
 
@@ -1071,17 +1153,17 @@ export class FlightModel {
           duration
       FROM ${tableName}
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-        ${selectedDateStr 
-          ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2` 
-          : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
-        }
+        ${selectedDateStr
+        ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
+        : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
+      }
       ORDER BY ${useDistinct ? 'dep_airport, arr_airport, airline_code, flight_number, departure_time' : 'departure_date, departure_time'}
           `;
-    
-    const routesParams = selectedDateStr 
-      ? [airportParam, selectedDateStr] 
+
+    const routesParams = selectedDateStr
+      ? [airportParam, selectedDateStr]
       : [airportParam, startDateStr, endDateStr];
-      
+
     const routesResult = await pool.query(routesQuery, routesParams);
 
     // 3. Summary Stats (Stats for Selected Date, except average which is monthly)
@@ -1093,10 +1175,10 @@ export class FlightModel {
             COUNT(*) as flight_count
         FROM ${tableName}
         WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
-          ${selectedDateStr 
-            ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
-            : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
-          }
+          ${selectedDateStr
+        ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
+        : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
+      }
         GROUP BY airline_code, dep_hour
           ),
           month_stats AS(
@@ -1124,10 +1206,10 @@ export class FlightModel {
               )
         SELECT
           (SELECT COUNT(*) FROM ${tableName} WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1 
-            ${selectedDateStr 
-              ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
-              : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
-            }
+            ${selectedDateStr
+        ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
+        : `AND ${isDeparture ? 'departure_date' : 'arrival_date'} >= $2 AND ${isDeparture ? 'departure_date' : 'arrival_date'} <= $3`
+      }
           ):: INTEGER as total_flights_day,
             ms.total_flights_month,
             ms.active_days_month,
@@ -1137,11 +1219,11 @@ export class FlightModel {
       LEFT JOIN peak_hour ph ON true
       LEFT JOIN top_carrier tc ON true
     `;
-    
+
     const summaryParams = selectedDateStr
       ? [airportParam, selectedDateStr, startDateStr, endDateStr]
       : [airportParam, startDateStr, endDateStr];
-      
+
     const summaryResult = await pool.query(summaryQuery, summaryParams);
 
     // Fallback if no data
@@ -1211,7 +1293,7 @@ export class FlightModel {
             (r.departure_date instanceof Date ? r.departure_date.toISOString().split('T')[0] : r.departure_date) :
             (r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date),
           departureDate: r.departure_date instanceof Date ? r.departure_date.toISOString().split('T')[0] : r.departure_date,
-          arrivalDate: r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date,          direction: isDeparture ? 'departure' : 'arrival'
+          arrivalDate: r.arrival_date instanceof Date ? r.arrival_date.toISOString().split('T')[0] : r.arrival_date, direction: isDeparture ? 'departure' : 'arrival'
         };
       }),
       summary: {
@@ -1261,7 +1343,7 @@ export class FlightModel {
     };
 
     const startDateStr = formatLocalDate(startDate);
-    const endDateStr   = formatLocalDate(endDate);
+    const endDateStr = formatLocalDate(endDate);
     const selectedDateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : null;
 
     const tableName = isDeparture ? 'departure_flight_paths' : 'arrival_flight_paths';
@@ -1269,7 +1351,7 @@ export class FlightModel {
 
     // Check if countryName is likely a country code (2 chars)
     const isCountryCode = countryName.length === 2;
-    
+
     let whereClause = '';
     let queryParams: any[] = [];
 
@@ -1307,15 +1389,15 @@ export class FlightModel {
     const dailyResult = await pool.query(dailyQuery, queryParams);
 
     // 2. Routes List (Specific to Selected Date)
-    
+
     // Re-prepare params for routes query (only needs country and selectedDate)
     let routesQueryParams: any[] = [];
     if (isCountryCode) {
-       routesQueryParams = selectedDateStr 
+      routesQueryParams = selectedDateStr
         ? [countryName.toUpperCase(), selectedDateStr]
         : [countryName.toUpperCase(), startDateStr, endDateStr];
     } else {
-       routesQueryParams = selectedDateStr
+      routesQueryParams = selectedDateStr
         ? [`%${countryName}%`, selectedDateStr]
         : [`%${countryName}%`, startDateStr, endDateStr];
     }
@@ -1349,15 +1431,15 @@ export class FlightModel {
     const routesResult = await pool.query(routesQuery, routesQueryParams);
 
     // 3. Summary Stats (Stats for Selected Date)
-    
+
     // Re-prepare params for summary query
     let summaryQueryParams: any[] = [];
     if (isCountryCode) {
-       summaryQueryParams = selectedDateStr
+      summaryQueryParams = selectedDateStr
         ? [countryName.toUpperCase(), selectedDateStr, startDateStr, endDateStr]
         : [countryName.toUpperCase(), startDateStr, endDateStr];
     } else {
-       summaryQueryParams = selectedDateStr
+      summaryQueryParams = selectedDateStr
         ? [`%${countryName}%`, selectedDateStr, startDateStr, endDateStr]
         : [`%${countryName}%`, startDateStr, endDateStr];
     }
@@ -1393,9 +1475,9 @@ export class FlightModel {
       )
       SELECT
         (SELECT COUNT(*) FROM ${tableName} fp JOIN airports a ON fp.${joinColumn} = a.code WHERE ${whereClause} 
-          ${selectedDateStr 
-            ? 'AND departure_date = $2' 
-            : 'AND departure_date >= $2 AND departure_date <= $3'}
+          ${selectedDateStr
+        ? 'AND departure_date = $2'
+        : 'AND departure_date >= $2 AND departure_date <= $3'}
         ):: INTEGER as total_flights_day,
         ms.total_flights_month,
         ms.active_days_month,

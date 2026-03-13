@@ -60,7 +60,7 @@ if [ "$AUTO_IMPORT_FLIGHTS" = "true" ]; then
     echo "   No flight data files found, skipping import"
   fi
   # Check if international flight data files exist (Recursive check)
-  if [ -d "/app/data/intl_flight_data" ] && [ -n "$(find /app/data/intl_flight_data -name "*.csv" -print -quit)" ]; then
+  if [ "$AUTO_IMPORT_INTL_FLIGHTS" = "true" ] && [ -d "/app/data/intl_flight_data" ] && [ -n "$(find /app/data/intl_flight_data -name "*.csv" -print -quit)" ]; then
     echo "   Found International flight data files, importing..."
     npx tsx src/scripts/import-intl-flights.ts --dir="/app/data/intl_flight_data" || {
       echo "⚠️  International flight import failed, but continuing..."

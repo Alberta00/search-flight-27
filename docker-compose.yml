@@ -44,6 +44,7 @@ services:
       RATE_LIMIT_MAX_REQUESTS: 1000
       ENABLE_SCHEDULED_JOBS: "true"
       AUTO_IMPORT_FLIGHTS: "true"
+      AUTO_IMPORT_INTL_FLIGHTS: "false"
       FORCE_IMPORT: "false"
     ports:
       - "3001:3001"
