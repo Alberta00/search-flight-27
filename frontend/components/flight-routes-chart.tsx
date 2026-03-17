@@ -34,6 +34,54 @@ const chartConfig = {
   },
 }
 
+const chartUiConfig = {
+  fonts: {
+    xTick: 11,
+    yTick: 10,
+    yLabel: 16,
+    tooltipTitle: 14,
+    tooltipText: 14,
+    dialogTitle: 24,
+    headerTitle: 26,
+  },
+  colors: {
+    main: 'hsl(221, 83%, 53%)',
+    compare: 'hsl(142, 76%, 36%)',
+    grid: 'hsl(var(--border))',
+    axis: 'hsl(var(--muted-foreground))',
+    tickLine: 'hsl(var(--primary))',
+  },
+  layout: {
+    cardPadding: 'p-3 sm:p-6',
+    headerGap: 'gap-3 sm:gap-4',
+    chartHeight: 'h-[380px] sm:h-[440px]',
+    chartHeightZoom: 'h-[400px] sm:h-[500px]',
+    chartMinWidth: 'min-w-[280px]',
+    chartMinWidthZoom: 'min-w-[320px]',
+    chartMargin: { top: 10, right: 10, left: 0, bottom: 0 },
+  },
+  grid: {
+    strokeDasharray: '3 3',
+    opacity: 0.3,
+  },
+  axis: {
+    xTickSize: 10,
+    xMinTickGap: 30,
+    xHeight: 44,
+    yWidth: 45,
+  },
+  legend: {
+    dot: 'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm',
+  },
+  tooltip: {
+    box: 'rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]',
+  },
+  zoomSliders: {
+    xAccent: 'accent-blue-500',
+    yAccent: 'accent-emerald-500',
+  },
+}
+
 interface FlightRoutesChartProps {
   chartData: any[]
   dateRange: DateRange | undefined
@@ -55,15 +103,7 @@ export function FlightRoutesChart({
   durationMode,
   setDurationMode
 }: FlightRoutesChartProps) {
-  const CHART_FONT = {
-    xTick: 11,
-    yTick: 10,
-    yLabel: 16,
-    tooltipTitle: 14,
-    tooltipText: 14,
-    dialogTitle: 24,
-    headerTitle: 26,
-  }
+  const { fonts, colors, layout, grid, axis, legend, tooltip, zoomSliders } = chartUiConfig
   const [chartZoomed, setChartZoomed] = useState(false)
   const [isPortraitMobile, setIsPortraitMobile] = useState(false)
   const [xZoomPercent, setXZoomPercent] = useState(0)
@@ -213,11 +253,11 @@ export function FlightRoutesChart({
   return (
     <>
       {/* Daily frequency chart - responsive */}
-      <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden flight-routes-accent">
-        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
+      <Card className={`${layout.cardPadding} border min-w-0 overflow-hidden flight-routes-accent`}>
+        <div className={`flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between ${layout.headerGap} mb-3 sm:mb-4`}>
           <h1
             className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0"
-            style={{ fontSize: CHART_FONT.headerTitle }}
+            style={{ fontSize: fonts.headerTitle }}
           >
             <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             สถิติความถี่เที่ยวบินรายวัน
@@ -233,7 +273,7 @@ export function FlightRoutesChart({
                   step={5}
                   value={xZoomPercent}
                   onChange={(e) => setXZoomPercent(Number(e.target.value))}
-                  className="w-20 sm:w-24 accent-blue-500"
+                  className={`w-20 sm:w-24 ${zoomSliders.xAccent}`}
                   aria-label="Zoom X axis"
                 />
                 <span className="text-[10px] w-8 text-right text-muted-foreground">
@@ -249,7 +289,7 @@ export function FlightRoutesChart({
                   step={1}
                   value={yGapStep}
                   onChange={(e) => setYGapStep(Number(e.target.value))}
-                  className="w-20 sm:w-24 accent-emerald-500"
+                  className={`w-20 sm:w-24 ${zoomSliders.yAccent}`}
                   aria-label="Zoom Y axis"
                 />
                 <span className="text-[10px] w-8 text-right text-muted-foreground">
@@ -326,25 +366,25 @@ export function FlightRoutesChart({
           </div>
         </div>
         <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
-          <div className="h-[380px] sm:h-[440px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
+          <div className={`${layout.chartHeight} ${layout.chartMinWidth} [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full`}>
             <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-              <AreaChart data={zoomedChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <AreaChart data={zoomedChartData} margin={layout.chartMargin}>
                 <defs>
                   <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.05} />
+                    <stop offset="0%" stopColor={colors.main} stopOpacity={0.4} />
+                    <stop offset="100%" stopColor={colors.main} stopOpacity={0.05} />
                   </linearGradient>
                   <linearGradient id="flightCompareGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.05} />
+                    <stop offset="0%" stopColor={colors.compare} stopOpacity={0.4} />
+                    <stop offset="100%" stopColor={colors.compare} stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                <CartesianGrid strokeDasharray={grid.strokeDasharray} stroke={colors.grid} opacity={grid.opacity} />
                 <Area
                   type="monotone"
                   dataKey="flights"
                   name={mainLabel}
-                  stroke="hsl(221, 83%, 53%)"
+                  stroke={colors.main}
                   strokeWidth={2}
                   fill="url(#flightGradient)"
                 />
@@ -353,32 +393,32 @@ export function FlightRoutesChart({
                     type="monotone"
                     dataKey="flightsCompare"
                     name={compareLabel}
-                    stroke="hsl(142, 76%, 36%)"
+                    stroke={colors.compare}
                     strokeWidth={2}
                     fill="url(#flightCompareGradient)"
                   />
                 )}
                 <XAxis
                   dataKey="date"
-                  fontSize={CHART_FONT.xTick}
-                  axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                  tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                  tickSize={10}
-                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  fontSize={fonts.xTick}
+                  axisLine={{ stroke: colors.axis }}
+                  tickLine={{ stroke: colors.tickLine, strokeWidth: 2 }}
+                  tickSize={axis.xTickSize}
+                  tick={{ fill: colors.axis }}
                   tickFormatter={formatXAxisDate}
-                  minTickGap={30}
+                  minTickGap={axis.xMinTickGap}
                   angle={0}
                   textAnchor="middle"
-                  height={44}
+                  height={axis.xHeight}
                 />
                 <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={CHART_FONT.yTick}
+                  stroke={colors.axis}
+                  fontSize={fonts.yTick}
                   tickFormatter={(v) => `${v}`}
                   domain={[yAxisMin, yAxisMax]}
                   ticks={yAxisTicks}
-                  label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: CHART_FONT.yLabel }}
-                  width={45}
+                  label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: fonts.yLabel }}
+                  width={axis.yWidth}
                 />
                 <Tooltip
                   content={({ active, payload }) => {
@@ -386,15 +426,15 @@ export function FlightRoutesChart({
                     const p = payload[0].payload
                     const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
                     return (
-                      <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
-                        <p className="font-medium mb-2" style={{ fontSize: CHART_FONT.tooltipTitle }}>
+                      <div className={tooltip.box}>
+                        <p className="font-medium mb-2" style={{ fontSize: fonts.tooltipTitle }}>
                           {tooltipDate}
                         </p>
-                        <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)', fontSize: CHART_FONT.tooltipText }}>
+                        <p className="text-sm" style={{ color: colors.main, fontSize: fonts.tooltipText }}>
                           {mainLabel}: {p.flights} เที่ยว
                         </p>
                         {compareMode && (
-                          <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)', fontSize: CHART_FONT.tooltipText }}>
+                          <p className="text-sm mt-1" style={{ color: colors.compare, fontSize: fonts.tooltipText }}>
                             {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
                           </p>
                         )}
@@ -409,11 +449,11 @@ export function FlightRoutesChart({
         {compareMode && (
           <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-primary shrink-0" />
+              <span className={`${legend.dot} bg-primary shrink-0`} />
               <span className="truncate">{mainLabel}</span>
             </span>
             <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-emerald-600 shrink-0" />
+              <span className={`${legend.dot} bg-emerald-600 shrink-0`} />
               <span className="truncate">{compareLabel}</span>
             </span>
           </div>
@@ -439,32 +479,32 @@ export function FlightRoutesChart({
             <DialogHeader>
               <DialogTitle
                 className="flex items-center gap-2 text-base sm:text-lg"
-                style={{ fontSize: CHART_FONT.dialogTitle }}
+                style={{ fontSize: fonts.dialogTitle }}
               >
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 สถิติความถี่เที่ยวบินรายวัน
               </DialogTitle>
             </DialogHeader>
             <div className="w-full min-w-0 mt-2">
-              <div className="h-[400px] sm:h-[500px] w-full min-w-[320px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
+              <div className={`${layout.chartHeightZoom} w-full ${layout.chartMinWidthZoom} [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full`}>
                 <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-                  <AreaChart data={zoomedChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <AreaChart data={zoomedChartData} margin={layout.chartMargin}>
                     <defs>
                       <linearGradient id="flightGradientZoom" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
-                        <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.05} />
+                        <stop offset="0%" stopColor={colors.main} stopOpacity={0.4} />
+                        <stop offset="100%" stopColor={colors.main} stopOpacity={0.05} />
                       </linearGradient>
                       <linearGradient id="flightCompareGradientZoom" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.4} />
-                        <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.05} />
+                        <stop offset="0%" stopColor={colors.compare} stopOpacity={0.4} />
+                        <stop offset="100%" stopColor={colors.compare} stopOpacity={0.05} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                    <CartesianGrid strokeDasharray={grid.strokeDasharray} stroke={colors.grid} opacity={grid.opacity} />
                   <Area
                     type="monotone"
                     dataKey="flights"
                     name={mainLabel}
-                    stroke="hsl(221, 83%, 53%)"
+                    stroke={colors.main}
                     strokeWidth={2}
                     fill="url(#flightGradientZoom)"
                   />
@@ -473,32 +513,32 @@ export function FlightRoutesChart({
                       type="monotone"
                       dataKey="flightsCompare"
                       name={compareLabel}
-                      stroke="hsl(142, 76%, 36%)"
+                      stroke={colors.compare}
                       strokeWidth={2}
                       fill="url(#flightCompareGradientZoom)"
                     />
                   )}
                     <XAxis
                       dataKey="date"
-                      fontSize={11}
-                    axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                      tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                      tickSize={10}
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      fontSize={fonts.xTick}
+                    axisLine={{ stroke: colors.axis }}
+                      tickLine={{ stroke: colors.tickLine, strokeWidth: 2 }}
+                      tickSize={axis.xTickSize}
+                      tick={{ fill: colors.axis }}
                       tickFormatter={formatXAxisDate}
-                      minTickGap={30}
+                      minTickGap={axis.xMinTickGap}
                       angle={0}
                       textAnchor="middle"
-                      height={44}
+                      height={axis.xHeight}
                     />
                     <YAxis
-                      stroke="hsl(var(--muted-foreground))"
-                      fontSize={11}
+                      stroke={colors.axis}
+                      fontSize={fonts.yTick}
                       tickFormatter={(v) => `${v}`}
                       domain={[yAxisMin, yAxisMax]}
                       ticks={yAxisTicks}
-                      label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
-                      width={45}
+                      label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: fonts.yLabel }}
+                      width={axis.yWidth}
                     />
                     <Tooltip
                       content={({ active, payload }) => {
@@ -506,13 +546,13 @@ export function FlightRoutesChart({
                         const p = payload[0].payload
                         const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
                         return (
-                          <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
+                          <div className={tooltip.box}>
                             <p className="font-medium mb-2">{tooltipDate}</p>
-                            <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)' }}>
+                            <p className="text-sm" style={{ color: colors.main }}>
                               {mainLabel}: {p.flights} เที่ยว
                             </p>
                             {compareMode && (
-                              <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)' }}>
+                              <p className="text-sm mt-1" style={{ color: colors.compare }}>
                                 {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
                               </p>
                             )}
@@ -527,11 +567,11 @@ export function FlightRoutesChart({
             {compareMode && (
               <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-primary shrink-0" />
+                  <span className={`${legend.dot} bg-primary shrink-0`} />
                   <span className="truncate">{mainLabel}</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-emerald-600 shrink-0" />
+                  <span className={`${legend.dot} bg-emerald-600 shrink-0`} />
                   <span className="truncate">{compareLabel}</span>
                 </span>
               </div>
