@@ -1170,16 +1170,7 @@ useEffect(() => {
                     <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-muted/30 rounded-lg border gap-3">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 overflow-hidden border relative">
-                          <img
-                            src={`https://airhex.com/images/airline-logos/${(flight.airlineName || flight.airline_name || '').trim().toLowerCase().replace(/\s+/g, '-')}.png`}
-                            alt={flight.airlineName || flight.airline_name}
-                            className="w-full h-full object-contain p-1"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none'
-                              e.currentTarget.nextElementSibling?.classList.remove('hidden')
-                            }}
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-primary/10 hidden">
+                          <div className="absolute inset-0 flex items-center justify-center bg-primary/10">
                             <Plane className="w-5 h-5 text-primary" />
                           </div>
                         </div>
