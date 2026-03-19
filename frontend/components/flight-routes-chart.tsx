@@ -71,7 +71,14 @@ const chartUiConfig = {
     yWidth: 45,
   },
   legend: {
-    dot: 'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm',
+    container: 'absolute right-2 top-2 z-10 flex flex-col items-start gap-2 rounded-lg bg-background/90 px-3 py-2 text-xs text-muted-foreground backdrop-blur-sm',
+    item: 'inline-flex items-center gap-2 min-w-0 max-w-full',
+    label: 'truncate',
+    marker: {
+      wrapper: 'relative w-8 h-3 shrink-0',
+      line: 'absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2',
+      point: 'absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background',
+    },
   },
   tooltip: {
     box: 'rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]',
@@ -112,6 +119,26 @@ export function FlightRoutesChart({
 
   const mainLabel = isDeparture ? 'ขาออก (Departure)' : 'ขาเข้า (Arrival)'
   const compareLabel = isDeparture ? 'ขาเข้า (Arrival)' : 'ขาออก (Departure)'
+  const formatFlightCount = (value: number | null | undefined) =>
+    new Intl.NumberFormat('en-US').format(value ?? 0)
+  const legendItems = [
+    { key: 'main', label: mainLabel, colorClass: 'bg-primary' },
+    ...(compareMode ? [{ key: 'compare', label: compareLabel, colorClass: 'bg-emerald-600' }] : []),
+  ]
+
+  const renderChartLegend = () => (
+    <div className={legend.container}>
+      {legendItems.map((item) => (
+        <span key={item.key} className={legend.item}>
+          <span className={legend.marker.wrapper}>
+            <span className={`${legend.marker.line} ${item.colorClass}`} />
+            <span className={`${legend.marker.point} ${item.colorClass}`} />
+          </span>
+          <span className={legend.label}>{item.label}</span>
+        </span>
+      ))}
+    </div>
+  )
 
   // Calculate current days diff for buttons state
   const currentDaysDiff = dateRange?.from && dateRange?.to 
@@ -366,7 +393,8 @@ export function FlightRoutesChart({
           </div>
         </div>
         <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
-          <div className={`${layout.chartHeight} ${layout.chartMinWidth} [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full`}>
+          <div className={`relative ${layout.chartHeight} ${layout.chartMinWidth} [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full`}>
+            {renderChartLegend()}
             <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
               <AreaChart data={zoomedChartData} margin={layout.chartMargin}>
                 <defs>
@@ -414,7 +442,7 @@ export function FlightRoutesChart({
                 <YAxis
                   stroke={colors.axis}
                   fontSize={fonts.yTick}
-                  tickFormatter={(v) => `${v}`}
+                  tickFormatter={(v) => formatFlightCount(v)}
                   domain={[yAxisMin, yAxisMax]}
                   ticks={yAxisTicks}
                   label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: fonts.yLabel }}
@@ -431,11 +459,11 @@ export function FlightRoutesChart({
                           {tooltipDate}
                         </p>
                         <p className="text-sm" style={{ color: colors.main, fontSize: fonts.tooltipText }}>
-                          {mainLabel}: {p.flights} เที่ยว
+                          {mainLabel}: {formatFlightCount(p.flights)} เที่ยว
                         </p>
                         {compareMode && (
                           <p className="text-sm mt-1" style={{ color: colors.compare, fontSize: fonts.tooltipText }}>
-                            {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
+                            {compareLabel}: {formatFlightCount(p.flightsCompare)} เที่ยว
                           </p>
                         )}
                       </div>
@@ -446,18 +474,6 @@ export function FlightRoutesChart({
             </ChartContainer>
           </div>
         </div>
-        {compareMode && (
-          <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className={`${legend.dot} bg-primary shrink-0`} />
-              <span className="truncate">{mainLabel}</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className={`${legend.dot} bg-emerald-600 shrink-0`} />
-              <span className="truncate">{compareLabel}</span>
-            </span>
-          </div>
-        )}
       </Card>
 
       {/* Dialog ซูมกราฟ - แนวนอนเต็มจอ (เหมาะกับ mobile) */}
@@ -486,7 +502,8 @@ export function FlightRoutesChart({
               </DialogTitle>
             </DialogHeader>
             <div className="w-full min-w-0 mt-2">
-              <div className={`${layout.chartHeightZoom} w-full ${layout.chartMinWidthZoom} [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full`}>
+              <div className={`relative ${layout.chartHeightZoom} w-full ${layout.chartMinWidthZoom} [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full`}>
+                {renderChartLegend()}
                 <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
                   <AreaChart data={zoomedChartData} margin={layout.chartMargin}>
                     <defs>
@@ -534,7 +551,7 @@ export function FlightRoutesChart({
                     <YAxis
                       stroke={colors.axis}
                       fontSize={fonts.yTick}
-                      tickFormatter={(v) => `${v}`}
+                      tickFormatter={(v) => formatFlightCount(v)}
                       domain={[yAxisMin, yAxisMax]}
                       ticks={yAxisTicks}
                       label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: fonts.yLabel }}
@@ -549,11 +566,11 @@ export function FlightRoutesChart({
                           <div className={tooltip.box}>
                             <p className="font-medium mb-2">{tooltipDate}</p>
                             <p className="text-sm" style={{ color: colors.main }}>
-                              {mainLabel}: {p.flights} เที่ยว
+                              {mainLabel}: {formatFlightCount(p.flights)} เที่ยว
                             </p>
                             {compareMode && (
                               <p className="text-sm mt-1" style={{ color: colors.compare }}>
-                                {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
+                                {compareLabel}: {formatFlightCount(p.flightsCompare)} เที่ยว
                               </p>
                             )}
                           </div>
@@ -564,18 +581,6 @@ export function FlightRoutesChart({
                 </ChartContainer>
               </div>
             </div>
-            {compareMode && (
-              <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className={`${legend.dot} bg-primary shrink-0`} />
-                  <span className="truncate">{mainLabel}</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className={`${legend.dot} bg-emerald-600 shrink-0`} />
-                  <span className="truncate">{compareLabel}</span>
-                </span>
-              </div>
-            )}
           </div>
         </DialogContent>
       </Dialog>
