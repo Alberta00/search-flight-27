@@ -77,11 +77,12 @@ export async function getAirportsByCountry(
     }
 
     const airports = await AirportModel.getAirportsByCountry(country);
+    const airportsWithFlights = airports.filter((airport) => airport.has_flight !== false);
 
     res.json({
       country,
       airports,
-      total: airports.length,
+      total: airportsWithFlights.length,
     });
   } catch (error) {
     next(error);

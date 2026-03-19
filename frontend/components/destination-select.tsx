@@ -220,7 +220,9 @@ export function DestinationSelect({
 
         try {
             const response = await airportApi.getAirportsByCountry(group.countryCode || group.country)
-            const normalized = normalizeAirports(response.airports)
+            const normalized = normalizeAirports(
+                response.airports.filter((airport) => airport.has_flight !== false)
+            )
 
             console.log('[DestinationSelect] country airports loaded', {
                 country: group.country,

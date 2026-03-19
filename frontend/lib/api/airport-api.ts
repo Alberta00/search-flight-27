@@ -13,6 +13,7 @@ export interface Airport {
   airport_type: string | null
   latitude: number | null
   longitude: number | null
+  has_flight?: boolean
   created_at?: string
   updated_at?: string
 }
