@@ -4,6 +4,11 @@ import { AirportModel } from '../models/Airport';
 /**
  * Search airports and cities
  * GET /api/airports/search?keyword=bangkok&subType=AIRPORT
+ *
+ * Note: keep this endpoint unchanged for backward compatibility.
+ * For lazy-loaded dropdown UIs, use GET /api/airports/countries first
+ * and then GET /api/airports/by-country for the selected country,
+ * because this search endpoint requires a keyword and returns a limited subset of matches.
  */
 export async function searchAirports(
   req: Request,
@@ -24,6 +29,60 @@ export async function searchAirports(
     const { items, total } = await AirportModel.searchAirportsWithTotal(keyword);
 
     res.json({ data: items, total });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Get airport countries summary for lazy-loaded directory UIs
+ * GET /api/airports/countries
+ */
+export async function getAirportCountries(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const countries = await AirportModel.getAirportCountries();
+    const totalAirports = countries.reduce((sum, country) => sum + country.airport_count, 0);
+
+    res.json({
+      countries,
+      totalCountries: countries.length,
+      totalAirports,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Get airports for a single country
+ * GET /api/airports/by-country?country=CN
+ */
+export async function getAirportsByCountry(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { country } = req.query;
+
+    if (!country || typeof country !== 'string') {
+      res.status(400).json({
+        error: 'country parameter is required',
+      });
+      return;
+    }
+
+    const airports = await AirportModel.getAirportsByCountry(country);
+
+    res.json({
+      country,
+      airports,
+      total: airports.length,
+    });
   } catch (error) {
     next(error);
   }

@@ -27,6 +27,12 @@ export interface AirportInput {
   longitude?: number | null;
 }
 
+export interface AirportCountrySummary {
+  country: string;
+  country_code: string | null;
+  airport_count: number;
+}
+
 export class AirportModel {
   /**
    * Get or create an airport
@@ -180,5 +186,47 @@ export class AirportModel {
     );
 
     return result.rows[0] || null;
+  }
+
+  /**
+   * Get country summaries for airport directory UIs.
+   */
+  static async getAirportCountries(): Promise<AirportCountrySummary[]> {
+    const query = `
+      SELECT
+        COALESCE(country_name, country, 'Other') AS country,
+        COALESCE(country_code, country, NULL) AS country_code,
+        COUNT(*)::int AS airport_count
+      FROM airports
+      GROUP BY COALESCE(country_name, country, 'Other'), COALESCE(country_code, country, NULL)
+      ORDER BY COALESCE(country_name, country, 'Other')
+    `;
+
+    const result = await pool.query(query);
+    return result.rows;
+  }
+
+  /**
+   * Get all airports for a single country, resolved by country code or country name.
+   */
+  static async getAirportsByCountry(countryValue: string): Promise<Airport[]> {
+    const normalizedValue = countryValue.trim();
+    const isCountryCode = normalizedValue.length <= 3;
+
+    const query = `
+      SELECT *
+      FROM airports
+      WHERE ${isCountryCode
+        ? '(country_code = $1 OR country = $1)'
+        : '(country_name = $1 OR country = $1)'}
+      ORDER BY
+        airport_type = 'large_airport' DESC,
+        city NULLS LAST,
+        name,
+        code
+    `;
+
+    const result = await pool.query(query, [isCountryCode ? normalizedValue.toUpperCase() : normalizedValue]);
+    return result.rows;
   }
 }

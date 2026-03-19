@@ -26,47 +26,6 @@ import { DateRange } from 'react-day-picker'
 import { Badge } from '@/components/ui/badge'
 import { FlightRoutesChart } from './flight-routes-chart'
 
-// Mock: รายการเส้นทางสายการบิน (ใช้แสดงใต้กราฟ)
-const mockRoutes = [
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Perth', arrivalCode: 'PER', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Paris', arrivalCode: 'CDG', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Copenhagen', arrivalCode: 'CPH', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'London', arrivalCode: 'LHR', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Nagoya', arrivalCode: 'NGO', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Oslo', arrivalCode: 'OSL', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Stockholm', arrivalCode: 'ARN', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Singapore', arrivalCode: 'SIN', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Tokyo', arrivalCode: 'NRT', direct: true, airlineCode: 'TG' },
-  { departureName: 'Suvarnabhumi Airport', departureCode: 'BKK', arrivalCity: 'Sydney', arrivalCode: 'SYD', direct: true, airlineCode: 'TG' },
-]
-
-// Mock data: daily flight count - เส้นหลัก (departure หรือ arrival ตามที่ผู้ใช้เลือก)
-const mockDailyData = [
-  { day: 1, date: '1 มี.ค.', flights: 8 },
-  { day: 2, date: '2 มี.ค.', flights: 12 },
-  { day: 3, date: '3 มี.ค.', flights: 15 },
-  { day: 4, date: '4 มี.ค.', flights: 11 },
-  { day: 5, date: '5 มี.ค.', flights: 14 },
-  { day: 6, date: '6 มี.ค.', flights: 18 },
-  { day: 7, date: '7 มี.ค.', flights: 22 },
-  { day: 8, date: '8 มี.ค.', flights: 16 },
-  { day: 9, date: '9 มี.ค.', flights: 13 },
-  { day: 10, date: '10 มี.ค.', flights: 10 },
-]
-
-// Mock data: เส้นเปรียบเทียบ (arrival หรือ departure ฝั่งตรงข้าม)
-const mockDailyDataCompare = [
-  { day: 1, date: '1 มี.ค.', flightsCompare: 6 },
-  { day: 2, date: '2 มี.ค.', flightsCompare: 10 },
-  { day: 3, date: '3 มี.ค.', flightsCompare: 12 },
-  { day: 4, date: '4 มี.ค.', flightsCompare: 14 },
-  { day: 5, date: '5 มี.ค.', flightsCompare: 11 },
-  { day: 6, date: '6 มี.ค.', flightsCompare: 16 },
-  { day: 7, date: '7 มี.ค.', flightsCompare: 19 },
-  { day: 8, date: '8 มี.ค.', flightsCompare: 14 },
-  { day: 9, date: '9 มี.ค.', flightsCompare: 11 },
-  { day: 10, date: '10 มี.ค.', flightsCompare: 8 },
-]
 
 
 // // Helper to parse date string that might be YYYYMMDD or YYYY-MM-DD

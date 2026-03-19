@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Kanit } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from '@/components/ui/toaster'
@@ -14,11 +14,6 @@ const kanit = Kanit({
 export const metadata: Metadata = {
   title: 'Search flight project ค้นหาตั๋วเครื่องบินราคาถูกที่สุด',
   description: 'วิเคราะห์ราคาตั๋วเครื่องบินตามฤดูกาล แนะนำช่วงที่ถูกที่สุดให้คุณ ค้นหาเที่ยวบินที่เหมาะสมกับงบประมาณของคุณ',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   // generator: 'v0.app',
   // icons: {
   //   icon: [
@@ -37,6 +32,12 @@ export const metadata: Metadata = {
   //   ],
   //   apple: '/apple-icon.png',
   // },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 }
 
 export default function RootLayout({
