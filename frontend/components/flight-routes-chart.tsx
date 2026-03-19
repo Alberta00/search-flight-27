@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import type { ReactNode } from 'react'
 import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -14,6 +15,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  ReferenceDot,
   ReferenceLine,
 } from 'recharts'
 import { ChartContainer } from '@/components/ui/chart'
@@ -95,7 +97,9 @@ const chartUiConfig = {
     dash: '4 4',
     label: 'Today',
     labelFontSize: 13,
-    labelOffset: 8,
+    labelOffset: 18,
+    labelDy: -10,
+    labelPlacement: 'top' as 'top' | 'bottom',
   },
 }
 
@@ -333,7 +337,50 @@ export function FlightRoutesChart({
   const mainActiveDot = showMainTooltip ? { r: 4, fill: mainTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
   const compareActiveDot = showCompareTooltip ? { r: 4, fill: compareTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
   const todayKey = format(new Date(), 'yyyy-MM-dd')
-  const isTodayVisible = zoomedChartData.some((item: any) => item.date === todayKey)
+  const todayPoint = zoomedChartData.find((item: any) => item.date === todayKey)
+  const isTodayVisible = Boolean(todayPoint)
+  const todayMarkerValue = (() => {
+    if (!todayPoint) return null
+
+    if (activeSeries === 'main') {
+      return typeof todayPoint.flights === 'number' ? todayPoint.flights : null
+    }
+
+    if (activeSeries === 'compare') {
+      return compareMode && typeof todayPoint.flightsCompare === 'number'
+        ? todayPoint.flightsCompare
+        : null
+    }
+
+    const visibleValues = [
+      typeof todayPoint.flights === 'number' ? todayPoint.flights : null,
+      compareMode && typeof todayPoint.flightsCompare === 'number' ? todayPoint.flightsCompare : null,
+    ].filter((value): value is number => value != null)
+
+    return visibleValues.length ? Math.max(...visibleValues) : null
+  })()
+
+  const renderTodayMarkerLabel = ({ viewBox }: { viewBox?: { x?: number; y?: number } }): ReactNode => {
+    if (viewBox?.x == null || viewBox.y == null) return null
+
+    const labelX = viewBox.x + todayMarker.labelOffset
+    const labelY =
+      todayMarker.labelPlacement === 'bottom'
+        ? viewBox.y + 16
+        : viewBox.y - 10
+
+    return (
+      <text
+        x={labelX}
+        y={labelY}
+        fill={todayMarker.labelColor}
+        fontSize={todayMarker.labelFontSize}
+        dy={todayMarker.labelDy}
+      >
+        {todayMarker.label}
+      </text>
+    )
+  }
 
   return (
     <>
@@ -426,7 +473,17 @@ export function FlightRoutesChart({
                     stroke={todayMarker.lineColor}
                     strokeDasharray={todayMarker.dash}
                     strokeWidth={todayMarker.strokeWidth}
-                    label={{ value: todayMarker.label, position: 'right', fill: todayMarker.labelColor, fontSize: todayMarker.labelFontSize, offset: todayMarker.labelOffset }}
+                  />
+                )}
+                {isTodayVisible && todayMarkerValue != null && (
+                  <ReferenceDot
+                    x={todayKey}
+                    y={todayMarkerValue}
+                    r={0}
+                    fill="transparent"
+                    stroke="transparent"
+                    isFront
+                    label={renderTodayMarkerLabel}
                   />
                 )}
                 <Area
@@ -550,7 +607,17 @@ export function FlightRoutesChart({
                       stroke={todayMarker.lineColor}
                       strokeDasharray={todayMarker.dash}
                       strokeWidth={todayMarker.strokeWidth}
-                      label={{ value: todayMarker.label, position: 'right', fill: todayMarker.labelColor, fontSize: todayMarker.labelFontSize, offset: todayMarker.labelOffset }}
+                    />
+                  )}
+                  {isTodayVisible && todayMarkerValue != null && (
+                    <ReferenceDot
+                      x={todayKey}
+                      y={todayMarkerValue}
+                      r={0}
+                      fill="transparent"
+                      stroke="transparent"
+                      isFront
+                      label={renderTodayMarkerLabel}
                     />
                   )}
                   <Area

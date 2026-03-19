@@ -1152,7 +1152,11 @@ export class FlightModel {
         departure_time,
         duration,
         dep_airport_ref.name as departure_airport_name,
-        arr_airport_ref.name as arrival_airport_name
+        arr_airport_ref.name as arrival_airport_name,
+        dep_airport_ref.country_name as departure_country_name,
+        dep_airport_ref.country_code as departure_country_code,
+        arr_airport_ref.country_name as arrival_country_name,
+        arr_airport_ref.country_code as arrival_country_code
       FROM ${tableName}
       -- Join airport reference data so the route list can show full airport names
       -- Normalize airport codes in the join because flight-path records can carry mixed case or padded values
@@ -1282,8 +1286,13 @@ export class FlightModel {
           departureCode: r.departure_code,
           // Prefer joined airport names over codes so downstream UI can render full labels
           departureName: r.departure_airport_name || r.departure_code,
+          // Expose country metadata so the analysis UI can compute country-level KPIs
+          departureCountryName: r.departure_country_name,
+          departureCountryCode: r.departure_country_code,
           arrivalCode: r.arrival_code,
           arrivalCity: r.arrival_airport_name || r.destination_name || r.arrival_code,
+          arrivalCountryName: r.arrival_country_name,
+          arrivalCountryCode: r.arrival_country_code,
           direct: r.direct,
           airlineCode: r.airline_code,
           airlineName: r.airline_name || r.airline_code,
@@ -1425,7 +1434,11 @@ export class FlightModel {
         a.name as airport_name,
         a.city as airport_city,
         dep_airport_ref.name as departure_airport_name,
-        arr_airport_ref.name as arrival_airport_name
+        arr_airport_ref.name as arrival_airport_name,
+        dep_airport_ref.country_name as departure_country_name,
+        dep_airport_ref.country_code as departure_country_code,
+        arr_airport_ref.country_name as arrival_country_name,
+        arr_airport_ref.country_code as arrival_country_code
       FROM ${tableName} fp
       JOIN airports a ON fp.${joinColumn} = a.code
       -- Join both route endpoints so country analysis can also return full airport names
@@ -1546,8 +1559,13 @@ export class FlightModel {
           departureCode: r.departure_code,
           // Prefer joined airport names over codes so downstream UI can render full labels
           departureName: r.departure_airport_name || r.airport_name || r.departure_code,
+          // Expose country metadata so the analysis UI can compute country-level KPIs
+          departureCountryName: r.departure_country_name,
+          departureCountryCode: r.departure_country_code,
           arrivalCode: r.arrival_code,
           arrivalCity: r.arrival_airport_name || r.destination_name || r.arrival_code,
+          arrivalCountryName: r.arrival_country_name,
+          arrivalCountryCode: r.arrival_country_code,
           direct: r.direct,
           airlineCode: r.airline_code,
           airlineName: r.airline_name || r.airline_code,

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
-import { Plane, Calendar as CalendarIcon, Search, Send, TrendingUp, ChevronDown, ChevronUp, Clock, PlaneTakeoff, PlaneLanding, ArrowRightLeft, MapPin } from 'lucide-react'
+import { useState, useEffect, useRef, useMemo, type ReactNode } from 'react'
+import { Plane, Calendar as CalendarIcon, Search, Send, TrendingUp, ChevronDown, ChevronUp, Clock, PlaneTakeoff, PlaneLanding, ArrowRightLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -125,6 +125,76 @@ function AnalysisCalendarCaption({
   )
 }
 
+const normalizeAnalysisRoutes = (rawRoutes: any[]) =>
+  (rawRoutes || []).map((r: any) => {
+    const getTimeFromDate = (dateStr: string) => {
+      if (!dateStr) return null
+      try {
+        const d = new Date(dateStr)
+        if (isNaN(d.getTime())) return null
+        return format(d, 'HH:mm')
+      } catch {
+        return null
+      }
+    }
+
+    let duration = r.duration
+    if ((!duration || duration === 0) && r.departure_date && r.arrival_date) {
+      const start = new Date(r.departure_date)
+      const end = new Date(r.arrival_date)
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+        const diffMs = end.getTime() - start.getTime()
+        if (diffMs > 0) {
+          duration = Math.floor(diffMs / 60000)
+        }
+      }
+    }
+
+    return {
+      ...r,
+      // Keep country metadata on each route so KPI cards can summarize at country level
+      departureName: r.departureName || r.departure_name,
+      departureCode: r.departureCode || r.departure_code,
+      departureCountryName: r.departureCountryName || r.departure_country_name,
+      departureCountryCode: r.departureCountryCode || r.departure_country_code,
+      arrivalCity: r.arrivalCity || r.arrival_city,
+      arrivalCode: r.arrivalCode || r.arrival_code,
+      arrivalCountryName: r.arrivalCountryName || r.arrival_country_name,
+      arrivalCountryCode: r.arrivalCountryCode || r.arrival_country_code,
+      airlineName: r.airlineName || r.airline_name,
+      airlineCode: r.airlineCode || r.airline_code,
+      departureTime:
+        r.departureTime ||
+        r.departure_time ||
+        r.time ||
+        getTimeFromDate(r.departure_date) ||
+        getTimeFromDate(r.departureDate),
+      arrivalTime:
+        r.arrivalTime ||
+        r.arrival_time ||
+        getTimeFromDate(r.arrival_date) ||
+        getTimeFromDate(r.arrivalDate),
+      date: r.date || r.departure_date || r.departureDate,
+      arrivalDate: r.arrivalDate || r.arrival_date || r.arrivalDate,
+      duration,
+    }
+  })
+
+const formatDisplayNumber = (value: number | null | undefined) =>
+  new Intl.NumberFormat('en-US').format(value ?? 0)
+
+const sidebarKpiUi = {
+  card: 'p-3 sm:p-4 rounded-lg bg-muted/40 border',
+  title: 'text-xs sm:text-sm font-medium text-foreground',
+  hero: 'text-xl sm:text-2xl font-bold text-primary mt-1',
+  heroLarge: 'mt-2 text-xl sm:text-2xl font-bold text-primary leading-none',
+  unitInline: 'text-base sm:text-lg font-semibold',
+  entity: 'text-xl sm:text-2xl font-bold text-primary mt-1 break-words',
+  meta: 'text-xs text-muted-foreground mt-1',
+  body: 'mt-3 text-sm leading-relaxed text-foreground',
+  emphasis: 'font-semibold text-foreground',
+}
+
 export function FlightRoutesAnalysis() {
   const ROUTE_GROUPS_PAGE_SIZE = 50
   const [origin, setOrigin] = useState('')
@@ -144,6 +214,7 @@ export function FlightRoutesAnalysis() {
   const [dailyData, setDailyData] = useState<any[]>([])
   const [dailyDataCompare, setDailyDataCompare] = useState<any[]>([])
   const [routes, setRoutes] = useState<any[]>([])
+  const [routesCompare, setRoutesCompare] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
   const [visibleRouteGroupsCount, setVisibleRouteGroupsCount] = useState(ROUTE_GROUPS_PAGE_SIZE)
@@ -329,50 +400,7 @@ useEffect(() => {
         console.log(`   - Routes Found: ${data.routes?.length || 0}`)
         
         setDailyData(data.dailyFrequency || [])
-        
-        // Map routes to ensure camelCase properties
-        const mappedRoutes = (data.routes || []).map((r: any) => {
-          // Helper to extract time from date string if time is missing
-          const getTimeFromDate = (dateStr: string) => {
-            if (!dateStr) return null
-            try {
-              const d = new Date(dateStr)
-              if (isNaN(d.getTime())) return null
-              return format(d, 'HH:mm')
-            } catch { return null }
-          }
-
-          // Calculate duration if missing and we have both dates
-          let duration = r.duration
-          if ((!duration || duration === 0) && r.departure_date && r.arrival_date) {
-            const start = new Date(r.departure_date)
-            const end = new Date(r.arrival_date)
-            if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
-              const diffMs = end.getTime() - start.getTime()
-              if (diffMs > 0) {
-                duration = Math.floor(diffMs / 60000) // minutes
-              }
-            }
-          }
-
-          return {
-            ...r,
-            departureName: r.departureName || r.departure_name,
-            departureCode: r.departureCode || r.departure_code,
-            arrivalCity: r.arrivalCity || r.arrival_city,
-            arrivalCode: r.arrivalCode || r.arrival_code,
-            airlineName: r.airlineName || r.airline_name,
-            airlineCode: r.airlineCode || r.airline_code,
-            // Map time fields - prioritize existing time, then extract from date
-            departureTime: r.departureTime || r.departure_time || r.time || getTimeFromDate(r.departure_date) || getTimeFromDate(r.departureDate),
-            arrivalTime: r.arrivalTime || r.arrival_time || getTimeFromDate(r.arrival_date) || getTimeFromDate(r.arrivalDate),
-            // Map date fields
-            date: r.date || r.departure_date || r.departureDate,
-            arrivalDate: r.arrivalDate || r.arrival_date || r.arrivalDate,
-            duration: duration
-          }
-        })
-        setRoutes(mappedRoutes)
+        setRoutes(normalizeAnalysisRoutes(data.routes || []))
         
         fetchedDataBounds.current.main = { range: requiredRange, origin, destination }
         // console.log('Daily data:', data.dailyFrequency)
@@ -413,10 +441,12 @@ useEffect(() => {
         const compareData = await compareResponse.json()
 
         setDailyDataCompare(compareData.dailyFrequency || [])
+        setRoutesCompare(normalizeAnalysisRoutes(compareData.routes || []))
         fetchedDataBounds.current.compare = { range: requiredRange, origin: destination, destination: origin }
         }
       } else {
         setDailyDataCompare([])
+        setRoutesCompare([])
         fetchedDataBounds.current.compare = null
       }
     } catch (error) {
@@ -539,6 +569,21 @@ useEffect(() => {
     })
   }, [routes, dateRange])
 
+  const filteredRoutesCompare = useMemo(() => {
+    if (!routesCompare || !dateRange?.from) return []
+
+    const from = new Date(dateRange.from)
+    from.setHours(0, 0, 0, 0)
+    const to = dateRange.to ? new Date(dateRange.to) : new Date(from)
+    to.setHours(23, 59, 59, 999)
+
+    return routesCompare.filter(route => {
+      const routeDate = parseFlightDate(route.date)
+      if (!routeDate) return false
+      return routeDate.getTime() >= from.getTime() && routeDate.getTime() <= to.getTime()
+    })
+  }, [routesCompare, dateRange])
+
   // Helper to prepare data (fill missing dates)
   const prepareChartData = (data: any[], range: DateRange | undefined) => {
     if (!range?.from || !range?.to) {
@@ -612,6 +657,7 @@ useEffect(() => {
     effectiveDailyData.length > 0
       ? Math.round(calculatedTotalFlights / effectiveDailyData.length)
       : 0
+  const insightRoutes = [...filteredRoutes, ...filteredRoutesCompare]
 
   // Calculate Most Active Carrier from routes data
   const calculateMostActiveCarrier = (filteredRoutesData: any[]) => {
@@ -675,7 +721,7 @@ useEffect(() => {
     return `${start} - ${end}`
   }
 
-  const calculatedMostActiveCarrier = calculateMostActiveCarrier(filteredRoutes)
+  const calculatedMostActiveCarrier = calculateMostActiveCarrier(insightRoutes)
   const calculatedPeakHourRange = calculatePeakHourRange(filteredRoutes)
 
   const chartData = processedDailyData.map(row => {
@@ -687,30 +733,95 @@ useEffect(() => {
     }
   })
 
-  // Group routes by Origin-Destination
-  const groupedRoutes = filteredRoutes.reduce((acc, route) => {
-    const key = `${route.departureCode}-${route.arrivalCode}`
-    if (!acc[key]) {
-      acc[key] = {
-        departureName: route.departureName,
-        departureCode: route.departureCode,
-        arrivalCity: route.arrivalCity,
-        arrivalCode: route.arrivalCode,
-        flights: []
-      }
-    }
-    acc[key].flights.push(route)
-    return acc
-  }, {} as Record<string, any>)
-
-  const sortedGroupKeys = Object.keys(groupedRoutes).sort()
-  const visibleGroupKeys = sortedGroupKeys.slice(0, visibleRouteGroupsCount)
-
   const formatAirportName = (name?: string | null, code?: string | null) => {
     if (name && name.trim()) return name.trim()
     if (code && code.trim()) return code.trim()
     return 'Unknown airport'
   }
+
+  const formatAirportDisplayName = (name?: string | null, code?: string | null) => {
+    const resolvedName = formatAirportName(name, code)
+    return resolvedName.replace(/\s+Airport$/i, '').trim()
+  }
+
+  const renderAirportLabel = (
+    name?: string | null,
+    code?: string | null,
+    options?: {
+      align?: 'left' | 'right' | 'center'
+      className?: string
+      codeClassName?: string
+    }
+  ): ReactNode => {
+    const displayName = formatAirportDisplayName(name, code)
+    const displayCode = code?.trim()
+    const alignClass =
+      options?.align === 'right'
+        ? 'items-end text-right'
+        : options?.align === 'center'
+          ? 'items-center text-center'
+          : 'items-start text-left'
+
+    return (
+      <span className={cn('flex min-w-0 flex-wrap gap-x-1.5 gap-y-0.5', alignClass, options?.className)}>
+        <span className="min-w-0 truncate">{displayName}</span>
+        {displayCode ? (
+          <span className={cn('shrink-0 text-muted-foreground', options?.codeClassName)}>
+            ({displayCode})
+          </span>
+        ) : null}
+      </span>
+    )
+  }
+
+  const buildAirportGroups = (
+    routesData: any[],
+    direction: 'incoming' | 'outgoing'
+  ) => {
+    const grouped = routesData.reduce((acc, route) => {
+      const airportCode = direction === 'incoming' ? route.departureCode : route.arrivalCode
+      const airportName = direction === 'incoming' ? route.departureName : route.arrivalCity
+      const key = airportCode || airportName || 'unknown'
+
+      if (!acc[key]) {
+        acc[key] = {
+          airportName,
+          airportCode,
+          flights: [],
+        }
+      }
+
+      acc[key].flights.push(route)
+      return acc
+    }, {} as Record<string, any>)
+
+    return Object.entries(grouped)
+      .map(([key, value]: [string, any]) => ({
+        key,
+        airportName: value.airportName,
+        airportCode: value.airportCode,
+        flights: [...value.flights].sort((a: any, b: any) =>
+          (a.departureTime || '').localeCompare(b.departureTime || '')
+        ),
+      }))
+      .sort((a, b) => {
+        if (b.flights.length !== a.flights.length) {
+          return b.flights.length - a.flights.length
+        }
+        return `${a.airportName || ''}${a.airportCode || ''}`.localeCompare(
+          `${b.airportName || ''}${b.airportCode || ''}`
+        )
+      })
+    }
+
+  const outgoingRoutes = origin ? filteredRoutes : filteredRoutesCompare
+  const incomingRoutes = origin ? filteredRoutesCompare : filteredRoutes
+  const outgoingAirportGroups = buildAirportGroups(outgoingRoutes, 'outgoing')
+  const incomingAirportGroups = buildAirportGroups(incomingRoutes, 'incoming')
+  const visibleIncomingGroups = incomingAirportGroups.slice(0, visibleRouteGroupsCount)
+  const visibleOutgoingGroups = outgoingAirportGroups.slice(0, visibleRouteGroupsCount)
+  const visibleRouteGroupTotal = Math.max(visibleIncomingGroups.length, visibleOutgoingGroups.length)
+  const routeGroupTotal = Math.max(incomingAirportGroups.length, outgoingAirportGroups.length)
 
   const handleRouteListScroll = () => {
     const viewport = routeListRef.current?.querySelector('[data-radix-scroll-area-viewport], [data-slot="scroll-area-viewport"]') as HTMLDivElement | null
@@ -718,54 +829,292 @@ useEffect(() => {
 
     const isNearBottom = viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 64
     if (isNearBottom) {
-      setVisibleRouteGroupsCount((prev) => Math.min(prev + ROUTE_GROUPS_PAGE_SIZE, sortedGroupKeys.length))
+      setVisibleRouteGroupsCount((prev) => Math.min(prev + ROUTE_GROUPS_PAGE_SIZE, routeGroupTotal))
     }
   }
 
   useEffect(() => {
     setVisibleRouteGroupsCount(ROUTE_GROUPS_PAGE_SIZE)
-  }, [sortedGroupKeys.length, origin, destination, dateRange?.from?.getTime(), dateRange?.to?.getTime()])
+  }, [routeGroupTotal, origin, destination, dateRange?.from?.getTime(), dateRange?.to?.getTime()])
 
   const toggleRouteExpand = (key: string) => {
     setExpandedRouteKey(prev => prev === key ? null : key)
   }
 
-  // Calculate most active airport in the selected region (Country)
-  const getMostActiveAirport = () => {
-    if (!filteredRoutes.length) return null
-    
-    const depCounts: Record<string, number> = {}
-    const arrCounts: Record<string, number> = {}
-    
-    filteredRoutes.forEach(r => {
-        // Fix duplicate code display: Check if name already ends with (CODE)
-        const formatName = (name: string, code: string) => {
-            if (!name) return code || 'Unknown'
-            if (!code) return name
-            if (name === code) return code
-            if (name.includes(`(${code})`)) return name
-            return `${name} (${code})`
-        }
+  const renderAirportRouteCard = (
+    group: any,
+    direction: 'incoming' | 'outgoing'
+  ) => {
+    const expandKey = `${direction}:${group.key}`
+    const isExpanded = expandedRouteKey === expandKey
+    const flights = group.flights
+    const flightCount = flights.length
+    const firstFlight = processFlightData(flights[0])
+    const lastFlight = processFlightData(flights[flights.length - 1])
+    const iconClassName =
+      direction === 'incoming'
+        ? 'bg-blue-500/10 text-blue-600'
+        : 'bg-emerald-500/10 text-emerald-600'
+    const DirectionIcon = direction === 'incoming' ? PlaneLanding : PlaneTakeoff
+    const cardAccentClass =
+      direction === 'incoming'
+        ? 'border-l-4 border-l-blue-300'
+        : 'border-l-4 border-l-emerald-300'
 
-        const dep = formatName(r.departureName, r.departureCode)
-        const arr = formatName(r.arrivalCity, r.arrivalCode)
-        
-        depCounts[dep] = (depCounts[dep] || 0) + 1
-        arrCounts[arr] = (arrCounts[arr] || 0) + 1
-    })
-    
-    const getMax = (counts: Record<string, number>) => {
-        const keys = Object.keys(counts)
-        if (keys.length <= 1) return null // Only 1 airport, no need to show "most active"
-        return keys.reduce((a, b) => counts[a] > counts[b] ? a : b)
-    }
-    
-    const maxDep = getMax(depCounts)
-    const maxArr = getMax(arrCounts)
-    return { maxDep, maxDepCount: maxDep ? depCounts[maxDep] : 0, maxArr, maxArrCount: maxArr ? arrCounts[maxArr] : 0 }
+    return (
+      <div
+        key={expandKey}
+        className={cn(
+          'rounded-lg bg-background border shadow-sm transition-all duration-200 overflow-hidden hover:shadow-md',
+          cardAccentClass
+        )}
+      >
+        <div
+          className="flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-muted/50"
+          onClick={() => toggleRouteExpand(expandKey)}
+        >
+          <div className="flex items-center gap-3.5 min-w-0 flex-1">
+            <div className={cn('w-10 h-10 rounded-full flex items-center justify-center shrink-0', iconClassName)}>
+              <DirectionIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-medium text-foreground text-sm sm:text-base truncate">
+                {renderAirportLabel(group.airportName, group.airportCode, {
+                  className: 'inline-flex max-w-full align-middle'
+                })}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                เที่ยวบินทั้งหมด: <span className="font-medium text-primary">{formatDisplayNumber(flightCount)}</span>
+              </p>
+            </div>
+          </div>
+          <div className="shrink-0 ml-2">
+            {isExpanded ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
+          </div>
+        </div>
+
+        {isExpanded && (
+          <div className="px-4 sm:px-5 py-5 sm:py-6 border-t bg-muted/5 space-y-6">
+            <div>
+              <div className="mb-4 flex items-center gap-2">
+                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] px-2 py-0.5 h-5 font-normal">
+                  เที่ยวบินแรก (First Flight)
+                </Badge>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-5">
+                <div className="flex flex-col items-start text-left min-w-[96px] gap-1">
+                  <span className="text-2xl font-bold leading-none">
+                    {firstFlight.departureTime || '--:--'}
+                  </span>
+                  <span className="text-sm font-medium">
+                    {renderAirportLabel(firstFlight.departureName, firstFlight.departureCode)}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {firstFlight.depDateObj
+                      ? format(firstFlight.depDateObj, 'EEE, d MMM', { locale: th })
+                      : '-'}
+                  </span>
+                </div>
+
+                <div className="flex-1 flex flex-col items-center justify-center relative gap-1">
+                  <span className="text-sm font-medium mb-1">
+                    {firstFlight.durationStr || '-'}
+                  </span>
+
+                  <div className="w-full flex items-center gap-2">
+                    <div className="flex-1 h-px bg-border" />
+                    <Plane className="w-4 h-4 text-muted-foreground" />
+                    <div className="flex-1 h-px bg-border" />
+                  </div>
+
+                  <span className="text-xs text-muted-foreground mt-1">
+                    {firstFlight.direct ? 'Direct' : 'Connecting'}
+                  </span>
+                </div>
+
+                <div className="flex flex-col items-end text-right min-w-[96px] gap-1">
+                  <span className="text-2xl font-bold leading-none">
+                    {firstFlight.arrTime || '--:--'}
+                  </span>
+                  <span className="text-sm font-medium">
+                    {renderAirportLabel(firstFlight.arrivalCity, firstFlight.arrivalCode, { align: 'right' })}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {firstFlight.arrDateObj
+                      ? format(firstFlight.arrDateObj, 'EEE, d MMM', { locale: th })
+                      : '-'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {flightCount > 1 && (
+              <>
+                <div className="h-px bg-border/50 border-dashed" />
+                <div>
+                  <div className="mb-4 flex items-center gap-2">
+                    <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-[10px] px-2 py-0.5 h-5 font-normal">
+                      เที่ยวบินสุดท้าย (Last Flight)
+                    </Badge>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-5">
+                    <div className="flex flex-col items-start text-left min-w-[96px] gap-1">
+                      <span className="text-2xl font-bold leading-none">
+                        {lastFlight.departureTime || '--:--'}
+                      </span>
+                      <span className="text-sm font-medium">
+                        {renderAirportLabel(lastFlight.departureName, lastFlight.departureCode)}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {lastFlight.depDateObj
+                          ? format(lastFlight.depDateObj, 'EEE, d MMM', { locale: th })
+                          : '-'}
+                      </span>
+                    </div>
+
+                    <div className="flex-1 flex flex-col items-center justify-center relative gap-1">
+                      <span className="text-sm font-medium mb-1">
+                        {lastFlight.durationStr || '-'}
+                      </span>
+
+                      <div className="w-full flex items-center gap-2">
+                        <div className="flex-1 h-px bg-border" />
+                        <Plane className="w-4 h-4 text-muted-foreground" />
+                        <div className="flex-1 h-px bg-border" />
+                      </div>
+
+                      <span className="text-xs text-muted-foreground mt-1">
+                        {lastFlight.direct ? 'Direct' : 'Connecting'}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col items-end text-right min-w-[96px] gap-1">
+                      <span className="text-2xl font-bold leading-none">
+                        {lastFlight.arrTime || '--:--'}
+                      </span>
+                      <span className="text-sm font-medium">
+                        {renderAirportLabel(lastFlight.arrivalCity, lastFlight.arrivalCode, { align: 'right' })}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {lastFlight.arrDateObj
+                          ? format(lastFlight.arrDateObj, 'EEE, d MMM', { locale: th })
+                          : '-'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full mt-1 text-xs h-9"
+              onClick={() => handleShowFlightDetails(flights)}
+            >
+              ดูรายละเอียดเที่ยวบิน
+            </Button>
+          </div>
+        )}
+      </div>
+    )
   }
 
-  const mostActive = getMostActiveAirport()
+  const connectedCarrierCount = (() => {
+    const carriers = new Set(
+      insightRoutes
+        .map((route) => route.airlineName || route.airline_name || route.airlineCode || route.airline_code)
+        .filter(Boolean)
+    )
+    return carriers.size
+  })()
+
+  const formatCountryLabel = (name?: string | null, code?: string | null) => {
+    if (name?.trim()) return name.trim()
+    if (code?.trim()) return code.trim()
+    return 'Unknown country'
+  }
+
+  const mostConnectedCountry = (() => {
+    if (!insightRoutes.length) return null
+
+    const countryMap = insightRoutes.reduce((acc, route) => {
+      const departureCountryLabel = formatCountryLabel(route.departureCountryName, route.departureCountryCode)
+      const arrivalCountryLabel = formatCountryLabel(route.arrivalCountryName, route.arrivalCountryCode)
+      const departureAirportKey = route.departureCode || route.departureName || ''
+      const arrivalAirportKey = route.arrivalCode || route.arrivalCity || ''
+
+      const appendCountry = (countryLabel: string, airportKey: string) => {
+        if (!acc[countryLabel]) {
+          acc[countryLabel] = {
+            countryLabel,
+            airportKeys: new Set<string>(),
+            totalFlights: 0,
+          }
+        }
+
+        if (airportKey) acc[countryLabel].airportKeys.add(airportKey)
+        acc[countryLabel].totalFlights += 1
+      }
+
+      appendCountry(departureCountryLabel, departureAirportKey)
+      appendCountry(arrivalCountryLabel, arrivalAirportKey)
+
+      return acc
+    }, {} as Record<string, { countryLabel: string; airportKeys: Set<string>; totalFlights: number }>)
+
+    return Object.values(countryMap)
+      .map((country) => ({
+        countryLabel: country.countryLabel,
+        airportCount: country.airportKeys.size,
+        totalFlights: country.totalFlights,
+      }))
+      .sort((a, b) => {
+        if (b.airportCount !== a.airportCount) return b.airportCount - a.airportCount
+        if (b.totalFlights !== a.totalFlights) return b.totalFlights - a.totalFlights
+        return a.countryLabel.localeCompare(b.countryLabel)
+      })[0] || null
+  })()
+
+  const primaryCountryKpi = (() => {
+    const focusRoutes = origin ? outgoingRoutes : incomingRoutes
+    if (!focusRoutes.length) return null
+
+    const focusLabel = origin ? 'ประเทศปลายทางมากสุด' : 'ประเทศต้นทางมากสุด'
+    const selectedCountryLabel = origin
+      ? formatCountryLabel(focusRoutes[0]?.departureCountryName, focusRoutes[0]?.departureCountryCode)
+      : formatCountryLabel(focusRoutes[0]?.arrivalCountryName, focusRoutes[0]?.arrivalCountryCode)
+    const grouped = focusRoutes.reduce((acc, route) => {
+      const countryLabel = origin
+        ? formatCountryLabel(route.arrivalCountryName, route.arrivalCountryCode)
+        : formatCountryLabel(route.departureCountryName, route.departureCountryCode)
+
+      if (!acc[countryLabel]) {
+        acc[countryLabel] = {
+          countryLabel,
+          totalFlights: 0,
+        }
+      }
+
+      acc[countryLabel].totalFlights += 1
+      return acc
+    }, {} as Record<string, { countryLabel: string; totalFlights: number }>)
+
+    const rankedCountries = Object.values(grouped).sort((a, b) => {
+      if (b.totalFlights !== a.totalFlights) return b.totalFlights - a.totalFlights
+      return a.countryLabel.localeCompare(b.countryLabel)
+    })
+
+    if (!rankedCountries.length) return null
+
+    return {
+      label: focusLabel,
+      selectedCountryLabel,
+      ...rankedCountries[0],
+    }
+  })()
 
   return (
     <div className="space-y-6 sm:space-y-8 w-full min-w-0">
@@ -1051,7 +1400,7 @@ useEffect(() => {
 
       {/* Chart + Summary + รายการเส้นทาง - แสดงหลังกดวิเคราะห์ข้อมูล */}
       {hasAnalyzed && (
-        <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 w-full min-w-0 transition-opacity duration-300", loading ? "opacity-50 pointer-events-none" : "opacity-100")}>
+      <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 w-full min-w-0 transition-opacity duration-300", loading ? "opacity-50 pointer-events-none" : "opacity-100")}>
           {loading && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/20 backdrop-blur-sm pointer-events-none">
               <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -1068,214 +1417,81 @@ useEffect(() => {
             />
 
             {/* รายการเส้นทางสายการบิน - ใต้กราฟ */}
-            <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden">
-              <h2 className="text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
-                <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
-                {originName || destinationName 
-                  ? `เส้นทางการบิน (${sortedGroupKeys.length} เส้นทาง)`
-                  : `เส้นทางการบิน (${filteredRoutes.length} เที่ยวบิน)`}
-              </h2>
+            <Card className="p-4 sm:p-6 border min-w-0 overflow-hidden">
+              <div className="mb-2 sm:mb-3 space-y-3">
+                <h2 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
+                  <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
+                  {originName || destinationName
+                    ? `เส้นทางการบิน (${formatDisplayNumber(routeGroupTotal)} สนามบิน)`
+                    : `เส้นทางการบิน (${formatDisplayNumber(filteredRoutes.length + filteredRoutesCompare.length)} เที่ยวบิน)`}
+                </h2>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <div className="rounded-xl border bg-blue-50/60 border-blue-100 px-4 sm:px-5 py-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 shrink-0">
+                          <PlaneLanding className="h-4 w-4" />
+                        </div>
+                        <div className="min-w-0 space-y-0.5">
+                          <p className="text-sm font-semibold text-foreground">มาจาก</p>
+                          <p className="text-xs text-muted-foreground">สนามบินต้นทางที่บินเข้ามา</p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0 pl-3">
+                        <p className="text-lg font-bold text-blue-700">{incomingAirportGroups.length.toLocaleString('th-TH')}</p>
+                        <p className="text-[11px] text-muted-foreground">สนามบิน</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rounded-xl border bg-emerald-50/60 border-emerald-100 px-4 sm:px-5 py-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 shrink-0">
+                          <PlaneTakeoff className="h-4 w-4" />
+                        </div>
+                        <div className="min-w-0 space-y-0.5">
+                          <p className="text-sm font-semibold text-foreground">ไปยัง</p>
+                          <p className="text-xs text-muted-foreground">สนามบินปลายทางที่บินออกไป</p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0 pl-3">
+                        <p className="text-lg font-bold text-emerald-700">{outgoingAirportGroups.length.toLocaleString('th-TH')}</p>
+                        <p className="text-[11px] text-muted-foreground">สนามบิน</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <ScrollArea
                 ref={routeListRef}
                 onScrollCapture={handleRouteListScroll}
                 className="h-[500px] sm:h-[600px] w-full rounded-md border bg-muted/20"
               >
-                <div className="p-1 space-y-2">
-                  {sortedGroupKeys.length > 0 ? (
-                    visibleGroupKeys.map((key) => {
-                      const group = groupedRoutes[key]
-                      const isExpanded = expandedRouteKey === key
-                      const flights = group.flights.sort((a: any, b: any) => (a.departureTime || '').localeCompare(b.departureTime || ''))
-                      const flightCount = flights.length
-                      const totalFlightsInRange = flightCount * numberOfDays
-                      
-                      // First and Last flight
-                      const firstFlight = processFlightData(flights[0])
-                      const lastFlight = processFlightData(flights[flights.length - 1])
-
-                      return (
-                        <div
-                          key={key}
-                          className="rounded-lg bg-background border shadow-sm transition-all duration-200 overflow-hidden"
-                        >
-                          {/* Collapsed Header */}
-                          <div 
-                            className="flex items-center justify-between p-3 sm:p-4 cursor-pointer hover:bg-muted/50"
-                            onClick={() => toggleRouteExpand(key)}
-                          >
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
-                              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                                <Send className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <div className="flex items-center justify-between gap-2">
-                                  <p className="font-medium text-foreground text-sm sm:text-base truncate">
-                                    {formatAirportName(group.departureName, group.departureCode)} → {formatAirportName(group.arrivalCity, group.arrivalCode)}
-                                  </p>
-                                  <span className="text-sm text-muted-foreground hidden sm:inline-block">ต้นทาง - ปลายทาง</span>
-                                </div>
-                                <p className="text-sm text-muted-foreground mt-0.5">
-                                  เที่ยวบินทั้งหมด: <span className="font-medium text-primary">{totalFlightsInRange}</span> <span className="text-[10px] text-muted-foreground">({flightCount}  เที่ยวบินต่อวัน)</span>
-                                </p>
-                              </div>
-                            </div>
-                            <div className="shrink-0 ml-2">
-                              {isExpanded ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
-                            </div>
+                <div className="p-2 sm:p-3">
+                  {(incomingAirportGroups.length > 0 || outgoingAirportGroups.length > 0) ? (
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 items-start">
+                      <div className="space-y-3">
+                        {visibleIncomingGroups.length > 0 ? (
+                          visibleIncomingGroups.map((group) => renderAirportRouteCard(group, 'incoming'))
+                        ) : (
+                          <div className="rounded-xl border bg-background px-5 py-10 text-center text-sm text-muted-foreground">
+                            ไม่มีเส้นทางขาเข้าในช่วงวันที่เลือก
                           </div>
+                        )}
+                      </div>
 
-                          {/* Expanded Content */}
-                          {isExpanded && (
-                            <div className="px-4 py-5 border-t bg-muted/5 space-y-6">
-                              {/* First Flight */}
-                              <div>
-                                <div className="mb-4 flex items-center gap-2">
-                                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] px-2 py-0.5 h-5 font-normal">
-                                    เที่ยวบินแรก (First Flight)
-                                  </Badge>
-                                </div>
-
-                                {/* ===== SUMMARY ROW (First Flight) ===== */}
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                                  {/* LEFT - Departure */}
-                                  <div className="flex flex-col items-start text-left min-w-[90px]">
-                                    <span className="text-2xl font-bold leading-none">
-                                      {firstFlight.departureTime || '--:--'}
-                                    </span>
-                                    <span className="text-sm font-medium">
-                                      {formatAirportName(firstFlight.departureName, firstFlight.departureCode)}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                      {firstFlight.depDateObj
-                                        ? format(firstFlight.depDateObj, 'EEE, d MMM', { locale: th })
-                                        : '-'}
-                                    </span>
-                                  </div>
-
-                                  {/* CENTER - Duration + Stops */}
-                                  <div className="flex-1 flex flex-col items-center relative">
-                                    {/* duration */}
-                                    <span className="text-sm font-medium mb-1">
-                                      {firstFlight.durationStr || '-'}
-                                    </span>
-
-                                    {/* line + plane */}
-                                    <div className="w-full flex items-center gap-2">
-                                      <div className="flex-1 h-px bg-border" />
-                                      <Plane className="w-4 h-4 text-muted-foreground" />
-                                      <div className="flex-1 h-px bg-border" />
-                                    </div>
-
-                                    {/* stops */}
-                                    <span className="text-xs text-muted-foreground mt-1">
-                                      {firstFlight.direct
-                                        ? 'Direct'
-                                        : 'Connecting'}
-                                    </span>
-                                  </div>
-
-                                  {/* RIGHT - Arrival */}
-                                  <div className="flex flex-col items-end text-right min-w-[90px]">
-                                    <span className="text-2xl font-bold leading-none">
-                                      {firstFlight.arrTime || '--:--'}
-                                    </span>
-                                    <span className="text-sm font-medium">
-                                      {formatAirportName(firstFlight.arrivalCity, firstFlight.arrivalCode)}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                      {firstFlight.arrDateObj
-                                        ? format(firstFlight.arrDateObj, 'EEE, d MMM', { locale: th })
-                                        : '-'}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Last Flight (if different) */}
-                              {flightCount > 1 && (
-                                <>
-                                  <div className="h-px bg-border/50 border-dashed" />
-                                  <div>
-                                    <div className="mb-4 flex items-center gap-2">
-                                      <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-[10px] px-2 py-0.5 h-5 font-normal">
-                                        เที่ยวบินสุดท้าย (Last Flight)
-                                      </Badge>
-                                    </div>
-
-                                    {/* ===== SUMMARY ROW (Last Flight) ===== */}
-                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                                      {/* LEFT - Departure */}
-                                      <div className="flex flex-col items-start text-left min-w-[90px]">
-                                        <span className="text-2xl font-bold leading-none">
-                                          {lastFlight.departureTime || '--:--'}
-                                        </span>
-                                        <span className="text-sm font-medium">
-                                          {formatAirportName(lastFlight.departureName, lastFlight.departureCode)}
-                                        </span>
-                                        <span className="text-xs text-muted-foreground">
-                                          {lastFlight.depDateObj
-                                            ? format(lastFlight.depDateObj, 'EEE, d MMM', { locale: th })
-                                            : '-'}
-                                        </span>
-                                      </div>
-
-                                      {/* CENTER - Duration + Stops */}
-                                      <div className="flex-1 flex flex-col items-center relative">
-                                        {/* duration */}
-                                        <span className="text-sm font-medium mb-1">
-                                          {lastFlight.durationStr || '-'}
-                                        </span>
-
-                                        {/* line + plane */}
-                                        <div className="w-full flex items-center gap-2">
-                                          <div className="flex-1 h-px bg-border" />
-                                          <Plane className="w-4 h-4 text-muted-foreground" />
-                                          <div className="flex-1 h-px bg-border" />
-                                        </div>
-
-                                        {/* stops */}
-                                        <span className="text-xs text-muted-foreground mt-1">
-                                          {lastFlight.direct
-                                            ? 'Direct'
-                                            : 'Connecting'}
-                                        </span>
-                                      </div>
-
-                                      {/* RIGHT - Arrival */}
-                                      <div className="flex flex-col items-end text-right min-w-[90px]">
-                                        <span className="text-2xl font-bold leading-none">
-                                          {lastFlight.arrTime || '--:--'}
-                                        </span>
-                                        <span className="text-sm font-medium">
-                                          {formatAirportName(lastFlight.arrivalCity, lastFlight.arrivalCode)}
-                                        </span>
-                                        <span className="text-xs text-muted-foreground">
-                                          {lastFlight.arrDateObj
-                                            ? format(lastFlight.arrDateObj, 'EEE, d MMM', { locale: th })
-                                            : '-'}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </>
-                              )}
-
-                              {/* BUTTON */}
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="w-full mt-6 text-xs h-9"
-                                onClick={() => handleShowFlightDetails(flights)}
-                              >
-                                ดูรายละเอียดเที่ยวบิน
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      )
-                    })
+                      <div className="space-y-3">
+                        {visibleOutgoingGroups.length > 0 ? (
+                          visibleOutgoingGroups.map((group) => renderAirportRouteCard(group, 'outgoing'))
+                        ) : (
+                          <div className="rounded-xl border bg-background px-5 py-10 text-center text-sm text-muted-foreground">
+                            ไม่มีเส้นทางขาออกในช่วงวันที่เลือก
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                    <div className="flex flex-col items-center justify-center py-14 px-6 text-center">
                       <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
                         <Send className="w-6 h-6 text-muted-foreground opacity-50" />
                       </div>
@@ -1287,9 +1503,9 @@ useEffect(() => {
                       </p>
                     </div>
                   )}
-                  {visibleRouteGroupsCount < sortedGroupKeys.length && (
-                    <div className="px-4 py-3 text-center text-xs text-muted-foreground">
-                      แสดงแล้ว {visibleGroupKeys.length.toLocaleString('th-TH')} / {sortedGroupKeys.length.toLocaleString('th-TH')} เส้นทาง
+                  {visibleRouteGroupsCount < routeGroupTotal && (
+                    <div className="px-4 pt-4 pb-2 text-center text-xs text-muted-foreground">
+                      แสดงแล้ว {visibleRouteGroupTotal.toLocaleString('th-TH')} / {routeGroupTotal.toLocaleString('th-TH')} สนามบิน
                     </div>
                   )}
                 </div>
@@ -1307,7 +1523,7 @@ useEffect(() => {
             </div>
             <div className="space-y-3 sm:space-y-4">
               {loading ? (
-                [...Array(4)].map((_, i) => (
+                [...Array(6)].map((_, i) => (
                   <div key={i} className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
                     <div className="h-3 w-1/2 bg-muted-foreground/20 rounded animate-pulse mb-2" />
                     <div className="h-6 w-3/4 bg-muted-foreground/20 rounded animate-pulse mb-2" />
@@ -1316,89 +1532,77 @@ useEffect(() => {
                 ))
               ) : (
                 <>
-              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-                <p className="text-xs sm:text-sm font-medium text-foreground">
+              <div className={sidebarKpiUi.card}>
+                <p className={sidebarKpiUi.title}>
                   จำนวนเที่ยวบินเฉลี่ย/วัน
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                  {calculatedAvgFlights} เที่ยว
+                <p className={sidebarKpiUi.hero}>
+                  {formatDisplayNumber(calculatedAvgFlights)} เที่ยว
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">อ้างอิงข้อมูลช่วงที่เลือก</p>
+                <p className={sidebarKpiUi.meta}>อ้างอิงข้อมูลช่วงที่เลือก</p>
               </div>
-              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-                <p className="text-xs sm:text-sm font-medium text-foreground">
+              <div className={sidebarKpiUi.card}>
+                <p className={sidebarKpiUi.title}>
                   ช่วงเวลาที่คนนิยมที่สุด
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
+                <p className={sidebarKpiUi.hero}>
                   {calculatedPeakHourRange}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">Peak Hour Range</p>
               </div>
-              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-                <p className="text-xs sm:text-sm font-medium text-foreground">
+              <div className={sidebarKpiUi.card}>
+                <p className={sidebarKpiUi.title}>
                   สายการบินที่มีเที่ยวบินสูงสุด
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
+                <p className={sidebarKpiUi.hero}>
                   {calculatedMostActiveCarrier}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">Most Active Carrier</p>
+                <p className={sidebarKpiUi.meta}>
+                  ให้บริการทั้งหมด <span className={sidebarKpiUi.emphasis}>{formatDisplayNumber(connectedCarrierCount)} สายการบิน</span>
+                </p>
               </div>
-              <div className="p-3 sm:p-4 rounded-lg bg-muted/40 border">
-                <p className="text-xs sm:text-sm font-medium text-foreground">
+              <div className={sidebarKpiUi.card}>
+                <p className={sidebarKpiUi.title}>
                   รวมจำนวนเที่ยวบินทั้งหมด
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-primary mt-1">
-                  {calculatedTotalFlights} เที่ยว
+                <p className={sidebarKpiUi.hero}>
+                  {formatDisplayNumber(calculatedTotalFlights)} เที่ยว
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">ตามช่วงเวลาที่เลือก</p>
+                <p className={sidebarKpiUi.meta}>ตามช่วงเวลาที่เลือก</p>
               </div>
+              {mostConnectedCountry && (
+                <div className={sidebarKpiUi.card}>
+                  <p className={sidebarKpiUi.title}>
+                    ประเทศที่เชื่อมต่อมากที่สุด
+                  </p>
+                  <p className={sidebarKpiUi.entity}>
+                    {mostConnectedCountry.countryLabel}
+                  </p>
+                  <p className={sidebarKpiUi.meta}>
+                    เชื่อมต่อ {formatDisplayNumber(mostConnectedCountry.airportCount)} สนามบิน
+                  </p>
+                </div>
+              )}
+              {primaryCountryKpi && (
+                <div className={sidebarKpiUi.card}>
+                  <p className={sidebarKpiUi.title}>
+                    {primaryCountryKpi.label}
+                  </p>
+                  <p className={sidebarKpiUi.heroLarge}>
+                    {formatDisplayNumber(primaryCountryKpi.totalFlights)} <span className={sidebarKpiUi.unitInline}>เที่ยวบิน</span>
+                  </p>
+                  <p className={sidebarKpiUi.body}>
+                    บิน{' '}
+                    <span className={sidebarKpiUi.emphasis}>
+                      {primaryCountryKpi.countryLabel === primaryCountryKpi.selectedCountryLabel
+                        ? 'ภายในประเทศ'
+                        : `${origin ? 'ไปยัง' : 'มาจาก'} ${primaryCountryKpi.countryLabel}`}
+                    </span>
+                  </p>
+                </div>
+              )}
                 </>
               )}
             </div>
-
-            {/* Most Active Airport Block (Show only if multiple airports involved) */}
-            {loading ? (
-              <div className="mt-4 space-y-3 sm:space-y-4">
-                <div className="p-3 sm:p-4 rounded-lg bg-blue-50/50 border border-blue-100">
-                  <div className="h-3 w-1/2 bg-blue-200 rounded animate-pulse mb-2" />
-                  <div className="h-6 w-3/4 bg-blue-200 rounded animate-pulse mb-2" />
-                  <div className="h-2 w-1/3 bg-blue-200 rounded animate-pulse" />
-                </div>
-              </div>
-            ) : (mostActive?.maxDep || mostActive?.maxArr) && (
-              <div className="mt-4 space-y-3 sm:space-y-4">
-                {mostActive.maxDep && (
-                  <div className="p-3 sm:p-4 rounded-lg bg-blue-50/50 border border-blue-100">
-                    <p className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-blue-600" />
-                      สนามบินที่มีเที่ยวบินออกมากที่สุด
-                    </p>
-                    <p className="text-base sm:text-lg font-bold text-blue-700 mt-1">
-                      {mostActive.maxDep}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      จำนวน {mostActive.maxDepCount * numberOfDays} เที่ยวบิน
-                      <span className="text-[10px] ml-1">({mostActive.maxDepCount} เที่ยวบินต่อวัน)</span>
-                    </p>
-                  </div>
-                )}
-                {mostActive.maxArr && (
-                  <div className="p-3 sm:p-4 rounded-lg bg-orange-50/50 border border-orange-100">
-                    <p className="text-xs sm:text-sm font-medium text-foreground flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-orange-600" />
-                      สนามบินที่มีเที่ยวบินเข้ามากที่สุด
-                    </p>
-                    <p className="text-base sm:text-lg font-bold text-orange-700 mt-1">
-                      {mostActive.maxArr}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      จำนวน {mostActive.maxArrCount * numberOfDays} เที่ยวบิน
-                      <span className="text-[10px] ml-1">({mostActive.maxArrCount} เที่ยวบินต่อวัน)</span>
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
           </Card>
         </div>
       )}
@@ -1469,8 +1673,10 @@ useEffect(() => {
                         <div className="text-right min-w-[80px] sm:min-w-[140px]">
                           <div className="font-bold text-lg">{flight.departureTime}</div>
                           <div className="text-xs text-muted-foreground truncate" title={flight.departureName}>
-                            <span className="hidden sm:inline">{formatAirportName(flight.departureName, flight.departureCode)}</span>
-                            <span className="sm:hidden">{formatAirportName(flight.departureName, flight.departureCode)}</span>
+                            {renderAirportLabel(flight.departureName, flight.departureCode, {
+                              className: 'text-xs text-muted-foreground',
+                              codeClassName: 'text-xs text-muted-foreground'
+                            })}
                           </div>
                         </div>
                         <div className="flex flex-col items-center px-2 min-w-[100px]">
@@ -1484,8 +1690,11 @@ useEffect(() => {
                         <div className="text-left min-w-[80px] sm:min-w-[140px]">
                           <div className="font-bold text-lg">{flight.arrivalTime}</div>
                           <div className="text-xs text-muted-foreground truncate" title={flight.arrivalCity || flight.arrivalCode}>
-                            <span className="hidden sm:inline">{formatAirportName(flight.arrivalCity, flight.arrivalCode)}</span>
-                            <span className="sm:hidden">{formatAirportName(flight.arrivalCity, flight.arrivalCode)}</span>
+                            {renderAirportLabel(flight.arrivalCity, flight.arrivalCode, {
+                              align: 'right',
+                              className: 'text-xs text-muted-foreground',
+                              codeClassName: 'text-xs text-muted-foreground'
+                            })}
                           </div>
                         </div>
                       </div>
