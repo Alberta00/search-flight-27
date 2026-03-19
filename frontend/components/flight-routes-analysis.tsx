@@ -25,13 +25,6 @@ import { cn } from '@/lib/utils'
 import { DateRange, type MonthCaptionProps, useDayPicker } from 'react-day-picker'
 import { Badge } from '@/components/ui/badge'
 import { FlightRoutesChart } from './flight-routes-chart'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 
 
 
@@ -79,7 +72,11 @@ const CALENDAR_YEAR_RANGE = (() => {
   return Array.from({ length: 8 }, (_, index) => currentYear - 2 + index)
 })()
 
-function AnalysisCalendarCaption({ calendarMonth, ...props }: MonthCaptionProps) {
+function AnalysisCalendarCaption({
+  calendarMonth,
+  displayIndex: _displayIndex,
+  ...props
+}: MonthCaptionProps) {
   const { goToMonth } = useDayPicker()
   const currentMonth = calendarMonth.date.getMonth()
   const currentYear = calendarMonth.date.getFullYear()
@@ -96,34 +93,34 @@ function AnalysisCalendarCaption({ calendarMonth, ...props }: MonthCaptionProps)
     <div
       {...props}
       className={cn(
-        'flex h-8 w-full items-center justify-center gap-2 px-10',
+        'flex h-8 w-full items-center justify-between gap-2 px-2',
         props.className
       )}
     >
-      <Select value={String(currentMonth)} onValueChange={handleMonthChange}>
-        <SelectTrigger size="sm" className="h-8 min-w-[120px] bg-background">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {CALENDAR_MONTH_OPTIONS.map((month) => (
-            <SelectItem key={month.value} value={String(month.value)}>
-              {month.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select value={String(currentYear)} onValueChange={handleYearChange}>
-        <SelectTrigger size="sm" className="h-8 w-[92px] bg-background">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {CALENDAR_YEAR_RANGE.map((year) => (
-            <SelectItem key={year} value={String(year)}>
-              {year}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <select
+        aria-label="เลือกเดือน"
+        className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-8 min-w-0 flex-1 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-[3px]"
+        value={String(currentMonth)}
+        onChange={(event) => handleMonthChange(event.target.value)}
+      >
+        {CALENDAR_MONTH_OPTIONS.map((month) => (
+          <option key={month.value} value={month.value}>
+            {month.label}
+          </option>
+        ))}
+      </select>
+      <select
+        aria-label="เลือกปี"
+        className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-8 w-[96px] shrink-0 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-[3px]"
+        value={String(currentYear)}
+        onChange={(event) => handleYearChange(event.target.value)}
+      >
+        {CALENDAR_YEAR_RANGE.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
     </div>
   )
 }
@@ -938,6 +935,7 @@ useEffect(() => {
                         onMonthChange={setFromCalendarMonth}
                         selected={dateRange?.from}
                         captionLayout="label"
+                        hideNavigation
                         startMonth={new Date(CALENDAR_YEAR_RANGE[0], 0, 1)}
                         endMonth={new Date(CALENDAR_YEAR_RANGE[CALENDAR_YEAR_RANGE.length - 1], 11, 1)}
                         components={{
@@ -980,6 +978,7 @@ useEffect(() => {
                         onMonthChange={setToCalendarMonth}
                         selected={dateRange?.to}
                         captionLayout="label"
+                        hideNavigation
                         startMonth={new Date(CALENDAR_YEAR_RANGE[0], 0, 1)}
                         endMonth={new Date(CALENDAR_YEAR_RANGE[CALENDAR_YEAR_RANGE.length - 1], 11, 1)}
                         components={{
