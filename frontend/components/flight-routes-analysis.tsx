@@ -79,6 +79,13 @@ export function FlightRoutesAnalysis() {
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
 
+  const applyDefaultQueryWindow = () => {
+    const today = new Date()
+    setDateRange({ from: subDays(today, 15), to: addDays(today, 15) })
+    setDurationMode(null)
+    setDateError(false)
+  }
+
   const fetchedDataBounds = useRef<{ 
     main: { range: DateRange, origin: string, destination: string } | null, 
     compare: { range: DateRange, origin: string, destination: string } | null 
@@ -611,6 +618,7 @@ useEffect(() => {
                   if (value) {
                     setDestination('')
                     setDestinationName('')
+                    applyDefaultQueryWindow()
                   }
                 }}
                 placeholder={destination ? "คุณกำลังดูข้อมูลปลายทาง" : "เลือกสนามบินต้นทาง"}
@@ -636,6 +644,7 @@ useEffect(() => {
                   if (value) {
                     setOrigin('')
                     setOriginName('')
+                    applyDefaultQueryWindow()
                   }
                 }}
                 placeholder={origin ? "คุณกำลังดูข้อมูลต้นทาง" : "เลือกสนามบินปลายทาง"}
