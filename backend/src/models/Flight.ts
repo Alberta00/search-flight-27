@@ -1405,9 +1405,10 @@ export class FlightModel {
     // Calculate days difference
     const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    // If range is small (<= 60 days), return ALL flights (Daily view)
-    // If range is large, return DISTINCT routes (Schedule view)
-    const useDistinct = diffDays > 60;
+    // Country-level queries can explode in size for large markets like CN,
+    // so keep the routes list compact by default.
+    const useDistinct = true;
+    const routeLimit = 500;
 
     const routesQuery = `
       SELECT ${useDistinct ? 'DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)' : ''}
@@ -1427,8 +1428,10 @@ export class FlightModel {
       WHERE ${whereClause}
         ${selectedDateStr ? 'AND departure_date = $2' : 'AND departure_date >= $2 AND departure_date <= $3'}
       ORDER BY ${useDistinct ? 'dep_airport, arr_airport, airline_code, flight_number, departure_time' : 'departure_date, departure_time'}
+      LIMIT ${selectedDateStr ? '$3' : '$4'}
     `;
-    const routesResult = await pool.query(routesQuery, routesQueryParams);
+    const routesResult = await pool.query(routesQuery, [...routesQueryParams, routeLimit]);
+    console.log(`[FlightModel] Country routes returned: ${routesResult.rows.length} (limit ${routeLimit})`);
 
     // 3. Summary Stats (Stats for Selected Date)
 

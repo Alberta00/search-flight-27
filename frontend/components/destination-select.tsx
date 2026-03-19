@@ -5,7 +5,6 @@ import { Search, MapPin, Plane, Globe, Loader2, X, ChevronDown, ChevronUp } from
 import { Airport, AirportCountrySummary, airportApi } from '@/lib/api/airport-api'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDebouncedCallback } from '@/lib/hooks/use-debounce'
-import { localizeAirport, mapThaiInputToEnglish, hasThaiCharacters } from '@/lib/services/thai-translation-service'
 import { cn } from '@/lib/utils'
 import {
     Popover,
@@ -65,7 +64,7 @@ export function DestinationSelect({
     value,
     displayValue,
     onChange,
-    placeholder = 'ค้นหาเมือง หรือ สนามบิน',
+    placeholder = 'Search city or airport',
     className,
     error,
     excludeCode,
@@ -93,7 +92,7 @@ export function DestinationSelect({
     const normalizeAirports = (airports: Airport[]) => {
         const unique = new Map<string, Airport>()
 
-        for (const airport of applyExcludedCodes(airports).map(localizeAirport)) {
+        for (const airport of applyExcludedCodes(airports)) {
             if (!unique.has(airport.code)) {
                 unique.set(airport.code, airport)
             }
@@ -163,8 +162,7 @@ export function DestinationSelect({
         const fetchName = async () => {
             try {
                 const details = await airportApi.getAirportDetails(value)
-                const localized = localizeAirport(details)
-                setSelectedName(buildDisplayValue(localized))
+                setSelectedName(buildDisplayValue(details))
             } catch {
                 setSelectedName((prev) => prev || value)
             }
@@ -186,7 +184,7 @@ export function DestinationSelect({
         setIsLoading(true)
 
         try {
-            const apiQuery = hasThaiCharacters(query) ? mapThaiInputToEnglish(query) : query
+            const apiQuery = query.trim()
             const { data, total } = await airportApi.searchAirports(apiQuery)
             const normalized = normalizeAirports(data)
 
@@ -276,7 +274,7 @@ export function DestinationSelect({
 
     const handleSelectCountry = (group: CountryAirportGroup) => {
         const valueToSend = group.countryCode || group.country
-        const displayName = `${group.country} (ทั้งประเทศ)`
+        const displayName = `${group.country} (All airports)`
 
         setSelectedName(displayName)
         setSearch('')
@@ -404,7 +402,7 @@ export function DestinationSelect({
                                 }}
                                 className="text-[10px] bg-white border border-blue-200 hover:bg-blue-100 text-blue-600 px-2 py-0.5 rounded transition-colors normal-case tracking-normal font-medium"
                             >
-                                ทั้งหมด
+                                All
                             </button>
                         )}
                         {collapsible && (
@@ -425,7 +423,7 @@ export function DestinationSelect({
 
                 {collapsible && isExpanded && group.isLoading && (
                     <div className="px-4 py-4 text-sm text-muted-foreground">
-                        กำลังโหลดสนามบิน...
+                        Loading airports...
                     </div>
                 )}
 
@@ -489,15 +487,15 @@ export function DestinationSelect({
                         {isLoading ? (
                             <div className="p-12 flex flex-col items-center justify-center text-gray-500 italic">
                                 <Loader2 className="h-8 w-8 animate-spin mb-3 text-blue-500" />
-                                <span className="text-sm">กำลังค้นหาเมืองและสนามบิน...</span>
+                                <span className="text-sm">Searching cities and airports...</span>
                             </div>
                         ) : showingSearchResults && results.length === 0 ? (
                             <div className="p-12 text-center text-gray-500">
                                 <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <Search className="h-8 w-8 text-gray-300" />
                                 </div>
-                                <p className="font-semibold text-gray-700">ไม่พบเมืองหรือสนามบิน</p>
-                                <p className="text-sm italic">ลองค้นหาด้วยชื่อประเทศ หรือ รหัสสนามบิน</p>
+                                <p className="font-semibold text-gray-700">No cities or airports found</p>
+                                <p className="text-sm italic">Try searching by country name or airport code</p>
                             </div>
                         ) : showingSearchResults ? (
                             <div className="px-1 py-1">
@@ -509,7 +507,7 @@ export function DestinationSelect({
                                     <div className="bg-blue-600 p-1.5 rounded-md">
                                         <Plane className="h-4 w-4 text-white" />
                                     </div>
-                                    <span className="text-xl font-bold text-gray-500 uppercase tracking-widest">เมืองหรือท่าอากาศยาน</span>
+                                    <span className="text-xl font-bold text-gray-500 uppercase tracking-widest">Cities or Airports</span>
                                 </div>
                                 <div className="px-1">
                                     {countryGroups.length > 0 ? (
@@ -527,11 +525,11 @@ export function DestinationSelect({
                     {!isLoading && (
                         showingSearchResults && results.length > 0 ? (
                             <div className="px-4 py-2.5 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-600">
-                                แสดง {results.length} สนามบินจากผลลัพธ์ทั้งหมด {searchTotal.toLocaleString('th-TH')} รายการ
+                                Showing {results.length} airports from {searchTotal.toLocaleString('en-US')} matched results
                             </div>
                         ) : !showingSearchResults && countryGroups.length > 0 ? (
                             <div className="px-4 py-2.5 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-600">
-                                แสดง {countryGroups.length.toLocaleString('th-TH')} ประเทศ จากทั้งหมด {totalAirportsInSystem != null ? totalAirportsInSystem.toLocaleString('th-TH') : '—'} สนามบิน
+                                Showing {countryGroups.length.toLocaleString('en-US')} countries from {totalAirportsInSystem != null ? totalAirportsInSystem.toLocaleString('en-US') : '—'} airports
                             </div>
                         ) : null
                     )}
