@@ -126,6 +126,7 @@ function AnalysisCalendarCaption({
 }
 
 export function FlightRoutesAnalysis() {
+  const ROUTE_GROUPS_PAGE_SIZE = 50
   const [origin, setOrigin] = useState('')
   const [originName, setOriginName] = useState('')
   const [destination, setDestination] = useState('')
@@ -145,6 +146,8 @@ export function FlightRoutesAnalysis() {
   const [routes, setRoutes] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
+  const [visibleRouteGroupsCount, setVisibleRouteGroupsCount] = useState(ROUTE_GROUPS_PAGE_SIZE)
+  const routeListRef = useRef<HTMLDivElement | null>(null)
 
   const applyDefaultQueryWindow = () => {
     if (dateRange?.from) {
@@ -691,6 +694,7 @@ useEffect(() => {
       acc[key] = {
         departureName: route.departureName,
         departureCode: route.departureCode,
+        arrivalCity: route.arrivalCity,
         arrivalCode: route.arrivalCode,
         flights: []
       }
@@ -700,6 +704,27 @@ useEffect(() => {
   }, {} as Record<string, any>)
 
   const sortedGroupKeys = Object.keys(groupedRoutes).sort()
+  const visibleGroupKeys = sortedGroupKeys.slice(0, visibleRouteGroupsCount)
+
+  const formatAirportName = (name?: string | null, code?: string | null) => {
+    if (name && name.trim()) return name.trim()
+    if (code && code.trim()) return code.trim()
+    return 'Unknown airport'
+  }
+
+  const handleRouteListScroll = () => {
+    const viewport = routeListRef.current?.querySelector('[data-radix-scroll-area-viewport], [data-slot="scroll-area-viewport"]') as HTMLDivElement | null
+    if (!viewport) return
+
+    const isNearBottom = viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 64
+    if (isNearBottom) {
+      setVisibleRouteGroupsCount((prev) => Math.min(prev + ROUTE_GROUPS_PAGE_SIZE, sortedGroupKeys.length))
+    }
+  }
+
+  useEffect(() => {
+    setVisibleRouteGroupsCount(ROUTE_GROUPS_PAGE_SIZE)
+  }, [sortedGroupKeys.length, origin, destination, dateRange?.from?.getTime(), dateRange?.to?.getTime()])
 
   const toggleRouteExpand = (key: string) => {
     setExpandedRouteKey(prev => prev === key ? null : key)
@@ -1050,10 +1075,14 @@ useEffect(() => {
                   ? `เส้นทางการบิน (${sortedGroupKeys.length} เส้นทาง)`
                   : `เส้นทางการบิน (${filteredRoutes.length} เที่ยวบิน)`}
               </h2>
-              <ScrollArea className="h-[500px] sm:h-[600px] w-full rounded-md border bg-muted/20">
+              <ScrollArea
+                ref={routeListRef}
+                onScrollCapture={handleRouteListScroll}
+                className="h-[500px] sm:h-[600px] w-full rounded-md border bg-muted/20"
+              >
                 <div className="p-1 space-y-2">
                   {sortedGroupKeys.length > 0 ? (
-                    sortedGroupKeys.map((key) => {
+                    visibleGroupKeys.map((key) => {
                       const group = groupedRoutes[key]
                       const isExpanded = expandedRouteKey === key
                       const flights = group.flights.sort((a: any, b: any) => (a.departureTime || '').localeCompare(b.departureTime || ''))
@@ -1081,7 +1110,7 @@ useEffect(() => {
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center justify-between gap-2">
                                   <p className="font-medium text-foreground text-sm sm:text-base truncate">
-                                    {group.departureName || group.departureCode} → {group.arrivalCity || group.arrivalCode}
+                                    {formatAirportName(group.departureName, group.departureCode)} → {formatAirportName(group.arrivalCity, group.arrivalCode)}
                                   </p>
                                   <span className="text-sm text-muted-foreground hidden sm:inline-block">ต้นทาง - ปลายทาง</span>
                                 </div>
@@ -1114,7 +1143,7 @@ useEffect(() => {
                                       {firstFlight.departureTime || '--:--'}
                                     </span>
                                     <span className="text-sm font-medium">
-                                      {firstFlight.departureCode}
+                                      {formatAirportName(firstFlight.departureName, firstFlight.departureCode)}
                                     </span>
                                     <span className="text-xs text-muted-foreground">
                                       {firstFlight.depDateObj
@@ -1151,7 +1180,7 @@ useEffect(() => {
                                       {firstFlight.arrTime || '--:--'}
                                     </span>
                                     <span className="text-sm font-medium">
-                                      {firstFlight.arrivalCode}
+                                      {formatAirportName(firstFlight.arrivalCity, firstFlight.arrivalCode)}
                                     </span>
                                     <span className="text-xs text-muted-foreground">
                                       {firstFlight.arrDateObj
@@ -1181,7 +1210,7 @@ useEffect(() => {
                                           {lastFlight.departureTime || '--:--'}
                                         </span>
                                         <span className="text-sm font-medium">
-                                          {lastFlight.departureCode}
+                                          {formatAirportName(lastFlight.departureName, lastFlight.departureCode)}
                                         </span>
                                         <span className="text-xs text-muted-foreground">
                                           {lastFlight.depDateObj
@@ -1218,7 +1247,7 @@ useEffect(() => {
                                           {lastFlight.arrTime || '--:--'}
                                         </span>
                                         <span className="text-sm font-medium">
-                                          {lastFlight.arrivalCode}
+                                          {formatAirportName(lastFlight.arrivalCity, lastFlight.arrivalCode)}
                                         </span>
                                         <span className="text-xs text-muted-foreground">
                                           {lastFlight.arrDateObj
@@ -1256,6 +1285,11 @@ useEffect(() => {
                       <p className="text-xs text-muted-foreground mt-1">
                         ลองเปลี่ยนวันที่หรือสนามบินอื่น
                       </p>
+                    </div>
+                  )}
+                  {visibleRouteGroupsCount < sortedGroupKeys.length && (
+                    <div className="px-4 py-3 text-center text-xs text-muted-foreground">
+                      แสดงแล้ว {visibleGroupKeys.length.toLocaleString('th-TH')} / {sortedGroupKeys.length.toLocaleString('th-TH')} เส้นทาง
                     </div>
                   )}
                 </div>
@@ -1435,8 +1469,8 @@ useEffect(() => {
                         <div className="text-right min-w-[80px] sm:min-w-[140px]">
                           <div className="font-bold text-lg">{flight.departureTime}</div>
                           <div className="text-xs text-muted-foreground truncate" title={flight.departureName}>
-                            <span className="hidden sm:inline">{flight.departureName} ({flight.departureCode})</span>
-                            <span className="sm:hidden">{flight.departureCode}</span>
+                            <span className="hidden sm:inline">{formatAirportName(flight.departureName, flight.departureCode)}</span>
+                            <span className="sm:hidden">{formatAirportName(flight.departureName, flight.departureCode)}</span>
                           </div>
                         </div>
                         <div className="flex flex-col items-center px-2 min-w-[100px]">
@@ -1450,8 +1484,8 @@ useEffect(() => {
                         <div className="text-left min-w-[80px] sm:min-w-[140px]">
                           <div className="font-bold text-lg">{flight.arrivalTime}</div>
                           <div className="text-xs text-muted-foreground truncate" title={flight.arrivalCity || flight.arrivalCode}>
-                            <span className="hidden sm:inline">{flight.arrivalCity || flight.arrivalCode} ({flight.arrivalCode})</span>
-                            <span className="sm:hidden">{flight.arrivalCode}</span>
+                            <span className="hidden sm:inline">{formatAirportName(flight.arrivalCity, flight.arrivalCode)}</span>
+                            <span className="sm:hidden">{formatAirportName(flight.arrivalCity, flight.arrivalCode)}</span>
                           </div>
                         </div>
                       </div>
