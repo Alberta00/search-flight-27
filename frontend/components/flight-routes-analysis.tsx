@@ -132,7 +132,7 @@ export function FlightRoutesAnalysis() {
   const [destinationName, setDestinationName] = useState('')
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [dateError, setDateError] = useState(false)
-  const [compareMode, setCompareMode] = useState(false)
+  const [compareMode, setCompareMode] = useState(true)
   const [durationMode, setDurationMode] = useState<'focus' | '7' | '30' | '90' | '180' | '365' | 'all' | null>(null)
   const [showCustomDateRange, setShowCustomDateRange] = useState(false)
   const [isExtendedRangeOpen, setIsExtendedRangeOpen] = useState(false)
@@ -271,7 +271,8 @@ useEffect(() => {
         fetchedDataBounds.current.main.destination === destination &&
         isRangeCovered(requiredRange, fetchedDataBounds.current.main.range)
 
-      const isCompareCached = !compareMode || (fetchedDataBounds.current.compare && 
+      const shouldFetchReverse = Boolean(origin || destination)
+      const isCompareCached = !shouldFetchReverse || (fetchedDataBounds.current.compare && 
         fetchedDataBounds.current.compare.origin === destination && // Swapped for compare
         fetchedDataBounds.current.compare.destination === origin && // Swapped for compare
         isRangeCovered(requiredRange, fetchedDataBounds.current.compare.range))
@@ -377,7 +378,7 @@ useEffect(() => {
       }
       
       // ===== COMPARE =====
-      if (compareMode) {
+      if (shouldFetchReverse) {
         if (!isCompareCached) {
           const compareParams = new URLSearchParams()
 
@@ -1037,12 +1038,8 @@ useEffect(() => {
             <FlightRoutesChart
               chartData={chartData}
               dateRange={dateRange}
-              setDateRange={setDateRange}
               compareMode={compareMode}
-              setCompareMode={setCompareMode}
               isDeparture={!!origin}
-              durationMode={durationMode}
-              setDurationMode={setDurationMode}
             />
 
             {/* รายการเส้นทางสายการบิน - ใต้กราฟ */}
