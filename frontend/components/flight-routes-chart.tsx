@@ -96,8 +96,8 @@ interface FlightRoutesChartProps {
   compareMode: boolean
   setCompareMode: React.Dispatch<React.SetStateAction<boolean>>
   isDeparture: boolean
-  durationMode?: '7' | '30' | 'all' | null
-  setDurationMode?: (mode: '7' | '30' | 'all' | null) => void
+  durationMode?: 'focus' | '7' | '30' | '90' | '180' | '365' | 'all' | null
+  setDurationMode?: (mode: 'focus' | '7' | '30' | '90' | '180' | '365' | 'all' | null) => void
 }
 
 export function FlightRoutesChart({

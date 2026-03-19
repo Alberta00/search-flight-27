@@ -22,9 +22,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
-import { DateRange } from 'react-day-picker'
+import { DateRange, type MonthCaptionProps, useDayPicker } from 'react-day-picker'
 import { Badge } from '@/components/ui/badge'
 import { FlightRoutesChart } from './flight-routes-chart'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 
 
@@ -62,6 +69,65 @@ const parseFlightDate = (dateStr: any): Date | null => {
   return isNaN(d.getTime()) ? null : d
 }
 
+const CALENDAR_MONTH_OPTIONS = Array.from({ length: 12 }, (_, monthIndex) => ({
+  value: monthIndex,
+  label: format(new Date(2024, monthIndex, 1), 'LLLL', { locale: th }),
+}))
+
+const CALENDAR_YEAR_RANGE = (() => {
+  const currentYear = new Date().getFullYear()
+  return Array.from({ length: 8 }, (_, index) => currentYear - 2 + index)
+})()
+
+function AnalysisCalendarCaption({ calendarMonth, ...props }: MonthCaptionProps) {
+  const { goToMonth } = useDayPicker()
+  const currentMonth = calendarMonth.date.getMonth()
+  const currentYear = calendarMonth.date.getFullYear()
+
+  const handleMonthChange = (value: string) => {
+    goToMonth(new Date(currentYear, Number(value), 1))
+  }
+
+  const handleYearChange = (value: string) => {
+    goToMonth(new Date(Number(value), currentMonth, 1))
+  }
+
+  return (
+    <div
+      {...props}
+      className={cn(
+        'flex h-8 w-full items-center justify-center gap-2 px-10',
+        props.className
+      )}
+    >
+      <Select value={String(currentMonth)} onValueChange={handleMonthChange}>
+        <SelectTrigger size="sm" className="h-8 min-w-[120px] bg-background">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {CALENDAR_MONTH_OPTIONS.map((month) => (
+            <SelectItem key={month.value} value={String(month.value)}>
+              {month.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Select value={String(currentYear)} onValueChange={handleYearChange}>
+        <SelectTrigger size="sm" className="h-8 w-[92px] bg-background">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {CALENDAR_YEAR_RANGE.map((year) => (
+            <SelectItem key={year} value={String(year)}>
+              {year}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+
 export function FlightRoutesAnalysis() {
   const [origin, setOrigin] = useState('')
   const [originName, setOriginName] = useState('')
@@ -70,7 +136,11 @@ export function FlightRoutesAnalysis() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [dateError, setDateError] = useState(false)
   const [compareMode, setCompareMode] = useState(false)
-  const [durationMode, setDurationMode] = useState<'7' | '30' | 'all' | null>(null)
+  const [durationMode, setDurationMode] = useState<'focus' | '7' | '30' | '90' | '180' | '365' | 'all' | null>(null)
+  const [showCustomDateRange, setShowCustomDateRange] = useState(false)
+  const [isExtendedRangeOpen, setIsExtendedRangeOpen] = useState(false)
+  const [fromCalendarMonth, setFromCalendarMonth] = useState(new Date())
+  const [toCalendarMonth, setToCalendarMonth] = useState(new Date())
   const [hasAnalyzed, setHasAnalyzed] = useState(false)
 
   const [dailyData, setDailyData] = useState<any[]>([])
@@ -80,11 +150,91 @@ export function FlightRoutesAnalysis() {
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
 
   const applyDefaultQueryWindow = () => {
+    if (dateRange?.from) {
+      setShowCustomDateRange(false)
+      setIsExtendedRangeOpen(false)
+      setDateError(false)
+      return
+    }
+
     const today = new Date()
     setDateRange({ from: subDays(today, 15), to: addDays(today, 15) })
+    setFromCalendarMonth(subDays(today, 15))
+    setToCalendarMonth(addDays(today, 15))
+    setDurationMode('focus')
+    setShowCustomDateRange(false)
+    setIsExtendedRangeOpen(false)
+    setDateError(false)
+  }
+
+  const applyPresetRange = (mode: 'focus' | '7' | '30' | '90' | '180' | '365' | 'all') => {
+    const today = new Date()
+
+    if (mode === 'focus') {
+      const from = subDays(today, 15)
+      const to = addDays(today, 15)
+      setDateRange({ from, to })
+      setFromCalendarMonth(from)
+      setToCalendarMonth(to)
+      setDurationMode('focus')
+    } else if (mode === '7') {
+      const to = addDays(today, 6)
+      setDateRange({ from: today, to })
+      setFromCalendarMonth(today)
+      setToCalendarMonth(to)
+      setDurationMode('7')
+    } else if (mode === '30') {
+      const to = addDays(today, 29)
+      setDateRange({ from: today, to })
+      setFromCalendarMonth(today)
+      setToCalendarMonth(to)
+      setDurationMode('30')
+    } else if (mode === '90') {
+      const to = addDays(today, 89)
+      setDateRange({ from: today, to })
+      setFromCalendarMonth(today)
+      setToCalendarMonth(to)
+      setDurationMode('90')
+    } else if (mode === '180') {
+      const to = addDays(today, 179)
+      setDateRange({ from: today, to })
+      setFromCalendarMonth(today)
+      setToCalendarMonth(to)
+      setDurationMode('180')
+    } else if (mode === '365') {
+      const to = addDays(today, 364)
+      setDateRange({ from: today, to })
+      setFromCalendarMonth(today)
+      setToCalendarMonth(to)
+      setDurationMode('365')
+    } else {
+      const from = subDays(today, 1)
+      const to = addDays(today, 365)
+      setDateRange({ from, to })
+      setFromCalendarMonth(from)
+      setToCalendarMonth(to)
+      setDurationMode('all')
+    }
+
+    setShowCustomDateRange(false)
+    setIsExtendedRangeOpen(false)
+    setDateError(false)
+  }
+
+  const handleCustomDateToggle = () => {
+    setShowCustomDateRange((prev) => !prev)
     setDurationMode(null)
     setDateError(false)
   }
+
+  const extendedRangeLabel =
+    durationMode === '90'
+      ? 'ไตรมาสนี้'
+      : durationMode === '180'
+        ? '6 เดือน'
+        : durationMode === '365'
+          ? '1 ปี'
+          : 'รอบเดือน'
 
   const fetchedDataBounds = useRef<{ 
     main: { range: DateRange, origin: string, destination: string } | null, 
@@ -659,68 +809,197 @@ useEffect(() => {
             <Label className="text-sm font-medium text-muted-foreground">
               ช่วงวันที่ (Start - End)
             </Label>
-            <div className="flex gap-2 w-full min-w-0">
-              <Popover>
+            <div className="flex flex-wrap items-end gap-2 w-full min-w-0">
+              <Button
+                type="button"
+                variant={durationMode === 'focus' ? 'default' : 'outline'}
+                size="sm"
+                className="h-8 px-3 text-xs sm:text-sm"
+                onClick={() => applyPresetRange('focus')}
+              >
+                รอบวัน
+              </Button>
+              <Button
+                type="button"
+                variant={durationMode === '7' ? 'default' : 'outline'}
+                size="sm"
+                className="h-8 px-3 text-xs sm:text-sm"
+                onClick={() => applyPresetRange('7')}
+              >
+                7 วัน
+              </Button>
+              <Button
+                type="button"
+                variant={durationMode === '30' ? 'default' : 'outline'}
+                size="sm"
+                className="h-8 px-3 text-xs sm:text-sm"
+                onClick={() => applyPresetRange('30')}
+              >
+                30 วัน
+              </Button>
+              <Button
+                type="button"
+                variant={durationMode === 'all' ? 'default' : 'outline'}
+                size="sm"
+                className="h-8 px-3 text-xs sm:text-sm"
+                onClick={() => applyPresetRange('all')}
+              >
+                ทั้งหมด
+              </Button>
+              <Popover open={isExtendedRangeOpen} onOpenChange={setIsExtendedRangeOpen}>
                 <PopoverTrigger asChild>
                   <Button
-                    variant="outline"
-                    className={cn(
-                      'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
-                      !dateRange?.from && 'text-muted-foreground',
-                      dateError && !dateRange?.from && 'border-red-500 ring-1 ring-red-500/20'
-                    )}
+                    type="button"
+                    variant={durationMode === '90' || durationMode === '180' || durationMode === '365' ? 'default' : 'outline'}
+                    size="sm"
+                    className="h-8 px-3 text-xs sm:text-sm"
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="truncate">
-                      {dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy') : 'วันเริ่มต้น'}
-                    </span>
+                    {extendedRangeLabel}
+                    <ChevronDown className="ml-1 h-3.5 w-3.5" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={dateRange?.from}
-                    onSelect={(date) => {
-                      if (durationMode === '7' && date) {
-                        setDateRange({ from: date, to: addDays(date, 6) })
-                      } else if (durationMode === '30' && date) {
-                        setDateRange({ from: date, to: addDays(date, 29) })
-                      } else {
-                        setDateRange((prev) => ({ from: date, to: prev?.to }))
-                      }
-                    }}
-                    initialFocus
-                  />
+                <PopoverContent className="w-44 p-1" align="start">
+                  <div className="flex flex-col gap-1">
+                    <Button
+                      type="button"
+                      variant={durationMode === '90' ? 'default' : 'ghost'}
+                      size="sm"
+                      className="justify-start"
+                      onClick={() => applyPresetRange('90')}
+                    >
+                      ไตรมาสนี้
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={durationMode === '180' ? 'default' : 'ghost'}
+                      size="sm"
+                      className="justify-start"
+                      onClick={() => applyPresetRange('180')}
+                    >
+                      6 เดือน
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={durationMode === '365' ? 'default' : 'ghost'}
+                      size="sm"
+                      className="justify-start"
+                      onClick={() => applyPresetRange('365')}
+                    >
+                      1 ปี
+                    </Button>
+                  </div>
                 </PopoverContent>
               </Popover>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
-                      !dateRange?.to && 'text-muted-foreground'
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="truncate">
-                      {dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy') : 'วันสิ้นสุด'}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={dateRange?.to}
-                    onSelect={(date) => {
-                      setDurationMode(null)
-                      setDateRange((prev) => ({ from: prev?.from, to: date }))
-                    }}
-                    disabled={(date) => dateRange?.from ? date < dateRange.from : false}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+            </div>
+            <div className="space-y-2 pt-0.5">
+              <button
+                type="button"
+                className={cn(
+                  'inline-flex items-center gap-1 text-sm font-medium transition-colors',
+                  showCustomDateRange ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                )}
+                onClick={handleCustomDateToggle}
+              >
+                <span>กำหนดเอง</span>
+                <ChevronDown
+                  className={cn(
+                    'h-4 w-4 transition-transform duration-200',
+                    showCustomDateRange && 'rotate-180'
+                  )}
+                />
+              </button>
+              <div
+                className={cn(
+                  'overflow-hidden transition-all duration-300 ease-in-out',
+                  showCustomDateRange ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+                )}
+              >
+                <div className="flex gap-2 w-full min-w-0 pt-1">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
+                          !dateRange?.from && 'text-muted-foreground',
+                          dateError && !dateRange?.from && 'border-red-500 ring-1 ring-red-500/20'
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                        <span className="truncate">
+                          {dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy') : 'วันเริ่มต้น'}
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
+                      <Calendar
+                        mode="single"
+                        month={fromCalendarMonth}
+                        onMonthChange={setFromCalendarMonth}
+                        selected={dateRange?.from}
+                        captionLayout="label"
+                        startMonth={new Date(CALENDAR_YEAR_RANGE[0], 0, 1)}
+                        endMonth={new Date(CALENDAR_YEAR_RANGE[CALENDAR_YEAR_RANGE.length - 1], 11, 1)}
+                        components={{
+                          MonthCaption: AnalysisCalendarCaption,
+                        }}
+                        onSelect={(date) => {
+                          setDurationMode(null)
+                          setDateError(false)
+                          if (date) {
+                            setFromCalendarMonth(date)
+                          }
+                          setDateRange((prev) => ({
+                            from: date,
+                            to: prev?.to && date && prev.to < date ? date : prev?.to,
+                          }))
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
+                          !dateRange?.to && 'text-muted-foreground'
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                        <span className="truncate">
+                          {dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy') : 'วันสิ้นสุด'}
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 flight-routes-accent" align="start">
+                      <Calendar
+                        mode="single"
+                        month={toCalendarMonth}
+                        onMonthChange={setToCalendarMonth}
+                        selected={dateRange?.to}
+                        captionLayout="label"
+                        startMonth={new Date(CALENDAR_YEAR_RANGE[0], 0, 1)}
+                        endMonth={new Date(CALENDAR_YEAR_RANGE[CALENDAR_YEAR_RANGE.length - 1], 11, 1)}
+                        components={{
+                          MonthCaption: AnalysisCalendarCaption,
+                        }}
+                        onSelect={(date) => {
+                          setDurationMode(null)
+                          setDateError(false)
+                          if (date) {
+                            setToCalendarMonth(date)
+                          }
+                          setDateRange((prev) => ({ from: prev?.from, to: date }))
+                        }}
+                        disabled={(date) => dateRange?.from ? date < dateRange.from : false}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
             </div>
           </div>
         </div>
