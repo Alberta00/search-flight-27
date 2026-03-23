@@ -1,7 +1,6 @@
 ﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import type { ReactNode } from 'react'
 import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -15,7 +14,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ReferenceDot,
   ReferenceLine,
 } from 'recharts'
 import { ChartContainer } from '@/components/ui/chart'
@@ -133,19 +131,24 @@ export function FlightRoutesChart({
   const legendItems = [
     {
       key: 'departure' as const,
-      label: 'ขาออก (Departure)',
+      label: 'ขาออก',
       targetSeries: isDeparture ? 'main' as const : 'compare' as const,
     },
     ...(compareMode ? [{
       key: 'arrival' as const,
-      label: 'ขาเข้า (Arrival)',
+      label: 'ขาเข้า',
       targetSeries: isDeparture ? 'compare' as const : 'main' as const,
+    }] : []),
+    ...(compareMode ? [{
+      key: 'all' as const,
+      label: 'สองเส้นทาง',
+      targetSeries: 'all' as const,
     }] : []),
   ]
 
   useEffect(() => {
     if (!compareMode) {
-      setActiveSeries('all')
+      setActiveSeries('main')
     }
   }, [compareMode])
 
@@ -156,16 +159,20 @@ export function FlightRoutesChart({
       stroke: isMuted ? 'hsl(var(--muted-foreground))' : (series === 'main' ? mainBaseColor : compareBaseColor),
       fillOpacityTop: isMuted ? 0.12 : 0.4,
       fillOpacityBottom: isMuted ? 0.02 : 0.05,
-      buttonClassName: isMuted
-        ? 'border-border bg-background text-muted-foreground/60'
-        : 'border-primary/20 bg-muted/30 text-foreground',
       markerOpacityClassName: isMuted ? 'opacity-35' : 'opacity-100',
     }
   }
 
-  const handleLegendClick = (series: 'main' | 'compare') => {
+  const getLegendButtonClass = (series: 'all' | 'main' | 'compare') => {
+    const isSelected = activeSeries === series
+    return isSelected
+      ? 'border-primary bg-primary/10 text-foreground shadow-sm'
+      : 'border-border bg-background text-muted-foreground hover:bg-muted/50'
+  }
+
+  const handleLegendSelect = (series: 'all' | 'main' | 'compare') => {
     if (!compareMode && series === 'compare') return
-    setActiveSeries((prev) => (prev === series ? 'all' : series))
+    setActiveSeries(series)
   }
 
   const renderChartLegend = () => (
@@ -174,19 +181,44 @@ export function FlightRoutesChart({
         <button
           key={item.key}
           type="button"
-          onClick={() => handleLegendClick(item.targetSeries)}
-          className={`${legend.item} ${getSeriesTone(item.targetSeries).buttonClassName}`}
+          onClick={() => handleLegendSelect(item.targetSeries)}
+          className={`${legend.item} ${getLegendButtonClass(item.targetSeries)}`}
         >
-          <span className={legend.marker.wrapper}>
-            <span
-              className={`${legend.marker.line} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
-              style={{ backgroundColor: getSeriesTone(item.targetSeries).stroke }}
-            />
-            <span
-              className={`${legend.marker.point} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
-              style={{ backgroundColor: getSeriesTone(item.targetSeries).stroke }}
-            />
-          </span>
+          {item.targetSeries === 'all' ? (
+            <span className="inline-flex items-center gap-1.5 shrink-0">
+              <span className={legend.marker.wrapper}>
+                <span
+                  className={legend.marker.line}
+                  style={{ backgroundColor: mainBaseColor }}
+                />
+                <span
+                  className={legend.marker.point}
+                  style={{ backgroundColor: mainBaseColor }}
+                />
+              </span>
+              <span className={legend.marker.wrapper}>
+                <span
+                  className={legend.marker.line}
+                  style={{ backgroundColor: compareBaseColor }}
+                />
+                <span
+                  className={legend.marker.point}
+                  style={{ backgroundColor: compareBaseColor }}
+                />
+              </span>
+            </span>
+          ) : (
+            <span className={legend.marker.wrapper}>
+              <span
+                className={`${legend.marker.line} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
+                style={{ backgroundColor: getSeriesTone(item.targetSeries).stroke }}
+              />
+              <span
+                className={`${legend.marker.point} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
+                style={{ backgroundColor: getSeriesTone(item.targetSeries).stroke }}
+              />
+            </span>
+          )}
           <span className={legend.label}>{item.label}</span>
         </button>
       ))}
@@ -337,50 +369,7 @@ export function FlightRoutesChart({
   const mainActiveDot = showMainTooltip ? { r: 4, fill: mainTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
   const compareActiveDot = showCompareTooltip ? { r: 4, fill: compareTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
   const todayKey = format(new Date(), 'yyyy-MM-dd')
-  const todayPoint = zoomedChartData.find((item: any) => item.date === todayKey)
-  const isTodayVisible = Boolean(todayPoint)
-  const todayMarkerValue = (() => {
-    if (!todayPoint) return null
-
-    if (activeSeries === 'main') {
-      return typeof todayPoint.flights === 'number' ? todayPoint.flights : null
-    }
-
-    if (activeSeries === 'compare') {
-      return compareMode && typeof todayPoint.flightsCompare === 'number'
-        ? todayPoint.flightsCompare
-        : null
-    }
-
-    const visibleValues = [
-      typeof todayPoint.flights === 'number' ? todayPoint.flights : null,
-      compareMode && typeof todayPoint.flightsCompare === 'number' ? todayPoint.flightsCompare : null,
-    ].filter((value): value is number => value != null)
-
-    return visibleValues.length ? Math.max(...visibleValues) : null
-  })()
-
-  const renderTodayMarkerLabel = ({ viewBox }: { viewBox?: { x?: number; y?: number } }): ReactNode => {
-    if (viewBox?.x == null || viewBox.y == null) return null
-
-    const labelX = viewBox.x + todayMarker.labelOffset
-    const labelY =
-      todayMarker.labelPlacement === 'bottom'
-        ? viewBox.y + 16
-        : viewBox.y - 10
-
-    return (
-      <text
-        x={labelX}
-        y={labelY}
-        fill={todayMarker.labelColor}
-        fontSize={todayMarker.labelFontSize}
-        dy={todayMarker.labelDy}
-      >
-        {todayMarker.label}
-      </text>
-    )
-  }
+  const isTodayVisible = zoomedChartData.some((item: any) => item.date === todayKey)
 
   return (
     <>
@@ -473,17 +462,14 @@ export function FlightRoutesChart({
                     stroke={todayMarker.lineColor}
                     strokeDasharray={todayMarker.dash}
                     strokeWidth={todayMarker.strokeWidth}
-                  />
-                )}
-                {isTodayVisible && todayMarkerValue != null && (
-                  <ReferenceDot
-                    x={todayKey}
-                    y={todayMarkerValue}
-                    r={0}
-                    fill="transparent"
-                    stroke="transparent"
-                    isFront
-                    label={renderTodayMarkerLabel}
+                    label={{
+                      value: todayMarker.label,
+                      position: 'right',
+                      fill: todayMarker.labelColor,
+                      fontSize: todayMarker.labelFontSize,
+                      offset: todayMarker.labelOffset,
+                      dy: todayMarker.labelDy,
+                    }}
                   />
                 )}
                 <Area
@@ -607,17 +593,14 @@ export function FlightRoutesChart({
                       stroke={todayMarker.lineColor}
                       strokeDasharray={todayMarker.dash}
                       strokeWidth={todayMarker.strokeWidth}
-                    />
-                  )}
-                  {isTodayVisible && todayMarkerValue != null && (
-                    <ReferenceDot
-                      x={todayKey}
-                      y={todayMarkerValue}
-                      r={0}
-                      fill="transparent"
-                      stroke="transparent"
-                      isFront
-                      label={renderTodayMarkerLabel}
+                      label={{
+                        value: todayMarker.label,
+                        position: 'right',
+                        fill: todayMarker.labelColor,
+                        fontSize: todayMarker.labelFontSize,
+                        offset: todayMarker.labelOffset,
+                        dy: todayMarker.labelDy,
+                      }}
                     />
                   )}
                   <Area

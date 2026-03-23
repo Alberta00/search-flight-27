@@ -1040,6 +1040,12 @@ useEffect(() => {
   const mostConnectedCountry = (() => {
     if (!insightRoutes.length) return null
 
+    type CountryAggregate = {
+      countryLabel: string
+      airportKeys: Set<string>
+      totalFlights: number
+    }
+
     const countryMap = insightRoutes.reduce((acc, route) => {
       const departureCountryLabel = formatCountryLabel(route.departureCountryName, route.departureCountryCode)
       const arrivalCountryLabel = formatCountryLabel(route.arrivalCountryName, route.arrivalCountryCode)
@@ -1063,9 +1069,9 @@ useEffect(() => {
       appendCountry(arrivalCountryLabel, arrivalAirportKey)
 
       return acc
-    }, {} as Record<string, { countryLabel: string; airportKeys: Set<string>; totalFlights: number }>)
+    }, {} as Record<string, CountryAggregate>)
 
-    return Object.values(countryMap)
+    return (Object.values(countryMap) as CountryAggregate[])
       .map((country) => ({
         countryLabel: country.countryLabel,
         airportCount: country.airportKeys.size,
@@ -1081,6 +1087,10 @@ useEffect(() => {
   const primaryCountryKpi = (() => {
     const focusRoutes = origin ? outgoingRoutes : incomingRoutes
     if (!focusRoutes.length) return null
+    type CountryFlightAggregate = {
+      countryLabel: string
+      totalFlights: number
+    }
 
     const focusLabel = origin ? 'ประเทศปลายทางมากสุด' : 'ประเทศต้นทางมากสุด'
     const selectedCountryLabel = origin
@@ -1100,9 +1110,9 @@ useEffect(() => {
 
       acc[countryLabel].totalFlights += 1
       return acc
-    }, {} as Record<string, { countryLabel: string; totalFlights: number }>)
+    }, {} as Record<string, CountryFlightAggregate>)
 
-    const rankedCountries = Object.values(grouped).sort((a, b) => {
+    const rankedCountries = (Object.values(grouped) as CountryFlightAggregate[]).sort((a, b) => {
       if (b.totalFlights !== a.totalFlights) return b.totalFlights - a.totalFlights
       return a.countryLabel.localeCompare(b.countryLabel)
     })
@@ -1123,9 +1133,9 @@ useEffect(() => {
       </h1> */}
 
       {/* Filter bar - responsive: stack on mobile */}
-      <Card className="p-3 sm:p-6 border bg-card">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <div className="space-y-2 min-w-0">
+      <Card className="overflow-hidden border bg-card p-4 sm:p-5 xl:p-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)] xl:items-start">
+          <div className="space-y-2.5 min-w-0">
             <Label className="text-sm font-medium text-muted-foreground">
               สนามบินต้นทาง (Departure)
             </Label>
@@ -1151,7 +1161,7 @@ useEffect(() => {
               />
             </div>
           </div>
-          <div className="space-y-2 min-w-0">
+          <div className="space-y-2.5 min-w-0">
             <Label className="text-sm font-medium text-muted-foreground">
               สนามบินปลายทาง (Arrival)
             </Label>
@@ -1177,25 +1187,25 @@ useEffect(() => {
               />
             </div>
           </div>
-          <div className="space-y-2 min-w-0">
+          <div className="space-y-2.5 min-w-0 xl:pl-1">
             <Label className="text-sm font-medium text-muted-foreground">
               ช่วงวันที่ (Start - End)
             </Label>
-            <div className="flex flex-wrap items-end gap-2 w-full min-w-0">
+            <div className="inline-flex min-h-[52px] max-w-full min-w-0 flex-wrap content-start items-end gap-2.5 border-b border-border/70 pb-1">
               <Button
                 type="button"
                 variant={durationMode === 'focus' ? 'default' : 'outline'}
                 size="sm"
-                className="h-8 px-3 text-xs sm:text-sm"
+                className="h-9 px-3.5 text-xs sm:text-sm"
                 onClick={() => applyPresetRange('focus')}
               >
-                รอบวัน
+                ± 15 วัน
               </Button>
               <Button
                 type="button"
                 variant={durationMode === '7' ? 'default' : 'outline'}
                 size="sm"
-                className="h-8 px-3 text-xs sm:text-sm"
+                className="h-9 px-3.5 text-xs sm:text-sm"
                 onClick={() => applyPresetRange('7')}
               >
                 7 วัน
@@ -1204,7 +1214,7 @@ useEffect(() => {
                 type="button"
                 variant={durationMode === '30' ? 'default' : 'outline'}
                 size="sm"
-                className="h-8 px-3 text-xs sm:text-sm"
+                className="h-9 px-3.5 text-xs sm:text-sm"
                 onClick={() => applyPresetRange('30')}
               >
                 30 วัน
@@ -1213,7 +1223,7 @@ useEffect(() => {
                 type="button"
                 variant={durationMode === 'all' ? 'default' : 'outline'}
                 size="sm"
-                className="h-8 px-3 text-xs sm:text-sm"
+                className="h-9 px-3.5 text-xs sm:text-sm"
                 onClick={() => applyPresetRange('all')}
               >
                 ทั้งหมด
@@ -1224,7 +1234,7 @@ useEffect(() => {
                     type="button"
                     variant={durationMode === '90' || durationMode === '180' || durationMode === '365' ? 'default' : 'outline'}
                     size="sm"
-                    className="h-8 px-3 text-xs sm:text-sm"
+                    className="h-9 px-3.5 text-xs sm:text-sm"
                   >
                     {extendedRangeLabel}
                     <ChevronDown className="ml-1 h-3.5 w-3.5" />
@@ -1262,13 +1272,13 @@ useEffect(() => {
                   </div>
                 </PopoverContent>
               </Popover>
-            </div>
-            <div className="space-y-2 pt-0.5">
               <button
                 type="button"
                 className={cn(
-                  'inline-flex items-center gap-1 text-sm font-medium transition-colors',
-                  showCustomDateRange ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  'inline-flex h-9 items-center gap-1 rounded-md border px-3.5 text-xs sm:text-sm font-medium leading-none transition-colors',
+                  showCustomDateRange
+                    ? 'border-primary/20 bg-muted/30 text-foreground'
+                    : 'border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground'
                 )}
                 onClick={handleCustomDateToggle}
               >
@@ -1280,19 +1290,21 @@ useEffect(() => {
                   )}
                 />
               </button>
+            </div>
+            <div className="space-y-2 pt-0">
               <div
                 className={cn(
                   'overflow-hidden transition-all duration-300 ease-in-out',
                   showCustomDateRange ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
                 )}
               >
-                <div className="flex gap-2 w-full min-w-0 pt-1">
+                <div className="grid w-full min-w-0 grid-cols-1 gap-2 pt-1 sm:grid-cols-2">
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
-                          'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
+                          'min-w-0 justify-start text-left font-normal h-11 sm:h-12 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2.5 sm:px-3',
                           !dateRange?.from && 'text-muted-foreground',
                           dateError && !dateRange?.from && 'border-red-500 ring-1 ring-red-500/20'
                         )}
@@ -1336,7 +1348,7 @@ useEffect(() => {
                       <Button
                         variant="outline"
                         className={cn(
-                          'flex-1 min-w-0 justify-start text-left font-normal h-12 sm:h-14 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2 sm:px-3',
+                          'min-w-0 justify-start text-left font-normal h-11 sm:h-12 bg-white border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/10 px-2.5 sm:px-3',
                           !dateRange?.to && 'text-muted-foreground'
                         )}
                       >
