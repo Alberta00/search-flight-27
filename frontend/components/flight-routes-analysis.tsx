@@ -195,6 +195,168 @@ const sidebarKpiUi = {
   emphasis: 'font-semibold text-foreground',
 }
 
+type RouteScope = 'all' | 'domestic' | 'international'
+
+const formatCountryLabel = (name?: string | null, code?: string | null) => {
+  if (name?.trim()) return name.trim()
+  if (code?.trim()) return code.trim()
+  return 'Unknown country'
+}
+
+const getRouteScope = (route: any): Exclude<RouteScope, 'all'> => {
+  const departureCountry = formatCountryLabel(route.departureCountryName, route.departureCountryCode)
+  const arrivalCountry = formatCountryLabel(route.arrivalCountryName, route.arrivalCountryCode)
+  return departureCountry === arrivalCountry ? 'domestic' : 'international'
+}
+
+function RouteColumnHeader({
+  title,
+  subtitle,
+  flights,
+  airports,
+  activeScope,
+  onScopeChange,
+  tone,
+}: {
+  title: string
+  subtitle?: string
+  flights: {
+    total: number
+    domestic: number
+    international: number
+  }
+  airports: number
+  activeScope: RouteScope
+  onScopeChange: (scope: RouteScope) => void
+  tone: 'incoming' | 'outgoing'
+}) {
+  const palette = tone === 'incoming'
+    ? {
+        card: 'border-blue-100 bg-blue-50/40',
+        iconWrap: 'bg-blue-500/10 text-blue-600',
+        count: 'text-blue-700',
+        active: 'border-blue-600 bg-blue-600 text-white shadow-md',
+        inactive: 'border-blue-200 bg-white text-blue-800 hover:bg-blue-50 hover:border-blue-300',
+        allActive: 'bg-slate-700 text-white border-slate-700 shadow-sm',
+        allInactive: 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200',
+        barDominant: 'bg-blue-600',
+        barSecondary: 'bg-blue-300',
+      }
+    : {
+        card: 'border-emerald-100 bg-emerald-50/40',
+        iconWrap: 'bg-emerald-500/10 text-emerald-600',
+        count: 'text-emerald-700',
+        active: 'border-emerald-600 bg-emerald-600 text-white shadow-md',
+        inactive: 'border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 hover:border-emerald-300',
+        allActive: 'bg-slate-700 text-white border-slate-700 shadow-sm',
+        allInactive: 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200',
+        barDominant: 'bg-emerald-600',
+        barSecondary: 'bg-emerald-300',
+      }
+
+  const DirectionIcon = tone === 'incoming' ? PlaneLanding : PlaneTakeoff
+
+  // จัดเรียงหา Dominant segment ของ flights
+  const sortedSegments = [
+    { key: 'international' as const, label: 'ต่างประเทศ', count: flights.international },
+    { key: 'domestic' as const, label: 'ในประเทศ', count: flights.domestic },
+  ].sort((a, b) => b.count - a.count)
+
+  return (
+    <div className={cn('flex flex-col justify-between rounded-xl border px-4 py-4 sm:px-5', palette.card)}>
+      {/* 1. Top Row: Strong Metric Hierarchy */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full', palette.iconWrap)}>
+            <DirectionIcon className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-base font-bold text-foreground">{title}</p>
+            {subtitle ? <p className="mt-0.5 text-xs font-medium text-muted-foreground">{subtitle}</p> : null}
+          </div>
+        </div>
+        <div className="shrink-0 text-right">
+          {/* Primary Metric: Flights */}
+          <p className={cn('text-2xl font-black tracking-tight leading-none', palette.count)}>
+            {new Intl.NumberFormat('en-US').format(flights.total)} <span className="text-sm font-semibold tracking-normal opacity-90">เที่ยวบิน</span>
+          </p>
+          {/* Secondary Metric: Airports */}
+          <p className="text-xs font-medium text-muted-foreground mt-1.5">
+            {new Intl.NumberFormat('en-US').format(airports)} สนามบิน
+          </p>
+        </div>
+      </div>
+
+      {/* 2 & 3. Segmented Control */}
+      <div className="mt-5 flex justify-end gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {/* Dominant and Secondary Segment */}
+        {sortedSegments.map((segment) => {
+          const isActive = activeScope === segment.key;
+          const pct = flights.total > 0 ? Math.round((segment.count / flights.total) * 100) : 0;
+          return (
+            <button
+              key={segment.key}
+              type="button"
+              onClick={() => onScopeChange(segment.key)}
+              className={cn(
+                'inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-left transition-all duration-200',
+                isActive ? palette.active : palette.inactive
+              )}
+            >
+              <span className="text-xs font-bold">
+                {segment.label}
+              </span>
+              <span className={cn(
+                "text-[11px] font-semibold px-1.5 py-0.5 rounded-md",
+                isActive ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"
+              )}>
+                {new Intl.NumberFormat('en-US').format(segment.count)} ({pct}%)
+              </span>
+            </button>
+          )
+        })}
+
+        {/* Ghost style Utility "All" */}
+        <button
+          type="button"
+          onClick={() => onScopeChange('all')}
+          className={cn(
+            'inline-flex h-9 shrink-0 items-center justify-center rounded-lg border px-3 transition-all duration-200 text-xs font-semibold',
+            activeScope === 'all' ? palette.allActive : palette.allInactive
+          )}
+        >
+          ทั้งหมด
+        </button>
+      </div>
+
+      {/* 5. Distribution Progress Bar */}
+      <div className="mt-3 flex h-1.5 w-full overflow-hidden rounded-full bg-slate-200/60">
+        {sortedSegments.map((segment, index) => {
+          const pct = flights.total > 0 ? (segment.count / flights.total) * 100 : 0;
+          if (pct === 0) return null;
+          
+          const isMuted = activeScope !== 'all' && activeScope !== segment.key;
+          const colorClass = isMuted
+            ? "bg-slate-300"
+            : (index === 0 ? palette.barDominant : palette.barSecondary);
+
+          return (
+            <div
+              key={segment.key}
+              style={{ width: `${pct}%` }}
+              className={cn(
+                "transition-all duration-500",
+                colorClass
+              )}
+              title={`${segment.label} ${pct.toFixed(1)}%`}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export function FlightRoutesAnalysis() {
   const ROUTE_GROUPS_PAGE_SIZE = 50
   const [origin, setOrigin] = useState('')
@@ -218,6 +380,8 @@ export function FlightRoutesAnalysis() {
   const [loading, setLoading] = useState(false)
   const [expandedRouteKey, setExpandedRouteKey] = useState<string | null>(null)
   const [visibleRouteGroupsCount, setVisibleRouteGroupsCount] = useState(ROUTE_GROUPS_PAGE_SIZE)
+  const [incomingRouteScope, setIncomingRouteScope] = useState<RouteScope>('all')
+  const [outgoingRouteScope, setOutgoingRouteScope] = useState<RouteScope>('all')
   const routeListRef = useRef<HTMLDivElement | null>(null)
 
   const applyDefaultQueryWindow = () => {
@@ -787,6 +951,7 @@ useEffect(() => {
         acc[key] = {
           airportName,
           airportCode,
+          scope: getRouteScope(route),
           flights: [],
         }
       }
@@ -800,6 +965,7 @@ useEffect(() => {
         key,
         airportName: value.airportName,
         airportCode: value.airportCode,
+        scope: value.scope as Exclude<RouteScope, 'all'>,
         flights: [...value.flights].sort((a: any, b: any) =>
           (a.departureTime || '').localeCompare(b.departureTime || '')
         ),
@@ -816,12 +982,42 @@ useEffect(() => {
 
   const outgoingRoutes = origin ? filteredRoutes : filteredRoutesCompare
   const incomingRoutes = origin ? filteredRoutesCompare : filteredRoutes
+  
+  // คำนวณจำนวนเที่ยวบินตาม Scope (Flights primary metric)
+  const calculateFlightStats = (routesData: any[]) => {
+    let domestic = 0;
+    let international = 0;
+    routesData.forEach(route => {
+      if (getRouteScope(route) === 'domestic') domestic++;
+      else international++;
+    });
+    return { total: routesData.length, domestic, international };
+  };
+  const incomingFlightCounts = calculateFlightStats(incomingRoutes);
+  const outgoingFlightCounts = calculateFlightStats(outgoingRoutes);
+
   const outgoingAirportGroups = buildAirportGroups(outgoingRoutes, 'outgoing')
   const incomingAirportGroups = buildAirportGroups(incomingRoutes, 'incoming')
-  const visibleIncomingGroups = incomingAirportGroups.slice(0, visibleRouteGroupsCount)
-  const visibleOutgoingGroups = outgoingAirportGroups.slice(0, visibleRouteGroupsCount)
+  const incomingGroupCounts = {
+    all: incomingAirportGroups.length,
+    domestic: incomingAirportGroups.filter((group) => group.scope === 'domestic').length,
+    international: incomingAirportGroups.filter((group) => group.scope === 'international').length,
+  }
+  const outgoingGroupCounts = {
+    all: outgoingAirportGroups.length,
+    domestic: outgoingAirportGroups.filter((group) => group.scope === 'domestic').length,
+    international: outgoingAirportGroups.filter((group) => group.scope === 'international').length,
+  }
+  const filteredIncomingGroups = incomingRouteScope === 'all'
+    ? incomingAirportGroups
+    : incomingAirportGroups.filter((group) => group.scope === incomingRouteScope)
+  const filteredOutgoingGroups = outgoingRouteScope === 'all'
+    ? outgoingAirportGroups
+    : outgoingAirportGroups.filter((group) => group.scope === outgoingRouteScope)
+  const visibleIncomingGroups = filteredIncomingGroups.slice(0, visibleRouteGroupsCount)
+  const visibleOutgoingGroups = filteredOutgoingGroups.slice(0, visibleRouteGroupsCount)
   const visibleRouteGroupTotal = Math.max(visibleIncomingGroups.length, visibleOutgoingGroups.length)
-  const routeGroupTotal = Math.max(incomingAirportGroups.length, outgoingAirportGroups.length)
+  const routeGroupTotal = Math.max(filteredIncomingGroups.length, filteredOutgoingGroups.length)
 
   const handleRouteListScroll = () => {
     const viewport = routeListRef.current?.querySelector('[data-radix-scroll-area-viewport], [data-slot="scroll-area-viewport"]') as HTMLDivElement | null
@@ -835,7 +1031,7 @@ useEffect(() => {
 
   useEffect(() => {
     setVisibleRouteGroupsCount(ROUTE_GROUPS_PAGE_SIZE)
-  }, [routeGroupTotal, origin, destination, dateRange?.from?.getTime(), dateRange?.to?.getTime()])
+  }, [routeGroupTotal, origin, destination, dateRange?.from?.getTime(), dateRange?.to?.getTime(), incomingRouteScope, outgoingRouteScope])
 
   const toggleRouteExpand = (key: string) => {
     setExpandedRouteKey(prev => prev === key ? null : key)
@@ -1031,12 +1227,6 @@ useEffect(() => {
     return carriers.size
   })()
 
-  const formatCountryLabel = (name?: string | null, code?: string | null) => {
-    if (name?.trim()) return name.trim()
-    if (code?.trim()) return code.trim()
-    return 'Unknown country'
-  }
-
   const mostConnectedCountry = (() => {
     if (!insightRoutes.length) return null
 
@@ -1082,48 +1272,6 @@ useEffect(() => {
         if (b.totalFlights !== a.totalFlights) return b.totalFlights - a.totalFlights
         return a.countryLabel.localeCompare(b.countryLabel)
       })[0] || null
-  })()
-
-  const primaryCountryKpi = (() => {
-    const focusRoutes = origin ? outgoingRoutes : incomingRoutes
-    if (!focusRoutes.length) return null
-    type CountryFlightAggregate = {
-      countryLabel: string
-      totalFlights: number
-    }
-
-    const focusLabel = origin ? 'ประเทศปลายทางมากสุด' : 'ประเทศต้นทางมากสุด'
-    const selectedCountryLabel = origin
-      ? formatCountryLabel(focusRoutes[0]?.departureCountryName, focusRoutes[0]?.departureCountryCode)
-      : formatCountryLabel(focusRoutes[0]?.arrivalCountryName, focusRoutes[0]?.arrivalCountryCode)
-    const grouped = focusRoutes.reduce((acc, route) => {
-      const countryLabel = origin
-        ? formatCountryLabel(route.arrivalCountryName, route.arrivalCountryCode)
-        : formatCountryLabel(route.departureCountryName, route.departureCountryCode)
-
-      if (!acc[countryLabel]) {
-        acc[countryLabel] = {
-          countryLabel,
-          totalFlights: 0,
-        }
-      }
-
-      acc[countryLabel].totalFlights += 1
-      return acc
-    }, {} as Record<string, CountryFlightAggregate>)
-
-    const rankedCountries = (Object.values(grouped) as CountryFlightAggregate[]).sort((a, b) => {
-      if (b.totalFlights !== a.totalFlights) return b.totalFlights - a.totalFlights
-      return a.countryLabel.localeCompare(b.countryLabel)
-    })
-
-    if (!rankedCountries.length) return null
-
-    return {
-      label: focusLabel,
-      selectedCountryLabel,
-      ...rankedCountries[0],
-    }
   })()
 
   return (
@@ -1438,40 +1586,24 @@ useEffect(() => {
                     : `เส้นทางการบิน (${formatDisplayNumber(filteredRoutes.length + filteredRoutesCompare.length)} เที่ยวบิน)`}
                 </h2>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                  <div className="rounded-xl border bg-blue-50/60 border-blue-100 px-4 sm:px-5 py-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 shrink-0">
-                          <PlaneLanding className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0 space-y-0.5">
-                          <p className="text-sm font-semibold text-foreground">มาจาก</p>
-                          <p className="text-xs text-muted-foreground">สนามบินต้นทางที่บินเข้ามา</p>
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0 pl-3">
-                        <p className="text-lg font-bold text-blue-700">{incomingAirportGroups.length.toLocaleString('th-TH')}</p>
-                        <p className="text-[11px] text-muted-foreground">สนามบิน</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="rounded-xl border bg-emerald-50/60 border-emerald-100 px-4 sm:px-5 py-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 shrink-0">
-                          <PlaneTakeoff className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0 space-y-0.5">
-                          <p className="text-sm font-semibold text-foreground">ไปยัง</p>
-                          <p className="text-xs text-muted-foreground">สนามบินปลายทางที่บินออกไป</p>
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0 pl-3">
-                        <p className="text-lg font-bold text-emerald-700">{outgoingAirportGroups.length.toLocaleString('th-TH')}</p>
-                        <p className="text-[11px] text-muted-foreground">สนามบิน</p>
-                      </div>
-                    </div>
-                  </div>
+                  <RouteColumnHeader
+                    title="มาจาก"
+                    subtitle="สนามบินต้นทางที่บินเข้ามา"
+                    flights={incomingFlightCounts}
+                    airports={incomingGroupCounts.all}
+                    activeScope={incomingRouteScope}
+                    onScopeChange={setIncomingRouteScope}
+                    tone="incoming"
+                  />
+                  <RouteColumnHeader
+                    title="ไปยัง"
+                    subtitle="สนามบินปลายทางที่บินออกไป"
+                    flights={outgoingFlightCounts}
+                    airports={outgoingGroupCounts.all}
+                    activeScope={outgoingRouteScope}
+                    onScopeChange={setOutgoingRouteScope}
+                    tone="outgoing"
+                  />
                 </div>
               </div>
               <ScrollArea
@@ -1480,14 +1612,18 @@ useEffect(() => {
                 className="h-[500px] sm:h-[600px] w-full rounded-md border bg-muted/20"
               >
                 <div className="p-2 sm:p-3">
-                  {(incomingAirportGroups.length > 0 || outgoingAirportGroups.length > 0) ? (
+                  {(filteredIncomingGroups.length > 0 || filteredOutgoingGroups.length > 0) ? (
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 items-start">
                       <div className="space-y-3">
                         {visibleIncomingGroups.length > 0 ? (
                           visibleIncomingGroups.map((group) => renderAirportRouteCard(group, 'incoming'))
                         ) : (
                           <div className="rounded-xl border bg-background px-5 py-10 text-center text-sm text-muted-foreground">
-                            ไม่มีเส้นทางขาเข้าในช่วงวันที่เลือก
+                            {incomingRouteScope === 'all'
+                              ? 'ไม่มีเส้นทางขาเข้าในช่วงวันที่เลือก'
+                              : incomingRouteScope === 'domestic'
+                                ? 'ไม่มีเส้นทางขาเข้าในประเทศ'
+                                : 'ไม่มีเส้นทางขาเข้าต่างประเทศ'}
                           </div>
                         )}
                       </div>
@@ -1497,7 +1633,11 @@ useEffect(() => {
                           visibleOutgoingGroups.map((group) => renderAirportRouteCard(group, 'outgoing'))
                         ) : (
                           <div className="rounded-xl border bg-background px-5 py-10 text-center text-sm text-muted-foreground">
-                            ไม่มีเส้นทางขาออกในช่วงวันที่เลือก
+                            {outgoingRouteScope === 'all'
+                              ? 'ไม่มีเส้นทางขาออกในช่วงวันที่เลือก'
+                              : outgoingRouteScope === 'domestic'
+                                ? 'ไม่มีเส้นทางขาออกในประเทศ'
+                                : 'ไม่มีเส้นทางขาออกต่างประเทศ'}
                           </div>
                         )}
                       </div>
@@ -1591,24 +1731,6 @@ useEffect(() => {
                   </p>
                   <p className={sidebarKpiUi.meta}>
                     เชื่อมต่อ {formatDisplayNumber(mostConnectedCountry.airportCount)} สนามบิน
-                  </p>
-                </div>
-              )}
-              {primaryCountryKpi && (
-                <div className={sidebarKpiUi.card}>
-                  <p className={sidebarKpiUi.title}>
-                    {primaryCountryKpi.label}
-                  </p>
-                  <p className={sidebarKpiUi.heroLarge}>
-                    {formatDisplayNumber(primaryCountryKpi.totalFlights)} <span className={sidebarKpiUi.unitInline}>เที่ยวบิน</span>
-                  </p>
-                  <p className={sidebarKpiUi.body}>
-                    บิน{' '}
-                    <span className={sidebarKpiUi.emphasis}>
-                      {primaryCountryKpi.countryLabel === primaryCountryKpi.selectedCountryLabel
-                        ? 'ภายในประเทศ'
-                        : `${origin ? 'ไปยัง' : 'มาจาก'} ${primaryCountryKpi.countryLabel}`}
-                    </span>
                   </p>
                 </div>
               )}
