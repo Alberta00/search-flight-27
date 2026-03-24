@@ -5,7 +5,7 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, differenceInDays, parseISO } from 'date-fns'
+import { format, differenceInDays, parseISO, addDays, subDays } from 'date-fns'
 import { th } from 'date-fns/locale/th'
 import dynamic from 'next/dynamic'
 
@@ -34,6 +34,7 @@ const chartUiConfig = {
   colors: {
     arrival: 'hsl(221, 83%, 53%)',
     departure: 'hsl(142, 76%, 36%)',
+    combined: 'hsl(212, 76%, 35%)',
     grid: 'hsl(var(--border))',
     axis: 'hsl(var(--muted-foreground))',
     tickLine: 'hsl(var(--primary))',
@@ -77,6 +78,7 @@ const chartUiConfig = {
     bgcolor: 'rgba(255, 255, 255, 0.95)',
     bordercolor: 'rgba(226, 232, 240, 1)',
     fontColor: 'rgba(15, 23, 42, 1)',
+    fontFamily: 'Arial, sans-serif',
     nameLength: -1, // -1 หมายถึงแสดงข้อความแบบไม่จำกัดความยาว
   },
   zoomSliders: {
@@ -117,10 +119,11 @@ export function FlightRoutesChart({
   const [yGapStep, setYGapStep] = useState(4)
   const zoomDialogRef = useRef<HTMLDivElement>(null)
 
-  const mainLabel = isDeparture ? 'ขาออก (Departure)' : 'ขาเข้า (Arrival)'
-  const compareLabel = isDeparture ? 'ขาเข้า (Arrival)' : 'ขาออก (Departure)'
+  const mainLabel = isDeparture ? 'ขาออก' : 'ขาเข้า '
+  const compareLabel = isDeparture ? 'ขาเข้า ' : 'ขาออก '
   const mainBaseColor = isDeparture ? colors.departure : colors.arrival
   const compareBaseColor = isDeparture ? colors.arrival : colors.departure
+  const combinedBaseColor = colors.combined
   const legendItems = [
     {
       key: 'departure' as const,
@@ -134,7 +137,7 @@ export function FlightRoutesChart({
     }] : []),
     ...(compareMode ? [{
       key: 'all' as const,
-      label: 'สองเส้นทาง',
+      label: 'รวม',
       targetSeries: 'all' as const,
     }] : []),
   ]
@@ -145,10 +148,20 @@ export function FlightRoutesChart({
     }
   }, [compareMode])
 
+  const getCombinedFlights = (item: any) => {
+    const flights = typeof item.flights === 'number' ? item.flights : 0
+    const flightsCompare = typeof item.flightsCompare === 'number' ? item.flightsCompare : 0
+    return flights + flightsCompare
+  }
+
   const getSeriesTone = (series: 'main' | 'compare') => {
     const isMuted = activeSeries !== 'all' && activeSeries !== series
 
-    const activeColor = series === 'main' ? mainBaseColor : compareBaseColor
+    const activeColor = compareMode && activeSeries === 'all'
+      ? combinedBaseColor
+      : series === 'main'
+        ? mainBaseColor
+        : compareBaseColor
 
     return {
       stroke: isMuted ? 'rgba(148, 163, 184, 0.5)' : activeColor,
@@ -180,30 +193,7 @@ export function FlightRoutesChart({
           onClick={() => handleLegendSelect(item.targetSeries)}
           className={`${legend.item} ${getLegendButtonClass(item.targetSeries)}`}
         >
-          {item.targetSeries === 'all' ? (
-            <span className="inline-flex items-center gap-1.5 shrink-0">
-              <span className={legend.marker.wrapper}>
-                <span
-                  className={legend.marker.line}
-                  style={{ backgroundColor: mainBaseColor }}
-                />
-                <span
-                  className={legend.marker.point}
-                  style={{ backgroundColor: mainBaseColor }}
-                />
-              </span>
-              <span className={legend.marker.wrapper}>
-                <span
-                  className={legend.marker.line}
-                  style={{ backgroundColor: compareBaseColor }}
-                />
-                <span
-                  className={legend.marker.point}
-                  style={{ backgroundColor: compareBaseColor }}
-                />
-              </span>
-            </span>
-          ) : (
+          {item.targetSeries === 'all' ? null : (
             <span className={legend.marker.wrapper}>
               <span
                 className={`${legend.marker.line} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
@@ -311,6 +301,12 @@ export function FlightRoutesChart({
     let minVal = Infinity
     let maxVal = -Infinity
     for (const item of zoomedChartData) {
+      if (compareMode && activeSeries === 'all') {
+        const combinedFlights = getCombinedFlights(item)
+        minVal = Math.min(minVal, combinedFlights)
+        maxVal = Math.max(maxVal, combinedFlights)
+        continue
+      }
       if (typeof item.flights === 'number') {
         minVal = Math.min(minVal, item.flights)
         maxVal = Math.max(maxVal, item.flights)
@@ -364,19 +360,40 @@ export function FlightRoutesChart({
   const showCompareTooltip = compareMode && (activeSeries === 'all' || activeSeries === 'compare')
   const mainActiveDot = showMainTooltip ? { r: 4, fill: mainTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
   const compareActiveDot = showCompareTooltip ? { r: 4, fill: compareTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
+  const xAxisBounds = (() => {
+    if (!zoomedChartData.length) return undefined
+
+    const firstDate = parseISO(zoomedChartData[0].date)
+    const lastDate = parseISO(zoomedChartData[zoomedChartData.length - 1].date)
+
+    // Plotly needs a non-zero date window for single-day views.
+    if (zoomedChartData.length === 1 || firstDate.getTime() === lastDate.getTime()) {
+      return {
+        min: subDays(firstDate, 1).toISOString(),
+        max: addDays(lastDate, 1).toISOString(),
+      }
+    }
+
+    return {
+      min: firstDate.toISOString(),
+      max: lastDate.toISOString(),
+    }
+  })()
   const todayKey = format(new Date(), 'yyyy-MM-dd')
   const isTodayVisible = zoomedChartData.some((item: any) => item.date === todayKey)
 
   const traces = [
     {
       x: zoomedChartData.map((d: any) => d.date),
-      y: zoomedChartData.map((d: any) => d.flights),
+      y: zoomedChartData.map((d: any) =>
+        compareMode && activeSeries === 'all' ? getCombinedFlights(d) : d.flights
+      ),
       type: 'scatter',
       mode: chartUiConfig.lines.showMarkers ? 'lines+markers' : 'lines',
-      name: mainLabel,
+      name: compareMode && activeSeries === 'all' ? 'ขาออก + ขาเข้า' : mainLabel,
       line: { color: mainTone.stroke, width: chartUiConfig.lines.lineWidth, shape: 'spline' },
       marker: { color: mainTone.stroke, size: chartUiConfig.lines.markerSize },
-      visible: activeSeries === 'all' || activeSeries === 'main' ? true : 'legendonly',
+      visible: compareMode ? true : activeSeries === 'all' || activeSeries === 'main' ? true : 'legendonly',
       fill: 'tozeroy',
       fillcolor: mainTone.fillcolor,
     },
@@ -388,7 +405,7 @@ export function FlightRoutesChart({
       name: compareLabel,
       line: { color: compareTone.stroke, width: chartUiConfig.lines.lineWidth, shape: 'spline' },
       marker: { color: compareTone.stroke, size: chartUiConfig.lines.markerSize },
-      visible: activeSeries === 'all' || activeSeries === 'compare' ? true : 'legendonly',
+      visible: activeSeries !== 'all' ? true : 'legendonly',
       fill: 'tozeroy',
       fillcolor: compareTone.fillcolor,
     }] : [])
@@ -399,6 +416,9 @@ export function FlightRoutesChart({
     margin: layout.chartMargin,
     xaxis: {
       automargin: true,
+      range: xAxisBounds ? [xAxisBounds.min, xAxisBounds.max] : undefined,
+      minallowed: xAxisBounds?.min,
+      maxallowed: xAxisBounds?.max,
       tickfont: { size: fonts.xTick, color: colors.axis },
       gridcolor: colors.grid,
       griddash: (grid.strokeDasharray ? 'dash' : 'solid') as 'dash' | 'solid',
@@ -418,13 +438,14 @@ export function FlightRoutesChart({
       griddash: (grid.strokeDasharray ? 'dash' : 'solid') as 'dash' | 'solid',
       showgrid: true,
       range: [yAxisMin, yAxisMax],
+      minallowed: -1,
       zeroline: false,
     },
     showlegend: false,
     hovermode: 'x unified' as const,
     dragmode: 'zoom' as const,
     hoverlabel: {
-      font: { size: fonts.tooltipText, family: 'inherit', color: tooltip.fontColor },
+      font: { size: fonts.tooltipText, family: tooltip.fontFamily, color: tooltip.fontColor },
       bgcolor: tooltip.bgcolor,
       bordercolor: tooltip.bordercolor,
       namelength: tooltip.nameLength,
@@ -461,7 +482,7 @@ export function FlightRoutesChart({
   return (
     <>
       {/* Daily frequency chart - responsive */}
-      <Card className={`${layout.cardPadding} border min-w-0 overflow-hidden flight-routes-accent`}>
+      <Card className={`${layout.cardPadding} border min-w-0 overflow-visible flight-routes-accent`}>
         <div className={`flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between ${layout.headerGap} mb-3 sm:mb-4`}>
           <h1
             className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0"
@@ -494,8 +515,8 @@ export function FlightRoutesChart({
             {renderChartLegend()}
           </div>
         </div>
-        <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
-          <div className={`relative ${layout.chartHeight} w-full ${layout.chartMinWidth} flight-routes-accent`}>
+        <div className="w-full min-w-0 overflow-x-auto overflow-y-visible -mx-1 px-1">
+          <div className={`relative overflow-visible ${layout.chartHeight} w-full ${layout.chartMinWidth} flight-routes-accent`}>
              <Plot
                data={traces as any}
                layout={plotlyLayout as any}
@@ -541,7 +562,7 @@ export function FlightRoutesChart({
               {renderChartLegend()}
             </div>
             <div className="w-full min-w-0 mt-2">
-              <div className={`relative ${layout.chartHeightZoom} w-full ${layout.chartMinWidthZoom} flight-routes-accent`}>
+              <div className={`relative overflow-visible ${layout.chartHeightZoom} w-full ${layout.chartMinWidthZoom} flight-routes-accent`}>
                  <Plot
                    data={traces as any}
                    layout={{...plotlyLayout, margin: layout.chartMarginZoom } as any}
