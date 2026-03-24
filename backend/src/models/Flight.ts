@@ -1143,15 +1143,25 @@ export class FlightModel {
         departure_date,
         arrival_date,
         dep_airport as departure_code,
-          arr_airport as arrival_code,
-          destination as destination_name,
-          airline_code,
-          airline_name,
-          flight_number,
-          stops = 0 as direct,
-          departure_time,
-          duration
+        arr_airport as arrival_code,
+        destination as destination_name,
+        airline_code,
+        airline_name,
+        flight_number,
+        stops = 0 as direct,
+        departure_time,
+        duration,
+        dep_airport_ref.name as departure_airport_name,
+        arr_airport_ref.name as arrival_airport_name,
+        dep_airport_ref.country_name as departure_country_name,
+        dep_airport_ref.country_code as departure_country_code,
+        arr_airport_ref.country_name as arrival_country_name,
+        arr_airport_ref.country_code as arrival_country_code
       FROM ${tableName}
+      -- Join airport reference data so the route list can show full airport names
+      -- Normalize airport codes in the join because flight-path records can carry mixed case or padded values
+      LEFT JOIN airports dep_airport_ref ON UPPER(TRIM(dep_airport_ref.code)) = UPPER(TRIM(dep_airport))
+      LEFT JOIN airports arr_airport_ref ON UPPER(TRIM(arr_airport_ref.code)) = UPPER(TRIM(arr_airport))
       WHERE ${isDeparture ? 'dep_airport' : 'arr_airport'} = $1
         ${selectedDateStr
         ? `AND ${isDeparture ? 'departure_date' : 'arrival_date'} = $2`
@@ -1256,12 +1266,6 @@ export class FlightModel {
         flights: r.flights
       })),
       routes: routesResult.rows.map(r => {
-        // Extract city from "CODE City" format if available
-        let arrivalCity = r.destination_name || r.arrival_code;
-        if (isDeparture && r.destination_name && r.destination_name.includes(' ')) {
-          arrivalCity = r.destination_name.substring(r.destination_name.indexOf(' ') + 1);
-        }
-
         // Format departure time as HH:mm
         const depTime = r.departure_time != null
           ? (() => {
@@ -1280,9 +1284,15 @@ export class FlightModel {
 
         return {
           departureCode: r.departure_code,
-          departureName: isDeparture ? airportParam : r.departure_code,
+          // Prefer joined airport names over codes so downstream UI can render full labels
+          departureName: r.departure_airport_name || r.departure_code,
+          // Expose country metadata so the analysis UI can compute country-level KPIs
+          departureCountryName: r.departure_country_name,
+          departureCountryCode: r.departure_country_code,
           arrivalCode: r.arrival_code,
-          arrivalCity: arrivalCity,
+          arrivalCity: r.arrival_airport_name || r.destination_name || r.arrival_code,
+          arrivalCountryName: r.arrival_country_name,
+          arrivalCountryCode: r.arrival_country_code,
           direct: r.direct,
           airlineCode: r.airline_code,
           airlineName: r.airline_name || r.airline_code,
@@ -1405,9 +1415,10 @@ export class FlightModel {
     // Calculate days difference
     const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    // If range is small (<= 60 days), return ALL flights (Daily view)
-    // If range is large, return DISTINCT routes (Schedule view)
-    const useDistinct = diffDays > 60;
+    // Country-level queries can explode in size for large markets like CN,
+    // so keep the routes list compact by default.
+    const useDistinct = true;
+    const routeLimit = 500;
 
     const routesQuery = `
       SELECT ${useDistinct ? 'DISTINCT ON(dep_airport, arr_airport, airline_code, flight_number, departure_time)' : ''}
@@ -1421,14 +1432,26 @@ export class FlightModel {
         departure_time,
         duration,
         a.name as airport_name,
-        a.city as airport_city
+        a.city as airport_city,
+        dep_airport_ref.name as departure_airport_name,
+        arr_airport_ref.name as arrival_airport_name,
+        dep_airport_ref.country_name as departure_country_name,
+        dep_airport_ref.country_code as departure_country_code,
+        arr_airport_ref.country_name as arrival_country_name,
+        arr_airport_ref.country_code as arrival_country_code
       FROM ${tableName} fp
       JOIN airports a ON fp.${joinColumn} = a.code
+      -- Join both route endpoints so country analysis can also return full airport names
+      -- Normalize airport codes in the join because flight-path records can carry mixed case or padded values
+      LEFT JOIN airports dep_airport_ref ON UPPER(TRIM(dep_airport_ref.code)) = UPPER(TRIM(fp.dep_airport))
+      LEFT JOIN airports arr_airport_ref ON UPPER(TRIM(arr_airport_ref.code)) = UPPER(TRIM(fp.arr_airport))
       WHERE ${whereClause}
         ${selectedDateStr ? 'AND departure_date = $2' : 'AND departure_date >= $2 AND departure_date <= $3'}
       ORDER BY ${useDistinct ? 'dep_airport, arr_airport, airline_code, flight_number, departure_time' : 'departure_date, departure_time'}
+      LIMIT ${selectedDateStr ? '$3' : '$4'}
     `;
-    const routesResult = await pool.query(routesQuery, routesQueryParams);
+    const routesResult = await pool.query(routesQuery, [...routesQueryParams, routeLimit]);
+    console.log(`[FlightModel] Country routes returned: ${routesResult.rows.length} (limit ${routeLimit})`);
 
     // 3. Summary Stats (Stats for Selected Date)
 
@@ -1518,11 +1541,6 @@ export class FlightModel {
         flights: r.flights
       })),
       routes: routesResult.rows.map(r => {
-        let arrivalCity = r.destination_name || r.arrival_code;
-        if (isDeparture && r.destination_name && r.destination_name.includes(' ')) {
-          arrivalCity = r.destination_name.substring(r.destination_name.indexOf(' ') + 1);
-        }
-
         const depTime = r.departure_time != null
           ? (() => {
             const d = new Date(r.departure_time);
@@ -1539,10 +1557,15 @@ export class FlightModel {
 
         return {
           departureCode: r.departure_code,
-          // Use airport name if available (from join), otherwise fallback to country name or code
-          departureName: isDeparture ? (r.airport_name || countryName) : r.departure_code,
+          // Prefer joined airport names over codes so downstream UI can render full labels
+          departureName: r.departure_airport_name || r.airport_name || r.departure_code,
+          // Expose country metadata so the analysis UI can compute country-level KPIs
+          departureCountryName: r.departure_country_name,
+          departureCountryCode: r.departure_country_code,
           arrivalCode: r.arrival_code,
-          arrivalCity: arrivalCity,
+          arrivalCity: r.arrival_airport_name || r.destination_name || r.arrival_code,
+          arrivalCountryName: r.arrival_country_name,
+          arrivalCountryCode: r.arrival_country_code,
           direct: r.direct,
           airlineCode: r.airline_code,
           airlineName: r.airline_name || r.airline_code,

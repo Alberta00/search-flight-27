@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import { Search, MapPin, Plane, Globe, Loader2, X } from 'lucide-react'
-import { Airport, airportApi } from '@/lib/api/airport-api'
+import React, { useEffect, useRef, useState } from 'react'
+import { Search, MapPin, Plane, Globe, Loader2, X, ChevronDown, ChevronUp } from 'lucide-react'
+import { Airport, AirportCountrySummary, airportApi } from '@/lib/api/airport-api'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDebouncedCallback } from '@/lib/hooks/use-debounce'
-import { localizeAirport, mapThaiInputToEnglish, hasThaiCharacters } from '@/lib/services/thai-translation-service'
 import { cn } from '@/lib/utils'
 import {
     Popover,
@@ -13,13 +12,40 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-/** กรุงเทพมี 2 สนามบิน — เวลาเลือกต้นทาง/ปลายทางเป็นกรุงเทพ ให้ซ่อนทั้งคู่ในอีกฝั่ง */
 const BANGKOK_AIRPORT_CODES = ['BKK', 'DMK']
+
+interface CountryAirportGroup {
+    country: string
+    countryCode: string | null
+    airportCount: number
+    airports: Airport[]
+    isLoaded: boolean
+    isLoading: boolean
+}
 
 function codesToExclude(code: string | undefined): string[] {
     if (!code) return []
     if (BANGKOK_AIRPORT_CODES.includes(code)) return BANGKOK_AIRPORT_CODES
     return [code]
+}
+
+function getAirportDisplayName(airport: Airport) {
+    const isBangkokAirport = BANGKOK_AIRPORT_CODES.includes(airport.code)
+    return isBangkokAirport ? airport.name : (airport.city || airport.name)
+}
+
+function getAirportDisplayDetail(airport: Airport) {
+    const isBangkokAirport = BANGKOK_AIRPORT_CODES.includes(airport.code)
+    return isBangkokAirport
+        ? `${airport.city}, ${airport.country_name}`
+        : `${airport.name}, ${airport.country_name}`
+}
+
+function buildDisplayValue(airport: Airport) {
+    const isBangkokAirport = BANGKOK_AIRPORT_CODES.includes(airport.code)
+    return isBangkokAirport
+        ? `${airport.name} (${airport.code})`
+        : `${airport.city || airport.name} (${airport.code})`
 }
 
 interface DestinationSelectProps {
@@ -29,7 +55,7 @@ interface DestinationSelectProps {
     placeholder?: string
     className?: string
     error?: string
-    excludeCode?: string // Airport code to exclude from results (e.g., the other field's value)
+    excludeCode?: string
     disabled?: boolean
     enableCountrySelection?: boolean
 }
@@ -38,54 +64,89 @@ export function DestinationSelect({
     value,
     displayValue,
     onChange,
-    placeholder = 'ค้นหาเมือง หรือ สนามบิน',
+    placeholder = 'Search city or airport',
     className,
     error,
     excludeCode,
     disabled = false,
-    enableCountrySelection = false
+    enableCountrySelection = false,
 }: DestinationSelectProps) {
     const [search, setSearch] = useState('')
     const [results, setResults] = useState<Airport[]>([])
     const [searchTotal, setSearchTotal] = useState(0)
     const [totalAirportsInSystem, setTotalAirportsInSystem] = useState<number | null>(null)
-    const [popular, setPopular] = useState<Airport[]>([])
+    const [countryGroups, setCountryGroups] = useState<CountryAirportGroup[]>([])
+    const [expandedCountries, setExpandedCountries] = useState<Record<string, boolean>>({})
     const [isLoading, setIsLoading] = useState(false)
     const [selectedName, setSelectedName] = useState('')
-    const inputRef = useRef<HTMLInputElement>(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+    const inputRef = useRef<HTMLInputElement>(null)
 
-    // Load popular destinations and total airport count on mount
-    useEffect(() => {
-        const loadPopular = async () => {
-            try {
-                // Split promises to handle failures independently (e.g. if DB is down for count but popular is cached/static)
-                const popularPromise = airportApi.getPopularAirports(8).catch(err => {
-                    console.error('Failed to load popular airports', err)
-                    return []
-                })
-                
-                const totalPromise = airportApi.getTotalCount().catch(err => {
-                    console.error('Failed to load total count', err)
-                    return null
-                })
+    const applyExcludedCodes = (airports: Airport[]) => {
+        const excludeCodes = codesToExclude(excludeCode)
+        return excludeCodes.length > 0
+            ? airports.filter((airport) => !excludeCodes.includes(airport.code))
+            : airports
+    }
 
-                const [data, total] = await Promise.all([popularPromise, totalPromise])
-                const localizedData = data.map(localizeAirport)
-                const excludeCodes = codesToExclude(excludeCode)
-                const filteredData = excludeCodes.length > 0
-                    ? localizedData.filter(airport => !excludeCodes.includes(airport.code))
-                    : localizedData
-                setPopular(filteredData)
-                setTotalAirportsInSystem(total)
-            } catch (err) {
-                console.error('Failed to load initial data', err)
+    const normalizeAirports = (airports: Airport[]) => {
+        const unique = new Map<string, Airport>()
+
+        for (const airport of applyExcludedCodes(airports)) {
+            if (!unique.has(airport.code)) {
+                unique.set(airport.code, airport)
             }
         }
-        loadPopular()
+
+        return Array.from(unique.values()).sort((a, b) =>
+            getAirportDisplayName(a).localeCompare(getAirportDisplayName(b))
+        )
+    }
+
+    useEffect(() => {
+        const loadCountries = async () => {
+            setIsLoading(true)
+
+            try {
+                const response = await airportApi.getAirportCountries()
+                const nextGroups = response.countries.map((country: AirportCountrySummary) => ({
+                    country: country.country,
+                    countryCode: country.country_code,
+                    airportCount: country.airport_count,
+                    airports: [],
+                    isLoaded: false,
+                    isLoading: false,
+                }))
+
+                console.log('[DestinationSelect] countries summary', {
+                    totalCountries: response.totalCountries,
+                    totalAirports: response.totalAirports,
+                })
+
+                setCountryGroups(nextGroups)
+                setTotalAirportsInSystem(response.totalAirports)
+                setExpandedCountries({})
+            } catch (err) {
+                console.error('[DestinationSelect] failed to load country summary', err)
+                setCountryGroups([])
+                setTotalAirportsInSystem(null)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        loadCountries()
+    }, [])
+
+    useEffect(() => {
+        setCountryGroups((prev) =>
+            prev.map((group) => ({
+                ...group,
+                airports: group.isLoaded ? normalizeAirports(group.airports) : group.airports,
+            }))
+        )
     }, [excludeCode])
 
-    // Sync selected name if value changes externally
     useEffect(() => {
         if (!value) {
             setSelectedName('')
@@ -93,7 +154,6 @@ export function DestinationSelect({
             return
         }
 
-        // If displayValue is provided, use it directly
         if (displayValue) {
             setSelectedName(displayValue)
             return
@@ -102,40 +162,41 @@ export function DestinationSelect({
         const fetchName = async () => {
             try {
                 const details = await airportApi.getAirportDetails(value)
-                const localized = localizeAirport(details)
-                // For Bangkok airports (BKK, DMK), show airport name instead of city
-                const isBangkokAirport = localized.code === 'BKK' || localized.code === 'DMK'
-                const displayName = isBangkokAirport
-                    ? `${localized.name} (${localized.code})`
-                    : `${localized.city || localized.name} (${localized.code})`
-                setSelectedName(displayName)
-            } catch (err) {
-                // Fallback if not found
-                if (!selectedName) setSelectedName(value)
+                setSelectedName(buildDisplayValue(details))
+            } catch {
+                setSelectedName((prev) => prev || value)
             }
         }
 
         if (value && !selectedName.includes(value)) {
             fetchName()
         }
-    }, [value, displayValue])
+    }, [value, displayValue, selectedName])
 
     const debouncedSearch = useDebouncedCallback(async (query: string) => {
         if (!query || query.length < 2) {
             setResults([])
+            setSearchTotal(0)
             setIsLoading(false)
             return
         }
 
         setIsLoading(true)
+
         try {
-            const apiQuery = hasThaiCharacters(query) ? mapThaiInputToEnglish(query) : query
+            const apiQuery = query.trim()
             const { data, total } = await airportApi.searchAirports(apiQuery)
-            const excludeCodes = codesToExclude(excludeCode)
-            const filteredData = excludeCodes.length > 0
-                ? data.filter(airport => !excludeCodes.includes(airport.code))
-                : data
-            setResults(filteredData.map(localizeAirport))
+            const normalized = normalizeAirports(data)
+
+            console.log('[DestinationSelect] search results', {
+                query,
+                apiQuery,
+                apiCount: data.length,
+                total,
+                normalizedCount: normalized.length,
+            })
+
+            setResults(normalized)
             setSearchTotal(total)
         } catch (err) {
             console.error('Search failed', err)
@@ -146,26 +207,82 @@ export function DestinationSelect({
         }
     }, 300)
 
+    const loadCountryAirports = async (group: CountryAirportGroup) => {
+        if (group.isLoaded || group.isLoading) return
+
+        setCountryGroups((prev) =>
+            prev.map((item) =>
+                item.country === group.country
+                    ? { ...item, isLoading: true }
+                    : item
+            )
+        )
+
+        try {
+            const response = await airportApi.getAirportsByCountry(group.countryCode || group.country)
+            const normalized = normalizeAirports(
+                response.airports.filter((airport) => airport.has_flight !== false)
+            )
+
+            console.log('[DestinationSelect] country airports loaded', {
+                country: group.country,
+                total: response.total,
+                normalizedCount: normalized.length,
+            })
+
+            setCountryGroups((prev) =>
+                prev.map((item) =>
+                    item.country === group.country
+                        ? {
+                            ...item,
+                            airports: normalized,
+                            airportCount: response.total,
+                            isLoaded: true,
+                            isLoading: false,
+                        }
+                        : item
+                )
+            )
+        } catch (err) {
+            console.error(`[DestinationSelect] failed to load airports for ${group.country}`, err)
+            setCountryGroups((prev) =>
+                prev.map((item) =>
+                    item.country === group.country
+                        ? { ...item, isLoading: false }
+                        : item
+                )
+            )
+        }
+    }
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
         setSearch(val)
         debouncedSearch(val)
-        // Open popover when typing
+
         if (!isPopoverOpen) {
             setIsPopoverOpen(true)
         }
     }
 
     const handleSelect = (airport: Airport) => {
-        // For Bangkok airports (BKK, DMK), show airport name instead of city
-        const isBangkokAirport = airport.code === 'BKK' || airport.code === 'DMK'
-        const displayName = isBangkokAirport 
-            ? `${airport.name} (${airport.code})`
-            : `${airport.city || airport.name} (${airport.code})`
+        const displayName = buildDisplayValue(airport)
         setSelectedName(displayName)
         setSearch('')
+        setResults([])
         setIsPopoverOpen(false)
         onChange(airport.code, displayName)
+    }
+
+    const handleSelectCountry = (group: CountryAirportGroup) => {
+        const valueToSend = group.countryCode || group.country
+        const displayName = `${group.country} (All airports)`
+
+        setSelectedName(displayName)
+        setSearch('')
+        setResults([])
+        setIsPopoverOpen(false)
+        onChange(valueToSend, displayName)
     }
 
     const clearSelection = (e: React.MouseEvent) => {
@@ -173,8 +290,9 @@ export function DestinationSelect({
         e.preventDefault()
         setSelectedName('')
         setSearch('')
-        onChange('', '')
         setResults([])
+        onChange('', '')
+
         if (inputRef.current) {
             inputRef.current.focus()
             setIsPopoverOpen(true)
@@ -183,59 +301,158 @@ export function DestinationSelect({
 
     const handleOpenChange = (open: boolean) => {
         if (disabled && open) return
+
         setIsPopoverOpen(open)
-        // When closing, reset search if nothing was selected
+
         if (!open && !value) {
             setSearch('')
+            setResults([])
         }
     }
 
-    const handleSelectCountry = (country: string, airports: Airport[]) => {
-        // Try to use country_code if available (more reliable for backend), otherwise use name
-        const countryCode = airports[0]?.country_code
-        const valueToSend = countryCode || country
-        const displayName = `${country} (ทั้งประเทศ)`
-        setSelectedName(displayName)
-        setSearch('')
-        setIsPopoverOpen(false)
-        onChange(valueToSend, displayName)
+    const toggleCountry = async (group: CountryAirportGroup) => {
+        const willExpand = !(expandedCountries[group.country] ?? false)
+
+        setExpandedCountries((prev) => ({
+            ...prev,
+            [group.country]: willExpand,
+        }))
+
+        if (willExpand) {
+            await loadCountryAirports(group)
+        }
     }
 
-    // Helper to group airports by country
     const groupAirportsByCountry = (airports: Airport[]) => {
-        return airports.reduce((acc, airport) => {
+        const grouped = airports.reduce((acc, airport) => {
             const country = airport.country_name || 'ประเทศอื่นๆ'
             if (!acc[country]) acc[country] = []
             acc[country].push(airport)
             return acc
         }, {} as Record<string, Airport[]>)
+
+        return Object.entries(grouped)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([country, items]) => ({
+                country,
+                countryCode: items[0]?.country_code || items[0]?.country || null,
+                airportCount: items.length,
+                airports: items.sort((a, b) => getAirportDisplayName(a).localeCompare(getAirportDisplayName(b))),
+                isLoaded: true,
+                isLoading: false,
+            }))
     }
 
-    const groupedPopular = groupAirportsByCountry(popular)
-    const groupedResults = groupAirportsByCountry(results)
+    const resultGroups = groupAirportsByCountry(results)
+    const showingSearchResults = search.length >= 2
+
+    const renderAirportItem = (airport: Airport, compact = false) => (
+        <button
+            key={airport.code}
+            className={cn(
+                'w-full text-left hover:bg-blue-50 flex items-center gap-4 transition-colors rounded-md group border-b border-gray-50 last:border-0',
+                compact ? 'px-4 py-3.5' : 'px-4 py-4'
+            )}
+            onClick={() => handleSelect(airport)}
+            type="button"
+        >
+            <div className="bg-gray-100 group-hover:bg-blue-100 p-2.5 rounded-full transition-colors shrink-0">
+                <Plane className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-3">
+                    <span className="font-bold text-sm sm:text-base text-gray-800 break-words group-hover:text-blue-700 transition-colors flex-1 min-w-0">
+                        {getAirportDisplayName(airport)}
+                    </span>
+                    <span className={cn(
+                        'font-bold text-xs sm:text-sm shrink-0 uppercase tracking-tighter px-2 py-0.5 rounded',
+                        compact
+                            ? 'text-blue-600 bg-blue-50 border border-blue-100'
+                            : 'text-gray-400 bg-gray-50 border border-gray-100'
+                    )}>
+                        {airport.code}
+                    </span>
+                </div>
+                <div className="text-xs text-gray-500 truncate mt-0.5 group-hover:text-gray-600 transition-colors">
+                    {getAirportDisplayDetail(airport)}
+                </div>
+            </div>
+        </button>
+    )
+
+    const renderCountryGroup = (group: CountryAirportGroup, compact = false, collapsible = false) => {
+        const isExpanded = expandedCountries[group.country] ?? false
+
+        return (
+            <div key={group.country} className="mb-4 last:mb-0">
+                <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center justify-between mb-2 rounded-md shadow-sm border border-blue-100">
+                    <div className="flex items-center gap-2">
+                        <Globe className="h-3.5 w-3.5" /> {group.country}
+                        {!compact && (
+                            <span className="text-[10px] text-blue-500 normal-case tracking-normal">
+                                {group.airportCount.toLocaleString('th-TH')}
+                            </span>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {enableCountrySelection && (
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleSelectCountry(group)
+                                }}
+                                className="text-[10px] bg-white border border-blue-200 hover:bg-blue-100 text-blue-600 px-2 py-0.5 rounded transition-colors normal-case tracking-normal font-medium"
+                            >
+                                All
+                            </button>
+                        )}
+                        {collapsible && (
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    void toggleCountry(group)
+                                }}
+                                className="text-blue-600"
+                                aria-label={isExpanded ? `Collapse ${group.country}` : `Expand ${group.country}`}
+                            >
+                                {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {collapsible && isExpanded && group.isLoading && (
+                    <div className="px-4 py-4 text-sm text-muted-foreground">
+                        Loading airports...
+                    </div>
+                )}
+
+                {(!collapsible || isExpanded) && group.isLoaded && (
+                    <div className="space-y-0.5">
+                        {group.airports.map((airport) => renderAirportItem(airport, compact))}
+                    </div>
+                )}
+            </div>
+        )
+    }
 
     return (
-        <div className={cn("relative w-full", className)}>
+        <div className={cn('relative w-full', className)}>
             <Popover open={isPopoverOpen} onOpenChange={handleOpenChange}>
                 <PopoverTrigger asChild>
                     <div
                         className={cn(
-                            "relative flex items-center bg-white border rounded-md transition-all h-12 sm:h-14 overflow-hidden",
-                            !disabled && "cursor-pointer",
-                            disabled && "pointer-events-none opacity-50 bg-muted/30",
-                            error ? "border-[#ff6b35] ring-1 ring-[#ff6b35]/20" : "border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10",
-                            isPopoverOpen && "border-blue-500 ring-2 ring-blue-500/10 shadow-md"
+                            'relative flex items-center bg-white border rounded-md transition-all h-12 sm:h-14 overflow-hidden',
+                            !disabled && 'cursor-pointer',
+                            disabled && 'pointer-events-none opacity-50 bg-muted/30',
+                            error ? 'border-[#ff6b35] ring-1 ring-[#ff6b35]/20' : 'border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10',
+                            isPopoverOpen && 'border-blue-500 ring-2 ring-blue-500/10 shadow-md'
                         )}
-                    // onClick={() => {
-                    //   // Focus input when clicking the container
-                    //   if (inputRef.current) {
-                    //     inputRef.current.focus()
-                    //   }
-                    //   setIsPopoverOpen(true)
-                    // }}
                     >
                         <div className="absolute left-3 flex items-center justify-center">
-                            <MapPin className={cn("h-5 w-5 transition-colors", isPopoverOpen ? "text-blue-500" : "text-gray-400")} />
+                            <MapPin className={cn('h-5 w-5 transition-colors', isPopoverOpen ? 'text-blue-500' : 'text-gray-400')} />
                         </div>
 
                         <input
@@ -245,7 +462,6 @@ export function DestinationSelect({
                             placeholder={placeholder}
                             value={search || (isPopoverOpen ? search : selectedName)}
                             onChange={handleSearchChange}
-                            //   onFocus={() => setIsPopoverOpen(true)}
                             autoComplete="off"
                             readOnly={false}
                         />
@@ -266,155 +482,56 @@ export function DestinationSelect({
                     className="p-0 w-[var(--radix-popover-trigger-width)] min-w-[360px] sm:min-w-[600px] sm:max-w-[min(96vw,640px)] overflow-hidden shadow-2xl border-gray-200 z-[100] bg-white"
                     align="start"
                     sideOffset={4}
-                    onOpenAutoFocus={(e) => e.preventDefault()} // Prevent auto-focus when opening
-                    onCloseAutoFocus={(e) => e.preventDefault()} // Prevent auto-focus when closing
+                    onOpenAutoFocus={(e) => e.preventDefault()}
+                    onCloseAutoFocus={(e) => e.preventDefault()}
                 >
                     <ScrollArea className="max-h-[450px] [&>[data-slot=scroll-area-viewport]]:max-h-[450px]">
                         {isLoading ? (
                             <div className="p-12 flex flex-col items-center justify-center text-gray-500 italic">
                                 <Loader2 className="h-8 w-8 animate-spin mb-3 text-blue-500" />
-                                <span className="text-sm">กำลังค้นหาเมืองและสนามบิน...</span>
+                                <span className="text-sm">Searching cities and airports...</span>
                             </div>
-                        ) : search.length >= 2 && results.length === 0 ? (
+                        ) : showingSearchResults && results.length === 0 ? (
                             <div className="p-12 text-center text-gray-500">
                                 <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <Search className="h-8 w-8 text-gray-300" />
                                 </div>
-                                <p className="font-semibold text-gray-700">ไม่พบเมืองหรือสนามบิน</p>
-                                <p className="text-sm italic">ลองค้นหาด้วยชื่อประเทศ หรือ รหัสสนามบิน</p>
+                                <p className="font-semibold text-gray-700">No cities or airports found</p>
+                                <p className="text-sm italic">Try searching by country name or airport code</p>
                             </div>
-                        ) : (!search || search.length < 2) ? (
+                        ) : showingSearchResults ? (
+                            <div className="px-1 py-1">
+                                {resultGroups.map((group) => renderCountryGroup(group, true, false))}
+                            </div>
+                        ) : (
                             <div className="py-2">
                                 <div className="px-4 py-3 flex items-center gap-2 border-b border-gray-100 mb-1 bg-gray-50/50">
                                     <div className="bg-blue-600 p-1.5 rounded-md">
                                         <Plane className="h-4 w-4 text-white" />
                                     </div>
-                                    <span className="text-xl font-bold text-gray-500 uppercase tracking-widest">เมืองหรือท่าอากาศยานยอดนิยม</span>
+                                    <span className="text-xl font-bold text-gray-500 uppercase tracking-widest">Cities or Airports</span>
                                 </div>
                                 <div className="px-1">
-                                    {popular.length > 0 ? (
-                                        Object.entries(groupedPopular).map(([country, airports]) => (
-                                            <div key={country} className="mb-4 last:mb-0">
-                                                <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center justify-between mb-2 rounded-md shadow-sm border border-blue-100">
-                                                    <div className="flex items-center gap-2">
-                                                        <Globe className="h-3.5 w-3.5" /> {country}
-                                                    </div>
-                                                    {enableCountrySelection && (
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation()
-                                                                handleSelectCountry(country, airports)
-                                                            }}
-                                                            className="text-[10px] bg-white border border-blue-200 hover:bg-blue-100 text-blue-600 px-2 py-0.5 rounded transition-colors normal-case tracking-normal font-medium"
-                                                        >
-                                                            เลือกทั้งประเทศ
-                                                        </button>
-                                                    )}
-                                                </div>
-                                                <div className="space-y-0.5">
-                                                    {airports.map((airport) => (
-                                                        <button
-                                                            key={airport.code}
-                                                            className="w-full text-left px-4 py-4 hover:bg-blue-50 flex items-center gap-4 transition-colors rounded-md group border-b border-gray-50 last:border-0"
-                                                            onClick={() => handleSelect(airport)}
-                                                            type="button"
-                                                        >
-                                                            <div className="bg-gray-100 group-hover:bg-blue-100 p-2.5 rounded-full transition-colors shrink-0">
-                                                                <Plane className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
-                                                            </div>
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-start justify-between gap-3">
-                                                                    <span className="font-bold text-sm sm:text-base text-gray-800 break-words group-hover:text-blue-700 transition-colors flex-1 min-w-0">
-                                                                        {(airport.code === 'BKK' || airport.code === 'DMK') ? airport.name : airport.city}
-                                                                    </span>
-                                                                    <span className="text-gray-400 font-bold text-xs sm:text-sm shrink-0 uppercase tracking-tighter bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
-                                                                        {airport.code}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="text-xs text-gray-500 truncate mt-0.5 group-hover:text-gray-600 transition-colors">
-                                                                    {(airport.code === 'BKK' || airport.code === 'DMK') 
-                                                                        ? `${airport.city}, ${airport.country_name}`
-                                                                        : `${airport.name}, ${airport.country_name}`}
-                                                                </div>
-                                                            </div>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        ))
+                                    {countryGroups.length > 0 ? (
+                                        countryGroups.map((group) => renderCountryGroup(group, false, true))
                                     ) : (
                                         <div className="py-8 text-center text-gray-400 text-sm">
-                                            No popular destinations found
+                                            No countries available
                                         </div>
                                     )}
                                 </div>
                             </div>
-                        ) : (
-                            <div className="px-1 py-1">
-                                {Object.entries(groupedResults).map(([country, airports]) => (
-                                    <div key={country} className="mb-4 last:mb-0">
-                                        <div className="px-4 py-2.5 text-[12px] font-extrabold text-blue-700 uppercase tracking-[0.15em] bg-blue-50 flex items-center justify-between mb-2 rounded-md shadow-sm border border-blue-100">
-                                            <div className="flex items-center gap-2">
-                                                <Globe className="h-3.5 w-3.5" /> {country}
-                                            </div>
-                                            {enableCountrySelection && (
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        handleSelectCountry(country, airports)
-                                                    }}
-                                                    className="text-[10px] bg-white border border-blue-200 hover:bg-blue-100 text-blue-600 px-2 py-0.5 rounded transition-colors normal-case tracking-normal font-medium"
-                                                >
-                                                    เลือกทั้งประเทศ
-                                                </button>
-                                            )}
-                                        </div>
-
-                                        <div className="space-y-0.5">
-                                            {airports.map((airport) => (
-                                                <button
-                                                    key={airport.code}
-                                                    className="w-full text-left px-4 py-3.5 hover:bg-blue-50 flex items-center gap-4 transition-colors rounded-md group border-b border-gray-50/50 last:border-0"
-                                                    onClick={() => handleSelect(airport)}
-                                                    type="button"
-                                                >
-                                                    <div className="bg-gray-100 group-hover:bg-blue-100 p-2.5 rounded-full transition-colors shrink-0">
-                                                        <Plane className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-start justify-between gap-3">
-                                                            <span className="font-bold text-sm sm:text-base text-gray-800 break-words group-hover:text-blue-700 transition-colors flex-1 min-w-0">
-                                                                {(airport.code === 'BKK' || airport.code === 'DMK') ? airport.name : (airport.name || airport.city)}
-                                                            </span>
-                                                            <span className="text-blue-600 font-bold text-xs sm:text-sm shrink-0 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-tighter">
-                                                                {airport.code}
-                                                            </span>
-                                                        </div>
-                                                        <div className="text-xs text-gray-500 truncate mt-1 group-hover:text-gray-600 transition-colors">
-                                                            {(airport.code === 'BKK' || airport.code === 'DMK')
-                                                                ? `${airport.city}, ${airport.country_name}`
-                                                                : `${airport.city || airport.name}, ${airport.country_name}`}
-                                                        </div>
-                                                    </div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
                         )}
                     </ScrollArea>
-                    {/* จำนวนสนามบินด้านล่าง */}
+
                     {!isLoading && (
-                        (search.length >= 2 && results.length > 0) ? (
+                        showingSearchResults && results.length > 0 ? (
                             <div className="px-4 py-2.5 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-600">
-                                แสดง {results.length} สนามบินจากทั้งหมด {totalAirportsInSystem != null ? totalAirportsInSystem.toLocaleString('th-TH') : searchTotal} สนามบิน
+                                Showing {results.length} airports from {searchTotal.toLocaleString('en-US')} matched results
                             </div>
-                        ) : (!search || search.length < 2) && popular.length > 0 ? (
+                        ) : !showingSearchResults && countryGroups.length > 0 ? (
                             <div className="px-4 py-2.5 border-t border-gray-200 bg-gray-50 text-center text-sm text-gray-600">
-                                แสดง {popular.length} สนามบินยอดนิยมจากทั้งหมด {totalAirportsInSystem != null ? totalAirportsInSystem.toLocaleString('th-TH') : '—'} สนามบิน
+                                Showing {countryGroups.length.toLocaleString('en-US')} countries from {totalAirportsInSystem != null ? totalAirportsInSystem.toLocaleString('en-US') : '—'} airports
                             </div>
                         ) : null
                     )}

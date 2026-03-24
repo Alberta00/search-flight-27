@@ -5,17 +5,15 @@ import { TrendingUp, Maximize2, Smartphone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DateRange } from 'react-day-picker'
-import { format, subDays, differenceInDays, parseISO, addYears, subMonths, addDays } from 'date-fns'
+import { format, differenceInDays, parseISO, addDays, subDays } from 'date-fns'
 import { th } from 'date-fns/locale/th'
-import {
-  Area,
-  AreaChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from 'recharts'
-import { ChartContainer } from '@/components/ui/chart'
+import dynamic from 'next/dynamic'
+
+const Plot = dynamic(() => import('react-plotly.js'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm animate-pulse bg-muted/10 rounded-lg border border-dashed">กำลังโหลดกราฟ...</div>
+})
+
 import {
   Dialog,
   DialogContent,
@@ -23,39 +21,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-const chartConfig = {
-  flights: {
-    label: 'จำนวนเที่ยวบิน',
-    color: 'hsl(221, 83%, 53%)',
-  },
-  flightsCompare: {
-    label: 'เปรียบเทียบ',
-    color: 'hsl(142, 76%, 36%)',
-  },
-}
-
-interface FlightRoutesChartProps {
-  chartData: any[]
-  dateRange: DateRange | undefined
-  setDateRange: (range: DateRange | undefined) => void
-  compareMode: boolean
-  setCompareMode: React.Dispatch<React.SetStateAction<boolean>>
-  isDeparture: boolean
-  durationMode?: '7' | '30' | 'all' | null
-  setDurationMode?: (mode: '7' | '30' | 'all' | null) => void
-}
-
-export function FlightRoutesChart({
-  chartData,
-  dateRange,
-  setDateRange,
-  compareMode,
-  setCompareMode,
-  isDeparture,
-  durationMode,
-  setDurationMode
-}: FlightRoutesChartProps) {
-  const CHART_FONT = {
+const chartUiConfig = {
+  fonts: {
     xTick: 11,
     yTick: 10,
     yLabel: 16,
@@ -63,15 +30,186 @@ export function FlightRoutesChart({
     tooltipText: 14,
     dialogTitle: 24,
     headerTitle: 26,
-  }
+  },
+  colors: {
+    arrival: 'hsl(221, 83%, 53%)',
+    departure: 'hsl(142, 76%, 36%)',
+    combined: 'hsl(212, 76%, 35%)',
+    grid: 'hsl(var(--border))',
+    axis: 'hsl(var(--muted-foreground))',
+    tickLine: 'hsl(var(--primary))',
+  },
+  lines: {
+    showMarkers: false, // เปิด/ปิด จุดของกราฟ
+    markerSize: 6,     // ขนาดของจุด
+    lineWidth: 2,      // ขนาดความหนาของเส้น
+  },
+  layout: {
+    cardPadding: 'p-3 sm:p-6',
+    headerGap: 'gap-3 sm:gap-4',
+    chartHeight: 'h-[380px] sm:h-[440px]',
+    chartHeightZoom: 'h-[400px] sm:h-[500px]',
+    chartMinWidth: 'min-w-[280px]',
+    chartMinWidthZoom: 'min-w-[320px]',
+    chartMargin: { t: 10, r: 10, l: 45, b: 40 },
+    chartMarginZoom: { t: 20, r: 20, l: 50, b: 40 },
+  },
+  grid: {
+    strokeDasharray: '3 3',
+    opacity: 0.3,
+  },
+  axis: {
+    xTickSize: 10,
+    xMinTickGap: 30,
+    xHeight: 44,
+    yWidth: 45,
+  },
+  legend: {
+    container: 'flex flex-wrap items-center gap-2',
+    item: 'inline-flex h-8 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs sm:text-sm min-w-0 transition-colors hover:bg-muted/50',
+    label: 'truncate',
+    marker: {
+      wrapper: 'relative w-8 h-3 shrink-0',
+      line: 'absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2',
+      point: 'absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background',
+    },
+  },
+  tooltip: {
+    bgcolor: 'rgba(255, 255, 255, 0.95)',
+    bordercolor: 'rgba(226, 232, 240, 1)',
+    fontColor: 'rgba(15, 23, 42, 1)',
+    fontFamily: 'Arial, sans-serif',
+    nameLength: -1, // -1 หมายถึงแสดงข้อความแบบไม่จำกัดความยาว
+  },
+  zoomSliders: {
+    xAccent: 'accent-blue-500',
+    yAccent: 'accent-emerald-500',
+  },
+  todayMarker: {
+    lineColor: 'hsl(14, 12%, 49%)',
+    labelColor: 'hsl(24, 7%, 40%)',
+    strokeWidth: 1.5,
+    dash: '4 4',
+    label: 'Today',
+    labelFontSize: 13,
+    labelOffset: 18,
+    labelDy: -10,
+    labelPlacement: 'top' as 'top' | 'bottom',
+  },
+}
+
+interface FlightRoutesChartProps {
+  chartData: any[]
+  dateRange: DateRange | undefined
+  compareMode: boolean
+  isDeparture: boolean
+}
+
+export function FlightRoutesChart({
+  chartData,
+  compareMode,
+  isDeparture,
+  dateRange,
+}: FlightRoutesChartProps) {
+  const { fonts, colors, layout, grid, axis, legend, tooltip, zoomSliders, todayMarker } = chartUiConfig
   const [chartZoomed, setChartZoomed] = useState(false)
   const [isPortraitMobile, setIsPortraitMobile] = useState(false)
+  const [activeSeries, setActiveSeries] = useState<'all' | 'main' | 'compare'>('all')
   const [xZoomPercent, setXZoomPercent] = useState(0)
-  const [yGapStep, setYGapStep] = useState(0)
+  const [yGapStep, setYGapStep] = useState(4)
   const zoomDialogRef = useRef<HTMLDivElement>(null)
 
-  const mainLabel = isDeparture ? 'ขาออก (Departure)' : 'ขาเข้า (Arrival)'
-  const compareLabel = isDeparture ? 'ขาเข้า (Arrival)' : 'ขาออก (Departure)'
+  const mainLabel = isDeparture ? 'ขาออก' : 'ขาเข้า '
+  const compareLabel = isDeparture ? 'ขาเข้า ' : 'ขาออก '
+  const mainBaseColor = isDeparture ? colors.departure : colors.arrival
+  const compareBaseColor = isDeparture ? colors.arrival : colors.departure
+  const combinedBaseColor = colors.combined
+  const legendItems = [
+    {
+      key: 'departure' as const,
+      label: 'ขาออก',
+      targetSeries: isDeparture ? 'main' as const : 'compare' as const,
+    },
+    ...(compareMode ? [{
+      key: 'arrival' as const,
+      label: 'ขาเข้า',
+      targetSeries: isDeparture ? 'compare' as const : 'main' as const,
+    }] : []),
+    ...(compareMode ? [{
+      key: 'all' as const,
+      label: 'รวม',
+      targetSeries: 'all' as const,
+    }] : []),
+  ]
+
+  useEffect(() => {
+    if (!compareMode) {
+      setActiveSeries('main')
+    }
+  }, [compareMode])
+
+  const getCombinedFlights = (item: any) => {
+    const flights = typeof item.flights === 'number' ? item.flights : 0
+    const flightsCompare = typeof item.flightsCompare === 'number' ? item.flightsCompare : 0
+    return flights + flightsCompare
+  }
+
+  const getSeriesTone = (series: 'main' | 'compare') => {
+    const isMuted = activeSeries !== 'all' && activeSeries !== series
+
+    const activeColor = compareMode && activeSeries === 'all'
+      ? combinedBaseColor
+      : series === 'main'
+        ? mainBaseColor
+        : compareBaseColor
+
+    return {
+      stroke: isMuted ? 'rgba(148, 163, 184, 0.5)' : activeColor,
+      fillcolor: isMuted 
+        ? 'rgba(148, 163, 184, 0.1)' 
+        : activeColor.replace('hsl', 'hsla').replace(')', ', 0.4)'),
+      markerOpacityClassName: isMuted ? 'opacity-35' : 'opacity-100',
+    }
+  }
+
+  const getLegendButtonClass = (series: 'all' | 'main' | 'compare') => {
+    const isSelected = activeSeries === series
+    return isSelected
+      ? 'border-primary bg-primary/10 text-foreground shadow-sm'
+      : 'border-border bg-background text-muted-foreground hover:bg-muted/50'
+  }
+
+  const handleLegendSelect = (series: 'all' | 'main' | 'compare') => {
+    if (!compareMode && series === 'compare') return
+    setActiveSeries(series)
+  }
+
+  const renderChartLegend = () => (
+    <div className={legend.container}>
+      {legendItems.map((item) => (
+        <button
+          key={item.key}
+          type="button"
+          onClick={() => handleLegendSelect(item.targetSeries)}
+          className={`${legend.item} ${getLegendButtonClass(item.targetSeries)}`}
+        >
+          {item.targetSeries === 'all' ? null : (
+            <span className={legend.marker.wrapper}>
+              <span
+                className={`${legend.marker.line} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
+                style={{ backgroundColor: getSeriesTone(item.targetSeries).stroke }}
+              />
+              <span
+                className={`${legend.marker.point} ${getSeriesTone(item.targetSeries).markerOpacityClassName}`}
+                style={{ backgroundColor: getSeriesTone(item.targetSeries).stroke }}
+              />
+            </span>
+          )}
+          <span className={legend.label}>{item.label}</span>
+        </button>
+      ))}
+    </div>
+  )
 
   // Calculate current days diff for buttons state
   const currentDaysDiff = dateRange?.from && dateRange?.to 
@@ -163,6 +301,12 @@ export function FlightRoutesChart({
     let minVal = Infinity
     let maxVal = -Infinity
     for (const item of zoomedChartData) {
+      if (compareMode && activeSeries === 'all') {
+        const combinedFlights = getCombinedFlights(item)
+        minVal = Math.min(minVal, combinedFlights)
+        maxVal = Math.max(maxVal, combinedFlights)
+        continue
+      }
       if (typeof item.flights === 'number') {
         minVal = Math.min(minVal, item.flights)
         maxVal = Math.max(maxVal, item.flights)
@@ -210,105 +354,144 @@ export function FlightRoutesChart({
     return [min, min + step, min + step * 2, min + step * 3, max]
   })()
 
-  const formatYAxisTick = (value: number) => {
-    if (Number.isInteger(value)) return `${value}`
-    return `${value.toFixed(1)}`
-  }
+  const mainTone = getSeriesTone('main')
+  const compareTone = getSeriesTone('compare')
+  const showMainTooltip = activeSeries === 'all' || activeSeries === 'main'
+  const showCompareTooltip = compareMode && (activeSeries === 'all' || activeSeries === 'compare')
+  const mainActiveDot = showMainTooltip ? { r: 4, fill: mainTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
+  const compareActiveDot = showCompareTooltip ? { r: 4, fill: compareTone.stroke, stroke: '#fff', strokeWidth: 2 } : false
+  const xAxisBounds = (() => {
+    if (!zoomedChartData.length) return undefined
 
+    const firstDate = parseISO(zoomedChartData[0].date)
+    const lastDate = parseISO(zoomedChartData[zoomedChartData.length - 1].date)
+
+    // Plotly needs a non-zero date window for single-day views.
+    if (zoomedChartData.length === 1 || firstDate.getTime() === lastDate.getTime()) {
+      return {
+        min: subDays(firstDate, 1).toISOString(),
+        max: addDays(lastDate, 1).toISOString(),
+      }
+    }
+
+    return {
+      min: firstDate.toISOString(),
+      max: lastDate.toISOString(),
+    }
+  })()
+  const todayKey = format(new Date(), 'yyyy-MM-dd')
+  const isTodayVisible = zoomedChartData.some((item: any) => item.date === todayKey)
+
+  const traces = [
+    {
+      x: zoomedChartData.map((d: any) => d.date),
+      y: zoomedChartData.map((d: any) =>
+        compareMode && activeSeries === 'all' ? getCombinedFlights(d) : d.flights
+      ),
+      type: 'scatter',
+      mode: chartUiConfig.lines.showMarkers ? 'lines+markers' : 'lines',
+      name: compareMode && activeSeries === 'all' ? 'ขาออก + ขาเข้า' : mainLabel,
+      line: { color: mainTone.stroke, width: chartUiConfig.lines.lineWidth, shape: 'spline' },
+      marker: { color: mainTone.stroke, size: chartUiConfig.lines.markerSize },
+      visible: compareMode ? true : activeSeries === 'all' || activeSeries === 'main' ? true : 'legendonly',
+      fill: 'tozeroy',
+      fillcolor: mainTone.fillcolor,
+    },
+    ...(compareMode ? [{
+      x: zoomedChartData.map((d: any) => d.date),
+      y: zoomedChartData.map((d: any) => d.flightsCompare),
+      type: 'scatter',
+      mode: chartUiConfig.lines.showMarkers ? 'lines+markers' : 'lines',
+      name: compareLabel,
+      line: { color: compareTone.stroke, width: chartUiConfig.lines.lineWidth, shape: 'spline' },
+      marker: { color: compareTone.stroke, size: chartUiConfig.lines.markerSize },
+      visible: activeSeries !== 'all' ? true : 'legendonly',
+      fill: 'tozeroy',
+      fillcolor: compareTone.fillcolor,
+    }] : [])
+  ]
+
+  const plotlyLayout = {
+    autosize: true,
+    margin: layout.chartMargin,
+    xaxis: {
+      automargin: true,
+      range: xAxisBounds ? [xAxisBounds.min, xAxisBounds.max] : undefined,
+      minallowed: xAxisBounds?.min,
+      maxallowed: xAxisBounds?.max,
+      tickfont: { size: fonts.xTick, color: colors.axis },
+      gridcolor: colors.grid,
+      griddash: (grid.strokeDasharray ? 'dash' : 'solid') as 'dash' | 'solid',
+      showgrid: true,
+      tickformat: '%d %b',
+      zeroline: false,
+    },
+    yaxis: {
+      title: {
+        text: 'จำนวนเที่ยวบิน',
+        font: { size: fonts.yLabel, color: colors.axis },
+        standoff: 10,
+      },
+      automargin: true,
+      tickfont: { size: fonts.yTick, color: colors.axis },
+      gridcolor: colors.grid,
+      griddash: (grid.strokeDasharray ? 'dash' : 'solid') as 'dash' | 'solid',
+      showgrid: true,
+      range: [yAxisMin, yAxisMax],
+      minallowed: -1,
+      zeroline: false,
+    },
+    showlegend: false,
+    hovermode: 'x unified' as const,
+    dragmode: 'zoom' as const,
+    hoverlabel: {
+      font: { size: fonts.tooltipText, family: tooltip.fontFamily, color: tooltip.fontColor },
+      bgcolor: tooltip.bgcolor,
+      bordercolor: tooltip.bordercolor,
+      namelength: tooltip.nameLength,
+      align: 'left' as const,
+    },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    shapes: isTodayVisible ? [
+      {
+        type: 'line' as const,
+        x0: todayKey,
+        x1: todayKey,
+        y0: 0,
+        y1: 1,
+        yref: 'paper' as const,
+        line: { color: todayMarker.lineColor, width: todayMarker.strokeWidth, dash: 'dash' },
+      }
+    ] : [],
+    annotations: isTodayVisible ? [
+      {
+        x: todayKey,
+        y: todayMarker.labelPlacement === 'top' ? 1 : 0,
+        yref: 'paper' as const,
+        text: todayMarker.label,
+        showarrow: false,
+        font: { size: todayMarker.labelFontSize, color: todayMarker.labelColor },
+        xanchor: 'left' as const,
+        xshift: 6,
+        yshift: todayMarker.labelDy,
+      }
+    ] : [],
+  }
 
   return (
     <>
       {/* Daily frequency chart - responsive */}
-      <Card className="p-3 sm:p-6 border min-w-0 overflow-hidden flight-routes-accent">
-        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
+      <Card className={`${layout.cardPadding} border min-w-0 overflow-visible flight-routes-accent`}>
+        <div className={`flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between ${layout.headerGap} mb-3 sm:mb-4`}>
           <h1
             className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2 shrink-0"
-            style={{ fontSize: CHART_FONT.headerTitle }}
+            style={{ fontSize: fonts.headerTitle }}
           >
             <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             สถิติความถี่เที่ยวบินรายวัน
           </h1>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-2 rounded-lg border bg-muted/30 px-2 py-1">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] text-muted-foreground">X</span>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={5}
-                  value={xZoomPercent}
-                  onChange={(e) => setXZoomPercent(Number(e.target.value))}
-                  className="w-20 sm:w-24 accent-blue-500"
-                  aria-label="Zoom X axis"
-                />
-                <span className="text-[10px] w-8 text-right text-muted-foreground">
-                  {xZoomPercent}%
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] text-muted-foreground">Y</span>
-                <input
-                  type="range"
-                  min={0}
-                  max={4}
-                  step={1}
-                  value={yGapStep}
-                  onChange={(e) => setYGapStep(Number(e.target.value))}
-                  className="w-20 sm:w-24 accent-emerald-500"
-                  aria-label="Zoom Y axis"
-                />
-                <span className="text-[10px] w-8 text-right text-muted-foreground">
-                  {Math.round((yGapStep / 4) * 100)}%
-                </span>
-              </div>
-            </div>
-            <div className="flex rounded-lg border bg-muted/30 p-0.5">
-              <Button
-                variant={durationMode === 'all' || (!durationMode && currentDaysDiff > 360) ? 'default' : 'ghost'}
-                size="sm"
-                className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                onClick={() => {
-                  const today = new Date()
-                  setDateRange({ from: subMonths(today, 1), to: addYears(today, 1) })
-                  setDurationMode?.('all')
-                }}
-              >
-                ทั้งหมด
-              </Button>
-              <Button
-                variant={durationMode === '7' ? 'default' : 'ghost'}
-                size="sm"
-                className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                onClick={() => {
-                  const today = new Date()
-                  setDateRange({ from: today, to: addDays(today, 6) })
-                  setDurationMode?.('7')
-                }}
-              >
-                7 วัน
-              </Button>
-              <Button
-                variant={durationMode === '30' ? 'default' : 'ghost'}
-                size="sm"
-                className="rounded-md h-8 px-2.5 sm:px-3 text-xs sm:text-sm min-w-[52px] sm:min-w-0"
-                onClick={() => {
-                  const today = new Date()
-                  setDateRange({ from: today, to: addDays(today, 29) })
-                  setDurationMode?.('30')
-                }}
-              >
-                30 วัน
-              </Button>
-            </div>
-            <Button
-              variant={compareMode ? 'default' : 'ghost'}
-              size="sm"
-              className="rounded-lg border h-8 px-2.5 sm:px-3 text-xs sm:text-sm"
-              onClick={() => setCompareMode((prev) => !prev)}
-            >
-              เปรียบเทียบ
-            </Button>
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -329,101 +512,25 @@ export function FlightRoutesChart({
               <Maximize2 className="w-4 h-4 sm:mr-1" />
               <span className="hidden sm:inline">ขยาย</span>
             </Button>
+            {renderChartLegend()}
           </div>
         </div>
-        <div className="w-full min-w-0 overflow-x-auto -mx-1 px-1">
-          <div className="h-[380px] sm:h-[440px] min-w-[280px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
-            <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-              <AreaChart data={zoomedChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="flightGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.05} />
-                  </linearGradient>
-                  <linearGradient id="flightCompareGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.05} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                <Area
-                  type="monotone"
-                  dataKey="flights"
-                  name={mainLabel}
-                  stroke="hsl(221, 83%, 53%)"
-                  strokeWidth={2}
-                  fill="url(#flightGradient)"
-                />
-                {compareMode && (
-                  <Area
-                    type="monotone"
-                    dataKey="flightsCompare"
-                    name={compareLabel}
-                    stroke="hsl(142, 76%, 36%)"
-                    strokeWidth={2}
-                    fill="url(#flightCompareGradient)"
-                  />
-                )}
-                <XAxis
-                  dataKey="date"
-                  fontSize={CHART_FONT.xTick}
-                  axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                  tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                  tickSize={10}
-                  tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                  tickFormatter={formatXAxisDate}
-                  minTickGap={30}
-                  angle={0}
-                  textAnchor="middle"
-                  height={44}
-                />
-                <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={CHART_FONT.yTick}
-                  tickFormatter={(v) => `${v}`}
-                  domain={[yAxisMin, yAxisMax]}
-                  ticks={yAxisTicks}
-                  label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: CHART_FONT.yLabel }}
-                  width={45}
-                />
-                <Tooltip
-                  content={({ active, payload }) => {
-                    if (!active || !payload?.length) return null
-                    const p = payload[0].payload
-                    const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
-                    return (
-                      <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
-                        <p className="font-medium mb-2" style={{ fontSize: CHART_FONT.tooltipTitle }}>
-                          {tooltipDate}
-                        </p>
-                        <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)', fontSize: CHART_FONT.tooltipText }}>
-                          {mainLabel}: {p.flights} เที่ยว
-                        </p>
-                        {compareMode && (
-                          <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)', fontSize: CHART_FONT.tooltipText }}>
-                            {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
-                          </p>
-                        )}
-                      </div>
-                    )
-                  }}
-                />
-              </AreaChart>
-            </ChartContainer>
+        <div className="w-full min-w-0 overflow-x-auto overflow-y-visible -mx-1 px-1">
+          <div className={`relative overflow-visible ${layout.chartHeight} w-full ${layout.chartMinWidth} flight-routes-accent`}>
+             <Plot
+               data={traces as any}
+               layout={plotlyLayout as any}
+               config={{
+                 scrollZoom: true,
+                 displaylogo: false,
+                 modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d'],
+                 displayModeBar: 'hover',
+               }}
+               useResizeHandler={true}
+               style={{ width: '100%', height: '100%' }}
+             />
           </div>
         </div>
-        {compareMode && (
-          <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-primary shrink-0" />
-              <span className="truncate">{mainLabel}</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-emerald-600 shrink-0" />
-              <span className="truncate">{compareLabel}</span>
-            </span>
-          </div>
-        )}
       </Card>
 
       {/* Dialog ซูมกราฟ - แนวนอนเต็มจอ (เหมาะกับ mobile) */}
@@ -445,103 +552,31 @@ export function FlightRoutesChart({
             <DialogHeader>
               <DialogTitle
                 className="flex items-center gap-2 text-base sm:text-lg"
-                style={{ fontSize: CHART_FONT.dialogTitle }}
+                style={{ fontSize: fonts.dialogTitle }}
               >
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 สถิติความถี่เที่ยวบินรายวัน
               </DialogTitle>
             </DialogHeader>
+            <div className="mt-2">
+              {renderChartLegend()}
+            </div>
             <div className="w-full min-w-0 mt-2">
-              <div className="h-[400px] sm:h-[500px] w-full min-w-[320px] [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full">
-                <ChartContainer config={chartConfig} className="h-full w-full aspect-auto flight-routes-accent">
-                  <AreaChart data={zoomedChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="flightGradientZoom" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
-                        <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.05} />
-                      </linearGradient>
-                      <linearGradient id="flightCompareGradientZoom" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.4} />
-                        <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.05} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                  <Area
-                    type="monotone"
-                    dataKey="flights"
-                    name={mainLabel}
-                    stroke="hsl(221, 83%, 53%)"
-                    strokeWidth={2}
-                    fill="url(#flightGradientZoom)"
-                  />
-                  {compareMode && (
-                    <Area
-                      type="monotone"
-                      dataKey="flightsCompare"
-                      name={compareLabel}
-                      stroke="hsl(142, 76%, 36%)"
-                      strokeWidth={2}
-                      fill="url(#flightCompareGradientZoom)"
-                    />
-                  )}
-                    <XAxis
-                      dataKey="date"
-                      fontSize={11}
-                    axisLine={{ stroke: 'hsl(var(--muted-foreground))' }}
-                      tickLine={{ stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                      tickSize={10}
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                      tickFormatter={formatXAxisDate}
-                      minTickGap={30}
-                      angle={0}
-                      textAnchor="middle"
-                      height={44}
-                    />
-                    <YAxis
-                      stroke="hsl(var(--muted-foreground))"
-                      fontSize={11}
-                      tickFormatter={(v) => `${v}`}
-                      domain={[yAxisMin, yAxisMax]}
-                      ticks={yAxisTicks}
-                      label={{ value: 'จำนวนเที่ยวบิน (เที่ยว)', angle: -90, position: 'insideLeft', fontSize: 11 }}
-                      width={45}
-                    />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (!active || !payload?.length) return null
-                        const p = payload[0].payload
-                        const tooltipDate = p.date ? format(parseISO(p.date), 'd MMM yyyy', { locale: th }) : ''
-                        return (
-                          <div className="rounded-lg border bg-background px-3 py-2 shadow-sm min-w-[140px]">
-                            <p className="font-medium mb-2">{tooltipDate}</p>
-                            <p className="text-sm" style={{ color: 'hsl(221, 83%, 53%)' }}>
-                              {mainLabel}: {p.flights} เที่ยว
-                            </p>
-                            {compareMode && (
-                              <p className="text-sm mt-1" style={{ color: 'hsl(142, 76%, 36%)' }}>
-                                {compareLabel}: {p.flightsCompare ?? 0} เที่ยว
-                              </p>
-                            )}
-                          </div>
-                        )
-                      }}
-                    />
-                  </AreaChart>
-                </ChartContainer>
+              <div className={`relative overflow-visible ${layout.chartHeightZoom} w-full ${layout.chartMinWidthZoom} flight-routes-accent`}>
+                 <Plot
+                   data={traces as any}
+                   layout={{...plotlyLayout, margin: layout.chartMarginZoom } as any}
+                   config={{
+                     scrollZoom: true,
+                     displaylogo: false,
+                     modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d'],
+                     displayModeBar: 'hover',
+                   }}
+                   useResizeHandler={true}
+                   style={{ width: '100%', height: '100%' }}
+                 />
               </div>
             </div>
-            {compareMode && (
-              <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-primary shrink-0" />
-                  <span className="truncate">{mainLabel}</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-emerald-600 shrink-0" />
-                  <span className="truncate">{compareLabel}</span>
-                </span>
-              </div>
-            )}
           </div>
         </DialogContent>
       </Dialog>

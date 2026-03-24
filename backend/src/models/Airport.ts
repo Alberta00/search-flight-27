@@ -11,6 +11,7 @@ export interface Airport {
   airport_type: string | null;
   latitude: number | null;
   longitude: number | null;
+  has_flight?: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -25,6 +26,12 @@ export interface AirportInput {
   airport_type?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+}
+
+export interface AirportCountrySummary {
+  country: string;
+  country_code: string | null;
+  airport_count: number;
 }
 
 export class AirportModel {
@@ -180,5 +187,84 @@ export class AirportModel {
     );
 
     return result.rows[0] || null;
+  }
+
+  /**
+   * Get country summaries for airport directory UIs.
+   */
+  static async getAirportCountries(): Promise<AirportCountrySummary[]> {
+    const query = `
+      SELECT
+        COALESCE(country_name, country, 'Other') AS country,
+        COALESCE(country_code, country, NULL) AS country_code,
+        COUNT(*)::int AS airport_count
+      FROM airports
+      GROUP BY COALESCE(country_name, country, 'Other'), COALESCE(country_code, country, NULL)
+      ORDER BY COALESCE(country_name, country, 'Other')
+    `;
+
+    const result = await pool.query(query);
+    return result.rows;
+  }
+
+  /**
+   * Get all airports for a single country, resolved by country code or country name.
+   */
+  static async getAirportsByCountry(countryValue: string): Promise<Airport[]> {
+    const normalizedValue = countryValue.trim();
+    const isCountryCode = normalizedValue.length <= 3;
+
+    const query = `
+      WITH country_airports AS (
+        SELECT *
+        FROM airports
+        WHERE ${isCountryCode
+          ? '(country_code = $1 OR country = $1)'
+          : '(country_name = $1 OR country = $1)'}
+      ),
+      active_codes AS (
+        SELECT DISTINCT code
+        FROM (
+          SELECT origin AS code
+          FROM routes
+          WHERE origin IN (SELECT code FROM country_airports)
+          UNION ALL
+          SELECT destination AS code
+          FROM routes
+          WHERE destination IN (SELECT code FROM country_airports)
+          UNION ALL
+          SELECT dep_airport AS code
+          FROM departure_flight_paths
+          WHERE dep_airport IN (SELECT code FROM country_airports)
+          UNION ALL
+          SELECT arr_airport AS code
+          FROM departure_flight_paths
+          WHERE arr_airport IN (SELECT code FROM country_airports)
+          UNION ALL
+          SELECT dep_airport AS code
+          FROM arrival_flight_paths
+          WHERE dep_airport IN (SELECT code FROM country_airports)
+          UNION ALL
+          SELECT arr_airport AS code
+          FROM arrival_flight_paths
+          WHERE arr_airport IN (SELECT code FROM country_airports)
+        ) active_pool
+        WHERE code IS NOT NULL
+      )
+      SELECT
+        country_airports.*,
+        (active_codes.code IS NOT NULL) AS has_flight
+      FROM country_airports
+      LEFT JOIN active_codes ON active_codes.code = country_airports.code
+      ORDER BY
+        (active_codes.code IS NOT NULL) DESC,
+        country_airports.airport_type = 'large_airport' DESC,
+        country_airports.city NULLS LAST,
+        country_airports.name,
+        country_airports.code
+    `;
+
+    const result = await pool.query(query, [isCountryCode ? normalizedValue.toUpperCase() : normalizedValue]);
+    return result.rows;
   }
 }

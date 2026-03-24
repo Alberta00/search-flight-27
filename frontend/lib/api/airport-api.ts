@@ -13,8 +13,21 @@ export interface Airport {
   airport_type: string | null
   latitude: number | null
   longitude: number | null
+  has_flight?: boolean
   created_at?: string
   updated_at?: string
+}
+
+export interface AirportCountrySummary {
+  country: string
+  country_code: string | null
+  airport_count: number
+}
+
+export interface AirportCountriesResponse {
+  countries: AirportCountrySummary[]
+  totalCountries: number
+  totalAirports: number
 }
 
 export class AirportApi {
@@ -30,6 +43,22 @@ export class AirportApi {
       subType,
     })
     return { data: res?.data ?? [], total: res?.total ?? 0 }
+  }
+
+  /**
+   * Get airport countries summary for lazy-loading dropdowns.
+   */
+  async getAirportCountries(): Promise<AirportCountriesResponse> {
+    return apiClient.get<AirportCountriesResponse>('/airports/countries')
+  }
+
+  /**
+   * Get all airports for a single country.
+   */
+  async getAirportsByCountry(country: string): Promise<{ country: string; airports: Airport[]; total: number }> {
+    return apiClient.get<{ country: string; airports: Airport[]; total: number }>('/airports/by-country', {
+      country,
+    })
   }
 
   /**

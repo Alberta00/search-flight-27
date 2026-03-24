@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import {
   searchAirports,
+  getAirportCountries,
+  getAirportsByCountry,
   getAirportDetails,
   getPopularAirports,
   getTotalCount,
@@ -21,8 +23,26 @@ router.get('/popular', getPopularAirports);
  * @access  Public
  * @query   keyword - Search keyword
  * @query   subType - Optional: AIRPORT or CITY
+ * @note    Kept for compatibility. For lazy-loaded dropdowns,
+ *          prefer GET /api/airports/countries followed by GET /api/airports/by-country
+ *          because /search is keyword-based and intentionally returns a limited subset of rows.
  */
 router.get('/search', searchAirports);
+
+/**
+ * @route   GET /api/airports/countries
+ * @desc    Get airport countries summary for lazy directory loading
+ * @access  Public
+ */
+router.get('/countries', getAirportCountries);
+
+/**
+ * @route   GET /api/airports/by-country
+ * @desc    Get all airports for a single country
+ * @access  Public
+ * @query   country - Country code or country name
+ */
+router.get('/by-country', getAirportsByCountry);
 
 /**
  * @route   GET /api/airports/count
