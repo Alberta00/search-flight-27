@@ -246,7 +246,6 @@ function TopDestinationsPanel() {
         <span className="text-lg shrink-0">{r.flag}</span>
         <div className="flex-1 min-w-0">
           <div className="text-[15px] font-bold truncate">{r.city} <span className="text-[11px] text-muted-foreground font-medium">{'\u00B7'} {r.country}</span></div>
-          <div className="text-[11px] text-muted-foreground truncate font-medium">{r.airlines}</div>
         </div>
         <div className="w-24 h-2 bg-muted rounded-full overflow-hidden shrink-0">
           <div className="h-full rounded-full" style={{ width: `${barW}%`, background: r.color }} />
