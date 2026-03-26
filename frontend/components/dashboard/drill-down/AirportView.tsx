@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -14,22 +15,27 @@ import {
   ReferenceDot,
 } from 'recharts';
 import {
-  ROUTES,
-  ARRIVALS,
-  AIRLINES,
-  HOUR_TOTAL,
-  DAILY,
-  INVEST_ROUTES,
+  MK_AIRPORTS,
   calcInvestScore,
   getInvestTier,
 } from '@/lib/dashboard/drill-down-data';
-import { useDrillDown, KPIRow, BackButton } from './DrillDownDashboard';
+import { getAirportDetail } from '@/lib/dashboard/services/drilldown';
+import { useDrillDown, KPIRow, BackButton, TimeToggle } from './DrillDownDashboard';
 import type { KPIItem } from './DrillDownDashboard';
 import type { TimeMode } from '@/types/dashboard';
 
-const MONTHLY = [38, 35, 48, 55, 62, 71, 78, 76, 64, 73, 50, 44];
-const AP_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-const AP_NOW = 9;
+const {
+  routes: ROUTES,
+  arrivals: ARRIVALS,
+  airlines: AIRLINES,
+  hourTotal: HOUR_TOTAL,
+  hourTotalArr: HOUR_TOTAL_ARR,
+  daily: DAILY,
+  investRoutes: INVEST_ROUTES,
+  monthly: MONTHLY,
+  monthLabels: AP_MONTHS,
+  currentMonthIdx: AP_NOW,
+} = getAirportDetail();
 
 export function AirportView() {
   const { drillTo, timeMode, selections } = useDrillDown();
@@ -44,7 +50,7 @@ export function AirportView() {
   const kpis: KPIItem[] = [
     { label: 'เที่ยวบินขาออกทั้งหมด', value: airport.flights.toLocaleString(), delta: `\u25B2 ช่วง ${DAILY.length} วัน`, deltaType: 'up', accentColor: '#2563eb' },
     { label: 'เฉลี่ยต่อวัน', value: Math.round(totalDailyFlights / DAILY.length).toString(), delta: 'ตามรายงานล่าสุด', deltaType: 'up', accentColor: '#16a34a' },
-    { label: 'จุดหมายยอดนิยม', value: <span className="text-lg">{topRoute ? topRoute.city : '-'}</span>, delta: topRoute ? `${topRoute.flights} เที่ยวบิน \u00B7 ${topRoute.flag}` : '-', deltaType: 'up', accentColor: '#ca8a04' },
+    { label: 'จุดหมายยอดนิยม', value: topRoute ? topRoute.city : '-', delta: topRoute ? `${topRoute.flights} เที่ยวบิน \u00B7 ${topRoute.flag}` : '-', deltaType: 'up', accentColor: '#ca8a04' },
     { label: 'ชั่วโมงที่คึกคักที่สุด', value: `${busiestHour.hour.toString().padStart(2, '0')}:00`, delta: `${busiestHour.flights} เที่ยวบินขาออก`, deltaType: 'up', accentColor: '#7c3aed' },
   ];
 
@@ -52,7 +58,8 @@ export function AirportView() {
     <div className="space-y-6">
       <BackButton label="กลับไปยังประเทศ" onClick={() => drillTo('country')} />
 
-      <div>
+      <div className="flex items-start justify-between">
+        <div>
         <div className="flex items-baseline gap-3 mb-1">
           <h2 className="text-xl font-bold">{'🛫'} {airport.iata} {'\u2014'} {airport.name}</h2>
           {selections.country && (
@@ -64,6 +71,8 @@ export function AirportView() {
           )}
         </div>
         <p className="text-[15px] text-muted-foreground">{airport.flights} ขาออก {'\u00B7'} {airport.routes} จุดหมาย {'\u00B7'} {airport.airlines} สายการบิน</p>
+        </div>
+        <TimeToggle />
       </div>
 
       <KPIRow items={kpis} />
@@ -76,10 +85,9 @@ export function AirportView() {
       <TopDestinationsPanel />
       <InvestmentPanel timeMode={timeMode} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
         <AirlineSharePanel />
-        <HourDistributionPanel />
-        <DailyBreakdownPanel />
+        <HourDistributionPanel timeMode={timeMode} />
       </div>
     </div>
   );
@@ -184,8 +192,8 @@ function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
       .map((v, i) => ({ month: AP_MONTHS[i], value: v, color: i === AP_NOW ? '#d29922' : v === peakVal ? '#ff9f43' : i === PREV ? '#2563eb' : '#bfdbfe', _idx: i }))
       .filter((d) => d._idx >= startIdx && d._idx <= endIdx);
   } else {
-    title = 'แนวโน้มฤดูกาล (YoY)';
-    modeDisplay = 'YoY';
+    title = 'แนวโน้มฤดูกาล (รายปี)';
+    modeDisplay = 'รายปี';
     chartData = MONTHLY.map((v, i) => ({ month: AP_MONTHS[i], value: v, color: i === AP_NOW ? '#d29922' : v === peakVal ? '#ff9f43' : v >= 60 ? '#93c5fd' : '#bfdbfe' }));
   }
 
@@ -194,7 +202,7 @@ function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#ca8a04]" />
       <div className="flex items-start justify-between mb-3">
         <div>
-          <div className="text-[12px] uppercase tracking-wider text-muted-foreground font-bold">แม่แบบปี</div>
+          <div className="text-[12px] uppercase tracking-wider text-muted-foreground font-bold">รายปี</div>
           <div className="text-[16px] font-bold">{title}</div>
         </div>
         <div className="text-right">
@@ -256,21 +264,21 @@ function TopDestinationsPanel() {
           <div className="text-[15px] text-muted-foreground mt-1">21{'\u2013'}24 ต.ค. 2026 {'\u00B7'} 5 อันดับแรกแต่ละทิศทาง</div>
         </div>
         <div className="flex gap-1.5">
-          <span className="text-[11px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
-          <span className="text-[11px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
+          <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
+          <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border">
         <div className="p-5">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-[11px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
+            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
             <span className="text-[15px] text-muted-foreground font-semibold">5 อันดับเส้นทางขาออก</span>
           </div>
           {top5dep.map((r, i) => renderRow(r, i, maxDep))}
         </div>
         <div className="p-5">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-[11px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
+            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
             <span className="text-[15px] text-muted-foreground font-semibold">5 อันดับเส้นทางขาเข้า</span>
           </div>
           {ARRIVALS.map((r, i) => renderRow(r, i, maxArr))}
@@ -383,58 +391,83 @@ function AirlineSharePanel() {
   );
 }
 
-function HourDistributionPanel() {
-  const max = Math.max(...Object.values(HOUR_TOTAL));
-  const hours = Array.from({ length: 24 }, (_, h) => ({ hour: h.toString().padStart(2, '0'), flights: HOUR_TOTAL[h] || 0 }));
+function HourDistributionPanel({ timeMode }: { timeMode: TimeMode }) {
+  const [view, setView] = useState<'both' | 'dep' | 'arr'>('both');
+  const subtitle = timeMode === 'wow' ? 'รายสัปดาห์' : timeMode === 'mom' ? 'รายเดือน' : 'รายปี';
+  const BAR_HEIGHT = 96;
+
+  const scale = timeMode === 'wow' ? 1 : timeMode === 'mom' ? 4 : 52;
+  const hours = Array.from({ length: 24 }, (_, h) => ({
+    hour: h.toString().padStart(2, '0'),
+    dep: (HOUR_TOTAL[h] || 0) * scale,
+    arr: (HOUR_TOTAL_ARR[h] || 0) * scale,
+  }));
+
+  const maxVal = Math.max(...hours.map((h) => {
+    if (view === 'dep') return h.dep;
+    if (view === 'arr') return h.arr;
+    return h.dep + h.arr;
+  }));
+
+  const viewButtons: { key: 'both' | 'dep' | 'arr'; label: string }[] = [
+    { key: 'both', label: 'ทั้งหมด' },
+    { key: 'dep', label: 'ขาออก' },
+    { key: 'arr', label: 'ขาเข้า' },
+  ];
 
   return (
     <div className="bg-card border border-border rounded-[10px] p-4">
-      <div className="text-[15px] font-bold mb-1">เที่ยวบินขาออกตามชั่วโมง</div>
-      <div className="text-sm text-muted-foreground mb-2.5">รวมทั้ง 4 วัน</div>
-      <div className="flex items-end gap-[2px] h-20 mb-1">
+      <div className="flex items-center justify-between mb-1">
+        <div className="text-[15px] font-bold">เที่ยวบินตามชั่วโมง</div>
+        <div className="flex border border-border rounded-md overflow-hidden">
+          {viewButtons.map((b) => (
+            <button
+              key={b.key}
+              type="button"
+              onClick={() => setView(b.key)}
+              className={`px-2.5 py-1 text-[11px] font-medium transition-colors cursor-pointer ${
+                view === b.key
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-background text-muted-foreground hover:bg-muted'
+              }`}
+            >
+              {b.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="text-sm text-muted-foreground mb-2.5">{subtitle}</div>
+      <div className="flex items-end gap-[2px] mb-1" style={{ height: BAR_HEIGHT }}>
         {hours.map((h) => {
-          const pct = (h.flights / max) * 100;
-          const col = h.flights >= 25 ? '#ff9f43' : h.flights >= 18 ? '#48dbfb' : h.flights >= 10 ? '#2563eb' : '#bfdbfe';
+          const total = view === 'dep' ? h.dep : view === 'arr' ? h.arr : h.dep + h.arr;
+          const depH = view !== 'arr' ? Math.round((h.dep / (maxVal || 1)) * BAR_HEIGHT) : 0;
+          const arrH = view !== 'dep' ? Math.round((h.arr / (maxVal || 1)) * BAR_HEIGHT) : 0;
+
           return (
-            <div key={h.hour} className="flex-1 rounded-t-sm min-w-1 opacity-75 hover:opacity-100 transition-opacity" style={{ height: `${pct}%`, background: col }} title={`${h.hour}:00 \u2014 ${h.flights} เที่ยวบิน`} />
+            <div
+              key={h.hour}
+              className="flex-1 flex flex-col justify-end min-w-1 rounded-t-sm overflow-hidden opacity-75 hover:opacity-100 transition-opacity"
+              title={`${h.hour}:00 — ขาออก ${h.dep.toLocaleString()} · ขาเข้า ${h.arr.toLocaleString()} · รวม ${(h.dep + h.arr).toLocaleString()}`}
+            >
+              {view !== 'arr' && (
+                <div style={{ height: depH, background: '#2563eb' }} />
+              )}
+              {view !== 'dep' && (
+                <div style={{ height: arrH, background: '#16a34a' }} />
+              )}
+            </div>
           );
         })}
       </div>
       <div className="flex justify-between text-xs text-muted-foreground">
         <span>00</span><span>06</span><span>12</span><span>18</span><span>23</span>
       </div>
-    </div>
-  );
-}
-
-function DailyBreakdownPanel() {
-  const max = Math.max(...DAILY.map((d) => d.flights));
-  return (
-    <div className="bg-card border border-border rounded-[10px] p-4">
-      <div className="text-[15px] font-bold mb-1">สรุปรายวัน</div>
-      <div className="text-sm text-muted-foreground mb-3">เที่ยวบินต่อวัน {'\u00B7'} ช่วง 4 วัน</div>
-      {DAILY.map((d) => {
-        const pct = (d.flights / max * 100).toFixed(0);
-        const isPeak = d.flights === max;
-        return (
-          <div key={d.date} className="flex items-center justify-between py-2 border-b border-border/60 last:border-b-0">
-            <div>
-              <div className="text-sm text-muted-foreground">{d.date}</div>
-              {d.delta !== null ? (
-                <span className={`text-[11px] font-semibold ${d.delta > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                  {d.delta > 0 ? '\u25B2' : '\u25BC'} {Math.abs(d.delta)}%
-                </span>
-              ) : (
-                <span className="text-[11px] text-muted-foreground">{'\u2014'}</span>
-              )}
-            </div>
-            <div className="flex-1 mx-3 h-2 bg-muted rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${pct}%`, background: isPeak ? '#16a34a' : '#2563eb' }} />
-            </div>
-            <div className="text-lg font-bold w-10 text-right tabular-nums">{d.flights}</div>
-          </div>
-        );
-      })}
+      {view === 'both' && (
+        <div className="flex gap-4 mt-2 text-xs font-medium text-muted-foreground">
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#2563eb]" /> ขาออก</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#16a34a]" /> ขาเข้า</span>
+        </div>
+      )}
     </div>
   );
 }

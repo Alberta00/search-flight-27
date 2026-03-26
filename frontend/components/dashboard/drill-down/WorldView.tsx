@@ -9,7 +9,7 @@ import {
   getChangeForMode,
   modeLabel,
 } from '@/lib/dashboard/drill-down-data';
-import { useDrillDown, KPIRow, ChangePill } from './DrillDownDashboard';
+import { useDrillDown, KPIRow, ChangePill, TimeToggle } from './DrillDownDashboard';
 import type { KPIItem } from './DrillDownDashboard';
 
 export function WorldView() {
@@ -22,27 +22,24 @@ export function WorldView() {
 
   const kpis: KPIItem[] = [
     { label: 'เที่ยวบินทั้งหมด', value: totalFlights.toLocaleString(), delta: `${busiestContinent.delta.split('(')[0].trim()} เทียบกับก่อนหน้า`, deltaType: 'up', accentColor: '#2563eb' },
-    { label: 'สนามบินที่ใช้งาน', value: BUSIEST_AIRPORTS.length.toLocaleString() + ' อันดับ', delta: `จาก ${BUSIEST_AIRPORTS.length} สนามบินที่คึกคักที่สุด`, deltaType: 'up', accentColor: '#16a34a' },
+    { label: 'สนามบินที่มีการใช้งาน', value: BUSIEST_AIRPORTS.length.toLocaleString() + ' อันดับ', delta: `จาก ${BUSIEST_AIRPORTS.length} สนามบินที่คึกคักที่สุด`, deltaType: 'up', accentColor: '#16a34a' },
     { label: 'เที่ยวบินเฉลี่ย/วัน', value: avgPerDay.toLocaleString(), delta: '\u2248 คงที่', deltaType: 'neutral', accentColor: '#ca8a04' },
-    { label: 'ทวีปที่คึกคักที่สุด', value: <span className="text-xl">{busiestContinent.icon} {busiestContinent.name}</span>, delta: `${busiestContinent.delta.split('(')[0].trim()} \u00B7 ${busiestContinent.flights.toLocaleString()} เที่ยวบิน`, deltaType: 'up', accentColor: '#7c3aed' },
+    { label: 'ทวีปที่คึกคักที่สุด', value: `${busiestContinent.icon} ${busiestContinent.name}`, delta: `${busiestContinent.delta.split('(')[0].trim()} \u00B7 ${busiestContinent.flights.toLocaleString()} เที่ยวบิน`, deltaType: 'up', accentColor: '#7c3aed' },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold mb-1">ภาพรวมเที่ยวบินทั่วโลก</h2>
-        <p className="text-sm text-muted-foreground">
-          แสดงข้อมูลสำหรับ <strong>21{'\u2013'}24 ต.ค. 2026</strong> {'\u00B7'} คลิกทวีปเพื่อดูรายละเอียด
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold mb-1">ภาพรวมเที่ยวบินทั่วโลก</h2>
+          <p className="text-sm text-muted-foreground">
+            แสดงข้อมูลสำหรับ <strong>21{'\u2013'}24 ต.ค. 2026</strong> {'\u00B7'} คลิกทวีปเพื่อดูรายละเอียด
+          </p>
+        </div>
+        <TimeToggle />
       </div>
 
       <KPIRow items={kpis} />
-
-      <div className="grid grid-cols-1 xl:grid-cols-[3fr_2fr] gap-4">
-        <BusiestAirportsTable />
-        <TopAirlinesTable />
-      </div>
-      <TopDestinations />
 
       {/* Continent Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -70,19 +67,25 @@ export function WorldView() {
             <div className="text-lg font-bold mb-1.5">{c.name}</div>
             <div className="text-[15px] text-muted-foreground mb-4">{c.airports}</div>
             <div className="text-2xl font-bold text-primary">{c.flights.toLocaleString()}</div>
-            <div className="text-[15px] text-muted-foreground mt-0.5">เที่ยวบินในช่วงนี้</div>
+            <div className="text-[15px] text-muted-foreground mt-0.5">เที่ยวบิน</div>
             <div className="text-[14px] text-primary mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
               {'\u25B6'} สำรวจ {c.name}
             </div>
           </button>
         ))}
       </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[3fr_2fr] gap-4">
+        <BusiestAirportsTable />
+        <TopAirlinesTable />
+      </div>
+      <TopDestinations />
     </div>
   );
 }
 
 function BusiestAirportsTable() {
-  const { timeMode } = useDrillDown();
+  const { timeMode, drillTo } = useDrillDown();
 
   return (
     <div className="flex flex-col gap-3">
@@ -229,14 +232,14 @@ function TopDestinations() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
         <div className="bg-card border border-border rounded-[10px] p-4">
           <div className="flex items-center gap-1.5 mb-3">
-            <span className="text-[11px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
+            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
             <span className="text-[16px] font-bold">5 อันดับจุดหมายขาออก</span>
           </div>
           {renderDest(WORLD_TOP_DEP)}
         </div>
         <div className="bg-card border border-border rounded-[10px] p-4">
           <div className="flex items-center gap-1.5 mb-3">
-            <span className="text-[11px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
+            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
             <span className="text-[16px] font-bold">5 อันดับจุดหมายขาเข้า</span>
           </div>
           {renderDest(WORLD_TOP_ARR)}

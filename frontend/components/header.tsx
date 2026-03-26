@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { Plane, Menu, Search, BarChart3, MapPin, LogIn, UserPlus, LayoutDashboard } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Plane, Menu, Search, BarChart3, MapPin, LogIn, UserPlus, Route, LayoutDashboard, } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,17 +16,27 @@ import {
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const isDashboard = pathname.startsWith('/dashboard')
+  const isFlightRoutes = pathname.startsWith('/flight-routes')
+  const isHome = pathname === '/'
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault()
+    setIsMobileMenuOpen(false)
+
+    if (!isHome) {
+      // Navigate to home page with hash — scroll happens after navigation
+      router.push(`/#${targetId}`)
+      return
+    }
+
     const targetElement = document.getElementById(targetId)
     if (targetElement) {
       targetElement.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       })
-      setIsMobileMenuOpen(false)
     }
   }
 
@@ -64,7 +74,14 @@ export function Header() {
           >
             {'ปลายทางยอดนิยม'}
           </a>
-
+          <Link
+            href="/flight-routes"
+            className={`text-sm font-medium transition-all duration-300 hover:translate-y-0.5 active:translate-y-1 ${
+              isFlightRoutes ? 'text-primary' : 'hover:text-primary'
+            }`}
+          >
+            {'เส้นทางการบิน'}
+          </Link>
           <Link
             href="/dashboard"
             className={`text-sm font-medium transition-all duration-300 hover:translate-y-0.5 active:translate-y-1 ${
@@ -172,6 +189,25 @@ export function Header() {
                   isDashboard ? 'text-primary' : 'text-foreground group-hover:text-primary'
                 }`}>
                   {'แดชบอร์ด'}
+                </span>
+              </Link>
+
+              <Link
+                href="/flight-routes"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-primary/10 hover:shadow-md transition-all duration-200 group border border-border/50 ${
+                  isFlightRoutes ? 'bg-primary/10 border-primary/30' : 'bg-background/80'
+                }`}
+              >
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                  isFlightRoutes ? 'bg-primary/20' : 'bg-primary/10 group-hover:bg-primary/20'
+                }`}>
+                  <Route className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+                </div>
+                <span className={`text-base font-semibold transition-colors flex-1 ${
+                  isFlightRoutes ? 'text-primary' : 'text-foreground group-hover:text-primary'
+                }`}>
+                  {'เส้นทางการบิน'}
                 </span>
               </Link>
 

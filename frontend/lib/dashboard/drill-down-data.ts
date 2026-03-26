@@ -80,6 +80,12 @@ export const HOUR_TOTAL: Record<number, number> = {
   18: 12, 19: 29, 20: 27, 21: 3, 22: 5, 23: 11,
 };
 
+export const HOUR_TOTAL_ARR: Record<number, number> = {
+  0: 12, 1: 5, 2: 6, 3: 3, 4: 7, 5: 9, 6: 11, 7: 10, 8: 13, 9: 6,
+  10: 8, 11: 19, 12: 17, 13: 14, 14: 16, 15: 20, 16: 18, 17: 16,
+  18: 15, 19: 22, 20: 24, 21: 8, 22: 7, 23: 9,
+};
+
 // ============================================================
 // Daily breakdown
 // ============================================================
@@ -270,6 +276,9 @@ export const INVEST_ROUTES: InvestRoute[] = [
 // ============================================================
 // Investment scoring helpers
 // ============================================================
+// TODO: Replace with dynamic threshold from API (e.g. max route flights,
+// median, or percentile-based benchmark for the selected airport).
+// Currently hardcoded to the busiest SKP route as a mock baseline.
 const INVEST_REF_FLIGHTS = 40;
 
 export function calcInvestScore(r: InvestRoute, timeMode: TimeMode): number {

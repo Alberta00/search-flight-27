@@ -237,6 +237,19 @@ export interface MKAirport {
   color: string;
 }
 
+/** Generalized airport info (same shape as MKAirport, used across all countries) */
+export type AirportInfo = MKAirport;
+
+/** Per-continent detail data — plain objects, no JSX */
+export interface ContinentDetailData {
+  countryCount: string;
+  busiestCountry: { flag: string; nameTh: string };
+  busiestDelta: string;
+  fastestGrowing: { flag: string; nameTh: string };
+  fastestDelta: string;
+  countries: CountryData[];
+}
+
 export interface InboundCountry {
   name: string;
   flag: string;

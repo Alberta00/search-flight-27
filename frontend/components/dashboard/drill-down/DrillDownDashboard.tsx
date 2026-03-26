@@ -51,14 +51,13 @@ export function DrillDownDashboard() {
   return (
     <DrillDownContext.Provider value={{ level, timeMode, drillTo, setTimeMode, selections }}>
       <div className="space-y-4">
-        {/* Header with time toggle */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">ภาพรวมการค้นหาเที่ยวบิน</h1>
-          <TimeToggle />
-        </div>
+        {/* Title centered */}
+        {/* <h1 className="text-xl font-bold text-center">ภาพรวมการค้นหาเที่ยวบิน</h1> */}
 
-        {/* Unified Status Line & Navigation */}
-        <StatusLine />
+        {/* Status line centered */}
+        <div className="flex justify-center">
+          <StatusLine />
+        </div>
 
         {/* Level views */}
         {level === 'world' && <WorldView />}
@@ -71,24 +70,28 @@ export function DrillDownDashboard() {
 }
 
 // ── Time Toggle ──
-function TimeToggle() {
+export function TimeToggle() {
   const { timeMode, setTimeMode } = useDrillDown();
-  const modes: TimeMode[] = ['wow', 'mom', 'yoy'];
+  const modes: { key: TimeMode; label: string }[] = [
+    { key: 'wow', label: 'รายสัปดาห์' },
+    { key: 'mom', label: 'รายเดือน' },
+    { key: 'yoy', label: 'รายปี' },
+  ];
 
   return (
     <div className="flex border border-border rounded-lg overflow-hidden">
       {modes.map((m) => (
         <button
-          key={m}
+          key={m.key}
           type="button"
-          onClick={() => setTimeMode(m)}
+          onClick={() => setTimeMode(m.key)}
           className={`px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
-            timeMode === m
+            timeMode === m.key
               ? 'bg-primary text-primary-foreground'
               : 'bg-background text-muted-foreground hover:bg-muted'
           }`}
         >
-          {m.toUpperCase()}
+          {m.label}
         </button>
       ))}
     </div>
@@ -130,7 +133,7 @@ function StatusLine() {
   const currentIdx = LEVELS.indexOf(level);
 
   return (
-    <div className="flex justify-center py-4">
+    <div className="flex justify-center">
       <div className="relative flex items-start">
         {/* Connector lines layer — sits behind circles, vertically centered on them */}
         <div className="absolute top-5 sm:top-6 left-0 right-0 flex items-center pointer-events-none" aria-hidden="true">
@@ -205,7 +208,7 @@ function StatusLine() {
 // ── KPI Row (shared) ──
 export interface KPIItem {
   label: string;
-  value: string | React.ReactNode;
+  value: string;
   delta: string;
   deltaType: 'up' | 'down' | 'neutral';
   accentColor: string;
