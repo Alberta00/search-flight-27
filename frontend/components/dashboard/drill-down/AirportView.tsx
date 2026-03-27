@@ -18,7 +18,12 @@ import {
   MK_AIRPORTS,
   calcInvestScore,
   getInvestTier,
+  growthCardBadgeClasses,
+  growthDeltaTypeFromPct,
+  growthPillSurfaceClasses,
+  parsePercentFromDelta,
 } from '@/lib/dashboard/drill-down-data';
+import { buildWowWeeklyBarData, buildWowWeeklyTrendPoints, weeklyTotalsFromDailyRows } from '@/lib/dashboard/week-chart';
 import { getAirportDetail } from '@/lib/dashboard/services/drilldown';
 import { useDrillDown, KPIRow, BackButton, TimeToggle } from './DrillDownDashboard';
 import type { KPIItem } from './DrillDownDashboard';
@@ -34,12 +39,19 @@ const {
   investRoutes: INVEST_ROUTES,
   monthly: MONTHLY,
   monthLabels: AP_MONTHS,
-  currentMonthIdx: AP_NOW,
 } = getAirportDetail();
 
 export function AirportView() {
   const { drillTo, timeMode, selections } = useDrillDown();
   const airport = selections.airport || MK_AIRPORTS[0];
+  const countryForTone = selections.country;
+  const countryPct = countryForTone ? parsePercentFromDelta(countryForTone.delta) : null;
+  const countryTone =
+    countryPct != null
+      ? growthDeltaTypeFromPct(countryPct, timeMode)
+      : countryForTone && countryForTone.deltaN < 0
+        ? 'down'
+        : 'neutral';
 
   // Derive KPIs from data
   const topRoute = ROUTES.length > 0 ? ROUTES.reduce((a, b) => a.flights > b.flights ? a : b) : null;
@@ -48,31 +60,37 @@ export function AirportView() {
   const totalDailyFlights = DAILY.reduce((s, d) => s + d.flights, 0);
 
   const kpis: KPIItem[] = [
-    { label: 'เที่ยวบินขาออกทั้งหมด', value: airport.flights.toLocaleString(), delta: `\u25B2 ช่วง ${DAILY.length} วัน`, deltaType: 'up', accentColor: '#2563eb' },
-    { label: 'เฉลี่ยต่อวัน', value: Math.round(totalDailyFlights / DAILY.length).toString(), delta: 'ตามรายงานล่าสุด', deltaType: 'up', accentColor: '#16a34a' },
-    { label: 'จุดหมายยอดนิยม', value: topRoute ? topRoute.city : '-', delta: topRoute ? `${topRoute.flights} เที่ยวบิน \u00B7 ${topRoute.flag}` : '-', deltaType: 'up', accentColor: '#ca8a04' },
-    { label: 'ชั่วโมงที่คึกคักที่สุด', value: `${busiestHour.hour.toString().padStart(2, '0')}:00`, delta: `${busiestHour.flights} เที่ยวบินขาออก`, deltaType: 'up', accentColor: '#7c3aed' },
+    { label: 'เที่ยวบินขาออกทั้งหมด', value: airport.flights.toLocaleString(), delta: `\u25B2 ช่วง ${DAILY.length} วัน`, deltaType: 'neutral', growthColored: false, accentColor: '#2563eb' },
+    { label: 'เฉลี่ยต่อวัน', value: Math.round(totalDailyFlights / DAILY.length).toString(), delta: 'ตามรายงานล่าสุด', deltaType: 'neutral', growthColored: false, accentColor: '#16a34a' },
+    { label: 'จุดหมายยอดนิยม', value: topRoute ? topRoute.city : '-', delta: topRoute ? `${topRoute.flights} เที่ยวบิน \u00B7 ${topRoute.flag}` : '-', deltaType: 'neutral', growthColored: false, accentColor: '#ca8a04' },
+    { label: 'ชั่วโมงที่คึกคักที่สุด', value: `${busiestHour.hour.toString().padStart(2, '0')}:00`, delta: `${busiestHour.flights} เที่ยวบินขาออก`, deltaType: 'neutral', growthColored: false, accentColor: '#7c3aed' },
   ];
 
   return (
     <div className="space-y-6">
-      <BackButton label="กลับไปยังประเทศ" onClick={() => drillTo('country')} />
 
-      <div className="flex items-start justify-between">
-        <div>
-        <div className="flex items-baseline gap-3 mb-1">
-          <h2 className="text-xl font-bold">{'🛫'} {airport.iata} {'\u2014'} {airport.name}</h2>
-          {selections.country && (
-            <span className={`text-[13px] font-bold py-0.5 px-3 rounded-full ${
-              selections.country.deltaN >= 0 ? 'bg-green-500/15 text-green-600' : 'bg-red-500/15 text-red-500'
-            }`}>
-              {selections.country.deltaN >= 0 ? '\u25B2' : '\u25BC'} {selections.country.deltaN >= 0 ? '+' : ''}{selections.country.deltaN} เที่ยวบิน ({selections.country.delta})
-            </span>
-          )}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex flex-wrap items-baseline gap-x-3 gap-y-2">
+            <h2 className="min-w-0 text-xl font-bold break-words">
+              {'🛫'} {airport.iata} {'\u2014'} {airport.name}
+            </h2>
+            {selections.country && (
+              <span
+                className={`inline-flex max-w-full shrink-0 flex-wrap items-center gap-x-1 text-[13px] font-bold break-words rounded-full py-0.5 px-3 ${growthCardBadgeClasses(countryTone)}`}
+              >
+                {selections.country.deltaN >= 0 ? '\u25B2' : '\u25BC'} {selections.country.deltaN >= 0 ? '+' : ''}
+                {selections.country.deltaN} เที่ยวบิน ({selections.country.delta})
+              </span>
+            )}
+          </div>
+          <p className="text-[15px] text-muted-foreground break-words">
+            {airport.flights} ขาออก {'\u00B7'} {airport.routes} จุดหมาย {'\u00B7'} {airport.airlines} สายการบิน
+          </p>
         </div>
-        <p className="text-[15px] text-muted-foreground">{airport.flights} ขาออก {'\u00B7'} {airport.routes} จุดหมาย {'\u00B7'} {airport.airlines} สายการบิน</p>
+        <div className="shrink-0 self-start lg:self-auto">
+          <TimeToggle />
         </div>
-        <TimeToggle />
       </div>
 
       <KPIRow items={kpis} />
@@ -89,17 +107,25 @@ export function AirportView() {
         <AirlineSharePanel />
         <HourDistributionPanel timeMode={timeMode} />
       </div>
+
+      <div className="flex justify-center pt-1">
+        <BackButton label="กลับไปยังประเทศ" onClick={() => drillTo('country')} />
+      </div>
     </div>
   );
 }
 
 function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
-  // WoW: derive from DAILY data
-  const wowData = DAILY.map((d) => ({ day: d.date, flights: d.flights }));
+  const now = new Date();
+  const nowIdx = now.getMonth();
+  const nowYear = now.getFullYear();
 
-  // MoM: ±2 months around current (Oct)
-  const startIdx = Math.max(0, AP_NOW - 2);
-  const endIdx = Math.min(11, AP_NOW + 2);
+  // WoW: 5 weeks (±2 from current), Thai brief ranges; totals scaled from daily sample avg × 7
+  const wowData = buildWowWeeklyTrendPoints(DAILY);
+
+  // MoM: ±2 months around calendar “เดือนนี้” (not a fixed mock month)
+  const startIdx = Math.max(0, nowIdx - 2);
+  const endIdx = Math.min(11, nowIdx + 2);
   const momData = MONTHLY
     .map((v, i) => ({ day: AP_MONTHS[i], flights: v, _idx: i }))
     .filter((d) => d._idx >= startIdx && d._idx <= endIdx);
@@ -116,51 +142,92 @@ function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
   const yDomain: [number, number] = [Math.floor(minVal * 0.9), Math.ceil(peak * 1.1)];
 
   const subtitle = timeMode === 'wow'
-    ? 'ภาพรวมรายวัน'
+    ? 'ภาพรวมรายสัปดาห์ (\u00B12 สัปดาห์)'
     : timeMode === 'mom'
       ? 'ภาพรวมรายเดือน (±2 เดือน)'
       : 'ภาพรวมรายปี';
 
   const dateRange = timeMode === 'wow'
-    ? `${wowData[0]?.day} \u2013 ${wowData[wowData.length - 1]?.day}`
+    ? `${wowData[0]?.day} \u2013 ${wowData[wowData.length - 1]?.day} · 5 สัปดาห์`
     : timeMode === 'mom'
-      ? `${momData[0]?.day} \u2013 ${momData[momData.length - 1]?.day} 2026`
-      : 'ม.ค. \u2013 ธ.ค. 2026';
+      ? `${momData[0]?.day} \u2013 ${momData[momData.length - 1]?.day} ${nowYear}`
+      : `ม.ค. \u2013 ธ.ค. ${nowYear}`;
+
+  // Center week index matches buildWowWeeklyBarData / buildWowWeeklyTrendPoints (±2 from current Monday).
+  const wowCurrentIdx = 2;
+  const currentPeriodDetail =
+    timeMode === 'wow'
+      ? wowData[wowCurrentIdx]?.day
+      : `${AP_MONTHS[nowIdx] ?? ''} ${nowYear}`.trim();
 
   return (
     <div className="relative overflow-hidden bg-card border border-border rounded-[10px] p-4 hover:border-primary hover:-translate-y-0.5 transition-all">
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-primary" />
       <div className="flex items-start justify-between mb-3">
         <div>
-          <div className="text-xs uppercase tracking-wider text-muted-foreground">{subtitle}</div>
+          <div className="text-base uppercase tracking-wider text-muted-foreground">{subtitle}</div>
           <div className="text-[15px] font-bold">แนวโน้มเที่ยวบิน</div>
         </div>
         <div className="text-right">
           <div className="text-[22px] font-bold leading-none">{total.toLocaleString()}</div>
-          <div className="text-[11px] text-green-600 font-semibold mt-0.5">{'\u25B2'} คงที่</div>
+          <div className="text-[13px] text-green-600 font-semibold mt-1">{'\u25B2'} คงที่</div>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={95}>
-        <AreaChart data={tData} margin={{ top: 5, right: 5, left: -10, bottom: 0 }}>
+      <ResponsiveContainer width="100%" minHeight={180} height={192}>
+        <AreaChart
+          data={tData}
+          margin={{
+            top: 10,
+            right: 12,
+            left: 4,
+            bottom: timeMode === 'wow' ? 36 : 8,
+          }}
+        >
           <defs>
-            <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="trendSparkGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#2563eb" stopOpacity={0.35} />
               <stop offset="100%" stopColor="#2563eb" stopOpacity={0.02} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 4" vertical={false} className="stroke-border" />
-          <XAxis dataKey="day" tick={{ fontSize: 11, fontWeight: 500 }} className="text-muted-foreground" />
-          <YAxis domain={yDomain} tick={{ fontSize: 10, fontWeight: 500 }} className="text-muted-foreground" tickCount={4} />
+          <XAxis
+            dataKey="day"
+            tick={{ fontSize: 13, fontWeight: 600 }}
+            tickMargin={timeMode === 'wow' ? 10 : 8}
+            interval={timeMode === 'yoy' ? 1 : 0}
+            className="text-muted-foreground"
+          />
+          <YAxis
+            domain={yDomain}
+            tick={{ fontSize: 13, fontWeight: 600 }}
+            className="text-muted-foreground"
+            tickCount={5}
+            width={48}
+          />
           <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', fontSize: '14px' }} formatter={(value: number) => [`${value} เที่ยวบิน`, '']} />
-          <Area type="monotone" dataKey="flights" stroke="#2563eb" strokeWidth={2.5} fill="url(#trendGradient)" />
-          <ReferenceDot x={peakEntry.day} y={peak} r={6} fill="#ff9f43" stroke="#fff" strokeWidth={2} />
+          <Area type="monotone" dataKey="flights" stroke="#2563eb" strokeWidth={2.5} fill="url(#trendSparkGradient)" />
+          {(timeMode === 'mom' || timeMode === 'yoy') && (
+            <ReferenceDot
+              x={AP_MONTHS[nowIdx]}
+              y={MONTHLY[nowIdx]}
+              r={6}
+              fill="#d29922"
+              stroke="#fff"
+              strokeWidth={2}
+            />
+          )}
+          <ReferenceDot x={peakEntry.day} y={peak} r={7} fill="#ff9f43" stroke="#fff" strokeWidth={2} />
         </AreaChart>
       </ResponsiveContainer>
-      <div className="flex justify-between text-[15px] font-medium text-muted-foreground mt-2.5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between text-[15px] font-medium text-muted-foreground mt-2.5">
         <span>{dateRange}</span>
-        <span className="flex gap-4">
-          <span className="text-primary font-bold">{'\u25CF'} จริง</span>
-          <span className="text-[#ff9f43] font-bold">{'\u25CF'} {timeMode === 'wow' ? 'วันสูงสุด' : 'เดือนสูงสุด'}</span>
+        <span className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1">
+          <span className="text-primary font-bold">{'\u25CF'} แนวโน้ม</span>
+          <span className="text-[#d29922] font-bold">
+            {'\u25CF'} {timeMode === 'wow' ? 'สัปดาห์นี้' : 'เดือนนี้'}
+            {currentPeriodDetail ? ` \u00B7 ${currentPeriodDetail}` : ''}
+          </span>
+          <span className="text-[#ff9f43] font-bold">{'\u25CF'} {timeMode === 'wow' ? 'สัปดาห์สูงสุด' : 'เดือนสูงสุด'}</span>
         </span>
       </div>
     </div>
@@ -168,33 +235,36 @@ function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
 }
 
 function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
+  const now = new Date();
+  const nowIdx = now.getMonth();
+
   let chartData: Array<{ month: string; value: number; color: string }>;
   let title: string;
-  let modeDisplay: string;
   const peakVal = Math.max(...MONTHLY);
+  const prevIdx = (nowIdx + 11) % 12;
 
   if (timeMode === 'wow') {
     title = 'แนวโน้มรายสัปดาห์ (WoW)';
-    modeDisplay = 'WoW';
-    chartData = [
-      { month: 'สัปดาห์ 1', value: 17, color: '#bfdbfe' },
-      { month: 'สัปดาห์ 2', value: 18, color: '#bfdbfe' },
-      { month: 'สัปดาห์ 3', value: 19, color: '#ff9f43' },
-      { month: 'สัปดาห์ 4', value: 18, color: '#d29922' },
-    ];
+    chartData = buildWowWeeklyBarData(weeklyTotalsFromDailyRows(DAILY));
   } else if (timeMode === 'mom') {
     title = 'แนวโน้มรายเดือน (MoM)';
-    modeDisplay = 'MoM';
-    const PREV = 8;
-    const startIdx = Math.max(0, AP_NOW - 2);
-    const endIdx = Math.min(11, AP_NOW + 2);
+    const startIdx = Math.max(0, nowIdx - 2);
+    const endIdx = Math.min(11, nowIdx + 2);
     chartData = MONTHLY
-      .map((v, i) => ({ month: AP_MONTHS[i], value: v, color: i === AP_NOW ? '#d29922' : v === peakVal ? '#ff9f43' : i === PREV ? '#2563eb' : '#bfdbfe', _idx: i }))
+      .map((v, i) => ({
+        month: AP_MONTHS[i],
+        value: v,
+        color: i === nowIdx ? '#d29922' : v === peakVal ? '#ff9f43' : i === prevIdx ? '#2563eb' : '#bfdbfe',
+        _idx: i,
+      }))
       .filter((d) => d._idx >= startIdx && d._idx <= endIdx);
   } else {
     title = 'แนวโน้มฤดูกาล (รายปี)';
-    modeDisplay = 'รายปี';
-    chartData = MONTHLY.map((v, i) => ({ month: AP_MONTHS[i], value: v, color: i === AP_NOW ? '#d29922' : v === peakVal ? '#ff9f43' : v >= 60 ? '#93c5fd' : '#bfdbfe' }));
+    chartData = MONTHLY.map((v, i) => ({
+      month: AP_MONTHS[i],
+      value: v,
+      color: i === nowIdx ? '#d29922' : v === peakVal ? '#ff9f43' : v >= 60 ? '#93c5fd' : '#bfdbfe',
+    }));
   }
 
   return (
@@ -202,31 +272,59 @@ function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#ca8a04]" />
       <div className="flex items-start justify-between mb-3">
         <div>
-          <div className="text-[12px] uppercase tracking-wider text-muted-foreground font-bold">รายปี</div>
           <div className="text-[16px] font-bold">{title}</div>
         </div>
-        <div className="text-right">
-          <div className="text-lg font-bold leading-none text-[#ca8a04]">{modeDisplay}</div>
-          <div className="text-[12px] text-muted-foreground mt-1 font-bold">โหมด</div>
-        </div>
       </div>
-      <ResponsiveContainer width="100%" height={110}>
-        <BarChart data={chartData} margin={{ top: 5, right: 5, left: -10, bottom: 0 }}>
+      <ResponsiveContainer width="100%" minHeight={200} height={208}>
+        <BarChart
+          data={chartData}
+          margin={{
+            top: 12,
+            right: 12,
+            left: 4,
+            bottom:
+              timeMode === 'wow' ? 44 : timeMode === 'mom' ? 20 : 28,
+          }}
+        >
           <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border" />
-          <XAxis dataKey="month" tick={{ fontSize: 10, fontWeight: 500 }} className="text-muted-foreground" />
-          <YAxis tick={{ fontSize: 10, fontWeight: 500 }} className="text-muted-foreground" />
+          <XAxis
+            dataKey="month"
+            tick={{ fontSize: 13, fontWeight: 600 }}
+            tickMargin={timeMode === 'wow' ? 10 : 8}
+            interval={timeMode === 'yoy' ? 1 : 0}
+            className="text-muted-foreground"
+          />
+          <YAxis
+            tick={{ fontSize: 13, fontWeight: 600 }}
+            width={48}
+            tickCount={5}
+            className="text-muted-foreground"
+          />
           <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', fontSize: '14px' }} formatter={(value: number) => [`${value} เที่ยวบิน`, '']} />
-          <Bar dataKey="value" radius={[3, 3, 0, 0]} maxBarSize={24}>
+          <Bar
+            dataKey="value"
+            radius={[5, 5, 0, 0]}
+            maxBarSize={timeMode === 'yoy' ? 32 : timeMode === 'mom' ? 42 : 48}
+          >
             {chartData.map((entry, i) => (<Cell key={i} fill={entry.color} opacity={entry.color === '#bfdbfe' ? 0.35 : 0.9} />))}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex justify-between text-[15px] font-medium text-muted-foreground mt-2">
-        <span>ทั้งปี {'\u00B7'} เที่ยวบินต่อเดือน</span>
-        <span className="flex gap-4">
+      <div className="flex flex-col gap-1.5 sm:flex-row sm:justify-between text-[15px] font-medium text-muted-foreground mt-2">
+        <span>
+          {timeMode === 'wow'
+            ? '5 สัปดาห์ · \u00B12 สัปดาห์จากสัปดาห์ปัจจุบัน'
+            : timeMode === 'mom'
+              ? '\u00B12 เดือนจากเดือนปัจจุบัน · เที่ยวบินต่อเดือน'
+              : `ทั้งปี ${'\u00B7'} เที่ยวบินต่อเดือน`}
+        </span>
+        <span className="flex flex-wrap gap-x-4 gap-y-1">
           <span style={{ color: '#d29922' }} className="font-bold">{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ปัจจุบัน' : 'เดือนปัจจุบัน'}</span>
           <span style={{ color: '#ff9f43' }} className="font-bold">{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ที่สูงสุด' : 'เดือนที่สูงสุด'}</span>
-          <span style={{ color: '#93c5fd' }} className="font-bold">{'\u25A0'} อื่นๆ</span>
+          {timeMode === 'mom' && (
+            <span style={{ color: '#2563eb' }} className="font-bold">{'\u25A0'} เดือนก่อนหน้า</span>
+          )}
+          <span style={{ color: timeMode === 'yoy' ? '#93c5fd' : '#bfdbfe' }} className="font-bold">{'\u25A0'} อื่นๆ</span>
         </span>
       </div>
     </div>
@@ -241,28 +339,32 @@ function TopDestinationsPanel() {
   const renderRow = (r: typeof ROUTES[0], i: number, maxF: number) => {
     const barW = ((r.flights / maxF) * 100).toFixed(0);
     return (
-      <div key={r.city + i} className="flex items-center gap-2 py-2 border-b border-border/60 last:border-b-0">
-        <span className="text-[14px] text-muted-foreground w-6 text-center shrink-0 font-bold">{i + 1}</span>
-        <span className="text-lg shrink-0">{r.flag}</span>
-        <div className="flex-1 min-w-0">
-          <div className="text-[15px] font-bold truncate">{r.city} <span className="text-[11px] text-muted-foreground font-medium">{'\u00B7'} {r.country}</span></div>
+      <div key={r.city + i} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 py-2 border-b border-border/60 last:border-b-0">
+        <div className="flex items-center gap-2">
+          <span className="text-[14px] text-muted-foreground w-6 text-center shrink-0 font-bold">{i + 1}</span>
+          <span className="text-lg shrink-0">{r.flag}</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-[15px] font-bold truncate">{r.city} <span className="text-[11px] text-muted-foreground font-medium">{'\u00B7'} {r.country}</span></div>
+          </div>
         </div>
-        <div className="w-24 h-2 bg-muted rounded-full overflow-hidden shrink-0">
-          <div className="h-full rounded-full" style={{ width: `${barW}%`, background: r.color }} />
+        <div className="flex items-center gap-2 pl-[calc(1.5rem+0.5rem+1.125rem+0.5rem)] sm:pl-0 sm:ml-auto sm:shrink-0">
+          <div className="w-24 h-2 bg-muted rounded-full overflow-hidden shrink-0">
+            <div className="h-full rounded-full" style={{ width: `${barW}%`, background: r.color }} />
+          </div>
+          <span className="text-[15px] font-bold w-10 text-right shrink-0 tabular-nums">{r.flights}</span>
         </div>
-        <span className="text-[15px] font-bold w-10 text-right shrink-0 tabular-nums">{r.flights}</span>
       </div>
     );
   };
 
   return (
     <div className="bg-card border border-border rounded-[10px]">
-      <div className="flex items-start justify-between p-5 border-b border-border">
-        <div>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between p-5 border-b border-border">
+        <div className="flex items-center gap-3 flex-wrap">
           <div className="text-[16px] font-bold">จุดหมายปลายทางยอดนิยม</div>
-          <div className="text-[15px] text-muted-foreground mt-1">21{'\u2013'}24 ต.ค. 2026 {'\u00B7'} 5 อันดับแรกแต่ละทิศทาง</div>
+          <div className="text-[14px] text-muted-foreground">21{'\u2013'}24 ต.ค. 2026 {'\u00B7'} 5 อันดับแรกแต่ละทิศทาง</div>
         </div>
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 shrink-0">
           <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
           <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
         </div>
@@ -347,7 +449,9 @@ function InvestmentPanel({ timeMode }: { timeMode: TimeMode }) {
                   const isActive = mode === modeKey;
                   return (
                     <span key={mode} className={`text-[13px] font-semibold py-1 px-2.5 rounded border whitespace-nowrap ${
-                      isActive ? 'bg-primary/12 border-primary text-primary text-sm font-bold' : `bg-muted border-border ${val < 0 ? 'text-red-500' : 'text-muted-foreground'}`
+                      isActive
+                        ? 'bg-primary/12 border-primary text-primary text-sm font-bold'
+                        : `${growthPillSurfaceClasses(growthDeltaTypeFromPct(val, mode))} border-border`
                     }`}>
                       {mode.toUpperCase()} {val > 0 ? '+' : ''}{val}%
                     </span>
@@ -378,12 +482,14 @@ function AirlineSharePanel() {
     <div className="bg-card border border-border rounded-[10px] p-4">
       <div className="text-[15px] font-bold mb-3.5">ส่วนแบ่งตลาดสายการบิน</div>
       {AIRLINES.map((a) => (
-        <div key={a.name} className="flex items-center gap-2 mb-2">
-          <div className="text-[13px] text-muted-foreground w-24 truncate shrink-0">{a.name}</div>
-          <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+        <div key={a.name} className="flex items-center gap-3 mb-2.5 min-w-0">
+          <div className="text-[15px] font-medium text-muted-foreground w-28 sm:w-36 shrink-0 truncate" title={a.name}>
+            {a.name}
+          </div>
+          <div className="flex-1 min-w-0 h-3 bg-muted rounded-full overflow-hidden">
             <div className="h-full rounded-full" style={{ width: `${(a.count / max * 100).toFixed(0)}%`, background: a.color }} />
           </div>
-          <div className="text-[13px] text-muted-foreground w-7 text-right shrink-0 tabular-nums">{a.count}</div>
+          <div className="text-[15px] font-semibold text-muted-foreground min-w-11 text-right shrink-0 tabular-nums">{a.count}</div>
         </div>
       ))}
     </div>
@@ -393,20 +499,22 @@ function AirlineSharePanel() {
 function HourDistributionPanel({ timeMode }: { timeMode: TimeMode }) {
   const [view, setView] = useState<'both' | 'dep' | 'arr'>('both');
   const subtitle = timeMode === 'wow' ? 'รายสัปดาห์' : timeMode === 'mom' ? 'รายเดือน' : 'รายปี';
-  const BAR_HEIGHT = 96;
 
   const scale = timeMode === 'wow' ? 1 : timeMode === 'mom' ? 4 : 52;
   const hours = Array.from({ length: 24 }, (_, h) => ({
-    hour: h.toString().padStart(2, '0'),
+    hour: h,
     dep: (HOUR_TOTAL[h] || 0) * scale,
     arr: (HOUR_TOTAL_ARR[h] || 0) * scale,
   }));
 
-  const maxVal = Math.max(...hours.map((h) => {
-    if (view === 'dep') return h.dep;
-    if (view === 'arr') return h.arr;
-    return h.dep + h.arr;
+  const chartData = hours.map((h) => ({
+    hour: h.hour,
+    hourLabel: `${h.hour.toString().padStart(2, '0')}:00`,
+    dep: h.dep,
+    arr: h.arr,
   }));
+
+  const xTickHours = new Set([0, 3, 6, 9, 12, 15, 18, 21, 23]);
 
   const viewButtons: { key: 'both' | 'dep' | 'arr'; label: string }[] = [
     { key: 'both', label: 'ทั้งหมด' },
@@ -417,7 +525,10 @@ function HourDistributionPanel({ timeMode }: { timeMode: TimeMode }) {
   return (
     <div className="bg-card border border-border rounded-[10px] p-4">
       <div className="flex items-center justify-between mb-1">
-        <div className="text-[15px] font-bold">เที่ยวบินตามชั่วโมง</div>
+        <div className="flex items-center gap-2">
+          <div className="text-[15px] font-bold">เที่ยวบินตามชั่วโมง</div>
+          <div className="text-[14px] text-muted-foreground font-medium">{subtitle}</div>
+        </div>
         <div className="flex border border-border rounded-md overflow-hidden">
           {viewButtons.map((b) => (
             <button
@@ -435,34 +546,65 @@ function HourDistributionPanel({ timeMode }: { timeMode: TimeMode }) {
           ))}
         </div>
       </div>
-      <div className="text-sm text-muted-foreground mb-2.5">{subtitle}</div>
-      <div className="flex items-end gap-[2px] mb-1" style={{ height: BAR_HEIGHT }}>
-        {hours.map((h) => {
-          const total = view === 'dep' ? h.dep : view === 'arr' ? h.arr : h.dep + h.arr;
-          const depH = view !== 'arr' ? Math.round((h.dep / (maxVal || 1)) * BAR_HEIGHT) : 0;
-          const arrH = view !== 'dep' ? Math.round((h.arr / (maxVal || 1)) * BAR_HEIGHT) : 0;
-
-          return (
-            <div
-              key={h.hour}
-              className="flex-1 flex flex-col justify-end min-w-1 rounded-t-sm overflow-hidden opacity-75 hover:opacity-100 transition-opacity"
-              title={`${h.hour}:00 — ขาออก ${h.dep.toLocaleString()} · ขาเข้า ${h.arr.toLocaleString()} · รวม ${(h.dep + h.arr).toLocaleString()}`}
-            >
-              {view !== 'arr' && (
-                <div style={{ height: depH, background: '#2563eb' }} />
-              )}
-              {view !== 'dep' && (
-                <div style={{ height: arrH, background: '#16a34a' }} />
-              )}
-            </div>
-          );
-        })}
+      <div className="text-[14px] font-medium text-muted-foreground mb-2">
+        แกน X แสดงเวลาในแต่ละชั่วโมง (00:00 - 23:00)
       </div>
-      <div className="flex justify-between text-xs text-muted-foreground">
-        <span>00</span><span>06</span><span>12</span><span>18</span><span>23</span>
+      <div className="h-[250px] -ml-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData} margin={{ top: 6, right: 10, left: 8, bottom: 22 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border" />
+            <XAxis
+              dataKey="hourLabel"
+              interval={0}
+              tickMargin={8}
+              tick={{ fontSize: 13, fontWeight: 600 }}
+              tickFormatter={(value: string) => {
+                const hour = Number(value.slice(0, 2));
+                return xTickHours.has(hour) ? value : '';
+              }}
+              className="text-muted-foreground"
+              label={{
+                value: 'เวลา (ชั่วโมง)',
+                position: 'insideBottom',
+                dy: 14,
+                style: { fill: 'hsl(var(--muted-foreground))', fontSize: 12, fontWeight: 600 },
+              }}
+            />
+            <YAxis
+              tick={{ fontSize: 13, fontWeight: 600 }}
+              tickFormatter={(value: number) => value.toLocaleString()}
+              tickCount={5}
+              width={56}
+              className="text-muted-foreground"
+              label={{
+                value: 'จำนวนเที่ยวบิน',
+                angle: -90,
+                position: 'insideLeft',
+                dx: -8,
+                style: { fill: 'hsl(var(--muted-foreground))', fontSize: 12, fontWeight: 600 },
+              }}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px',
+                fontSize: '14px',
+              }}
+              labelFormatter={(label) => `เวลา ${label}`}
+              formatter={(value: number, name: string) => [`${value.toLocaleString()} เที่ยวบิน`, name]}
+            />
+            {(view === 'both' || view === 'dep') && (
+              <Bar dataKey="dep" name="ขาออก" stackId={view === 'both' ? 'hour' : undefined} fill="#2563eb" radius={view === 'both' ? [0, 0, 0, 0] : [4, 4, 0, 0]} />
+            )}
+            {(view === 'both' || view === 'arr') && (
+              <Bar dataKey="arr" name="ขาเข้า" stackId={view === 'both' ? 'hour' : undefined} fill="#16a34a" radius={view === 'both' ? [4, 4, 0, 0] : [4, 4, 0, 0]} />
+            )}
+          </BarChart>
+        </ResponsiveContainer>
       </div>
       {view === 'both' && (
-        <div className="flex gap-4 mt-2 text-xs font-medium text-muted-foreground">
+        <div className="flex gap-4 mt-2 text-sm font-medium text-muted-foreground">
           <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#2563eb]" /> ขาออก</span>
           <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#16a34a]" /> ขาเข้า</span>
         </div>

@@ -88,13 +88,13 @@ export function DailyTrendChart({ data }: DailyTrendChartProps) {
             <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 15, fontWeight: 600 }}
               interval="preserveStartEnd"
               padding={{ left: 20, right: 20 }}
               className="text-muted-foreground"
             />
             <YAxis
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 15, fontWeight: 600 }}
               className="text-muted-foreground"
               type="number"
               domain={[yMin, yMax]}

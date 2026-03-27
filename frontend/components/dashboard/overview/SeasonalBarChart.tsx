@@ -41,14 +41,14 @@ export function SeasonalBarChart({ data }: SeasonalBarChartProps) {
                 className="w-5 h-5 rounded inline-block"
                 style={{ backgroundColor: SEASON_COLORS.peak }}
               />
-              <span className="font-medium">Peak Season</span>
+              <span className="font-medium">ฤดูท่องเที่ยว (Peak)</span>
             </span>
             <span className="flex items-center gap-2">
               <span
                 className="w-5 h-5 rounded inline-block"
                 style={{ backgroundColor: SEASON_COLORS.low }}
               />
-              <span className="font-medium">Low Season</span>
+              <span className="font-medium">นอกฤดูท่องเที่ยว (Low)</span>
             </span>
           </div>
         </div>

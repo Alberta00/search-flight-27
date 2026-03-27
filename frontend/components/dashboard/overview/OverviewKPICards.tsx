@@ -1,12 +1,16 @@
 'use client';
 
 import type { OverviewSummary } from '@/types/dashboard';
+import { growthDeltaTypeFromPct, growthTextClass } from '@/lib/dashboard/drill-down-data';
 
 interface OverviewKPICardsProps {
   data: OverviewSummary;
 }
 
 export function OverviewKPICards({ data }: OverviewKPICardsProps) {
+  const yoyTone = growthDeltaTypeFromPct(data.growthRate, 'yoy');
+  const growthClass = growthTextClass(yoyTone);
+
   return (
     <div className="bg-blue-50 rounded-2xl p-6 sm:p-8">
       {/* Airport Name Header */}
@@ -37,8 +41,9 @@ export function OverviewKPICards({ data }: OverviewKPICardsProps) {
         </div>
         <div className="min-w-0">
           <p className="text-sm sm:text-base text-muted-foreground whitespace-nowrap">อัตราการเติบโต</p>
-          <p className="text-2xl sm:text-3xl font-bold text-green-600 mt-1 whitespace-nowrap">
-            +{data.growthRate}%
+          <p className={`text-2xl sm:text-3xl font-bold mt-1 whitespace-nowrap ${growthClass}`}>
+            {data.growthRate >= 0 ? '+' : ''}
+            {data.growthRate}%
             <span className="text-sm sm:text-base font-normal text-muted-foreground ml-1">เทียบกับปีที่ผ่านมา</span>
           </p>
         </div>

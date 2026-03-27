@@ -130,14 +130,20 @@ export interface BusiestAirport {
   wowN: number;
 }
 
+/** World continent row — `delta` is display copy; growth coloring uses wow/mom/yoy + timeMode thresholds. */
 export interface ContinentData {
   name: string;
   icon: string;
   airports: string;
   flights: number;
   delta: string;
-  deltaType: 'up' | 'down' | 'neutral';
   highlight?: boolean;
+  yoy: number;
+  yoyN: number;
+  mom: number;
+  momN: number;
+  wow: number;
+  wowN: number;
 }
 
 export interface CountryData {
@@ -168,6 +174,14 @@ export interface AirlineData {
   color: string;
 }
 
+export interface CountryAirlineShare {
+  name: string;
+  flights: number;
+  share: number;
+  delta: number;
+  color: string;
+}
+
 export interface DailyData {
   date: string;
   flights: number;
@@ -192,6 +206,8 @@ export interface TopAirlineWorld {
   name: string;
   flag: string;
   iata: string;
+  ticker?: string;
+  exchange?: string;
   flights: number;
   yoy: number;
   yoyN: number;

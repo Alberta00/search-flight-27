@@ -25,26 +25,26 @@ export const SKP = { x: 346, y: 316 };
 // Routes from SKP
 // ============================================================
 export const ROUTES: RouteData[] = [
-  { city: 'Istanbul', country: 'Turkey', x: 423, y: 329, flights: 40, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'Turkish \u00B7 Pegasus \u00B7 AJet', color: '#ffd32a' },
-  { city: 'Zurich', country: 'Switzerland', x: 213, y: 234, flights: 20, flag: '\u{1F1E8}\u{1F1ED}', airlines: 'Edelweiss \u00B7 Wizz Air', color: '#ff9f43' },
-  { city: 'Belgrade', country: 'Serbia', x: 337, y: 274, flights: 16, flag: '\u{1F1F7}\u{1F1F8}', airlines: 'Air Serbia', color: '#ff9f43' },
-  { city: 'Vienna', country: 'Austria', x: 295, y: 224, flights: 14, flag: '\u{1F1E6}\u{1F1F9}', airlines: 'Austrian \u00B7 Wizz Air', color: '#ff9f43' },
-  { city: 'Frankfurt', country: 'Germany', x: 215, y: 198, flights: 11, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Lufthansa \u00B7 Wizz Air', color: '#48dbfb' },
+  { city: 'Istanbul', country: 'ตุรกี', x: 423, y: 329, flights: 40, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'Turkish \u00B7 Pegasus \u00B7 AJet', color: '#ffd32a' },
+  { city: 'Zurich', country: 'สวิตเซอร์แลนด์', x: 213, y: 234, flights: 20, flag: '\u{1F1E8}\u{1F1ED}', airlines: 'Edelweiss \u00B7 Wizz Air', color: '#ff9f43' },
+  { city: 'Belgrade', country: 'เซอร์เบีย', x: 337, y: 274, flights: 16, flag: '\u{1F1F7}\u{1F1F8}', airlines: 'Air Serbia', color: '#ff9f43' },
+  { city: 'Vienna', country: 'ออสเตรีย', x: 295, y: 224, flights: 14, flag: '\u{1F1E6}\u{1F1F9}', airlines: 'Austrian \u00B7 Wizz Air', color: '#ff9f43' },
+  { city: 'Frankfurt', country: 'เยอรมนี', x: 215, y: 198, flights: 11, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Lufthansa \u00B7 Wizz Air', color: '#48dbfb' },
   { city: 'Zagreb', country: 'Croatia', x: 291, y: 261, flights: 10, flag: '\u{1F1ED}\u{1F1F7}', airlines: 'Croatia Airlines', color: '#48dbfb' },
-  { city: 'Mulhouse', country: 'Switzerland', x: 202, y: 233, flights: 10, flag: '\u{1F1E8}\u{1F1ED}', airlines: 'Wizz Air', color: '#48dbfb' },
-  { city: 'Dortmund', country: 'Germany', x: 203, y: 176, flights: 8, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#48dbfb' },
-  { city: 'Memmingen', country: 'Germany', x: 230, y: 229, flights: 8, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#48dbfb' },
-  { city: 'Izmir', country: 'Turkey', x: 406, y: 367, flights: 8, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'Pegasus', color: '#48dbfb' },
-  { city: 'Warsaw', country: 'Poland', x: 342, y: 166, flights: 8, flag: '\u{1F1F5}\u{1F1F1}', airlines: 'LOT \u00B7 Wizz Air', color: '#48dbfb' },
-  { city: 'Antalya', country: 'Turkey', x: 444, y: 389, flights: 6, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'SunExpress', color: '#54a0ff' },
+  { city: 'Mulhouse', country: 'สวิตเซอร์แลนด์', x: 202, y: 233, flights: 10, flag: '\u{1F1E8}\u{1F1ED}', airlines: 'Wizz Air', color: '#48dbfb' },
+  { city: 'Dortmund', country: 'เยอรมนี', x: 203, y: 176, flights: 8, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#48dbfb' },
+  { city: 'Memmingen', country: 'เยอรมนี', x: 230, y: 229, flights: 8, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#48dbfb' },
+  { city: 'Izmir', country: 'ตุรกี', x: 406, y: 367, flights: 8, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'Pegasus', color: '#48dbfb' },
+  { city: 'Warsaw', country: 'โปแลนด์', x: 342, y: 166, flights: 8, flag: '\u{1F1F5}\u{1F1F1}', airlines: 'LOT \u00B7 Wizz Air', color: '#48dbfb' },
+  { city: 'Antalya', country: 'ตุรกี', x: 444, y: 389, flights: 6, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'SunExpress', color: '#54a0ff' },
   { city: 'Malm\u00F6', country: 'Sweden', x: 259, y: 118, flights: 6, flag: '\u{1F1F8}\u{1F1EA}', airlines: 'Wizz Air', color: '#54a0ff' },
-  { city: 'Berlin', country: 'Germany', x: 263, y: 162, flights: 6, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#54a0ff' },
+  { city: 'Berlin', country: 'เยอรมนี', x: 263, y: 162, flights: 6, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#54a0ff' },
   { city: 'Ljubljana', country: 'Slovenia', x: 275, y: 253, flights: 6, flag: '\u{1F1F8}\u{1F1EE}', airlines: 'Wizz Air', color: '#54a0ff' },
-  { city: 'Hahn', country: 'Germany', x: 200, y: 200, flights: 6, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#54a0ff' },
-  { city: 'Paris', country: 'France', x: 149, y: 214, flights: 6, flag: '\u{1F1EB}\u{1F1F7}', airlines: 'Wizz Air', color: '#54a0ff' },
+  { city: 'Hahn', country: 'เยอรมนี', x: 200, y: 200, flights: 6, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Wizz Air', color: '#54a0ff' },
+  { city: 'Paris', country: 'ฝรั่งเศส', x: 149, y: 214, flights: 6, flag: '\u{1F1EB}\u{1F1F7}', airlines: 'Wizz Air', color: '#54a0ff' },
   { city: 'Brussels', country: 'Belgium', x: 170, y: 191, flights: 4, flag: '\u{1F1E7}\u{1F1EA}', airlines: 'Wizz Air', color: '#54a0ff' },
   { city: 'Bratislava', country: 'Slovakia', x: 303, y: 224, flights: 4, flag: '\u{1F1F8}\u{1F1F0}', airlines: 'Wizz Air', color: '#54a0ff' },
-  { city: 'Eindhoven', country: 'Netherlands', x: 180, y: 178, flights: 4, flag: '\u{1F1F3}\u{1F1F1}', airlines: 'Wizz Air', color: '#54a0ff' },
+  { city: 'Eindhoven', country: 'เนเธอร์แลนด์', x: 180, y: 178, flights: 4, flag: '\u{1F1F3}\u{1F1F1}', airlines: 'Wizz Air', color: '#54a0ff' },
 ];
 
 // Reference cities for route map context
@@ -100,11 +100,11 @@ export const DAILY: DailyData[] = [
 // World: Busiest airports
 // ============================================================
 export const BUSIEST_AIRPORTS: BusiestAirport[] = [
-  { rank: 1, iata: 'ATL', city: 'Atlanta', country: 'USA', flag: '\u{1F1FA}\u{1F1F8}', dep: 15420, arr: 15380, total: 30800, yoy: +3.2, yoyN: +954, mom: +1.1, momN: +334, wow: +0.4, wowN: +123 },
-  { rank: 2, iata: 'DXB', city: 'Dubai', country: 'UAE', flag: '\u{1F1E6}\u{1F1EA}', dep: 14210, arr: 14190, total: 28400, yoy: +5.8, yoyN: +1556, mom: +2.3, momN: +638, wow: +1.0, wowN: +282 },
-  { rank: 3, iata: 'DFW', city: 'Dallas', country: 'USA', flag: '\u{1F1FA}\u{1F1F8}', dep: 13560, arr: 13500, total: 27060, yoy: +2.4, yoyN: +634, mom: +0.6, momN: +161, wow: +0.2, wowN: +54 },
-  { rank: 4, iata: 'LHR', city: 'London', country: 'UK', flag: '\u{1F1EC}\u{1F1E7}', dep: 12490, arr: 12510, total: 25000, yoy: +1.9, yoyN: +466, mom: -0.3, momN: -75, wow: -0.1, wowN: -25 },
-  { rank: 5, iata: 'HND', city: 'Tokyo', country: 'Japan', flag: '\u{1F1EF}\u{1F1F5}', dep: 12380, arr: 12340, total: 24720, yoy: +4.1, yoyN: +974, mom: +1.5, momN: +366, wow: +0.6, wowN: +148 },
+  { rank: 1, iata: 'ATL', city: 'Atlanta', country: 'สหรัฐฯ', flag: '\u{1F1FA}\u{1F1F8}', dep: 15420, arr: 15380, total: 30800, yoy: +3.2, yoyN: +954, mom: +1.1, momN: +334, wow: +0.4, wowN: +123 },
+  { rank: 2, iata: 'DXB', city: 'Dubai', country: 'สหรัฐอาหรับฯ', flag: '\u{1F1E6}\u{1F1EA}', dep: 14210, arr: 14190, total: 28400, yoy: +5.8, yoyN: +1556, mom: +2.3, momN: +638, wow: +1.0, wowN: +282 },
+  { rank: 3, iata: 'DFW', city: 'Dallas', country: 'สหรัฐฯ', flag: '\u{1F1FA}\u{1F1F8}', dep: 13560, arr: 13500, total: 27060, yoy: +2.4, yoyN: +634, mom: +0.6, momN: +161, wow: +0.2, wowN: +54 },
+  { rank: 4, iata: 'LHR', city: 'London', country: 'สหราชอาณาจักร', flag: '\u{1F1EC}\u{1F1E7}', dep: 12490, arr: 12510, total: 25000, yoy: +1.9, yoyN: +466, mom: -0.3, momN: -75, wow: -0.1, wowN: -25 },
+  { rank: 5, iata: 'HND', city: 'Tokyo', country: 'ญี่ปุ่น', flag: '\u{1F1EF}\u{1F1F5}', dep: 12380, arr: 12340, total: 24720, yoy: +4.1, yoyN: +974, mom: +1.5, momN: +366, wow: +0.6, wowN: +148 },
 ];
 
 // ============================================================
@@ -122,23 +122,23 @@ export const TOP_AIRLINES_WORLD: TopAirlineWorld[] = [
 // World: Route rankings
 // ============================================================
 export const ROUTE_RANKS_CONTINENT: RouteRank[] = [
-  { name: 'Europe', icon: '\u{1F30D}', routes: 8420, flights: 42100, yoy: +3.8, yoyN: +1544, mom: +1.2, momN: +500, wow: +0.4, wowN: +168 },
-  { name: 'Asia-Pacific', icon: '\u{1F30F}', routes: 7610, flights: 38520, yoy: +5.1, yoyN: +1870, mom: +2.1, momN: +793, wow: +0.8, wowN: +307 },
-  { name: 'North America', icon: '\u{1F30E}', routes: 5840, flights: 28440, yoy: +1.2, yoyN: +337, mom: +0.4, momN: +113, wow: +0.1, wowN: +28 },
-  { name: 'Middle East', icon: '\u{1F310}', routes: 1920, flights: 8240, yoy: +6.7, yoyN: +517, mom: +2.8, momN: +224, wow: +1.2, wowN: +98 },
-  { name: 'South America', icon: '\u{1F30E}', routes: 1350, flights: 5820, yoy: -0.9, yoyN: -53, mom: -0.3, momN: -17, wow: -0.1, wowN: -6 },
-  { name: 'Africa', icon: '\u{1F30D}', routes: 680, flights: 1710, yoy: +2.3, yoyN: +38, mom: +0.6, momN: +10, wow: +0.2, wowN: +3 },
+  { name: 'ยุโรป', icon: '\u{1F30D}', routes: 8420, flights: 42100, yoy: +3.8, yoyN: +1544, mom: +1.2, momN: +500, wow: +0.4, wowN: +168 },
+  { name: 'เอเซีย', icon: '\u{1F30F}', routes: 7610, flights: 38520, yoy: +5.1, yoyN: +1870, mom: +2.1, momN: +793, wow: +0.8, wowN: +307 },
+  { name: 'อเมริกาเหนือ', icon: '\u{1F30E}', routes: 5840, flights: 28440, yoy: +1.2, yoyN: +337, mom: +0.4, momN: +113, wow: +0.1, wowN: +28 },
+  { name: 'ตะวันออกกลาง', icon: '\u{1F310}', routes: 1920, flights: 8240, yoy: +6.7, yoyN: +517, mom: +2.8, momN: +224, wow: +1.2, wowN: +98 },
+  { name: 'อเมริกาใต้', icon: '\u{1F30E}', routes: 1350, flights: 5820, yoy: -0.9, yoyN: -53, mom: -0.3, momN: -17, wow: -0.1, wowN: -6 },
+  { name: 'แอฟริกา', icon: '\u{1F30D}', routes: 680, flights: 1710, yoy: +2.3, yoyN: +38, mom: +0.6, momN: +10, wow: +0.2, wowN: +3 },
 ];
 
 export const ROUTE_RANKS_COUNTRY: RouteRank[] = [
-  { name: 'United States', icon: '\u{1F1FA}\u{1F1F8}', routes: 5120, flights: 28100, yoy: +1.4, yoyN: +388, mom: +0.3, momN: +84, wow: +0.1, wowN: +28 },
-  { name: 'China', icon: '\u{1F1E8}\u{1F1F3}', routes: 3860, flights: 18400, yoy: +7.2, yoyN: +1235, mom: +2.9, momN: +518, wow: +1.1, wowN: +201 },
-  { name: 'Germany', icon: '\u{1F1E9}\u{1F1EA}', routes: 2140, flights: 6240, yoy: +2.1, yoyN: +128, mom: +0.5, momN: +31, wow: +0.2, wowN: +12 },
-  { name: 'UK', icon: '\u{1F1EC}\u{1F1E7}', routes: 1980, flights: 5810, yoy: +1.4, yoyN: +80, mom: -0.1, momN: -6, wow: +0.0, wowN: +0 },
-  { name: 'Japan', icon: '\u{1F1EF}\u{1F1F5}', routes: 1640, flights: 5200, yoy: +3.8, yoyN: +190, mom: +1.4, momN: +72, wow: +0.5, wowN: +26 },
-  { name: 'India', icon: '\u{1F1EE}\u{1F1F3}', routes: 1520, flights: 4900, yoy: +9.6, yoyN: +428, mom: +3.4, momN: +161, wow: +1.4, wowN: +68 },
-  { name: 'France', icon: '\u{1F1EB}\u{1F1F7}', routes: 1470, flights: 5200, yoy: +0.8, yoyN: +41, mom: +0.2, momN: +10, wow: +0.1, wowN: +5 },
-  { name: 'Turkey', icon: '\u{1F1F9}\u{1F1F7}', routes: 1180, flights: 2980, yoy: +6.8, yoyN: +190, mom: +2.0, momN: +58, wow: +0.8, wowN: +24 },
+  { name: 'สหรัฐฯ', icon: '\u{1F1FA}\u{1F1F8}', routes: 5120, flights: 28100, yoy: +1.4, yoyN: +388, mom: +0.3, momN: +84, wow: +0.1, wowN: +28 },
+  { name: 'จีน', icon: '\u{1F1E8}\u{1F1F3}', routes: 3860, flights: 18400, yoy: +7.2, yoyN: +1235, mom: +2.9, momN: +518, wow: +1.1, wowN: +201 },
+  { name: 'เยอรมนี', icon: '\u{1F1E9}\u{1F1EA}', routes: 2140, flights: 6240, yoy: +2.1, yoyN: +128, mom: +0.5, momN: +31, wow: +0.2, wowN: +12 },
+  { name: 'สหราชอาณาจักร', icon: '\u{1F1EC}\u{1F1E7}', routes: 1980, flights: 5810, yoy: +1.4, yoyN: +80, mom: -0.1, momN: -6, wow: +0.0, wowN: +0 },
+  { name: 'ญี่ปุ่น', icon: '\u{1F1EF}\u{1F1F5}', routes: 1640, flights: 5200, yoy: +3.8, yoyN: +190, mom: +1.4, momN: +72, wow: +0.5, wowN: +26 },
+  { name: 'อินเดีย', icon: '\u{1F1EE}\u{1F1F3}', routes: 1520, flights: 4900, yoy: +9.6, yoyN: +428, mom: +3.4, momN: +161, wow: +1.4, wowN: +68 },
+  { name: 'ฝรั่งเศส', icon: '\u{1F1EB}\u{1F1F7}', routes: 1470, flights: 5200, yoy: +0.8, yoyN: +41, mom: +0.2, momN: +10, wow: +0.1, wowN: +5 },
+  { name: 'ตุรกี', icon: '\u{1F1F9}\u{1F1F7}', routes: 1180, flights: 2980, yoy: +6.8, yoyN: +190, mom: +2.0, momN: +58, wow: +0.8, wowN: +24 },
 ];
 
 // ============================================================
@@ -164,16 +164,16 @@ export const WORLD_TOP_ARR: WorldDestination[] = [
 // Continent: Continents grid
 // ============================================================
 export const CONTINENTS: ContinentData[] = [
-  { name: 'Europe', icon: '\u{1F3F0}', airports: '1,847 สนามบิน \u00B7 52 ประเทศ', flights: 42100, delta: '\u25B2 +1,544 (+3.8%)', deltaType: 'up', highlight: true },
-  { name: 'Asia-Pacific', icon: '\u{26E9}\uFE0F', airports: '2,340 สนามบิน \u00B7 38 ประเทศ', flights: 38520, delta: '\u25B2 +1,870 (+5.1%)', deltaType: 'up' },
-  { name: 'North America', icon: '\u{1F5FD}', airports: '1,987 สนามบิน \u00B7 3 ประเทศ', flights: 28440, delta: '\u25B2 +337 (+1.2%)', deltaType: 'neutral' },
-  { name: 'Middle East', icon: '\u{1F54C}', airports: '412 สนามบิน \u00B7 16 ประเทศ', flights: 8240, delta: '\u25B2 +517 (+6.7%)', deltaType: 'up' },
-  { name: 'South America', icon: '\u{1F3D4}\uFE0F', airports: '823 สนามบิน \u00B7 12 ประเทศ', flights: 5820, delta: '\u25BC -53 (-0.9%)', deltaType: 'down' },
-  { name: 'Africa', icon: '\u{1F981}', airports: '653 สนามบิน \u00B7 54 ประเทศ', flights: 1710, delta: '\u25B2 +38 (+2.3%)', deltaType: 'neutral' },
+  { name: 'ยุโรป', icon: '\u{1F3F0}', airports: '1,847 สนามบิน \u00B7 52 ประเทศ', flights: 42100, delta: '\u25B2 +1,544 (+3.8%)', highlight: true, yoy: 3.8, yoyN: 1544, mom: 1.2, momN: 500, wow: 0.4, wowN: 168 },
+  { name: 'เอเซีย', icon: '\u{26E9}\uFE0F', airports: '2,340 สนามบิน \u00B7 38 ประเทศ', flights: 38520, delta: '\u25B2 +1,870 (+5.1%)', yoy: 5.1, yoyN: 1870, mom: 2.1, momN: 793, wow: 0.8, wowN: 307 },
+  { name: 'อเมริกาเหนือ', icon: '\u{1F5FD}', airports: '1,987 สนามบิน \u00B7 3 ประเทศ', flights: 28440, delta: '\u25B2 +337 (+1.2%)', yoy: 1.2, yoyN: 337, mom: 0.4, momN: 113, wow: 0.1, wowN: 28 },
+  { name: 'ตะวันออกกลาง', icon: '\u{1F54C}', airports: '412 สนามบิน \u00B7 16 ประเทศ', flights: 8240, delta: '\u25B2 +517 (+6.7%)', yoy: 6.7, yoyN: 517, mom: 2.8, momN: 224, wow: 1.2, wowN: 98 },
+  { name: 'อเมริกาใต้', icon: '\u{1F3D4}\uFE0F', airports: '823 สนามบิน \u00B7 12 ประเทศ', flights: 5820, delta: '\u25BC -53 (-0.9%)', yoy: -0.9, yoyN: -53, mom: -0.3, momN: -17, wow: -0.1, wowN: -6 },
+  { name: 'แอฟริกา', icon: '\u{1F981}', airports: '653 สนามบิน \u00B7 54 ประเทศ', flights: 1710, delta: '\u25B2 +38 (+2.3%)', yoy: 2.3, yoyN: 38, mom: 0.6, momN: 10, wow: 0.2, wowN: 3 },
 ];
 
 // ============================================================
-// Continent: Europe top 5 routes
+// Continent: ope top 5 routes
 // ============================================================
 export const EUR_TOP_ROUTES: EurTopRoute[] = [
   { from: 'London LHR', to: 'Dublin DUB', fromFlag: '\u{1F1EC}\u{1F1E7}', toFlag: '\u{1F1EE}\u{1F1EA}', flights: 1240, yoy: +2.1, yoyN: +26, wow: +0.3, wowN: +4, mom: +0.8, momN: +10 },
@@ -192,18 +192,18 @@ export const EUR_SEASONAL = [38, 35, 48, 55, 62, 71, 78, 76, 64, 73, 50, 44]; //
 // Country: European countries
 // ============================================================
 export const COUNTRIES: CountryData[] = [
-  { flag: '\u{1F1E9}\u{1F1EA}', name: 'Germany', airports: 46, flights: 6240, delta: '+2.1%', deltaN: +128, bar: 100 },
-  { flag: '\u{1F1EC}\u{1F1E7}', name: 'UK', airports: 38, flights: 5810, delta: '+1.4%', deltaN: +80, bar: 93 },
-  { flag: '\u{1F1EB}\u{1F1F7}', name: 'France', airports: 42, flights: 5200, delta: '+0.8%', deltaN: +41, bar: 83 },
-  { flag: '\u{1F1EA}\u{1F1F8}', name: 'Spain', airports: 31, flights: 4820, delta: '+4.2%', deltaN: +194, bar: 77 },
-  { flag: '\u{1F1EE}\u{1F1F9}', name: 'Italy', airports: 35, flights: 4440, delta: '+3.1%', deltaN: +133, bar: 71 },
-  { flag: '\u{1F1F3}\u{1F1F1}', name: 'Netherlands', airports: 8, flights: 3100, delta: '+2.5%', deltaN: +76, bar: 50 },
-  { flag: '\u{1F1F9}\u{1F1F7}', name: 'Turkey', airports: 22, flights: 2980, delta: '+6.8%', deltaN: +190, bar: 48 },
-  { flag: '\u{1F1F5}\u{1F1F1}', name: 'Poland', airports: 11, flights: 1640, delta: '+5.2%', deltaN: +81, bar: 26 },
-  { flag: '\u{1F1F7}\u{1F1F8}', name: 'Serbia', airports: 3, flights: 820, delta: '+8.1%', deltaN: +61, bar: 13 },
-  { flag: '\u{1F1E6}\u{1F1F9}', name: 'Austria', airports: 5, flights: 760, delta: '+1.9%', deltaN: +14, bar: 12 },
-  { flag: '\u{1F1E8}\u{1F1ED}', name: 'Switzerland', airports: 4, flights: 710, delta: '+2.2%', deltaN: +15, bar: 11 },
-  { flag: '\u{1F1F2}\u{1F1F0}', name: 'N. Macedonia', airports: 2, flights: 292, delta: '+12.4%', deltaN: +32, bar: 5, highlight: true },
+  { flag: '\u{1F1E9}\u{1F1EA}', name: 'เยอรมนี', airports: 46, flights: 6240, delta: '+2.1%', deltaN: +128, bar: 100 },
+  { flag: '\u{1F1EC}\u{1F1E7}', name: 'สหราชอาณาจักร', airports: 38, flights: 5810, delta: '+1.4%', deltaN: +80, bar: 93 },
+  { flag: '\u{1F1EB}\u{1F1F7}', name: 'ฝรั่งเศส', airports: 42, flights: 5200, delta: '+0.8%', deltaN: +41, bar: 83 },
+  { flag: '\u{1F1EA}\u{1F1F8}', name: 'สเปน', airports: 31, flights: 4820, delta: '+4.2%', deltaN: +194, bar: 77 },
+  { flag: '\u{1F1EE}\u{1F1F9}', name: 'อิตาลี', airports: 35, flights: 4440, delta: '+3.1%', deltaN: +133, bar: 71 },
+  { flag: '\u{1F1F3}\u{1F1F1}', name: 'เนเธอร์แลนด์', airports: 8, flights: 3100, delta: '+2.5%', deltaN: +76, bar: 50 },
+  { flag: '\u{1F1F9}\u{1F1F7}', name: 'ตุรกี', airports: 22, flights: 2980, delta: '+6.8%', deltaN: +190, bar: 48 },
+  { flag: '\u{1F1F5}\u{1F1F1}', name: 'โปแลนด์', airports: 11, flights: 1640, delta: '+5.2%', deltaN: +81, bar: 26 },
+  { flag: '\u{1F1F7}\u{1F1F8}', name: 'เซอร์เบีย', airports: 3, flights: 820, delta: '+8.1%', deltaN: +61, bar: 13 },
+  { flag: '\u{1F1E6}\u{1F1F9}', name: 'ออสเตรีย', airports: 5, flights: 760, delta: '+1.9%', deltaN: +14, bar: 12 },
+  { flag: '\u{1F1E8}\u{1F1ED}', name: 'สวิตเซอร์แลนด์', airports: 4, flights: 710, delta: '+2.2%', deltaN: +15, bar: 11 },
+  { flag: '\u{1F1F2}\u{1F1F0}', name: 'มาซิโดเนียเหนือ', airports: 2, flights: 292, delta: '+12.4%', deltaN: +32, bar: 5, highlight: true },
 ];
 
 // ============================================================
@@ -216,25 +216,25 @@ export const MK_AIRPORTS: MKAirport[] = [
 export const MK_TOTAL = MK_AIRPORTS.reduce((s, a) => s + a.flights, 0);
 
 // ============================================================
-// Country: Top 5 inbound countries
+// Country: Top 5 inbound countries; MK is short for Macedonia 
 // ============================================================
 export const MK_INBOUND_COUNTRIES: InboundCountry[] = [
-  { name: 'Turkey', flag: '\u{1F1F9}\u{1F1F7}', flights: 54, pct: 37.2 },
-  { name: 'Switzerland', flag: '\u{1F1E8}\u{1F1ED}', flights: 20, pct: 13.8 },
-  { name: 'Serbia', flag: '\u{1F1F7}\u{1F1F8}', flights: 14, pct: 9.7 },
-  { name: 'Austria', flag: '\u{1F1E6}\u{1F1F9}', flights: 15, pct: 10.3 },
-  { name: 'Germany', flag: '\u{1F1E9}\u{1F1EA}', flights: 42, pct: 29.0 },
+  { name: 'ตุรกี', flag: '\u{1F1F9}\u{1F1F7}', flights: 54, pct: 37.2 },
+  { name: 'สวิตเซอร์แลนด์', flag: '\u{1F1E8}\u{1F1ED}', flights: 20, pct: 13.8 },
+  { name: 'เซอร์เบีย', flag: '\u{1F1F7}\u{1F1F8}', flights: 14, pct: 9.7 },
+  { name: 'ออสเตรีย', flag: '\u{1F1E6}\u{1F1F9}', flights: 15, pct: 10.3 },
+  { name: 'เยอรมนี', flag: '\u{1F1E9}\u{1F1EA}', flights: 42, pct: 29.0 },
 ];
 
 // ============================================================
 // Airport: Top 5 arrivals
 // ============================================================
 export const ARRIVALS: RouteData[] = [
-  { city: 'Istanbul', country: 'Turkey', x: 0, y: 0, flights: 38, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'Turkish \u00B7 Pegasus', color: '#ffd32a' },
-  { city: 'Zurich', country: 'Switzerland', x: 0, y: 0, flights: 19, flag: '\u{1F1E8}\u{1F1ED}', airlines: 'Edelweiss \u00B7 Wizz Air', color: '#ff9f43' },
-  { city: 'Vienna', country: 'Austria', x: 0, y: 0, flights: 15, flag: '\u{1F1E6}\u{1F1F9}', airlines: 'Austrian', color: '#ff9f43' },
-  { city: 'Belgrade', country: 'Serbia', x: 0, y: 0, flights: 14, flag: '\u{1F1F7}\u{1F1F8}', airlines: 'Air Serbia', color: '#ff9f43' },
-  { city: 'Frankfurt', country: 'Germany', x: 0, y: 0, flights: 10, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Lufthansa', color: '#48dbfb' },
+  { city: 'Istanbul', country: 'ตุรกี', x: 0, y: 0, flights: 38, flag: '\u{1F1F9}\u{1F1F7}', airlines: 'Turkish \u00B7 Pegasus', color: '#ffd32a' },
+  { city: 'Zurich', country: 'สวิตเซอร์แลนด์', x: 0, y: 0, flights: 19, flag: '\u{1F1E8}\u{1F1ED}', airlines: 'Edelweiss \u00B7 Wizz Air', color: '#ff9f43' },
+  { city: 'Vienna', country: 'ออสเตรีย', x: 0, y: 0, flights: 15, flag: '\u{1F1E6}\u{1F1F9}', airlines: 'Austrian', color: '#ff9f43' },
+  { city: 'Belgrade', country: 'เซอร์เบีย', x: 0, y: 0, flights: 14, flag: '\u{1F1F7}\u{1F1F8}', airlines: 'Air Serbia', color: '#ff9f43' },
+  { city: 'Frankfurt', country: 'เยอรมนี', x: 0, y: 0, flights: 10, flag: '\u{1F1E9}\u{1F1EA}', airlines: 'Lufthansa', color: '#48dbfb' },
 ];
 
 // ============================================================
@@ -307,6 +307,65 @@ export function getChangeForMode(item: { yoy: number; yoyN: number; mom: number;
   return { pct: item.yoy, num: item.yoyN };
 }
 
+/**
+ * Minimum positive % to count as “strong” (green). Below threshold but ≥0 is neutral (orange).
+ * Red when negative. Product rule: WoW ≥4%, MoM ≥5%, YoY ≥6%.
+ */
+export const GREEN_PCT_THRESHOLD: Record<TimeMode, number> = {
+  wow: 4,
+  mom: 5,
+  yoy: 6,
+};
+
+export type GrowthDeltaKind = 'up' | 'down' | 'neutral';
+
+export function growthDeltaTypeFromPct(pct: number, _timeMode: TimeMode): GrowthDeltaKind {
+  if (pct < 0) return 'down';
+  // 3-tier: uncomment below and remove the simple 2-tier return to restore threshold-based neutral
+  // if (pct >= GREEN_PCT_THRESHOLD[timeMode]) return 'up';
+  // return 'neutral';
+  return 'up';
+}
+
+/** First signed percentage in text, e.g. "(+7.2%)" or "+3.8%". */
+export function parseFirstSignedPercent(text: string): number | null {
+  const paren = text.match(/\(([+-]?\d+(?:\.\d+)?)%\)/);
+  if (paren) return parseFloat(paren[1]);
+  const plain = text.match(/([+-]?\d+(?:\.\d+)?)%/);
+  if (plain) return parseFloat(plain[1]);
+  return null;
+}
+
+/** Parse trailing % from country-style deltas like "+2.1%". */
+export function parsePercentFromDelta(delta: string): number | null {
+  return parseFirstSignedPercent(delta);
+}
+
+export function growthTextClass(kind: GrowthDeltaKind): string {
+  if (kind === 'up') return 'text-green-600';
+  if (kind === 'down') return 'text-red-500';
+  return 'text-blue-600';
+}
+
+export function growthCardBadgeClasses(kind: GrowthDeltaKind): string {
+  if (kind === 'up') return 'bg-green-500/15 text-green-600';
+  if (kind === 'down') return 'bg-red-500/15 text-red-500';
+  return 'bg-blue-500/15 text-blue-600';
+}
+
+export function growthPillSurfaceClasses(kind: GrowthDeltaKind): string {
+  if (kind === 'up') return 'bg-green-500/10 text-green-600';
+  if (kind === 'down') return 'bg-red-500/10 text-red-500';
+  return 'bg-blue-500/10 text-blue-600';
+}
+
+/** Solid bar fill for compact charts (e.g. route growth bars). */
+export function growthBarFillClasses(kind: GrowthDeltaKind): string {
+  if (kind === 'up') return 'bg-green-600';
+  if (kind === 'down') return 'bg-red-500';
+  return 'bg-blue-500';
+}
+
 export function fmtChange(pct: number, num: number) {
   const sign = num >= 0 ? '+' : '';
   const arrow = num >= 0 ? '\u25B2' : '\u25BC';
@@ -314,7 +373,21 @@ export function fmtChange(pct: number, num: number) {
 }
 
 export function modeLabel(timeMode: TimeMode) {
-  if (timeMode === 'wow') return 'การเปลี่ยนแปลง WoW';
-  if (timeMode === 'mom') return 'การเปลี่ยนแปลง MoM';
-  return 'การเปลี่ยนแปลง YoY';
+  if (timeMode === 'wow') return 'การเปลี่ยนแปลง รายสัปดาห์';
+  if (timeMode === 'mom') return 'การเปลี่ยนแปลง รายเดือน';
+  return 'การเปลี่ยนแปลง รายปี';
+}
+
+/** Matches the time toggle: what “previous period” means for copy. */
+export function compareToPriorPeriodPhraseTh(timeMode: TimeMode): string {
+  if (timeMode === 'wow') return 'เทียบกับสัปดาห์ที่แล้ว';
+  if (timeMode === 'mom') return 'เทียบกับเดือนที่แล้ว';
+  return 'เทียบกับปีที่แล้ว';
+}
+
+/** World / summary KPI line: Δ flights, %, and period wording (aligned with `getChangeForMode`). */
+export function fmtWorldKpiDeltaTh(pct: number, num: number, timeMode: TimeMode): string {
+  const sign = num >= 0 ? '+' : '';
+  const arrow = num >= 0 ? '\u25B2' : '\u25BC';
+  return `${arrow} ${sign}${num.toLocaleString()} (${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%) ${compareToPriorPeriodPhraseTh(timeMode)}`;
 }
