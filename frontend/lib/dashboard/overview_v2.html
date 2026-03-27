@@ -330,9 +330,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);
   </nav>
   <div class="header-right">
     <div class="time-toggle">
-      <button class="time-btn" onclick="setTimeMode('wow',this)">WoW</button>
-      <button class="time-btn" onclick="setTimeMode('mom',this)">MoM</button>
-      <button class="time-btn active" onclick="setTimeMode('yoy',this)">YoY</button>
+      <button class="time-btn" onclick="setTimeMode('wow',this)">รายสัปดาห์</button>
+      <button class="time-btn" onclick="setTimeMode('mom',this)">รายเดือน</button>
+      <button class="time-btn active" onclick="setTimeMode('yoy',this)">รายปี</button>
     </div>
     <div style="width:32px;height:32px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">D</div>
   </div>
@@ -679,6 +679,8 @@ const ROUTES = [
   {city:'Bratislava', country:'Slovakia',      x:303, y:224, flights:4,  flag:'🇸🇰', airlines:'Wizz Air',                color:'#54a0ff'},
   {city:'Eindhoven',  country:'Netherlands',   x:180, y:178, flights:4,  flag:'🇳🇱', airlines:'Wizz Air',                color:'#54a0ff'},
 ];
+
+
 
 // Reference cities (not SKP routes — geographical context only)
 const REF_CITIES = [

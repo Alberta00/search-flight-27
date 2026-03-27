@@ -73,6 +73,7 @@ export interface MarketShareItem {
   value: number;
   percentage: number;
   color: string;
+  [key: string]: string | number;
 }
 
 export interface FlightRatio {
@@ -81,6 +82,7 @@ export interface FlightRatio {
   value: number;
   percentage: number;
   color: string;
+  [key: string]: string | number;
 }
 
 export interface Top5RouteItem {
@@ -130,14 +132,20 @@ export interface BusiestAirport {
   wowN: number;
 }
 
+/** World continent row — `delta` is display copy; growth coloring uses wow/mom/yoy + timeMode thresholds. */
 export interface ContinentData {
   name: string;
   icon: string;
   airports: string;
   flights: number;
   delta: string;
-  deltaType: 'up' | 'down' | 'neutral';
   highlight?: boolean;
+  yoy: number;
+  yoyN: number;
+  mom: number;
+  momN: number;
+  wow: number;
+  wowN: number;
 }
 
 export interface CountryData {
@@ -168,23 +176,35 @@ export interface AirlineData {
   color: string;
 }
 
+export interface CountryAirlineShare {
+  name: string;
+  flights: number;
+  share: number;
+  delta: number;
+  color: string;
+}
+
 export interface DailyData {
   date: string;
   flights: number;
   delta: number | null;
 }
 
-export interface WorldDestination {
+/** Shared shape for entities that carry WoW / MoM / YoY growth numbers. */
+export interface TimeModeMetrics {
+  yoy: number;
+  yoyN: number;
+  mom: number;
+  momN: number;
+  wow: number;
+  wowN: number;
+}
+
+export interface WorldDestination extends TimeModeMetrics {
   name: string;
   icon: string;
   iata: string;
   flights: number;
-  yoy: number;
-  yoyN: number;
-  wow: number;
-  wowN: number;
-  mom?: number;
-  momN?: number;
 }
 
 export interface TopAirlineWorld {
@@ -192,6 +212,8 @@ export interface TopAirlineWorld {
   name: string;
   flag: string;
   iata: string;
+  ticker?: string;
+  exchange?: string;
   flights: number;
   yoy: number;
   yoyN: number;
@@ -214,18 +236,12 @@ export interface RouteRank {
   wowN: number;
 }
 
-export interface EurTopRoute {
+export interface EurTopRoute extends TimeModeMetrics {
   from: string;
   to: string;
   fromFlag: string;
   toFlag: string;
   flights: number;
-  yoy: number;
-  yoyN: number;
-  wow: number;
-  wowN: number;
-  mom?: number;
-  momN?: number;
 }
 
 export interface MKAirport {
@@ -235,6 +251,19 @@ export interface MKAirport {
   routes: number;
   airlines: number;
   color: string;
+}
+
+/** Generalized airport info (same shape as MKAirport, used across all countries) */
+export type AirportInfo = MKAirport;
+
+/** Per-continent detail data — plain objects, no JSX */
+export interface ContinentDetailData {
+  countryCount: string;
+  busiestCountry: { flag: string; nameTh: string };
+  busiestDelta: string;
+  fastestGrowing: { flag: string; nameTh: string };
+  fastestDelta: string;
+  countries: CountryData[];
 }
 
 export interface InboundCountry {
