@@ -7,13 +7,13 @@ import type {
   DailyData,
   WorldDestination,
   TopAirlineWorld,
-  RouteRank,
   EurTopRoute,
   MKAirport,
   InboundCountry,
   InvestRoute,
   DrillLevel,
   TimeMode,
+  TimeModeMetrics,
 } from '@/types/dashboard';
 
 // ============================================================
@@ -119,29 +119,6 @@ export const TOP_AIRLINES_WORLD: TopAirlineWorld[] = [
 ];
 
 // ============================================================
-// World: Route rankings
-// ============================================================
-export const ROUTE_RANKS_CONTINENT: RouteRank[] = [
-  { name: 'ยุโรป', icon: '\u{1F30D}', routes: 8420, flights: 42100, yoy: +3.8, yoyN: +1544, mom: +1.2, momN: +500, wow: +0.4, wowN: +168 },
-  { name: 'เอเซีย', icon: '\u{1F30F}', routes: 7610, flights: 38520, yoy: +5.1, yoyN: +1870, mom: +2.1, momN: +793, wow: +0.8, wowN: +307 },
-  { name: 'อเมริกาเหนือ', icon: '\u{1F30E}', routes: 5840, flights: 28440, yoy: +1.2, yoyN: +337, mom: +0.4, momN: +113, wow: +0.1, wowN: +28 },
-  { name: 'ตะวันออกกลาง', icon: '\u{1F310}', routes: 1920, flights: 8240, yoy: +6.7, yoyN: +517, mom: +2.8, momN: +224, wow: +1.2, wowN: +98 },
-  { name: 'อเมริกาใต้', icon: '\u{1F30E}', routes: 1350, flights: 5820, yoy: -0.9, yoyN: -53, mom: -0.3, momN: -17, wow: -0.1, wowN: -6 },
-  { name: 'แอฟริกา', icon: '\u{1F30D}', routes: 680, flights: 1710, yoy: +2.3, yoyN: +38, mom: +0.6, momN: +10, wow: +0.2, wowN: +3 },
-];
-
-export const ROUTE_RANKS_COUNTRY: RouteRank[] = [
-  { name: 'สหรัฐฯ', icon: '\u{1F1FA}\u{1F1F8}', routes: 5120, flights: 28100, yoy: +1.4, yoyN: +388, mom: +0.3, momN: +84, wow: +0.1, wowN: +28 },
-  { name: 'จีน', icon: '\u{1F1E8}\u{1F1F3}', routes: 3860, flights: 18400, yoy: +7.2, yoyN: +1235, mom: +2.9, momN: +518, wow: +1.1, wowN: +201 },
-  { name: 'เยอรมนี', icon: '\u{1F1E9}\u{1F1EA}', routes: 2140, flights: 6240, yoy: +2.1, yoyN: +128, mom: +0.5, momN: +31, wow: +0.2, wowN: +12 },
-  { name: 'สหราชอาณาจักร', icon: '\u{1F1EC}\u{1F1E7}', routes: 1980, flights: 5810, yoy: +1.4, yoyN: +80, mom: -0.1, momN: -6, wow: +0.0, wowN: +0 },
-  { name: 'ญี่ปุ่น', icon: '\u{1F1EF}\u{1F1F5}', routes: 1640, flights: 5200, yoy: +3.8, yoyN: +190, mom: +1.4, momN: +72, wow: +0.5, wowN: +26 },
-  { name: 'อินเดีย', icon: '\u{1F1EE}\u{1F1F3}', routes: 1520, flights: 4900, yoy: +9.6, yoyN: +428, mom: +3.4, momN: +161, wow: +1.4, wowN: +68 },
-  { name: 'ฝรั่งเศส', icon: '\u{1F1EB}\u{1F1F7}', routes: 1470, flights: 5200, yoy: +0.8, yoyN: +41, mom: +0.2, momN: +10, wow: +0.1, wowN: +5 },
-  { name: 'ตุรกี', icon: '\u{1F1F9}\u{1F1F7}', routes: 1180, flights: 2980, yoy: +6.8, yoyN: +190, mom: +2.0, momN: +58, wow: +0.8, wowN: +24 },
-];
-
-// ============================================================
 // World: Top 5 departure/arrival destinations
 // ============================================================
 export const WORLD_TOP_DEP: WorldDestination[] = [
@@ -175,7 +152,7 @@ export const CONTINENTS: ContinentData[] = [
 // ============================================================
 // Continent: ope top 5 routes
 // ============================================================
-export const EUR_TOP_ROUTES: EurTopRoute[] = [
+export const CONTINENT_TOP_ROUTES: EurTopRoute[] = [
   { from: 'London LHR', to: 'Dublin DUB', fromFlag: '\u{1F1EC}\u{1F1E7}', toFlag: '\u{1F1EE}\u{1F1EA}', flights: 1240, yoy: +2.1, yoyN: +26, wow: +0.3, wowN: +4, mom: +0.8, momN: +10 },
   { from: 'London LHR', to: 'Amsterdam AMS', fromFlag: '\u{1F1EC}\u{1F1E7}', toFlag: '\u{1F1F3}\u{1F1F1}', flights: 1180, yoy: +1.8, yoyN: +21, wow: +0.2, wowN: +2, mom: +0.6, momN: +7 },
   { from: 'Paris CDG', to: 'London LHR', fromFlag: '\u{1F1EB}\u{1F1F7}', toFlag: '\u{1F1EC}\u{1F1E7}', flights: 1120, yoy: +1.4, yoyN: +15, wow: +0.1, wowN: +1, mom: +0.4, momN: +4 },
@@ -186,7 +163,7 @@ export const EUR_TOP_ROUTES: EurTopRoute[] = [
 // ============================================================
 // Continent: Europe seasonal data
 // ============================================================
-export const EUR_SEASONAL = [38, 35, 48, 55, 62, 71, 78, 76, 64, 73, 50, 44]; // thousands
+export const CONTINENT_SEASONAL = [38, 35, 48, 55, 62, 71, 78, 76, 64, 73, 50, 44]; // thousands
 
 // ============================================================
 // Country: European countries
@@ -301,29 +278,16 @@ export function getInvestTier(score: number) {
 // ============================================================
 // Time mode helper
 // ============================================================
-export function getChangeForMode(item: { yoy: number; yoyN: number; mom: number; momN: number; wow: number; wowN: number }, timeMode: TimeMode) {
+export function getChangeForMode(item: TimeModeMetrics, timeMode: TimeMode) {
   if (timeMode === 'wow') return { pct: item.wow, num: item.wowN };
   if (timeMode === 'mom') return { pct: item.mom, num: item.momN };
   return { pct: item.yoy, num: item.yoyN };
 }
 
-/**
- * Minimum positive % to count as “strong” (green). Below threshold but ≥0 is neutral (orange).
- * Red when negative. Product rule: WoW ≥4%, MoM ≥5%, YoY ≥6%.
- */
-export const GREEN_PCT_THRESHOLD: Record<TimeMode, number> = {
-  wow: 4,
-  mom: 5,
-  yoy: 6,
-};
-
 export type GrowthDeltaKind = 'up' | 'down' | 'neutral';
 
 export function growthDeltaTypeFromPct(pct: number, _timeMode: TimeMode): GrowthDeltaKind {
   if (pct < 0) return 'down';
-  // 3-tier: uncomment below and remove the simple 2-tier return to restore threshold-based neutral
-  // if (pct >= GREEN_PCT_THRESHOLD[timeMode]) return 'up';
-  // return 'neutral';
   return 'up';
 }
 
@@ -342,34 +306,28 @@ export function parsePercentFromDelta(delta: string): number | null {
 }
 
 export function growthTextClass(kind: GrowthDeltaKind): string {
-  if (kind === 'up') return 'text-green-600';
-  if (kind === 'down') return 'text-red-500';
-  return 'text-blue-600';
+  if (kind === 'up') return 'text-accent';
+  if (kind === 'down') return 'text-destructive';
+  return 'text-primary';
 }
 
 export function growthCardBadgeClasses(kind: GrowthDeltaKind): string {
-  if (kind === 'up') return 'bg-green-500/15 text-green-600';
-  if (kind === 'down') return 'bg-red-500/15 text-red-500';
-  return 'bg-blue-500/15 text-blue-600';
+  if (kind === 'up') return 'bg-accent/15 text-accent';
+  if (kind === 'down') return 'bg-destructive/15 text-destructive';
+  return 'bg-primary/15 text-primary';
 }
 
 export function growthPillSurfaceClasses(kind: GrowthDeltaKind): string {
-  if (kind === 'up') return 'bg-green-500/10 text-green-600';
-  if (kind === 'down') return 'bg-red-500/10 text-red-500';
-  return 'bg-blue-500/10 text-blue-600';
+  if (kind === 'up') return 'bg-accent/10 text-accent';
+  if (kind === 'down') return 'bg-destructive/10 text-destructive';
+  return 'bg-primary/10 text-primary';
 }
 
 /** Solid bar fill for compact charts (e.g. route growth bars). */
 export function growthBarFillClasses(kind: GrowthDeltaKind): string {
-  if (kind === 'up') return 'bg-green-600';
-  if (kind === 'down') return 'bg-red-500';
-  return 'bg-blue-500';
-}
-
-export function fmtChange(pct: number, num: number) {
-  const sign = num >= 0 ? '+' : '';
-  const arrow = num >= 0 ? '\u25B2' : '\u25BC';
-  return `${arrow} ${sign}${num.toLocaleString()} flights (${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%)`;
+  if (kind === 'up') return 'bg-accent';
+  if (kind === 'down') return 'bg-destructive';
+  return 'bg-primary';
 }
 
 export function modeLabel(timeMode: TimeMode) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useId } from 'react';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -23,27 +23,23 @@ import {
   growthPillSurfaceClasses,
   parsePercentFromDelta,
 } from '@/lib/dashboard/drill-down-data';
+import { KPI_ACCENT } from '@/lib/dashboard/kpi-colors';
 import { buildWowWeeklyBarData, buildWowWeeklyTrendPoints, weeklyTotalsFromDailyRows } from '@/lib/dashboard/week-chart';
 import { getAirportDetail } from '@/lib/dashboard/services/drilldown';
 import { useDrillDown, KPIRow, BackButton, TimeToggle } from './DrillDownDashboard';
 import type { KPIItem } from './DrillDownDashboard';
 import type { TimeMode } from '@/types/dashboard';
 
-const {
-  routes: ROUTES,
-  arrivals: ARRIVALS,
-  airlines: AIRLINES,
-  hourTotal: HOUR_TOTAL,
-  hourTotalArr: HOUR_TOTAL_ARR,
-  daily: DAILY,
-  investRoutes: INVEST_ROUTES,
-  monthly: MONTHLY,
-  monthLabels: AP_MONTHS,
-} = getAirportDetail();
+type AirportDetail = ReturnType<typeof getAirportDetail>;
 
 export function AirportView() {
   const { drillTo, timeMode, selections } = useDrillDown();
   const airport = selections.airport || MK_AIRPORTS[0];
+
+  // Fetch per selected airport — currently returns the same mock data
+  // but the architecture is ready for a per-airport API lookup.
+  const detail = getAirportDetail(airport.iata);
+  const { routes: ROUTES, hourTotal: HOUR_TOTAL, daily: DAILY } = detail;
   const countryForTone = selections.country;
   const countryPct = countryForTone ? parsePercentFromDelta(countryForTone.delta) : null;
   const countryTone =
@@ -60,10 +56,10 @@ export function AirportView() {
   const totalDailyFlights = DAILY.reduce((s, d) => s + d.flights, 0);
 
   const kpis: KPIItem[] = [
-    { label: 'เที่ยวบินขาออกทั้งหมด', value: airport.flights.toLocaleString(), delta: `\u25B2 ช่วง ${DAILY.length} วัน`, deltaType: 'neutral', growthColored: false, accentColor: '#2563eb' },
-    { label: 'เฉลี่ยต่อวัน', value: Math.round(totalDailyFlights / DAILY.length).toString(), delta: 'ตามรายงานล่าสุด', deltaType: 'neutral', growthColored: false, accentColor: '#16a34a' },
-    { label: 'จุดหมายยอดนิยม', value: topRoute ? topRoute.city : '-', delta: topRoute ? `${topRoute.flights} เที่ยวบิน \u00B7 ${topRoute.flag}` : '-', deltaType: 'neutral', growthColored: false, accentColor: '#ca8a04' },
-    { label: 'ชั่วโมงที่คึกคักที่สุด', value: `${busiestHour.hour.toString().padStart(2, '0')}:00`, delta: `${busiestHour.flights} เที่ยวบินขาออก`, deltaType: 'neutral', growthColored: false, accentColor: '#7c3aed' },
+    { label: 'เที่ยวบินขาออกทั้งหมด', value: airport.flights.toLocaleString(), delta: `\u25B2 ช่วง ${DAILY.length} วัน`, deltaType: 'neutral', growthColored: false, accentColor: KPI_ACCENT.flights },
+    { label: 'เฉลี่ยต่อวัน', value: Math.round(totalDailyFlights / DAILY.length).toString(), delta: 'ตามรายงานล่าสุด', deltaType: 'neutral', growthColored: false, accentColor: KPI_ACCENT.airports },
+    { label: 'จุดหมายยอดนิยม', value: topRoute ? topRoute.city : '-', delta: topRoute ? `${topRoute.flights} เที่ยวบิน \u00B7 ${topRoute.flag}` : '-', deltaType: 'neutral', growthColored: false, accentColor: KPI_ACCENT.average },
+    { label: 'ชั่วโมงที่คึกคักที่สุด', value: `${busiestHour.hour.toString().padStart(2, '0')}:00`, delta: `${busiestHour.flights} เที่ยวบินขาออก`, deltaType: 'neutral', growthColored: false, accentColor: KPI_ACCENT.highlight },
   ];
 
   return (
@@ -96,16 +92,16 @@ export function AirportView() {
       <KPIRow items={kpis} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
-        <TrendSparkChart timeMode={timeMode} />
-        <SeasonalTrendChart timeMode={timeMode} />
+        <TrendSparkChart timeMode={timeMode} detail={detail} />
+        <SeasonalTrendChart timeMode={timeMode} detail={detail} />
       </div>
 
-      <TopDestinationsPanel />
-      <InvestmentPanel timeMode={timeMode} />
+      <TopDestinationsPanel detail={detail} />
+      <InvestmentPanel timeMode={timeMode} detail={detail} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
-        <AirlineSharePanel />
-        <HourDistributionPanel timeMode={timeMode} />
+        <AirlineSharePanel detail={detail} />
+        <HourDistributionPanel timeMode={timeMode} detail={detail} />
       </div>
 
       <div className="flex justify-center pt-1">
@@ -115,7 +111,9 @@ export function AirportView() {
   );
 }
 
-function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
+function TrendSparkChart({ timeMode, detail }: { timeMode: TimeMode; detail: AirportDetail }) {
+  const gradientId = useId();
+  const { daily: DAILY, monthly: MONTHLY, monthLabels: AP_MONTHS } = detail;
   const now = new Date();
   const nowIdx = now.getMonth();
   const nowYear = now.getFullYear();
@@ -170,7 +168,7 @@ function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
         </div>
         <div className="text-right">
           <div className="text-[22px] font-bold leading-none">{total.toLocaleString()}</div>
-          <div className="text-[13px] text-green-600 font-semibold mt-1">{'\u25B2'} คงที่</div>
+          <div className="text-[13px] text-accent font-semibold mt-1">{'\u25B2'} คงที่</div>
         </div>
       </div>
       <ResponsiveContainer width="100%" minHeight={180} height={192}>
@@ -184,7 +182,7 @@ function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
           }}
         >
           <defs>
-            <linearGradient id="trendSparkGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#2563eb" stopOpacity={0.35} />
               <stop offset="100%" stopColor="#2563eb" stopOpacity={0.02} />
             </linearGradient>
@@ -205,7 +203,7 @@ function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
             width={48}
           />
           <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', fontSize: '14px' }} formatter={(value: number) => [`${value} เที่ยวบิน`, '']} />
-          <Area type="monotone" dataKey="flights" stroke="#2563eb" strokeWidth={2.5} fill="url(#trendSparkGradient)" />
+          <Area type="monotone" dataKey="flights" stroke="#2563eb" strokeWidth={2.5} fill={`url(#${gradientId})`} />
           {(timeMode === 'mom' || timeMode === 'yoy') && (
             <ReferenceDot
               x={AP_MONTHS[nowIdx]}
@@ -223,18 +221,19 @@ function TrendSparkChart({ timeMode }: { timeMode: TimeMode }) {
         <span>{dateRange}</span>
         <span className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1">
           <span className="text-primary font-bold">{'\u25CF'} แนวโน้ม</span>
-          <span className="text-[#d29922] font-bold">
+          <span style={{ color: 'var(--chart-current)' }} className="font-bold">
             {'\u25CF'} {timeMode === 'wow' ? 'สัปดาห์นี้' : 'เดือนนี้'}
             {currentPeriodDetail ? ` \u00B7 ${currentPeriodDetail}` : ''}
           </span>
-          <span className="text-[#ff9f43] font-bold">{'\u25CF'} {timeMode === 'wow' ? 'สัปดาห์สูงสุด' : 'เดือนสูงสุด'}</span>
+          <span style={{ color: 'var(--chart-peak)' }} className="font-bold">{'\u25CF'} {timeMode === 'wow' ? 'สัปดาห์สูงสุด' : 'เดือนสูงสุด'}</span>
         </span>
       </div>
     </div>
   );
 }
 
-function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
+function SeasonalTrendChart({ timeMode, detail }: { timeMode: TimeMode; detail: AirportDetail }) {
+  const { daily: DAILY, monthly: MONTHLY, monthLabels: AP_MONTHS } = detail;
   const now = new Date();
   const nowIdx = now.getMonth();
 
@@ -263,13 +262,13 @@ function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
     chartData = MONTHLY.map((v, i) => ({
       month: AP_MONTHS[i],
       value: v,
-      color: i === nowIdx ? '#d29922' : v === peakVal ? '#ff9f43' : v >= 60 ? '#93c5fd' : '#bfdbfe',
+      color: i === nowIdx ? '#d29922' : v === peakVal ? '#ff9f43' : '#bfdbfe',
     }));
   }
 
   return (
     <div className="relative overflow-hidden bg-card border border-border rounded-[10px] p-4 hover:border-primary hover:-translate-y-0.5 transition-all">
-      <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#ca8a04]" />
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-[var(--chart-3)]" />
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-[16px] font-bold">{title}</div>
@@ -306,7 +305,9 @@ function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
             radius={[5, 5, 0, 0]}
             maxBarSize={timeMode === 'yoy' ? 32 : timeMode === 'mom' ? 42 : 48}
           >
-            {chartData.map((entry, i) => (<Cell key={i} fill={entry.color} opacity={entry.color === '#bfdbfe' ? 0.35 : 0.9} />))}
+            {chartData.map((entry, i) => (
+              <Cell key={i} fill={entry.color} opacity={entry.color === '#bfdbfe' ? 0.55 : 0.9} />
+            ))}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
@@ -319,19 +320,20 @@ function SeasonalTrendChart({ timeMode }: { timeMode: TimeMode }) {
               : `ทั้งปี ${'\u00B7'} เที่ยวบินต่อเดือน`}
         </span>
         <span className="flex flex-wrap gap-x-4 gap-y-1">
-          <span style={{ color: '#d29922' }} className="font-bold">{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ปัจจุบัน' : 'เดือนปัจจุบัน'}</span>
-          <span style={{ color: '#ff9f43' }} className="font-bold">{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ที่สูงสุด' : 'เดือนที่สูงสุด'}</span>
+          <span style={{ color: 'var(--chart-current)' }} className="font-bold">{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ปัจจุบัน' : 'เดือนปัจจุบัน'}</span>
+          <span style={{ color: 'var(--chart-peak)' }} className="font-bold">{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ที่สูงสุด' : 'เดือนที่สูงสุด'}</span>
           {timeMode === 'mom' && (
-            <span style={{ color: '#2563eb' }} className="font-bold">{'\u25A0'} เดือนก่อนหน้า</span>
+            <span style={{ color: 'var(--chart-1)' }} className="font-bold">{'\u25A0'} เดือนก่อนหน้า</span>
           )}
-          <span style={{ color: timeMode === 'yoy' ? '#93c5fd' : '#bfdbfe' }} className="font-bold">{'\u25A0'} อื่นๆ</span>
+          <span style={{ color: timeMode === 'yoy' ? 'var(--chart-mid)' : 'var(--chart-subtle)' }} className="font-bold">{'\u25A0'} อื่นๆ</span>
         </span>
       </div>
     </div>
   );
 }
 
-function TopDestinationsPanel() {
+function TopDestinationsPanel({ detail }: { detail: AirportDetail }) {
+  const { routes: ROUTES, arrivals: ARRIVALS } = detail;
   const top5dep = ROUTES.slice(0, 5);
   const maxDep = top5dep[0].flights;
   const maxArr = ARRIVALS[0].flights;
@@ -366,7 +368,7 @@ function TopDestinationsPanel() {
         </div>
         <div className="flex gap-1.5 shrink-0">
           <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-primary/15 text-primary">{'\u2191'} ขาออก</span>
-          <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
+          <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-accent/10 text-accent">{'\u2193'} ขาเข้า</span>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-border">
@@ -379,7 +381,7 @@ function TopDestinationsPanel() {
         </div>
         <div className="p-5">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
+            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-accent/10 text-accent">{'\u2193'} ขาเข้า</span>
             <span className="text-[15px] text-muted-foreground font-semibold">5 อันดับเส้นทางขาเข้า</span>
           </div>
           {ARRIVALS.map((r, i) => renderRow(r, i, maxArr))}
@@ -389,7 +391,8 @@ function TopDestinationsPanel() {
   );
 }
 
-function InvestmentPanel({ timeMode }: { timeMode: TimeMode }) {
+function InvestmentPanel({ timeMode, detail }: { timeMode: TimeMode; detail: AirportDetail }) {
+  const { investRoutes: INVEST_ROUTES } = detail;
   const modeKey = timeMode;
   const modeShort = timeMode.toUpperCase();
 
@@ -476,7 +479,8 @@ function InvestmentPanel({ timeMode }: { timeMode: TimeMode }) {
   );
 }
 
-function AirlineSharePanel() {
+function AirlineSharePanel({ detail }: { detail: AirportDetail }) {
+  const { airlines: AIRLINES } = detail;
   const max = AIRLINES[0].count;
   return (
     <div className="bg-card border border-border rounded-[10px] p-4">
@@ -496,7 +500,8 @@ function AirlineSharePanel() {
   );
 }
 
-function HourDistributionPanel({ timeMode }: { timeMode: TimeMode }) {
+function HourDistributionPanel({ timeMode, detail }: { timeMode: TimeMode; detail: AirportDetail }) {
+  const { hourTotal: HOUR_TOTAL, hourTotalArr: HOUR_TOTAL_ARR } = detail;
   const [view, setView] = useState<'both' | 'dep' | 'arr'>('both');
   const subtitle = timeMode === 'wow' ? 'รายสัปดาห์' : timeMode === 'mom' ? 'รายเดือน' : 'รายปี';
 
@@ -595,18 +600,18 @@ function HourDistributionPanel({ timeMode }: { timeMode: TimeMode }) {
               formatter={(value: number, name: string) => [`${value.toLocaleString()} เที่ยวบิน`, name]}
             />
             {(view === 'both' || view === 'dep') && (
-              <Bar dataKey="dep" name="ขาออก" stackId={view === 'both' ? 'hour' : undefined} fill="#2563eb" radius={view === 'both' ? [0, 0, 0, 0] : [4, 4, 0, 0]} />
+              <Bar dataKey="dep" name="ขาออก" stackId={view === 'both' ? 'hour' : undefined} fill="var(--chart-1)" radius={view === 'both' ? [0, 0, 0, 0] : [4, 4, 0, 0]} />
             )}
             {(view === 'both' || view === 'arr') && (
-              <Bar dataKey="arr" name="ขาเข้า" stackId={view === 'both' ? 'hour' : undefined} fill="#16a34a" radius={view === 'both' ? [4, 4, 0, 0] : [4, 4, 0, 0]} />
+              <Bar dataKey="arr" name="ขาเข้า" stackId={view === 'both' ? 'hour' : undefined} fill="var(--chart-2)" radius={view === 'both' ? [4, 4, 0, 0] : [4, 4, 0, 0]} />
             )}
           </BarChart>
         </ResponsiveContainer>
       </div>
       {view === 'both' && (
         <div className="flex gap-4 mt-2 text-sm font-medium text-muted-foreground">
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#2563eb]" /> ขาออก</span>
-          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-[#16a34a]" /> ขาเข้า</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-primary" /> ขาออก</span>
+          <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm bg-accent" /> ขาเข้า</span>
         </div>
       )}
     </div>

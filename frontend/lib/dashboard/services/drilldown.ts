@@ -11,17 +11,13 @@ import type {
   CountryData,
   ContinentDetailData,
   AirportInfo,
+  BusiestAirport,
   InboundCountry,
   CountryAirlineShare,
 } from '@/types/dashboard';
 import {
-  CONTINENTS,
-  BUSIEST_AIRPORTS,
-  TOP_AIRLINES_WORLD,
-  WORLD_TOP_DEP,
-  WORLD_TOP_ARR,
-  EUR_SEASONAL,
-  EUR_TOP_ROUTES,
+  CONTINENT_SEASONAL,
+  CONTINENT_TOP_ROUTES,
   ROUTES,
   ARRIVALS,
   AIRLINES,
@@ -43,26 +39,14 @@ import {
   AIRPORT_CURRENT_MONTH_IDX,
 } from '../mock/drilldown-details';
 
-// ── World level ──
-
-export function getWorldSummary() {
-  return {
-    continents: CONTINENTS,
-    busiestAirports: BUSIEST_AIRPORTS,
-    topAirlines: TOP_AIRLINES_WORLD,
-    topDepartures: WORLD_TOP_DEP,
-    topArrivals: WORLD_TOP_ARR,
-  };
-}
-
 // ── Continent level ──
 
 export function getContinentDetail(continentName: string) {
   const detail = CONTINENT_DETAILS[continentName] || CONTINENT_DETAILS['ยุโรป'];
   return {
     detail,
-    seasonal: EUR_SEASONAL,
-    topRoutes: EUR_TOP_ROUTES,
+    seasonal: CONTINENT_SEASONAL,
+    topRoutes: CONTINENT_TOP_ROUTES,
   };
 }
 
@@ -115,7 +99,13 @@ export function getCountryAirlineMarketShare(countryName: string): CountryAirlin
 
 // ── Airport level ──
 
-export function getAirportDetail() {
+/**
+ * Fetch detail data for a specific airport.
+ * Currently returns the same mock dataset for all airports —
+ * parameterized by `iata` so the real API can be wired in later.
+ */
+export function getAirportDetail(_iata?: string) {
+  // Future: look up per-airport data by IATA code
   return {
     routes: ROUTES,
     arrivals: ARRIVALS,
@@ -126,6 +116,17 @@ export function getAirportDetail() {
     investRoutes: INVEST_ROUTES,
     monthly: AIRPORT_MONTHLY,
     monthLabels: AIRPORT_MONTH_LABELS,
-    currentMonthIdx: AIRPORT_CURRENT_MONTH_IDX,
+  };
+}
+
+/** Build an AirportInfo from a BusiestAirport record (world-level shortcut). */
+export function airportInfoFromBusiest(a: BusiestAirport): AirportInfo {
+  return {
+    iata: a.iata,
+    name: `${a.city}, ${a.country}`,
+    flights: a.total,
+    routes: Math.round(a.total / 8),
+    airlines: Math.round(a.total / 50),
+    color: 'var(--chart-1)',
   };
 }

@@ -12,14 +12,15 @@ import {
 } from 'recharts';
 import {
   CONTINENTS,
-  EUR_SEASONAL,
-  EUR_TOP_ROUTES,
+  CONTINENT_SEASONAL,
+  CONTINENT_TOP_ROUTES,
   getChangeForMode,
   growthDeltaTypeFromPct,
   growthTextClass,
   parseFirstSignedPercent,
   parsePercentFromDelta,
 } from '@/lib/dashboard/drill-down-data';
+import { KPI_ACCENT } from '@/lib/dashboard/kpi-colors';
 import { buildWowWeeklyBarData } from '@/lib/dashboard/week-chart';
 import { getContinentDetail } from '@/lib/dashboard/services/drilldown';
 import { useDrillDown, KPIRow, BackButton, ChangePill, TimeToggle } from './DrillDownDashboard';
@@ -27,7 +28,6 @@ import type { KPIItem } from './DrillDownDashboard';
 import type { CountryData } from '@/types/dashboard';
 
 const MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-const NOW_IDX = 9;
 
 /** Match KPI ref to grid row, or minimal row so drill-down always works for any continent. */
 function resolveCountryRow(ref: { flag: string; nameTh: string }, countries: CountryData[]): CountryData {
@@ -80,7 +80,7 @@ export function ContinentView() {
       value: continent.flights.toLocaleString(),
       delta: continent.delta,
       deltaType: continentGrowthTone,
-      accentColor: '#2563eb',
+      accentColor: KPI_ACCENT.flights,
       ...(topByFlights
         ? {
             onClick: () => drillTo('country', { country: topByFlights }),
@@ -94,7 +94,7 @@ export function ContinentView() {
       delta: `แสดงรายละเอียด ${countries.length} ประเทศ`,
       deltaType: 'neutral',
       growthColored: false,
-      accentColor: '#16a34a',
+      accentColor: KPI_ACCENT.airports,
       ...(topByAirports && !airportsCardSameAsFlightsCard
         ? {
             onClick: () => drillTo('country', { country: topByAirports }),
@@ -108,7 +108,7 @@ export function ContinentView() {
       delta: cData.busiestDelta,
       deltaType: busiestKpiTone,
       growthColored: busiestPct != null,
-      accentColor: '#ca8a04',
+      accentColor: KPI_ACCENT.average,
       onClick: () => drillTo('country', { country: busiestResolved }),
       actionLabel: `ไปยังประเทศ ${cData.busiestCountry.nameTh} (คึกคักที่สุด)`,
     },
@@ -118,7 +118,7 @@ export function ContinentView() {
       delta: cData.fastestDelta,
       deltaType: fastestKpiTone,
       growthColored: fastestPct != null,
-      accentColor: '#7c3aed',
+      accentColor: KPI_ACCENT.highlight,
       onClick: () => drillTo('country', { country: fastestResolved }),
       actionLabel: `ไปยังประเทศ ${cData.fastestGrowing.nameTh} (เติบโตเร็วที่สุด)`,
     },
@@ -141,8 +141,8 @@ export function ContinentView() {
       <KPIRow items={kpis} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
-        <EurSeasonalChart />
-        <EurTopRoutesPanel />
+        <ContinentSeasonalChart />
+        <ContinentTopRoutesPanel />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
@@ -158,6 +158,7 @@ export function ContinentView() {
           <button
             key={c.name}
             type="button"
+            aria-label={`ดูข้อมูล ${c.name}`}
             onClick={() => drillTo('country', { country: c })}
             className={`bg-card border rounded-[10px] p-4 text-left transition-all hover:border-primary hover:-translate-y-0.5 cursor-pointer ${
               c.highlight ? 'border-primary bg-primary/5' : 'border-border shadow-sm'
@@ -191,10 +192,12 @@ export function ContinentView() {
   );
 }
 
-function EurSeasonalChart() {
+function ContinentSeasonalChart() {
   const { timeMode, selections } = useDrillDown();
   const continentName = selections.continent?.name || 'ยุโรป';
-  const peakVal = Math.max(...EUR_SEASONAL);
+  const peakVal = Math.max(...CONTINENT_SEASONAL);
+  const nowIdx = new Date().getMonth();
+  const prevIdx = (nowIdx + 11) % 12;
 
   let chartData: Array<{ month: string; value: number; color: string }>;
   let title: string;
@@ -204,23 +207,22 @@ function EurSeasonalChart() {
     chartData = buildWowWeeklyBarData([16, 17, 19, 18, 17]);
   } else if (timeMode === 'mom') {
     title = `แนวโน้มรายเดือน \u2014 ${continentName} (รายเดือน)`;
-    const PREV = 8;
-    const startIdx = Math.max(0, NOW_IDX - 2);
-    const endIdx = Math.min(11, NOW_IDX + 2);
-    chartData = EUR_SEASONAL
+    const startIdx = Math.max(0, nowIdx - 2);
+    const endIdx = Math.min(11, nowIdx + 2);
+    chartData = CONTINENT_SEASONAL
       .map((v, i) => ({
         month: MONTHS[i],
         value: v,
-        color: i === NOW_IDX ? '#d29922' : v === peakVal ? '#ff9f43' : i === PREV ? '#2563eb' : '#bfdbfe',
+        color: i === nowIdx ? '#d29922' : v === peakVal ? '#ff9f43' : i === prevIdx ? '#2563eb' : '#bfdbfe',
         _idx: i,
       }))
       .filter((d) => d._idx >= startIdx && d._idx <= endIdx);
   } else {
     title = `แนวโน้มฤดูกาล \u2014 ${continentName} (รายปี)`;
-    chartData = EUR_SEASONAL.map((v, i) => ({
+    chartData = CONTINENT_SEASONAL.map((v, i) => ({
       month: MONTHS[i],
       value: v,
-      color: i === NOW_IDX ? '#d29922' : v === peakVal ? '#ff9f43' : v >= 60 ? '#93c5fd' : '#bfdbfe',
+      color: i === nowIdx ? '#d29922' : v === peakVal ? '#ff9f43' : '#bfdbfe',
     }));
   }
 
@@ -258,7 +260,11 @@ function EurSeasonalChart() {
           />
           <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={34}>
             {chartData.map((entry, i) => (
-              <Cell key={i} fill={entry.color} opacity={entry.color === '#bfdbfe' ? 0.4 : 0.9} />
+              <Cell
+                key={i}
+                fill={entry.color}
+                opacity={entry.color === '#bfdbfe' ? 0.55 : 0.9}
+              />
             ))}
           </Bar>
         </BarChart>
@@ -267,19 +273,19 @@ function EurSeasonalChart() {
         {/* <span>ทั้งปี </span> */}
         {/* {'\u00B7'} เที่ยวบินเป็นพันเที่ยว */}
         <span className="flex items-center gap-3">
-          <span style={{ color: '#d29922' }}>{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ปัจจุบัน' : 'เดือนปัจจุบัน'}</span>
-          <span style={{ color: '#ff9f43' }}>{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ที่สูงสุด' : 'เดือนที่สูงสุด'}</span>
+          <span style={{ color: 'var(--chart-current)' }}>{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ปัจจุบัน' : 'เดือนปัจจุบัน'}</span>
+          <span style={{ color: 'var(--chart-peak)' }}>{'\u25A0'} {timeMode === 'wow' ? 'สัปดาห์ที่สูงสุด' : 'เดือนที่สูงสุด'}</span>
           {timeMode === 'mom' && (
-            <span style={{ color: '#2563eb' }}>{'\u25A0'} เดือนก่อนหน้า</span>
+            <span style={{ color: 'var(--chart-1)' }}>{'\u25A0'} เดือนก่อนหน้า</span>
           )}
-          <span style={{ color: timeMode === 'yoy' ? '#93c5fd' : '#bfdbfe' }}>{'\u25A0'} อื่นๆ</span>
+          <span style={{ color: timeMode === 'yoy' ? 'var(--chart-mid)' : 'var(--chart-subtle)' }}>{'\u25A0'} อื่นๆ</span>
         </span>
       </div>
     </div>
   );
 }
 
-function EurTopRoutesPanel() {
+function ContinentTopRoutesPanel() {
   const { timeMode, selections } = useDrillDown();
   const continentName = selections.continent?.name || 'ยุโรป';
 
@@ -288,8 +294,8 @@ function EurTopRoutesPanel() {
       <div className="text-[16px] font-bold mb-4">
         {'🏆'} 5 อันดับเส้นทางตามจำนวนเที่ยวบิน {'\u2014'} {continentName}
       </div>
-      {EUR_TOP_ROUTES.map((r, i) => {
-        const { pct, num } = getChangeForMode(r as any, timeMode);
+      {CONTINENT_TOP_ROUTES.map((r, i) => {
+        const { pct, num } = getChangeForMode(r, timeMode);
         return (
           <div key={i} className="flex items-center gap-2 py-2.5 border-b border-border/60 last:border-b-0">
             <span className="text-[14px] text-muted-foreground w-6 text-center shrink-0 font-bold">{i + 1}</span>

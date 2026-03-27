@@ -73,6 +73,7 @@ export interface MarketShareItem {
   value: number;
   percentage: number;
   color: string;
+  [key: string]: string | number;
 }
 
 export interface FlightRatio {
@@ -81,6 +82,7 @@ export interface FlightRatio {
   value: number;
   percentage: number;
   color: string;
+  [key: string]: string | number;
 }
 
 export interface Top5RouteItem {
@@ -188,17 +190,21 @@ export interface DailyData {
   delta: number | null;
 }
 
-export interface WorldDestination {
+/** Shared shape for entities that carry WoW / MoM / YoY growth numbers. */
+export interface TimeModeMetrics {
+  yoy: number;
+  yoyN: number;
+  mom: number;
+  momN: number;
+  wow: number;
+  wowN: number;
+}
+
+export interface WorldDestination extends TimeModeMetrics {
   name: string;
   icon: string;
   iata: string;
   flights: number;
-  yoy: number;
-  yoyN: number;
-  wow: number;
-  wowN: number;
-  mom?: number;
-  momN?: number;
 }
 
 export interface TopAirlineWorld {
@@ -230,18 +236,12 @@ export interface RouteRank {
   wowN: number;
 }
 
-export interface EurTopRoute {
+export interface EurTopRoute extends TimeModeMetrics {
   from: string;
   to: string;
   fromFlag: string;
   toFlag: string;
   flights: number;
-  yoy: number;
-  yoyN: number;
-  wow: number;
-  wowN: number;
-  mom?: number;
-  momN?: number;
 }
 
 export interface MKAirport {

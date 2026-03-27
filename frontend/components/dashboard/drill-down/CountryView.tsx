@@ -13,6 +13,7 @@ import {
   growthTextClass,
   parsePercentFromDelta,
 } from '@/lib/dashboard/drill-down-data';
+import { KPI_ACCENT } from '@/lib/dashboard/kpi-colors';
 import {
   getCountryAirports,
   getCountryTopAirline,
@@ -48,7 +49,7 @@ export function CountryView() {
       value: country.flights.toLocaleString(),
       delta: `${country.deltaN >= 0 ? '\u25B2' : '\u25BC'} ${country.deltaN >= 0 ? '+' : ''}${country.deltaN} เที่ยวบิน (${country.delta})`,
       deltaType: countryFlightTone,
-      accentColor: '#2563eb',
+      accentColor: KPI_ACCENT.flights,
     },
     {
       label: 'สนามบินที่มีการใช้งาน',
@@ -56,7 +57,7 @@ export function CountryView() {
       delta: 'ตามฐานข้อมูลล่าสุด',
       deltaType: 'neutral',
       growthColored: false,
-      accentColor: '#16a34a',
+      accentColor: KPI_ACCENT.airports,
     },
     {
       label: 'จุดหมายที่ให้บริการ',
@@ -64,7 +65,7 @@ export function CountryView() {
       delta: 'ครอบคลุมหลายภูมิภาค',
       deltaType: 'neutral',
       growthColored: false,
-      accentColor: '#ca8a04',
+      accentColor: KPI_ACCENT.average,
     },
     {
       label: 'สายการบินหลัก',
@@ -75,7 +76,7 @@ export function CountryView() {
           : 'ส่วนแบ่งตลาดหลัก',
       deltaType: 'neutral',
       growthColored: false,
-      accentColor: '#7c3aed',
+      accentColor: KPI_ACCENT.highlight,
     },
   ];
 

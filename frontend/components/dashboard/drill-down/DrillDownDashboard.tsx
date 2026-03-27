@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, createContext, useContext } from 'react';
-import type { DrillLevel, TimeMode } from '@/types/dashboard';
+import type { DrillLevel, TimeMode, ContinentData, CountryData, AirportInfo } from '@/types/dashboard';
 import { growthDeltaTypeFromPct, growthPillSurfaceClasses, growthTextClass } from '@/lib/dashboard/drill-down-data';
 import { WorldView } from './WorldView';
 import { ContinentView } from './ContinentView';
@@ -10,9 +10,9 @@ import { AirportView } from './AirportView';
 
 // ── Context for drill-down state ──
 interface SelectionState {
-  continent?: any;
-  country?: any;
-  airport?: any;
+  continent?: ContinentData;
+  country?: CountryData;
+  airport?: AirportInfo;
 }
 
 interface DrillDownContextValue {
@@ -41,11 +41,20 @@ export function DrillDownDashboard() {
   const [timeMode, setTimeMode] = useState<TimeMode>('yoy');
   const [selections, setSelections] = useState<SelectionState>({});
 
+  const LEVEL_ORDER: DrillLevel[] = ['world', 'continent', 'country', 'airport'];
+
   const drillTo = useCallback((newLevel: DrillLevel, selection?: SelectionState) => {
     setLevel(newLevel);
-    if (selection) {
-      setSelections((prev) => ({ ...prev, ...selection }));
-    }
+    setSelections((prev) => {
+      const newIdx = LEVEL_ORDER.indexOf(newLevel);
+      // When drilling backwards, clear forward selections
+      const cleaned: SelectionState = {};
+      if (newIdx >= 1 && prev.continent) cleaned.continent = prev.continent;
+      if (newIdx >= 2 && prev.country) cleaned.country = prev.country;
+      if (newIdx >= 3 && prev.airport) cleaned.airport = prev.airport;
+      // Merge in any new selection
+      return { ...cleaned, ...selection };
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
@@ -85,6 +94,7 @@ export function TimeToggle() {
         <button
           key={m.key}
           type="button"
+          aria-pressed={timeMode === m.key}
           onClick={() => setTimeMode(m.key)}
           className={`flex-1 sm:flex-initial min-w-0 px-3 sm:px-4 py-2 sm:py-1.5 text-xs sm:text-sm font-medium transition-colors cursor-pointer min-h-[44px] sm:min-h-0 ${
             timeMode === m.key
@@ -282,7 +292,7 @@ export function KPIRow({ items }: { items: KPIItem[] }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
       {items.map((item, i) => (
-        <KPIRowCard key={i} item={item} />
+        <KPIRowCard key={item.label} item={item} />
       ))}
     </div>
   );

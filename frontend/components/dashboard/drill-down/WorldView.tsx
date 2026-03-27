@@ -13,7 +13,9 @@ import {
   growthDeltaTypeFromPct,
   modeLabel,
 } from '@/lib/dashboard/drill-down-data';
+import { KPI_ACCENT } from '@/lib/dashboard/kpi-colors';
 import { enrichTopAirlinesWithListing } from '@/lib/dashboard/airline-ticker-map';
+import { airportInfoFromBusiest } from '@/lib/dashboard/services/drilldown';
 import { useDrillDown, KPIRow, ChangePill, TimeToggle } from './DrillDownDashboard';
 import type { KPIItem } from './DrillDownDashboard';
 
@@ -42,7 +44,7 @@ export function WorldView() {
       value: totalFlights.toLocaleString(),
       delta: busiestDeltaLine,
       deltaType: busiestGrowthTone,
-      accentColor: '#2563eb',
+      accentColor: KPI_ACCENT.flights,
     },
     {
       label: 'สนามบินที่มีการใช้งาน',
@@ -50,7 +52,7 @@ export function WorldView() {
       delta: `จาก ${BUSIEST_AIRPORTS.length} สนามบินที่คึกคักที่สุด`,
       deltaType: 'neutral',
       growthColored: false,
-      accentColor: '#16a34a',
+      accentColor: KPI_ACCENT.airports,
     },
     {
       label: 'เที่ยวบินเฉลี่ย/วัน',
@@ -58,14 +60,14 @@ export function WorldView() {
       delta: '\u2248 คงที่',
       deltaType: 'neutral',
       growthColored: false,
-      accentColor: '#ca8a04',
+      accentColor: KPI_ACCENT.average,
     },
     {
       label: 'ทวีปที่คึกคักที่สุด',
       value: `${busiestContinent.icon} ${busiestContinent.name}`,
       delta: busiestContinentSubline,
       deltaType: busiestGrowthTone,
-      accentColor: '#7c3aed',
+      accentColor: KPI_ACCENT.highlight,
     },
   ];
 
@@ -93,6 +95,7 @@ export function WorldView() {
           <button
             key={c.name}
             type="button"
+            aria-label={`สำรวจ ${c.name}`}
             onClick={() => drillTo('continent', { continent: c })}
             className={`relative overflow-hidden bg-card border rounded-[10px] p-4 sm:p-6 text-left transition-all hover:border-primary hover:-translate-y-1 hover:shadow-lg cursor-pointer group ${
               c.highlight ? 'border-primary' : 'border-border'
@@ -162,7 +165,7 @@ function BusiestAirportsTable() {
                 return (
                   <tr 
                     key={a.iata} 
-                    onClick={() => drillTo('airport', { airport: { iata: a.iata, name: a.city + ' ' + a.country, flights: a.total, routes: 150, airlines: 40, color: '#2563eb' } })}
+                    onClick={() => drillTo('airport', { airport: airportInfoFromBusiest(a) })}
                     className="border-b border-border/60 last:border-b-0 hover:bg-primary/[0.03] cursor-pointer group/row"
                   >
                     <td className="py-2.5 px-2.5 font-bold text-muted-foreground w-8 text-[14px] group-hover/row:text-primary transition-colors">{a.rank}</td>
@@ -258,7 +261,7 @@ function TopDestinations() {
 
   const renderDest = (items: typeof WORLD_TOP_DEP) =>
     items.map((d, i) => {
-      const { pct, num } = getChangeForMode(d as any, timeMode);
+      const { pct, num } = getChangeForMode(d, timeMode);
       return (
         <div key={d.iata} className="flex items-center gap-2 py-1.5 border-b border-border/60 last:border-b-0">
           <span className="text-[14px] text-muted-foreground w-5 text-center shrink-0">{i + 1}</span>
@@ -292,7 +295,7 @@ function TopDestinations() {
         </div>
         <div className="bg-card border border-border rounded-[10px] p-4">
           <div className="flex items-center gap-1.5 mb-3">
-            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-green-500/12 text-green-600">{'\u2193'} ขาเข้า</span>
+            <span className="text-[14px] font-bold py-0.5 px-2.5 rounded-full bg-accent/10 text-accent">{'\u2193'} ขาเข้า</span>
             <span className="text-[16px] font-bold">5 อันดับจุดหมายขาเข้า</span>
           </div>
           {renderDest(WORLD_TOP_ARR)}
