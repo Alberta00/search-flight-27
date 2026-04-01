@@ -105,7 +105,15 @@ export interface Top5Data {
 
 // --- Drill-Down Dashboard Types ---
 export type DrillLevel = 'world' | 'continent' | 'country' | 'airport';
-export type TimeMode = 'wow' | 'mom' | 'yoy';
+export type TimeMode =
+  | 'wow'
+  | 'mom'
+  | 'yoy'
+  | '7d'
+  | '15d'
+  | '30d'
+  | 'monthly_range'
+  | 'custom';
 
 export interface KPICard {
   label: string;

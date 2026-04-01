@@ -82,11 +82,16 @@ export function DrillDownDashboard() {
 // ── Time Toggle ──
 export function TimeToggle() {
   const { timeMode, setTimeMode } = useDrillDown();
-  const modes: { key: TimeMode; label: string }[] = [
-    { key: 'wow', label: 'รายสัปดาห์' },
-    { key: 'mom', label: 'รายเดือน' },
-    { key: 'yoy', label: 'รายปี' },
-  ];
+  const modes: { key: TimeMode; label: string }[]  = [
+  { key: '7d', label: '7 วัน' },
+  { key: '15d', label: '±15 วัน' },
+  { key: '30d', label: '30 วัน' },
+  { key: 'wow', label: 'รายสัปดาห์' },
+  { key: 'mom', label: 'รายเดือน' },
+  { key: 'yoy', label: 'รายปี' },
+  { key: 'monthly_range', label: 'เลือกรอบเดือน' },
+  { key: 'custom', label: 'กำหนดเอง' },
+];
 
   return (
     <div className="flex w-full sm:w-auto border border-border rounded-lg overflow-hidden">

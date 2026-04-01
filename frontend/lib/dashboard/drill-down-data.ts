@@ -117,6 +117,13 @@ export const TOP_AIRLINES_WORLD: TopAirlineWorld[] = [
   { rank: 4, name: 'Ryanair', flag: '\u{1F1EA}\u{1F1FA}', iata: 'FR', flights: 14280, yoy: +5.6, yoyN: +756, mom: +2.4, momN: +335, wow: +1.1, wowN: +155 },
   { rank: 5, name: 'Southwest Airlines', flag: '\u{1F1FA}\u{1F1F8}', iata: 'WN', flights: 13510, yoy: -0.8, yoyN: -109, mom: -0.3, momN: -41, wow: -0.2, wowN: -27 },
 ];
+export const TOP_AIRLINES_BY_CONTINENT = [
+  { name: 'ยุโรป', airline: 'Ryanair', flights: 8420, yoy: 3.8, yoyN: 1544, mom: 1.2, momN: 500, wow: 0.4, wowN: 168 },
+  { name: 'เอเชียแปซิฟิก', airline: 'Singapore Airlines', flights: 7610, yoy: 5.1, yoyN: 1870, mom: 2.1, momN: 793, wow: 0.8, wowN: 307 },
+  { name: 'อเมริกาเหนือ', airline: 'American Airlines', flights: 5840, yoy: 1.2, yoyN: 337, mom: 0.4, momN: 113, wow: 0.1, wowN: 28 },
+  { name: 'ตะวันออกกลาง', airline: 'Emirates', flights: 1920, yoy: 6.7, yoyN: 517, mom: 2.8, momN: 224, wow: 1.2, wowN: 98 },
+  { name: 'อเมริกาใต้', airline: 'LATAM', flights: 1350, yoy: -0.9, yoyN: -53, mom: -0.3, momN: -17, wow: -0.1, wowN: -6 },
+];
 
 // ============================================================
 // World: Top 5 departure/arrival destinations
@@ -147,6 +154,36 @@ export const CONTINENTS: ContinentData[] = [
   { name: 'ตะวันออกกลาง', icon: '\u{1F54C}', airports: '412 สนามบิน \u00B7 16 ประเทศ', flights: 8240, delta: '\u25B2 +517 (+6.7%)', yoy: 6.7, yoyN: 517, mom: 2.8, momN: 224, wow: 1.2, wowN: 98 },
   { name: 'อเมริกาใต้', icon: '\u{1F3D4}\uFE0F', airports: '823 สนามบิน \u00B7 12 ประเทศ', flights: 5820, delta: '\u25BC -53 (-0.9%)', yoy: -0.9, yoyN: -53, mom: -0.3, momN: -17, wow: -0.1, wowN: -6 },
   { name: 'แอฟริกา', icon: '\u{1F981}', airports: '653 สนามบิน \u00B7 54 ประเทศ', flights: 1710, delta: '\u25B2 +38 (+2.3%)', yoy: 2.3, yoyN: 38, mom: 0.6, momN: 10, wow: 0.2, wowN: 3 },
+ {
+    name: 'โอเชียเนีย',
+    icon: '🌏',
+    airports: '312 สนามบิน · 16 ประเทศ',
+    flights: 1610,
+    delta: '▼ -33 (-0.1%)',
+    yoy: -0.1, yoyN: -33,
+    mom: -0.4, momN: -13,
+    wow: -0.1, wowN: -3,
+  },
+  {
+    name: 'คาริบเบียน',
+    icon: '🏝️',
+    airports: '312 สนามบิน · 16 ประเทศ',
+    flights: 1510,
+    delta: '▼ -33 (-0.1%)',
+    yoy: -0.1, yoyN: -33,
+    mom: -0.4, momN: -13,
+    wow: -0.1, wowN: -3,
+  },
+  {
+    name: 'อเมริกากลาง',
+    icon: '🌎',
+    airports: '312 สนามบิน · 16 ประเทศ',
+    flights: 1410,
+    delta: '▼ -33 (-0.1%)',
+    yoy: -0.1, yoyN: -33,
+    mom: -0.4, momN: -13,
+    wow: -0.1, wowN: -3,
+  },
 ];
 
 // ============================================================
